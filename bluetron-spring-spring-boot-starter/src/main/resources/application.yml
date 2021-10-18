@@ -1,0 +1,9 @@
+bluetron-nb:
+  common:
+    apilog:
+      enable: true
+#      showip: true
+#      showargs: false
+#    auditlog:
+#      type: db
+#      datasource:
