@@ -1,3 +1,3 @@
-### 1.0.2-SNAPSHOT
+### 1.0.0-SNAPSHOT
 
-增加AutoPartsRemoteServiceInvokeException.java异常类
+旨在成为一个非业务性的通用基础组件
