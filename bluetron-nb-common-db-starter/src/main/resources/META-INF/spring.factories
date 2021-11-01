@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.bluetron.nb.common.db.config.TenantAutoConfigure,\
+com.bluetron.nb.common.db.config.MybatisPlusAutoConfigure,\
+com.bluetron.nb.common.db.query.ConverterUtil

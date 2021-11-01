@@ -11,7 +11,10 @@
     <modules>
         <module>bluetron-nb-common-base</module>
         <module>bluetron-nb-common-util</module>
-        <module>bluetron-spring-spring-boot-starter</module>
+        <module>bluetron-nb-common-sb-starter</module>
+        <module>bluetron-nb-common-db-starter</module>
+        <module>bluetron-nb-common-redis-starter</module>
+        <module>bluetron-nb-common-job-starter</module>
     </modules>
 
     <name>bluetron-nb-common</name>
@@ -29,16 +32,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <java.version>1.8</java.version>
-        <redisson.version>3.6.5</redisson.version>
     </properties>
 
     <dependencies>
-
-<!--        <dependency>-->
-<!--            <groupId>com.bluetron.app</groupId>-->
-<!--            <artifactId>bluetron-app-common-basic</artifactId>-->
-<!--            <version>1.0.0-SNAPSHOT</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,11 +67,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.commons</groupId>-->
-<!--            <artifactId>commons-collections4</artifactId>-->
-<!--        </dependency>-->
 
     </dependencies>
 

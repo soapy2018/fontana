@@ -1,7 +1,6 @@
 package com.bluetron.nb.common.util.tools;
 
-
-import com.bluetron.nb.common.util.lang.StringUtils;
+import com.bluetron.nb.common.util.lang.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -62,7 +61,7 @@ public class URLUtil {
 	 * @return 192.168.8.80
 	 */
 	public static String getHost(String url) {
-		if (StringUtils.isAllBlank(url)) {
+		if (StringUtil.isBlank(url)) {
 			return url;
 		}
 		try {
@@ -81,7 +80,7 @@ public class URLUtil {
 	 * @return 192.168.8.80, exception then return defaultVal
 	 */
 	public static String getHost(String url,String defaultVal){
-		return StringUtils.isBlank(getHost(url)) ? defaultVal : getHost(url);
+		return StringUtil.isBlank(getHost(url)) ? defaultVal : getHost(url);
 	}
 
 	/**

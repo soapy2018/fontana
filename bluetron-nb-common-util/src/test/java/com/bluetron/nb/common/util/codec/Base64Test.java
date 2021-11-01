@@ -14,7 +14,7 @@ public class Base64Test {
 
 	@Test
 	public void testToBase64File() {
-		assertThat(Base64Utils.fileToBase64(new File("src/test/resources/google.png"))).isEqualTo(googlePNG);
+		assertThat(Base64Util.fileToBase64(new File("src/test/resources/google.png"))).isEqualTo(googlePNG);
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class Base64Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertThat(Base64Utils.toBase64ofInputStream(in)).isEqualTo(googlePNG);
+		assertThat(Base64Util.toBase64ofInputStream(in)).isEqualTo(googlePNG);
 	}
 
 }

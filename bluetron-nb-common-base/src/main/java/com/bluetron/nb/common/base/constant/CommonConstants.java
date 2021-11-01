@@ -49,6 +49,52 @@ public interface CommonConstants {
      */
     String AUDITLOG_PREFIX = "bluetron-nb.common.auditlog";
 
+    /**
+     * mybatis plus 配置
+     */
+    String MYBATISPLUS_PREFIX = "bluetron-nb.common.mybatis-plus";
+
+    /**
+     * redis配置
+     */
+    String CACHEMANAGER_PREFIX = "bluetron-nb.common.cache-manager";
+
+    /**
+     * mybatis plus 配置
+     */
+    String TENANT_PREFIX = "bluetron-nb.common.tenant";
+
+    /**
+     * 锁配置
+     */
+    String LOCK_PREFIX = "bluetron-nb.common.lock";
+
+    /**
+     * xxlJob配置
+     */
+    String XXLJOB_PREFIX = "bluetron-nb.common.xxljob";
+
+    /**
+     * 数据表中的tenant_id字段
+     */
+    String TENANT_ID_COLUMN = "tenant_id";
+
+    /**
+     * redis锁前缀
+     */
+    String LOCK_KEY_PREFIX = "LOCK_KEY";
+
+    /**
+     * 公共日期格式
+     */
+    String MONTH_FORMAT = "yyyy-MM";
+    String DATE_FORMAT = "yyyy-MM-dd";
+    String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    String SIMPLE_MONTH_FORMAT = "yyyyMM";
+    String SIMPLE_DATE_FORMAT = "yyyyMMdd";
+    String SIMPLE_DATETIME_FORMAT = "yyyyMMddHHmmss";
+    String TIME_ZONE_GMT8 = "GMT+8";
+
 }
 
 
