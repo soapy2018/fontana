@@ -1,14 +1,15 @@
-package com.bluetron.nb.common.sb.log;
+package com.bluetron.nb.common.base.log;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 /**
  * 审计日志
  *
- * @author bcloud
- * @date 2020/2/3
+ * @author cqf
+ * @date 2021/9/3
  * <p>
  * 
  

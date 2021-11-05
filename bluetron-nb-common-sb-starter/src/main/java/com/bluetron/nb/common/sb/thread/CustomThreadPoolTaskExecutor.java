@@ -1,4 +1,4 @@
-package com.bluetron.nb.common.base.thread;
+package com.bluetron.nb.common.sb.thread;
 
 import com.alibaba.ttl.TtlCallable;
 import com.alibaba.ttl.TtlRunnable;

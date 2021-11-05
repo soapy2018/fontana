@@ -1,6 +1,8 @@
 package com.bluetron.nb.common.sb.log;
 
 import com.bluetron.nb.common.base.constant.CommonConstants;
+import com.bluetron.nb.common.base.log.Audit;
+import com.bluetron.nb.common.base.log.IAuditService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.FilterType;
  **/
 @Configuration
 @ComponentScan(basePackages = {"com.bluetron.nb.common.sb"},
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.bluetron.nb.common.sb.filter.LoginUserFilter")})
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.bluetron.nb.common.sb.filter.*")})
 @Slf4j
 public class CommonSBAutoConfig {
     public CommonSBAutoConfig() {

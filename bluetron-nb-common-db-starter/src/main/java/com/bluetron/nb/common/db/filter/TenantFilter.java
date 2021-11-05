@@ -1,4 +1,4 @@
-package com.bluetron.nb.common.sb.filter;
+package com.bluetron.nb.common.db.filter;
 
 import com.bluetron.nb.common.base.constant.CommonConstants;
 import com.bluetron.nb.common.base.constant.HttpConstants;
@@ -34,8 +34,9 @@ public class TenantFilter extends OncePerRequestFilter {
             //保存租户id
             if (StringUtils.isNotEmpty(tenantId)) {
                 TenantContextHolder.setTenant(tenantId);
+            }else {
+                TenantContextHolder.setDefaultTenant();
             }
-
             filterChain.doFilter(request, response);
         } finally {
             TenantContextHolder.clear();

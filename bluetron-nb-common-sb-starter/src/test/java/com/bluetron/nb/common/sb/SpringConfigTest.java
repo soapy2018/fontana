@@ -34,11 +34,13 @@ public class SpringConfigTest {
 
 	@Test
 	public void testGetMessage() {
-		assertThat(accessor.getMessage("success", "zh_CN")).isEqualTo("成功");
+		//三个配置文件，最先匹配的市core
+		assertThat(accessor.getMessage("success", "zh_CN")).isEqualTo("成功啦");
 		assertThat(accessor.getMessage("success", "en_US")).isEqualTo("success");
 		assertThat(accessor.getMessage("xxxx", "en_US")).isEqualTo("");
-		//若不指定Local，默认Local是zh_CN
-		assertThat(accessor.getMessage("success")).isEqualTo("成功");
+		//若不指定Local，默认Local是zh_CN，
+		assertThat(accessor.getMessage("success")).isEqualTo("成功啦");
+		assertThat(accessor.getMessage("supos.token.expire")).isEqualTo("SupOS token 失效");
 		// new testcase by default
 		assertThat(accessor.getMessage("abc", Locale.CHINA , "abcd")).isEqualTo("abcd");
 	}

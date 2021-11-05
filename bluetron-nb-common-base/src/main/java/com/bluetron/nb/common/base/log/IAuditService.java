@@ -1,10 +1,10 @@
-package com.bluetron.nb.common.sb.log;
+package com.bluetron.nb.common.base.log;
 
 /**
  * 审计日志接口
  *
- * @author bcloud
- * @date 2020/2/3
+ * @author cqf
+ * @date 2021/9/3
  * <p>
  * 
  

@@ -65,6 +65,11 @@ public interface CommonConstants {
     String TENANT_PREFIX = "bluetron-nb.common.tenant";
 
     /**
+     * mybatis plus 配置
+     */
+    String DYNAMIC_DATASOURCE_PREFIX = "bluetron-nb.common.dynamic-datasource";
+
+    /**
      * 锁配置
      */
     String LOCK_PREFIX = "bluetron-nb.common.lock";
@@ -83,6 +88,16 @@ public interface CommonConstants {
      * redis锁前缀
      */
     String LOCK_KEY_PREFIX = "LOCK_KEY";
+
+    /**
+     * redis缓存name
+     */
+    String TENANT_DATASOURCE_KEY = "tenantDataSource";
+
+    /**
+     * 默认租户id
+     */
+    String DEFAULT_TENANT = "default";
 
     /**
      * 公共日期格式
