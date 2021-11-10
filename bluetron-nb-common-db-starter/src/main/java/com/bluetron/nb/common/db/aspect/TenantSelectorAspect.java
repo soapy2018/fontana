@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
-@ConditionalOnProperty(prefix = CommonConstants.DYNAMIC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = CommonConstants.TENANT_PREFIX, name = "type", havingValue = "db")
 @Order(0) // 该切面应当先于 @Transactional 执行
 @Slf4j
 public class TenantSelectorAspect {
@@ -28,9 +28,13 @@ public class TenantSelectorAspect {
     public Object switchTenant(ProceedingJoinPoint joinPoint, Tenant tenant) throws Exception {
         String originTenantId = TenantContextHolder.getTenant();
         try {
+            if (tenant == null) {
+                // 获取类上的注解
+                tenant = joinPoint.getTarget().getClass().getDeclaredAnnotation(Tenant.class);
+            }
             String tenantId = tenant.value();
             TenantContextHolder.setTenant(tenantId);
-            log.info("Switch tenant to {} in Method {}}", tenantId, joinPoint.getSignature());
+            log.info("Switch tenant to [{}] in Method [{}]", tenantId, joinPoint.getSignature());
         } catch (Exception e) {
             log.warn("", e);
         }
@@ -41,7 +45,7 @@ public class TenantSelectorAspect {
             throw new Exception(e);
         } finally {
             TenantContextHolder.setTenant(originTenantId);
-            log.info("Switch tenant to origin tenant {} in Method {}", originTenantId, joinPoint.getSignature());
+            log.info("Switch tenant to origin tenant [{}] in Method [{}]", originTenantId, joinPoint.getSignature());
         }
         return result;
     }

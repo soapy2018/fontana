@@ -1,8 +1,8 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.bluetron.nb.common.db.config.TenantAutoConfigure,\
-com.bluetron.nb.common.db.config.MybatisPlusAutoConfigure,\
 com.bluetron.nb.common.db.query.ConverterUtil,\
 com.bluetron.nb.common.db.filter.TenantFilter,\
 com.bluetron.nb.common.db.aspect.TenantSelectorAspect,\
 com.bluetron.nb.common.db.service.impl.DbAuditServiceImpl,\
-com.bluetron.nb.common.db.service.impl.TenantInfoServiceImpl
+com.bluetron.nb.common.db.service.impl.TenantInfoServiceImpl,\
+com.bluetron.nb.common.db.config.MybatisPlusAutoConfigure

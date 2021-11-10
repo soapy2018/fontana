@@ -80,6 +80,11 @@ public interface CommonConstants {
     String XXLJOB_PREFIX = "bluetron-nb.common.xxljob";
 
     /**
+     * swagger2配置
+     */
+    String SWAGGER2_PREFIX = "bluetron-nb.common.swagger2";
+
+    /**
      * 数据表中的tenant_id字段
      */
     String TENANT_ID_COLUMN = "tenant_id";

@@ -24,7 +24,7 @@ import java.util.Arrays;
 @Aspect
 @EnableConfigurationProperties({ApiLogProperties.class})
 @ConditionalOnProperty(prefix = CommonConstants.APILOG_PREFIX,
-		name = "enable", havingValue = "true", matchIfMissing = false)
+		name = "enable", havingValue = "true")
 @Configuration
 public class ApiLogConfig {
 

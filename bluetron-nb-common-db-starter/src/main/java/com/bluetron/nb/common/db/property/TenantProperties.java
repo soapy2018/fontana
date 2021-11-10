@@ -25,6 +25,11 @@ public class TenantProperties {
     private Boolean enable = false;
 
     /**
+     * 多租户隔离类型
+     */
+    private String type;
+
+    /**
      * 配置不进行多租户隔离的表名
      */
     private List<String> ignoreTables = new ArrayList<>();

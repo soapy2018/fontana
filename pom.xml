@@ -15,6 +15,7 @@
         <module>bluetron-nb-common-db-starter</module>
         <module>bluetron-nb-common-redis-starter</module>
         <module>bluetron-nb-common-job-starter</module>
+        <module>bluetron-nb-common-swagger2-starter</module>
     </modules>
 
     <name>bluetron-nb-common</name>
