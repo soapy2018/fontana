@@ -13,9 +13,8 @@ import java.util.Set;
  */
 public class ListSqlExpression extends AbsSqlExpression {
 
-    private List<ISqlExpression> sqlExpressionList = new LinkedList();
-
     private final SqlConnectSegment sqlConnectSegment;
+    private List<ISqlExpression> sqlExpressionList = new LinkedList();
 
 
     public ListSqlExpression(Set<Class> entityTypeSet) {

@@ -1,4 +1,5 @@
 package com.bluetron.nb.common.result;
+
 import com.bluetron.nb.common.base.result.Result;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ResultTest {
     @Test
-    public void testSucceed(){
+    public void testSucceed() {
         assertThat(Result.succeed().getCode()).isEqualTo(1);
         assertThat(Result.succeed().getMsg()).isEqualTo("成功");
     }

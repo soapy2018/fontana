@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
  */
 //@EnableConfigurationProperties({AuditLogProperties.class})
 @Configuration
-@Import({LoggerAuditServiceImpl.class,AuditLogAspect.class})
+@Import({LoggerAuditServiceImpl.class, AuditLogAspect.class})
 public class LogAutoConfigure {
     /**
      * 日志数据库配置

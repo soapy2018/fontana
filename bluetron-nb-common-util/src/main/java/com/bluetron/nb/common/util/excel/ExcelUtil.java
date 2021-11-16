@@ -11,6 +11,7 @@ import com.bluetron.nb.common.util.lang.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +23,6 @@ import java.util.Map;
 
 /**
  * Excel工具类
- *
  */
 public class ExcelUtil {
 
@@ -30,37 +30,39 @@ public class ExcelUtil {
         throw new IllegalStateException("Utility class");
     }
 
-    public static List<List<Object>> readExcel(InputStream bookStream){
+    public static List<List<Object>> readExcel(InputStream bookStream) {
         return readExcel(bookStream, 0);
     }
 
     /**
      * description 读取指定excel文件流的sheet页到集合；对于合并单元格，都会读到List中
+     *
      * @param bookStream
      * @param sheetName
      * @return
      */
-    public static List<List<Object>> readExcel(InputStream bookStream, String sheetName){
+    public static List<List<Object>> readExcel(InputStream bookStream, String sheetName) {
         return cn.hutool.poi.excel.ExcelUtil.getReader(bookStream, sheetName).read();
     }
 
-    public static List<List<Object>> readExcel(InputStream bookStream, int sheetIndex){
+    public static List<List<Object>> readExcel(InputStream bookStream, int sheetIndex) {
         return cn.hutool.poi.excel.ExcelUtil.getReader(bookStream, sheetIndex).read();
     }
 
-    public static List<List<Object>> readExcel(File bookFile){
+    public static List<List<Object>> readExcel(File bookFile) {
         return cn.hutool.poi.excel.ExcelUtil.getReader(bookFile).read();
     }
 
 
     /**
      * description 将List<List<String>>写入到excel，同时可以设置表头，sheet名
+     *
      * @param dataList
      * @param bookFile
      * @param sheetName
      * @param title
      */
-    public static void writeListToExcel(List<List<String>> dataList, File bookFile, String sheetName, String title){
+    public static void writeListToExcel(List<List<String>> dataList, File bookFile, String sheetName, String title) {
 
         ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(bookFile, sheetName);
         //ExcelWriter writer = new ExcelWriter(bookFile, sheetName);
@@ -69,7 +71,7 @@ public class ExcelUtil {
         //writer.passCurrentRow();
 
         //合并单元格后的标题行，使用默认标题样式
-        if(!StringUtil.isEmpty(title)) {
+        if (!StringUtil.isEmpty(title)) {
             writer.merge(dataList.get(0).size() - 1, title);
         }
         //一次性写出内容，强制输出标题
@@ -78,22 +80,23 @@ public class ExcelUtil {
         writer.close();
     }
 
-    public static void writeListToExcel(List<List<String>> dataList, File bookFile){
+    public static void writeListToExcel(List<List<String>> dataList, File bookFile) {
         writeListToExcel(dataList, bookFile, null, null);
     }
 
-    public static void writeListToExcel(List<List<String>> dataList, File bookFile, String title){
+    public static void writeListToExcel(List<List<String>> dataList, File bookFile, String title) {
         writeListToExcel(dataList, bookFile, null, title);
     }
 
     /**
      * description 将List<Map<String, Object>写到excel，注意这里不同行对应map的key必须相同，也就是列标题要相同
+     *
      * @param dataList
      * @param bookFile
      * @param sheetName
      * @param title
      */
-    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile, String sheetName, String title){
+    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile, String sheetName, String title) {
 
         ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(bookFile, sheetName);
         //ExcelWriter writer = new ExcelWriter(bookFile, sheetName);
@@ -102,7 +105,7 @@ public class ExcelUtil {
         //writer.passCurrentRow();
 
         //合并单元格后的标题行，使用默认标题样式
-        if(!StringUtil.isEmpty(title)) {
+        if (!StringUtil.isEmpty(title)) {
             writer.merge(dataList.get(0).size() - 1, title);
         }
         //一次性写出内容，强制输出标题
@@ -111,11 +114,11 @@ public class ExcelUtil {
         writer.close();
     }
 
-    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile){
+    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile) {
         writeMapToExcel(dataList, bookFile, null, null);
     }
 
-    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile, String title){
+    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile, String title) {
         writeMapToExcel(dataList, bookFile, null, title);
     }
 
@@ -204,12 +207,12 @@ public class ExcelUtil {
         //是否为xlsx
         ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(true);
 
-        if(!StringUtil.isBlank(sheetName)) {
+        if (!StringUtil.isBlank(sheetName)) {
             writer.setSheet(sheetName);
         }
 
         //合并单元格后的标题行，使用默认标题样式
-        if(!StringUtil.isBlank(title)) {
+        if (!StringUtil.isBlank(title)) {
             writer.merge(dataList.get(0).size() - 1, title);
         }
 

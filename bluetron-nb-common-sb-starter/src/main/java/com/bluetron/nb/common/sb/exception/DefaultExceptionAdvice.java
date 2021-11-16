@@ -12,6 +12,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 import java.sql.SQLException;
 
 /**
@@ -24,6 +25,7 @@ import java.sql.SQLException;
 public class DefaultExceptionAdvice {
     @Autowired
     I18nMessageResourceAccessor messageResource;
+
     /**
      * IllegalArgumentException异常处理返回json
      * 返回状态码:400
@@ -90,10 +92,9 @@ public class DefaultExceptionAdvice {
     private Result defHandler(GeneralException e) {
         String message = messageResource.getMessage(e.getKey());
         log.error(message, e);
-        if(StringUtils.isNotBlank(message))
-        {
+        if (StringUtils.isNotBlank(message)) {
             return Result.failed(e.getCode(), message);
-        }else{
+        } else {
             return Result.failed(e.getResultCode());
         }
     }

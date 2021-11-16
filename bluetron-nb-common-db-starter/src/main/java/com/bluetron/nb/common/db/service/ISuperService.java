@@ -10,8 +10,6 @@ import com.bluetron.nb.common.base.lock.DistributedLock;
  * @author cqf
  * @date 2021/10/10
  * <p>
- * 
- 
  */
 public interface ISuperService<T> extends IService<T> {
     /**
@@ -19,8 +17,8 @@ public interface ISuperService<T> extends IService<T> {
      * 例子如下：
      * String username = sysUser.getUsername();
      * boolean result = super.saveIdempotency(sysUser, lock
-     *                 , LOCK_KEY_USERNAME+username
-     *                 , new QueryWrapper<SysUser>().eq("username", username));
+     * , LOCK_KEY_USERNAME+username
+     * , new QueryWrapper<SysUser>().eq("username", username));
      *
      * @param entity       实体对象
      * @param locker       锁实例
@@ -38,8 +36,8 @@ public interface ISuperService<T> extends IService<T> {
      * 例子如下：
      * String username = sysUser.getUsername();
      * boolean result = super.saveOrUpdateIdempotency(sysUser, lock
-     *                 , LOCK_KEY_USERNAME+username
-     *                 , new QueryWrapper<SysUser>().eq("username", username));
+     * , LOCK_KEY_USERNAME+username
+     * , new QueryWrapper<SysUser>().eq("username", username));
      *
      * @param entity       实体对象
      * @param locker       锁实例

@@ -7,21 +7,22 @@ import java.util.Map;
 
 /**
  * Bean 对象操作，先主要用于 数值copy和转换
- * 
+ * <p>
  * move BeanMapper to this class
- * 
+ * <p>
  * 先设置几个比较经典的方法
+ *
  * @return
  */
 public class BeanUtil {
 
     private BeanUtil() {
-        
+
     }
-    
+
     /**
      * bean 转为 Map，值对象为Object
-     * 
+     *
      * @param object
      * @return
      */
@@ -31,7 +32,7 @@ public class BeanUtil {
 
     /**
      * bean 转为 Map，值对象为String
-     * 
+     *
      * @param object
      * @return
      */
@@ -56,16 +57,16 @@ public class BeanUtil {
     public static void copyProperties(Object source, Object target) {
         cn.hutool.core.bean.BeanUtil.copyProperties(source, target);
     }
-    
+
     /**
      * 复制Bean对象属性
      *
-     * @param source 源Bean对象
-     * @param target 目标Bean对象
+     * @param source     源Bean对象
+     * @param target     目标Bean对象
      * @param ignoreNull 是否忽略null值
      */
-    public static void copyProperties(Object source, Object target , Boolean ignoreNull) {
-        cn.hutool.core.bean.BeanUtil.copyProperties(source, target , CopyOptions.create().setIgnoreNullValue(ignoreNull));
+    public static void copyProperties(Object source, Object target, Boolean ignoreNull) {
+        cn.hutool.core.bean.BeanUtil.copyProperties(source, target, CopyOptions.create().setIgnoreNullValue(ignoreNull));
     }
 
     /**

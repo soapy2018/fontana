@@ -6,6 +6,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +26,10 @@ public class ClasspathI18nMessageResource extends ReloadableResourceBundleMessag
         init();
     }
 
+    public static void main(String[] args) {
+        ClasspathI18nMessageResource appI18nMessageResource = new ClasspathI18nMessageResource();
+    }
+
     protected void init() {
         log.info("start init AppI18nMessageResource...");
         try {
@@ -42,7 +47,7 @@ public class ClasspathI18nMessageResource extends ReloadableResourceBundleMessag
 
     /**
      * 获取默认路径下国际化资源文件名
-     * 
+     *
      * @return
      * @throws IOException
      */
@@ -75,7 +80,7 @@ public class ClasspathI18nMessageResource extends ReloadableResourceBundleMessag
 
     /**
      * 排序结果影响键值冲突时的覆盖 覆盖规则，前覆盖后 开放了排序接口，用户只需要实现这个排序能力即可使用
-     * 
+     *
      * @param baseNames       国际化资源文件的路径名
      * @param defaultBaseName
      */
@@ -89,9 +94,5 @@ public class ClasspathI18nMessageResource extends ReloadableResourceBundleMessag
             // 默认的系统定义允许被覆盖
             baseNames.add(defaultBaseName);
         }
-    }
-
-    public static void main(String[] args) {
-        ClasspathI18nMessageResource appI18nMessageResource = new ClasspathI18nMessageResource();
     }
 }

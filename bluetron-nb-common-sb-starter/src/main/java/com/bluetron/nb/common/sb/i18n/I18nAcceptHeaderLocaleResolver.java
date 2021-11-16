@@ -3,6 +3,7 @@ package com.bluetron.nb.common.sb.i18n;
 import com.bluetron.nb.common.base.constant.CommonConstants;
 import com.bluetron.nb.common.base.constant.HttpConstants;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
@@ -17,12 +18,12 @@ public class I18nAcceptHeaderLocaleResolver extends AcceptHeaderLocaleResolver {
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
-            String acceptLanguage = request.getHeader(HttpConstants.CONTENT_LANGUAGE_HEADER);
+        String acceptLanguage = request.getHeader(HttpConstants.CONTENT_LANGUAGE_HEADER);
         if (acceptLanguage == null || acceptLanguage.trim().isEmpty()) {
             return super.resolveLocale(request);
         }
         String[] split = acceptLanguage.split(CommonConstants.UNDERLINE);
-        if (split.length != LANG_LENGTH){
+        if (split.length != LANG_LENGTH) {
             return getDefaultLocale();
         }
         return new Locale(split[0], split[1]);

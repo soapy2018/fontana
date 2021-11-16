@@ -16,15 +16,15 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  */
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
- @Override
- public boolean supportsParameter(MethodParameter methodParameter) {
-  return LoginUserDTO.class.isAssignableFrom(methodParameter.getParameterType());
- }
+    @Override
+    public boolean supportsParameter(MethodParameter methodParameter) {
+        return LoginUserDTO.class.isAssignableFrom(methodParameter.getParameterType());
+    }
 
- @Override
- public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-  return RequestLoginContextHolder.getCurrentLoginUser();
- }
+    @Override
+    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+        return RequestLoginContextHolder.getCurrentLoginUser();
+    }
 }
 
 

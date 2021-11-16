@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationUtils;
 import org.springframework.util.Assert;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +22,6 @@ import java.util.concurrent.TimeUnit;
  *
  * @author cqf
  * <p>
- * 
- 
  */
 @Slf4j
 public class RedisRepository {
@@ -75,17 +74,19 @@ public class RedisRepository {
     /**
      * 添加到带有 过期时间的  缓存
      *
-     * @param key   redis主键
-     * @param value 值
-     * @param time  过期时间
-     * @param timeUnit  过期时间单位
+     * @param key      redis主键
+     * @param value    值
+     * @param time     过期时间
+     * @param timeUnit 过期时间单位
      */
     public void setExpire(final String key, final Object value, final long time, final TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, time, timeUnit);
     }
+
     public void setExpire(final String key, final Object value, final long time) {
         this.setExpire(key, value, time, TimeUnit.SECONDS);
     }
+
     public void setExpire(final String key, final Object value, final long time, final TimeUnit timeUnit, RedisSerializer<Object> valueSerializer) {
         byte[] rawKey = rawKey(key);
         byte[] rawValue = rawValue(value, valueSerializer);
@@ -96,11 +97,13 @@ public class RedisRepository {
                 potentiallyUsePsetEx(connection);
                 return null;
             }
+
             public void potentiallyUsePsetEx(RedisConnection connection) {
                 if (!TimeUnit.MILLISECONDS.equals(timeUnit) || !failsafeInvokePsetEx(connection)) {
                     connection.setEx(rawKey, TimeoutUtils.toSeconds(time, timeUnit), rawValue);
                 }
             }
+
             private boolean failsafeInvokePsetEx(RedisConnection connection) {
                 boolean failed = false;
                 try {
@@ -179,10 +182,11 @@ public class RedisRepository {
     public Object get(final String key) {
         return redisTemplate.opsForValue().get(key);
     }
+
     /**
      * 根据key获取对象
      *
-     * @param key the key
+     * @param key             the key
      * @param valueSerializer 序列化
      * @return the string
      */
@@ -408,9 +412,9 @@ public class RedisRepository {
     /**
      * redis List数据结构 : 返回列表 key 中指定区间内的元素，区间以偏移量 start 和 end 指定。
      *
-     * @param key   the key
-     * @param start the start
-     * @param end   the end
+     * @param key             the key
+     * @param start           the start
+     * @param end             the end
      * @param valueSerializer 序列化
      * @return the list
      */
@@ -447,9 +451,10 @@ public class RedisRepository {
         if (key instanceof byte[]) {
             return (byte[]) key;
         }
-        RedisSerializer<Object> redisSerializer = (RedisSerializer<Object>)redisTemplate.getKeySerializer();
+        RedisSerializer<Object> redisSerializer = (RedisSerializer<Object>) redisTemplate.getKeySerializer();
         return redisSerializer.serialize(key);
     }
+
     private byte[] rawValue(Object value, RedisSerializer valueSerializer) {
         if (value instanceof byte[]) {
             return (byte[]) value;

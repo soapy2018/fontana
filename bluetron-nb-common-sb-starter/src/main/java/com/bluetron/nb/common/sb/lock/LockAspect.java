@@ -23,8 +23,6 @@ import org.springframework.stereotype.Component;
  * @author bcloud
  * @date 2020/6/6
  * <p>
- * 
- 
  */
 @Slf4j
 @Aspect
@@ -57,7 +55,7 @@ public class LockAspect {
         }
 
         if (lockKey.contains("#")) {
-            MethodSignature methodSignature = (MethodSignature)point.getSignature();
+            MethodSignature methodSignature = (MethodSignature) point.getSignature();
             //获取方法参数值
             Object[] args = point.getArgs();
             lockKey = getValBySpEL(lockKey, methodSignature, args);
@@ -92,7 +90,7 @@ public class LockAspect {
             // spring的表达式上下文对象
             EvaluationContext context = new StandardEvaluationContext();
             // 给上下文赋值
-            for(int i = 0; i < args.length; i++) {
+            for (int i = 0; i < args.length; i++) {
                 context.setVariable(paramNames[i], args[i]);
             }
             return expression.getValue(context).toString();

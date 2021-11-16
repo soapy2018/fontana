@@ -14,28 +14,10 @@ import java.util.Set;
  */
 public class NormalSqlExpression extends AbsSqlExpression {
 
-    public enum Type {
-        LIKE("LIKE"),
-        NOT_LIKE("NOT LIKE"),
-        EQ("="),
-        NE("<>"),
-        GT(">"),
-        GE(">="),
-        LT("<"),
-        LE("<=");
-
-        private String symbol;
-
-        Type(String symbol) {
-            this.symbol = symbol;
-        }
-    }
-
     private Type type;
     private String left;
     private String right;
     private Object data;
-
     private NormalSqlExpression(Set<Class> entityTypeSet, Type type, String left, String right, Object data) {
         super(entityTypeSet);
         this.type = type;
@@ -46,6 +28,7 @@ public class NormalSqlExpression extends AbsSqlExpression {
 
     /**
      * 没有值得情况 and table1.name = table2.name
+     *
      * @param type
      * @param left
      * @param right
@@ -63,7 +46,6 @@ public class NormalSqlExpression extends AbsSqlExpression {
         return new NormalSqlExpression(entityTypeSet, type, left, null, data);
     }
 
-
     @Override
     public void buildSql(StringBuilder sql, List<Object> params) {
         sql.append(this.left).append(" ").append(this.type.symbol).append(" ");
@@ -77,6 +59,24 @@ public class NormalSqlExpression extends AbsSqlExpression {
                 params.add(this.data);
             }
 
+        }
+    }
+
+
+    public enum Type {
+        LIKE("LIKE"),
+        NOT_LIKE("NOT LIKE"),
+        EQ("="),
+        NE("<>"),
+        GT(">"),
+        GE(">="),
+        LT("<"),
+        LE("<=");
+
+        private String symbol;
+
+        Type(String symbol) {
+            this.symbol = symbol;
         }
     }
 

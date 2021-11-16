@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,6 +25,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,13 +33,12 @@ import java.util.stream.Collectors;
  * @author cqf
  * @date 2021/11/18 9:22
  * <p>
- * 
- 
  */
 @Configuration
 @EnableSwagger2
 @EnableKnife4j
 @Import(BeanValidatorPluginsConfiguration.class)
+@Slf4j
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
     private static final String AUTH_KEY = "Authorization";
 
@@ -53,6 +54,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = CommonConstants.SWAGGER2_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public List<Docket> createRestApi(SwaggerProperties swaggerProperties) {
+        log.info("swagger初始化：{}", swaggerProperties);
         ConfigurableBeanFactory configurableBeanFactory = (ConfigurableBeanFactory) beanFactory;
         List<Docket> docketList = new LinkedList<>();
 
@@ -66,7 +68,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
         // 分组创建
         for (String groupName : swaggerProperties.getDocket().keySet()) {
-           SwaggerProperties.DocketInfo docketInfo = swaggerProperties.getDocket().get(groupName);
+            SwaggerProperties.DocketInfo docketInfo = swaggerProperties.getDocket().get(groupName);
 
             ApiInfo apiInfo = new ApiInfoBuilder()
                     .title(docketInfo.getTitle().isEmpty() ? swaggerProperties.getTitle() : docketInfo.getTitle())

@@ -7,7 +7,6 @@ import java.util.Set;
 
 /**
  * 登录人员信息（对应personnel）
- *
  */
 @Data
 public class LoginPersonnelDTO implements ILoginAccountDTO {

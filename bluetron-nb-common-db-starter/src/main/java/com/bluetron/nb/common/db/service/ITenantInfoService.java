@@ -13,5 +13,6 @@ import java.util.List;
  */
 public interface ITenantInfoService extends ISuperService<TenantInfo> {
     List<TenantInfo> getActiveTenantsList();
+
     TenantInfo getTenantInfo(String tenantId);
 }

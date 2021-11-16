@@ -2,6 +2,7 @@ package com.bluetron.nb.common.base.dto.req;
 
 
 import com.bluetron.nb.common.base.dto.LoginUserDTO;
+
 import java.io.Serializable;
 
 /**

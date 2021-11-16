@@ -2,7 +2,8 @@ package com.bluetron.nb.common.base.dto.res;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/8/20 10:10
  */

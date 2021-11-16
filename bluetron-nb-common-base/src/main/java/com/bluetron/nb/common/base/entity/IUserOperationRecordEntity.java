@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * 所有带用户操作记录功能实体的汇总
+ *
  * @author genx
  * @date 2021/4/8 10:42
  */

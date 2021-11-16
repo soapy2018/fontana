@@ -5,7 +5,8 @@ import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/5/27 18:07
  */
@@ -14,18 +15,17 @@ public class SearchHandler {
     private final NormalSqlExpression.Type type;
     private final Class paramType;
 
-    public static SearchHandler create(NormalSqlExpression.Type type, Class paramType) {
-        return new SearchHandler(type, paramType);
-    }
-
     private SearchHandler(NormalSqlExpression.Type type, Class paramType) {
         this.type = type;
         this.paramType = paramType;
     }
 
+    public static SearchHandler create(NormalSqlExpression.Type type, Class paramType) {
+        return new SearchHandler(type, paramType);
+    }
 
     public void addCondition(ISqlExpression sqlExpression, String leftSegment, Object data) {
-        if(data == null){
+        if (data == null) {
             return;
         }
         if (data instanceof Iterable || data.getClass().isArray()) {
@@ -39,19 +39,19 @@ public class SearchHandler {
                     params.add(ConverterUtil.convert(datum, this.paramType));
                 }
             }
-            if(this.type == NormalSqlExpression.Type.EQ){
+            if (this.type == NormalSqlExpression.Type.EQ) {
                 //in查询
                 sqlExpression.in(true, leftSegment, params);
             } else {
                 //or查询
-                sqlExpression.or(c->{
+                sqlExpression.or(c -> {
                     for (Object param : params) {
                         c.addCondition(true, this.type, leftSegment, param);
                     }
                 });
             }
         } else {
-            if(data instanceof CharSequence && "".equals(data.toString())){
+            if (data instanceof CharSequence && "".equals(data.toString())) {
                 //忽略 空字符串
                 return;
             }

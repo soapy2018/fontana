@@ -7,12 +7,10 @@ import com.bluetron.nb.common.db.cache.DataSourceCache;
 import com.bluetron.nb.common.db.entity.TenantInfo;
 import com.bluetron.nb.common.db.service.ITenantInfoService;
 import com.zaxxer.hikari.HikariDataSource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+
 import javax.sql.DataSource;
-import java.sql.SQLException;
-import java.sql.SQLNonTransientConnectionException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +28,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     //public Map<Object, Object> backupTargetDataSources;
     @Autowired(required = false)
     private ITenantInfoService tenantInfoService;
+
     /**
      * 动态数据源构造器
      *
@@ -96,14 +95,14 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         synchronized (tenantId) {
 
             //default数据源不放入cache池，
-            if(tenantId == null || CommonConstants.DEFAULT_TENANT.equals(tenantId)){
+            if (tenantId == null || CommonConstants.DEFAULT_TENANT.equals(tenantId)) {
                 return super.determineTargetDataSource();
             }
             //尝试从缓存中提取数据源
             HikariDataSource dataSource = (HikariDataSource) DataSourceCache.get(tenantId);
             if (null == dataSource) {
                 TenantInfo tenantInfo = tenantInfoService.getTenantInfo(tenantId);
-                if(null != tenantInfo){
+                if (null != tenantInfo) {
                     Map<Object, Object> dataSourceMap = new HashMap<>();
                     HikariDataSource newDataSource = new HikariDataSource();
                     newDataSource.setDriverClassName(tenantInfo.getDatasourceDriver());
@@ -123,7 +122,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                     //添加缓存
                     DataSourceCache.set(tenantId, newDataSource);
                     return newDataSource;
-                }else{
+                } else {
                     throw new GeneralException("租户不存在");
                 }
             }
@@ -132,18 +131,9 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     }
 
-
-    /**
-     * 设置数据源
-     * @param dataSources
-     */
-    public void setDataSources(Map<Object, Object> dataSources) {
-        super.setTargetDataSources(dataSources);
-        super.afterPropertiesSet();
-    }
-
     /**
      * 设置默认数据源
+     *
      * @param defaultDataSource
      */
     public void setDefaultDataSource(Object defaultDataSource) {
@@ -155,6 +145,16 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     public Map<Object, DataSource> getDataSources() {
         return super.getResolvedDataSources();
+    }
+
+    /**
+     * 设置数据源
+     *
+     * @param dataSources
+     */
+    public void setDataSources(Map<Object, Object> dataSources) {
+        super.setTargetDataSources(dataSources);
+        super.afterPropertiesSet();
     }
 
 }

@@ -17,6 +17,7 @@ public interface ISqlExpression {
 
     /**
      * 添加SQL段
+     *
      * @param sqlExpression
      * @return
      */
@@ -24,6 +25,7 @@ public interface ISqlExpression {
 
     /**
      * 构建SQL语句
+     *
      * @param sql
      * @param params
      * @return
@@ -32,6 +34,7 @@ public interface ISqlExpression {
 
     /**
      * 联表时 两张表的关系
+     *
      * @param s1
      * @param s2
      * @param <E1>
@@ -43,6 +46,7 @@ public interface ISqlExpression {
 
     /**
      * 等于
+     *
      * @return
      */
     <E, T> ISqlExpression eq(boolean condition, SFunction<E, T> fun, T data);
@@ -104,6 +108,7 @@ public interface ISqlExpression {
 
     /**
      * in 子查询
+     *
      * @param condition
      * @param fun
      * @param subEntityType

@@ -14,18 +14,6 @@ public class BeanUtilTest {
 
     private Person person = null;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Person {
-        private String name;
-        private Integer age;
-
-        public Person(int age) {
-            this.age = age;
-        }
-    }
-
     @Before
     public void init() {
         this.person = new Person("jack", 20);
@@ -60,28 +48,56 @@ public class BeanUtilTest {
         assertThat(target1.getAge()).isEqualTo(null); // not copy
         assertThat(target1.getName()).isEqualTo("jack");
     }
-    
+
+    @Test
+    public void copyPropertiesNullTest() {
+
+        SuposOrganizeVO vo = new SuposOrganizeVO();
+        vo.setName("123");
+        vo.setIsMainPosition(null);
+
+        assertThat(vo.isMainPosition).isNull();
+
+        Position target = new Position();
+        BeanUtil.copyProperties(vo, target);
+
+        assertThat(target.getName()).isEqualTo("123");
+        assertThat(target.isMainPosition).isNull();
+
+        Position target1 = new Position();
+        BeanUtil.copyProperties(vo, target1, true);
+        assertThat(target1.getName()).isEqualTo("123");
+        assertThat(target1.isMainPosition).isFalse();
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Person {
+        private String name;
+        private Integer age;
+
+        public Person(int age) {
+            this.age = age;
+        }
+    }
+
     @Data
     @AllArgsConstructor
     public static class Position {
-        
+
+        private String name;
+        private Long companyId;
+        private Boolean isMainPosition;
         public Position() {
             this.isMainPosition = Boolean.FALSE;
         }
-        
-        private String name;
-        private Long companyId;
-        private Boolean isMainPosition;    
     }
-    
+
     @Data
     @AllArgsConstructor
     public static class SuposOrganizeVO {
-        
-        public SuposOrganizeVO() {
-            
-        }
-        
+
         private String fullPath;
         private Long companyId;
         private Boolean isMainPosition;
@@ -90,27 +106,9 @@ public class BeanUtilTest {
         private String name;
         private String Id;
         private String depId;
-    }
-    
-    @Test
-    public void copyPropertiesNullTest() {
+        public SuposOrganizeVO() {
 
-        SuposOrganizeVO vo = new SuposOrganizeVO();
-        vo.setName("123");
-        vo.setIsMainPosition(null);
-        
-        assertThat(vo.isMainPosition).isNull();
-        
-        Position target = new Position();
-        BeanUtil.copyProperties(vo , target);
-        
-        assertThat(target.getName()).isEqualTo("123");
-        assertThat(target.isMainPosition).isNull();
-        
-        Position target1 = new Position();
-        BeanUtil.copyProperties(vo , target1 , true);
-        assertThat(target1.getName()).isEqualTo("123");
-        assertThat(target1.isMainPosition).isFalse();
+        }
     }
 
 

@@ -72,16 +72,6 @@ public enum ResultCode implements ICodeAndMessageEnum {
         this.message = message;
     }
 
-    @Override
-    public Integer getCode() {
-        return this.code;
-    }
-
-    @Override
-    public String getMessage() {
-        return this.message;
-    }
-
     public static String getMessageFromName(String name) {
         for (ResultCode item : ResultCode.values()) {
             if (item.name().equals(name)) {
@@ -98,6 +88,16 @@ public enum ResultCode implements ICodeAndMessageEnum {
             }
         }
         return null;
+    }
+
+    @Override
+    public Integer getCode() {
+        return this.code;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.message;
     }
 
     @Override

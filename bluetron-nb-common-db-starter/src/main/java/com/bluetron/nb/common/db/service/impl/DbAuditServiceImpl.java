@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
+
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
@@ -23,8 +24,6 @@ import javax.sql.DataSource;
  * @author bcloud
  * @date 2020/2/8
  * <p>
- *
-
  */
 @Slf4j
 @EnableConfigurationProperties(LogDbProperties.class)

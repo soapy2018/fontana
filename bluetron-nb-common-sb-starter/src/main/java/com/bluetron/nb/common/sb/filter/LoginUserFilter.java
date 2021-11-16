@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -17,7 +18,8 @@ import java.net.URLDecoder;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/7/30 10:19
  */
@@ -62,7 +64,7 @@ public class LoginUserFilter implements Filter {
 
             //执行
             filterChain.doFilter(servletRequest, servletResponse);
-        }finally {
+        } finally {
             //完成请求后 将 ThreadLocal 值置空
             RequestLoginContextHolder.setCurrentLoginUser(null);
             RequestLoginContextHolder.setCurrentLoginPersonnel(null);

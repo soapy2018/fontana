@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -57,7 +56,7 @@ public class multiTenancyTest {
         TenantContextHolder.setTenant("set");
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/methodA")
-                    )
+            )
                     .andExpect(status().isOk()) // 期待返回状态吗码200
                     .andReturn();
         } catch (Exception e) {

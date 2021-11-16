@@ -3,6 +3,7 @@ package com.bluetron.nb.common.db.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.bluetron.nb.common.db.property.MybatisPlusAutoFillProperties;
 import org.apache.ibatis.reflection.MetaObject;
+
 import java.util.Date;
 
 /**
@@ -11,8 +12,6 @@ import java.util.Date;
  * @author cqf
  * @date 2021/11/11
  * <p>
- * 
- 
  */
 public class DateMetaObjectHandler implements MetaObjectHandler {
     private MybatisPlusAutoFillProperties autoFillProperties;

@@ -32,7 +32,7 @@ public class PdfUtilTest {
     private MockHttpServletResponse response = new MockHttpServletResponse();
 
     @Before
-    public void before(){
+    public void before() {
 
     }
 

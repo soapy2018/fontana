@@ -6,8 +6,6 @@ package com.bluetron.nb.common.base.log;
  * @author cqf
  * @date 2021/9/3
  * <p>
- * 
- 
  */
 public interface IAuditService {
     void save(Audit audit);

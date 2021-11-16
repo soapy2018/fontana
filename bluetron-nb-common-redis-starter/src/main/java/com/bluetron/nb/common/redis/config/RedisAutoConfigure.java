@@ -13,7 +13,9 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.*;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
+
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +26,6 @@ import java.util.Map;
  * @author cqf
  * @date 2021/11/6 11:02
  * <p>
- * 
- 
  */
 @EnableConfigurationProperties({RedisProperties.class, CacheManagerProperties.class})
 @EnableCaching
@@ -45,6 +45,7 @@ public class RedisAutoConfigure {
 
     /**
      * RedisTemplate配置
+     *
      * @param factory
      */
     @Bean

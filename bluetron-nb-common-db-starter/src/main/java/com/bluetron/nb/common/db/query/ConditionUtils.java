@@ -13,18 +13,19 @@ import java.util.Map;
 
 /**
  * 给QueryWrapper追加条件
+ *
  * @author genx
  * @date 2021/6/15 20:54
  */
 public class ConditionUtils {
 
-    public static QueryCondition readQueryCondition(Map<String, String[]> parameterMap){
+    public static QueryCondition readQueryCondition(Map<String, String[]> parameterMap) {
         QueryCondition queryCondition = new QueryCondition();
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-            if(entry.getValue() == null || entry.getValue().length == 0){
+            if (entry.getValue() == null || entry.getValue().length == 0) {
                 continue;
             }
-            if(entry.getValue().length == 1){
+            if (entry.getValue().length == 1) {
                 queryCondition.put(entry.getKey(), entry.getValue()[0]);
             } else {
                 queryCondition.put(entry.getKey(), entry.getValue());
@@ -40,6 +41,7 @@ public class ConditionUtils {
         }
         appendCondition(queryWrapper, condition, queryCondition.getOrderBy(), queryCondition.isAsc());
     }
+
     public static <E, T> void appendCondition(BluetronQueryWrapper<E, T> queryWrapper, IQueryCondition<T> queryCondition) {
         Map<String, Object> condition = new HashMap(32);
         for (Map.Entry<String, Object> entry : queryCondition.entrySet()) {
@@ -54,6 +56,7 @@ public class ConditionUtils {
 
     /**
      * 追加条件
+     *
      * @param queryWrapper
      * @param condition
      * @param <E>
@@ -111,13 +114,13 @@ public class ConditionUtils {
         }
     }
 
-    private static boolean isQueryByEqual(Class beanClass, String fieldCode){
+    private static boolean isQueryByEqual(Class beanClass, String fieldCode) {
         try {
             Field field = ReflectUtil.getField(beanClass, fieldCode);
-            if(field.getAnnotation(QueryByEqual.class) != null){
+            if (field.getAnnotation(QueryByEqual.class) != null) {
                 return true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return false;

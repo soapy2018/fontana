@@ -4,6 +4,7 @@ import com.bluetron.nb.common.base.constant.ICodeAndMessageEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
@@ -37,6 +38,7 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> succeed(T model, String msg) {
         return of(model, ResultCode.SUCCESS.getCode(), msg);
     }
+
     /*
      失败的返回值可自行定义，默认为-1
     */

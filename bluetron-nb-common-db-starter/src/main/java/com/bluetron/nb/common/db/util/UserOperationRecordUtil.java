@@ -2,10 +2,12 @@ package com.bluetron.nb.common.db.util;
 
 import com.bluetron.nb.common.base.dto.ILoginAccountDTO;
 import com.bluetron.nb.common.base.entity.IUserOperationRecordEntity;
+
 import java.util.Date;
 
 /**
  * 设置创建/更新的一些字段
+ *
  * @author genx
  * @date 2021/4/8 10:45
  */
@@ -13,6 +15,7 @@ public class UserOperationRecordUtil {
 
     /**
      * 添加创建记录
+     *
      * @param entity
      * @param loginUserDTO
      */
@@ -29,6 +32,7 @@ public class UserOperationRecordUtil {
 
     /**
      * 添加修改记录
+     *
      * @param entity
      * @param loginUserDTO
      */

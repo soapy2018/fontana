@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 
 /**
  * 枚举类 请求参数解析 尝试通过中文名匹配
+ *
  * @author genx
  * @date 2021/4/12 13:56
  */
@@ -18,6 +19,22 @@ public class StringToEnumConverterFactory implements ConverterFactory<String, En
 
     public StringToEnumConverterFactory(GenericConversionService conversionService) {
         conversionService.addConverterFactory(this);
+    }
+
+    /**
+     * copy from org.springframework.core.convert.support.ConversionUtils#getEnumType(Class)
+     *
+     * @param targetType
+     * @return
+     */
+    public static Class<?> getEnumType(Class<?> targetType) {
+        Class enumType;
+        for (enumType = targetType; enumType != null && !enumType.isEnum(); enumType = enumType.getSuperclass()) {
+        }
+        Assert.notNull(enumType, () -> {
+            return "The target type " + targetType.getName() + " does not refer to an enum";
+        });
+        return enumType;
     }
 
     @Override
@@ -34,20 +51,20 @@ public class StringToEnumConverterFactory implements ConverterFactory<String, En
 
         @Override
         public T convert(String source) {
-            if(StringUtils.isBlank(source)){
+            if (StringUtils.isBlank(source)) {
                 return null;
             }
             source = source.trim();
             T data = null;
             try {
                 data = (T) Enum.valueOf(enumType, source);
-            }catch ( Exception e){
+            } catch (Exception e) {
 
             }
-            if(data == null && ICodeAndNameEnum.class.isAssignableFrom(enumType)){
+            if (data == null && ICodeAndNameEnum.class.isAssignableFrom(enumType)) {
                 T[] values = enumType.getEnumConstants();
                 for (T value : values) {
-                    if(source.equals(((ICodeAndNameEnum)value).getChineseName())){
+                    if (source.equals(((ICodeAndNameEnum) value).getChineseName())) {
                         //尝试通过中文名来匹配 枚举
                         return value;
                     }
@@ -55,19 +72,5 @@ public class StringToEnumConverterFactory implements ConverterFactory<String, En
             }
             return data;
         }
-    }
-
-    /**
-     * copy from org.springframework.core.convert.support.ConversionUtils#getEnumType(Class)
-     * @param targetType
-     * @return
-     */
-    public static Class<?> getEnumType(Class<?> targetType) {
-        Class enumType;
-        for (enumType = targetType; enumType != null && !enumType.isEnum(); enumType = enumType.getSuperclass()) {}
-        Assert.notNull(enumType, () -> {
-            return "The target type " + targetType.getName() + " does not refer to an enum";
-        });
-        return enumType;
     }
 }

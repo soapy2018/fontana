@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 泛型工具类
+ *
  * @author genx
  * @date 2021/6/24 18:31
  */
@@ -18,9 +19,10 @@ public class GenericTypeKitUtil {
 
     /**
      * 获取泛型 针对当前实例 具体的类
-     * @param instanceType 实例的类
+     *
+     * @param instanceType    实例的类
      * @param genericBeanType 泛型所在的类
-     * @param index 泛型下标
+     * @param index           泛型下标
      * @return
      */
     public static Class getGenericType(Class instanceType, Class genericBeanType, int index) {
@@ -46,10 +48,9 @@ public class GenericTypeKitUtil {
     }
 
     /**
-     *
-     * @param cls 当前的类
+     * @param cls                 当前的类
      * @param actualTypeArguments 从前面传过来的具体类型
-     * @param map 当前 实例对象的map
+     * @param map                 当前 实例对象的map
      */
     private static void readGeneric(Class cls, Type[] actualTypeArguments, Map<Class, Class[]> map) {
         if (cls == Object.class) {
@@ -74,6 +75,7 @@ public class GenericTypeKitUtil {
 
     /**
      * 将 Type 解析为 具体的类
+     *
      * @param actualTypeArguments
      * @return
      */

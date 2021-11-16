@@ -17,17 +17,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApiLogProperties {
 
     /**
-     *  apilog是否开启
+     * apilog是否开启
      */
     private Boolean enable = false;
 
     /**
-     *  记录中是否显示来源IP
+     * 记录中是否显示来源IP
      */
     private Boolean showip = false;
 
     /**
-     *  记录中是否显示入参
+     * 记录中是否显示入参
      */
     private Boolean showargs = true;
 

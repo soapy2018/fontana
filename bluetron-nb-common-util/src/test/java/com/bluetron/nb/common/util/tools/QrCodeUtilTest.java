@@ -2,13 +2,14 @@ package com.bluetron.nb.common.util.tools;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.qrcode.QrConfig;
-import com.bluetron.nb.common.util.tools.QrCodeUtil;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Test;
+
 import java.awt.*;
 
 /**
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/4/15 16:50
  */

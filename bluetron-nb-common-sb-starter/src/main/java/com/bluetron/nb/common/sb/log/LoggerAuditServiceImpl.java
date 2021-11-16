@@ -15,8 +15,6 @@ import java.time.format.DateTimeFormatter;
  * @author bcloud
  * @date 2020/2/3
  * <p>
- * 
- 
  */
 @Slf4j
 @EnableConfigurationProperties({AuditLogProperties.class})

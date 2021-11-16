@@ -20,6 +20,7 @@ public enum CustomerResultCode implements ICodeAndMessageEnum {
         this.code = code;
         this.message = message;
     }
+
     @Override
     public Integer getCode() {
         return this.code;

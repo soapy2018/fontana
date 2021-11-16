@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于标识该字段强制用 = 条件查询
+ *
  * @author genx
  * @date 2021/10/8 14:59
  */

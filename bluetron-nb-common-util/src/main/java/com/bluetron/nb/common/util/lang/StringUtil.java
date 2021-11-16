@@ -2,6 +2,7 @@ package com.bluetron.nb.common.util.lang;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,28 +19,28 @@ public class StringUtil extends StringUtils {
     /**
      * Collection转字符串，默认逗号分隔
      * ["aaa","bbb"] -> aaa,bbb
-     * 
-     * @param Collection 
-     * @return aaa,bbb,ccc
+     *
+     * @param Collection
+     * @return aaa, bbb, ccc
      */
     public static String joinIgnoreNull(Collection<String> Collection) {
         return joinIgnoreNull(Collection, ",");
     }
-    
+
     /**
      * Collection转字符串
      * ["aaa","bbb"] -> aaa,bbb
-     * 
+     *
      * @param Collection
-     * @param delimiter 连接符号
-     * @return aaa,bbb,ccc
+     * @param delimiter  连接符号
+     * @return aaa, bbb, ccc
      */
-    public static String joinIgnoreNull(Collection<String> Collection , CharSequence delimiter) {
-        
-        if(null == Collection || Collection.isEmpty()) {
+    public static String joinIgnoreNull(Collection<String> Collection, CharSequence delimiter) {
+
+        if (null == Collection || Collection.isEmpty()) {
             return "";
         }
-        
+
         String joinString = Collection.stream().filter(t -> null != t)
                 .collect(Collectors.joining(delimiter));
         return joinString;
@@ -50,8 +51,8 @@ public class StringUtil extends StringUtils {
      * ["aaa","bbb"] -> aaa,bbb,但是不支持过滤null
      *
      * @param collection
-     * @param separator 连接符号
-     * @return aaa,bbb,ccc
+     * @param separator  连接符号
+     * @return aaa, bbb, ccc
      */
     public static String join(Collection<?> collection, String separator) {
         return org.apache.commons.lang3.StringUtils.join(collection, separator);
@@ -66,8 +67,8 @@ public class StringUtil extends StringUtils {
      * [1,2,3] -> 1,2,3
      *
      * @param objectsArray
-     * @param separator 连接符号
-     * @return aaa,bbb,ccc
+     * @param separator    连接符号
+     * @return aaa, bbb, ccc
      */
 
     public static String join(Object[] objectsArray, char separator) {
@@ -80,7 +81,8 @@ public class StringUtil extends StringUtils {
 
     /**
      * "1,2,3" 解析为 [1,2,3]
-     *  忽略0
+     * 忽略0
+     *
      * @param param String
      * @return Set<Long>
      */
@@ -106,7 +108,8 @@ public class StringUtil extends StringUtils {
 
     /**
      * "1,2,3" 解析为 [1,2,3]
-     *  忽略0
+     * 忽略0
+     *
      * @param param
      * @return
      */

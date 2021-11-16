@@ -12,11 +12,9 @@ import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.bluetron.nb.common.base.constant.CommonConstants;
 import com.bluetron.nb.common.db.property.MybatisPlusAutoFillProperties;
 import com.bluetron.nb.common.db.property.TenantProperties;
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.plugin.Interceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,6 +28,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +41,6 @@ import java.util.Map;
  * @author cqf
  * @date 2021/10/5
  * <p>
- *
  */
 @Configuration
 @Slf4j
@@ -77,7 +75,7 @@ public class MybatisPlusAutoConfigure {
                     .setTenantHandler(tenantHandler);
             paginationInterceptor.setSqlParserList(CollUtil.toList(tenantSqlParser));
             paginationInterceptor.setSqlParserFilter(sqlParserFilter);
-        }else{
+        } else {
             List<ISqlParser> sqlParserList = new ArrayList<>();
             // 攻击 SQL 阻断解析器、加入解析链
             sqlParserList.add(new BlockAttackSqlParser());
@@ -94,8 +92,10 @@ public class MybatisPlusAutoConfigure {
     }
 
     ///**********************动态数据源相关*******************/////////////
+
     /**
      * 配置文件yml中的默认数据源
+     *
      * @return
      */
     @Bean(name = "defaultDataSource")
@@ -120,14 +120,14 @@ public class MybatisPlusAutoConfigure {
     /**
      * 初始化数据源，并用配置文件yml中的配置作为默认数据源
      * 只初始化一次
-     * @return
      *
+     * @return
      */
     @Bean("dynamicDataSource")
     @ConditionalOnProperty(prefix = CommonConstants.TENANT_PREFIX, name = "type", havingValue = "db")
     public DataSource dynamicDataSource() {
         Map<Object, Object> dataSourceMap = new HashMap<>();
-        HikariDataSource defaultDataSource = (HikariDataSource)getDefaultDataSource();
+        HikariDataSource defaultDataSource = (HikariDataSource) getDefaultDataSource();
         dataSourceMap.put(CommonConstants.DEFAULT_TENANT, defaultDataSource);
 // 不全部初始化了吧
 //        List<TenantInfo> tenantList = tenantInfoService.getActiveTenantsList();

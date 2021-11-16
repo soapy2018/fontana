@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.entity.StringEntity;
 import org.junit.Test;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +38,7 @@ public class HttpClientUtilTest {
         head.put("Content-Type", "application/x-www-form-urlencoded");
 
         StringEntity requestBody = new StringEntity("grant_type=password_code&deviceId=C28FE8EB-4DF9-4234-8429-07A125AD63A5&validCode=fctu&username=bcloud&password=admin", "UTF-8");
-        Map<String, Object> map = HttpClientUtil.post("http://192.168.8.119:9901/api-uaa/oauth/token", requestBody, head );
+        Map<String, Object> map = HttpClientUtil.post("http://192.168.8.119:9901/api-uaa/oauth/token", requestBody, head);
 
         log.info(map.toString());
         //assertThat(map.toString()).isEqualTo("{code=200, message=, content={\"status\":\"UP\"}}");
@@ -72,7 +73,7 @@ public class HttpClientUtilTest {
         params.put("a", "a");
         params.put("b", "b");
         params.put("c", "c");
-        assertThat(ParameterHelper.urlBindParams("http://www.abc.com",params))
+        assertThat(ParameterHelper.urlBindParams("http://www.abc.com", params))
                 .isEqualTo("http://www.abc.com?a=a&b=b&c=c");
     }
 }

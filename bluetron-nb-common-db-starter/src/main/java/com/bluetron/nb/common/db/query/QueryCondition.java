@@ -10,7 +10,8 @@ import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/8/16 19:42
  */
@@ -115,9 +116,17 @@ public class QueryCondition<T> implements Map<String, Object>, IQueryCondition<T
         return orderBy;
     }
 
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
     @Override
     public boolean isAsc() {
         return isAsc;
+    }
+
+    public void setAsc(boolean asc) {
+        isAsc = asc;
     }
 
     @Override
@@ -125,21 +134,13 @@ public class QueryCondition<T> implements Map<String, Object>, IQueryCondition<T
         return page;
     }
 
+    public void setPage(int page) {
+        this.page = page;
+    }
+
     @Override
     public int getPageSize() {
         return pageSize;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-    }
-
-    public void setAsc(boolean asc) {
-        isAsc = asc;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 
     public void setPageSize(int pageSize) {

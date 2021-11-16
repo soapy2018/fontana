@@ -9,7 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/7/30 10:11
  */
@@ -30,6 +31,10 @@ public class RequestLoginContextHolder {
         throw new GeneralException(ResultCode.USER_NOT_LOGGED_IN);
     }
 
+    public static void setCurrentLoginUser(LoginUserDTO loginUserDTO) {
+        REQUEST_LOGIN_HOLDER.set(loginUserDTO);
+    }
+
     public static LoginPersonnelDTO getCurrentLoginPersonnel() {
         LoginPersonnelDTO loginPersonnelDTO = REQUEST_LOGIN_PERSONNEL_HOLDER.get();
         if (loginPersonnelDTO != null && StringUtils.isNotBlank(loginPersonnelDTO.getTenantId())) {
@@ -37,6 +42,10 @@ public class RequestLoginContextHolder {
         }
         //throw new AutoPartsNotLoginException();
         throw new GeneralException(ResultCode.USER_NOT_LOGGED_IN);
+    }
+
+    public static void setCurrentLoginPersonnel(LoginPersonnelDTO loginPersonnelDTO) {
+        REQUEST_LOGIN_PERSONNEL_HOLDER.set(loginPersonnelDTO);
     }
 
     public static ILoginAccountDTO getCurrentLoginAccount() {
@@ -55,14 +64,6 @@ public class RequestLoginContextHolder {
     public static String getCurrentTenantId() {
         ILoginAccountDTO loginAccountDTO = getCurrentLoginAccount();
         return loginAccountDTO.getTenantId();
-    }
-
-    public static void setCurrentLoginUser(LoginUserDTO loginUserDTO) {
-        REQUEST_LOGIN_HOLDER.set(loginUserDTO);
-    }
-
-    public static void setCurrentLoginPersonnel(LoginPersonnelDTO loginPersonnelDTO) {
-        REQUEST_LOGIN_PERSONNEL_HOLDER.set(loginPersonnelDTO);
     }
 
 }

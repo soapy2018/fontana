@@ -5,6 +5,7 @@ import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -17,8 +18,6 @@ import java.util.List;
  * @author cqf
  * @date 2021/9/22
  * <p>
- * 
- 
  */
 public class FeignHttpInterceptorConfig {
     protected List<String> requestHeaders = new ArrayList<>();
@@ -46,7 +45,7 @@ public class FeignHttpInterceptorConfig {
                 if (headerNames != null) {
                     String headerName;
                     String headerValue;
-                    while(headerNames.hasMoreElements()) {
+                    while (headerNames.hasMoreElements()) {
                         headerName = headerNames.nextElement();
                         if (requestHeaders.contains(headerName)) {
                             headerValue = request.getHeader(headerName);

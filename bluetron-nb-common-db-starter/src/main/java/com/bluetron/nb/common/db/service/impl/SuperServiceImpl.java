@@ -12,6 +12,7 @@ import com.bluetron.nb.common.base.lock.DistributedLock;
 import com.bluetron.nb.common.base.lock.ZLock;
 import com.bluetron.nb.common.db.service.ISuperService;
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +23,6 @@ import java.util.concurrent.TimeUnit;
  * @author cqf
  * @date 2021/10/10
  * <p>
- * 
- 
  */
 public class SuperServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements ISuperService<T> {
     @Override
@@ -36,7 +35,7 @@ public class SuperServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M,
         }
         try (
                 ZLock lock = locker.tryLock(lockKey, 10, 60, TimeUnit.SECONDS);
-                ) {
+        ) {
             if (lock != null) {
                 //判断记录是否已存在
                 int count = super.count(countWrapper);

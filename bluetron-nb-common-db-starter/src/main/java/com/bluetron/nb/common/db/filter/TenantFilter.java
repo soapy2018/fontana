@@ -6,8 +6,8 @@ import com.bluetron.nb.common.base.context.TenantContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class TenantFilter extends OncePerRequestFilter {
             //保存租户id
             if (StringUtils.isNotEmpty(tenantId)) {
                 TenantContextHolder.setTenant(tenantId);
-            }else {
+            } else {
                 TenantContextHolder.setDefaultTenant();
             }
             filterChain.doFilter(request, response);

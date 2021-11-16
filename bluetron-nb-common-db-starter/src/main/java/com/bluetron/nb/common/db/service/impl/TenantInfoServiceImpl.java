@@ -7,7 +7,6 @@ import com.bluetron.nb.common.db.entity.TenantInfo;
 import com.bluetron.nb.common.db.mapper.TenantInfoMapper;
 import com.bluetron.nb.common.db.service.ITenantInfoService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +19,11 @@ import java.util.List;
  * @date: 2021/11/4 17:09
  */
 //租户信息放在default数据库
-    @Tenant
-    @Service
-    @ConditionalOnProperty(prefix = CommonConstants.TENANT_PREFIX, name = "type", havingValue = "db")
-    //@ConditionalOnProperty(prefix = CommonConstants.DYNAMIC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true")
-    public class TenantInfoServiceImpl extends SuperServiceImpl<TenantInfoMapper, TenantInfo> implements ITenantInfoService {
+@Tenant
+@Service
+@ConditionalOnProperty(prefix = CommonConstants.TENANT_PREFIX, name = "type", havingValue = "db")
+//@ConditionalOnProperty(prefix = CommonConstants.DYNAMIC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true")
+public class TenantInfoServiceImpl extends SuperServiceImpl<TenantInfoMapper, TenantInfo> implements ITenantInfoService {
     @Override
     public List<TenantInfo> getActiveTenantsList() {
         return baseMapper.selectList(

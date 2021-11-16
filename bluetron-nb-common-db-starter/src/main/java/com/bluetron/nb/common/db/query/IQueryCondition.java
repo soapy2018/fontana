@@ -1,12 +1,14 @@
 package com.bluetron.nb.common.db.query;
 
 import com.bluetron.nb.common.util.tools.GenericTypeKitUtil;
+
 import java.util.Map;
 import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 
+ * Description:
+ *
  * @author genx
  * @date 2021/9/30 10:49
  */
@@ -24,6 +26,7 @@ public interface IQueryCondition<T> {
 
     /**
      * 获取查询类
+     *
      * @return
      */
     default Class<T> getQueryBeanType() {

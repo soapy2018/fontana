@@ -1,6 +1,9 @@
 package com.bluetron.nb.common.util.tools.tree;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @className: menu
@@ -13,11 +16,11 @@ import lombok.*;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Menu extends Tree<Menu>{
+public class Menu extends Tree<Menu> {
 
     String description;
 
-    public Menu(Integer id, String name, Integer parentId, String description){
+    public Menu(Integer id, String name, Integer parentId, String description) {
         super(id, name, parentId);
         this.description = description;
     }

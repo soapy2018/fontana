@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 /**
  * 多表联查
+ *
  * @author genx
  * @date 2021/5/27 10:52
  */
@@ -36,35 +37,30 @@ public class BluetronQueryWrapper<E, R> {
      * 当前已包含的实体对象
      */
     private final Set<Class> entityTypeSet = new HashSet(8);
-
+    /**
+     * 条件
+     */
+    private final ISqlExpression where;
+    /**
+     * 排序
+     */
+    private final List<String> orderByList = new LinkedList();
     /**
      * 主表的别名
      * (连接表的别名在 JoinWrapper 维护)
      */
     private Map<String, String> aliasMap = new HashMap(16);
-
     /**
      * 需要忽略的字段
      */
     private Set<String> ignoreSet = new HashSet(16);
-
-    /**
-     * 条件
-     */
-    private final ISqlExpression where;
-
     /**
      * 查询的key 与 数据库真实字段的映射关系
      * {
-     *  "workOrderNo": "_workOrder.code"
+     * "workOrderNo": "_workOrder.code"
      * }
      */
     private Map<String, String> searchMapping = new HashMap(64);
-
-    /**
-     * 排序
-     */
-    private final List<String> orderByList = new LinkedList();
 
     public BluetronQueryWrapper(Class<E> entityType, Class<R> returnType) {
         this.entityType = entityType;
@@ -75,6 +71,7 @@ public class BluetronQueryWrapper<E, R> {
 
     /**
      * 设置别名
+     *
      * @param f1
      * @param f2
      * @param <T>
@@ -87,13 +84,14 @@ public class BluetronQueryWrapper<E, R> {
 
     /**
      * 忽略一些字段
+     *
      * @param ff
      * @return
      */
     public BluetronQueryWrapper<E, R> ignore(SFunction<E, ?>... ff) {
-        if(ff != null && ff.length > 0){
+        if (ff != null && ff.length > 0) {
             for (SFunction<E, ?> f : ff) {
-                if(f != null) {
+                if (f != null) {
                     //用空字符串来代表 忽略
                     ignoreSet.add(SqlUtils.getPropertyName(f));
                 }

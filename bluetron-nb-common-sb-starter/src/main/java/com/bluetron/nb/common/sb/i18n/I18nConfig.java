@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractResourceBasedMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+
 import java.util.Locale;
 
 /**
@@ -20,13 +21,13 @@ import java.util.Locale;
 @Slf4j
 public class I18nConfig {
 
+    public static final int LANG_LENGTH = 2;
     @Value("${spring.mvc.locale:zh_CN}")
     private String locale;
-    public static final int LANG_LENGTH = 2;
 
     @Bean
     @ConditionalOnMissingBean(LocaleResolver.class)
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver localeResolver = new I18nAcceptHeaderLocaleResolver();
         String[] localeSplit = this.locale.split(CommonConstants.UNDERLINE);
         if (localeSplit.length != LANG_LENGTH) {
@@ -39,14 +40,14 @@ public class I18nConfig {
 
     @Bean
     @ConditionalOnMissingBean(AbstractResourceBasedMessageSource.class)
-    public ClasspathI18nMessageResource messageResource(){
+    public ClasspathI18nMessageResource messageResource() {
         ClasspathI18nMessageResource classpathI18nMessageResource = new ClasspathI18nMessageResource();
         return classpathI18nMessageResource;
     }
 
     @Bean
     public I18nMessageResourceAccessor messageResourceAccessor(ClasspathI18nMessageResource messageResource,
-                                                                  LocaleResolver localeResolver){
+                                                               LocaleResolver localeResolver) {
         I18nMessageResourceAccessor i18nMessageResourceAccessor = new I18nMessageResourceAccessor(messageResource);
         i18nMessageResourceAccessor.setLocaleResolver(localeResolver);
         i18nMessageResourceAccessor.setDefaultLocaleName(this.locale);

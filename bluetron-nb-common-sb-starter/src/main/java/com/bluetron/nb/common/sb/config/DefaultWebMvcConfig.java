@@ -11,10 +11,12 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import java.util.List;
 
 /**
  * SpringMvc相关配置
+ *
  * @author genx
  * @date 2021/4/17 10:17
  */
@@ -49,6 +51,7 @@ public class DefaultWebMvcConfig implements WebMvcConfigurer {
 
     /**
      * 允许跨域
+     *
      * @return
      */
     @Bean

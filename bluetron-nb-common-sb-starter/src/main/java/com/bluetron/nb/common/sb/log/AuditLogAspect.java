@@ -27,8 +27,6 @@ import java.time.LocalDateTime;
  * @author cqf
  * @date 2021/11/3
  * <p>
- * 
- 
  */
 @Slf4j
 @Aspect
@@ -39,12 +37,6 @@ public class AuditLogAspect {
 
     private AuditLogProperties auditLogProperties;
     private IAuditService auditService;
-
-    public AuditLogAspect(AuditLogProperties auditLogProperties, IAuditService auditService) {
-        this.auditLogProperties = auditLogProperties;
-        this.auditService = auditService;
-    }
-
     /**
      * 用于SpEL表达式解析.
      */
@@ -53,6 +45,10 @@ public class AuditLogAspect {
      * 用于获取方法参数定义名字.
      */
     private DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
+    public AuditLogAspect(AuditLogProperties auditLogProperties, IAuditService auditService) {
+        this.auditLogProperties = auditLogProperties;
+        this.auditService = auditService;
+    }
 
     @Before("@within(auditLog) || @annotation(auditLog)")
     public void beforeMethod(JoinPoint joinPoint, AuditLog auditLog) {
@@ -83,7 +79,7 @@ public class AuditLogAspect {
             // spring的表达式上下文对象
             EvaluationContext context = new StandardEvaluationContext();
             // 给上下文赋值
-            for(int i = 0; i < args.length; i++) {
+            for (int i = 0; i < args.length; i++) {
                 context.setVariable(paramNames[i], args[i]);
             }
             return expression.getValue(context).toString();
@@ -99,7 +95,7 @@ public class AuditLogAspect {
         audit.setTimestamp(LocalDateTime.now());
         audit.setApplicationName(applicationName);
 
-        MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         audit.setClassName(methodSignature.getDeclaringTypeName());
         audit.setMethodName(methodSignature.getName());
 

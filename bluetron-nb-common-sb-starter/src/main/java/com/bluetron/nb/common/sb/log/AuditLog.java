@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * @author bcloud
  * @date 2020/2/3
  * <p>
- *
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

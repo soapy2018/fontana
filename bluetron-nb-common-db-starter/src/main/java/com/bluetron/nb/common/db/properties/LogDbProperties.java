@@ -13,8 +13,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author cqf
  * @date 2021/9/8
  * <p>
- * 
- 
  */
 @Setter
 @Getter

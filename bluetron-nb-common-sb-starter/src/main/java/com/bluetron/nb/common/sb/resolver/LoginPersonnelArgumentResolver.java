@@ -12,22 +12,23 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
  * Description:
+ *
  * @author genx
  * @date 2021/4/22 15:33
  */
 public class LoginPersonnelArgumentResolver implements HandlerMethodArgumentResolver {
 
- private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
- @Override
- public boolean supportsParameter(MethodParameter methodParameter) {
-  return LoginPersonnelDTO.class.isAssignableFrom(methodParameter.getParameterType());
- }
+    @Override
+    public boolean supportsParameter(MethodParameter methodParameter) {
+        return LoginPersonnelDTO.class.isAssignableFrom(methodParameter.getParameterType());
+    }
 
- @Override
- public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-  return RequestLoginContextHolder.getCurrentLoginPersonnel();
- }
+    @Override
+    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+        return RequestLoginContextHolder.getCurrentLoginPersonnel();
+    }
 }
 
 

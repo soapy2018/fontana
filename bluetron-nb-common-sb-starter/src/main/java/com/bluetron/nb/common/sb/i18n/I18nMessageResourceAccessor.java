@@ -36,14 +36,14 @@ public class I18nMessageResourceAccessor {
     /**
      * 根据key获取文本
      * 优先从head头取Local信息，取不到则用默认Local
+     *
      * @param key
      * @return
      */
     public String getMessage(String key) {
 
         Locale locale = getLocaleFromRequest();
-        if( null != locale)
-        {
+        if (null != locale) {
             log.debug("key is {} locale is {}", key, locale);
             return getMessage(key, locale, null);
         }
@@ -52,7 +52,6 @@ public class I18nMessageResourceAccessor {
     }
 
     /**
-     *
      * @param key
      * @param lang 语言环境，与bundle resource 文件名对应
      * @return
@@ -64,7 +63,7 @@ public class I18nMessageResourceAccessor {
 
     /**
      * 设置默认的语言环境
-     * 
+     *
      * @param defaultLocaleName
      */
     public void setDefaultLocaleName(String defaultLocaleName) {
@@ -81,10 +80,9 @@ public class I18nMessageResourceAccessor {
     }
 
     /**
-     * 
-     * @param key              key
-     * @param locale           国家
-     * @param defaultMsg       默认值
+     * @param key        key
+     * @param locale     国家
+     * @param defaultMsg 默认值
      * @return
      */
     public String getMessage(String key, Locale locale, String defaultMsg) {
@@ -98,7 +96,7 @@ public class I18nMessageResourceAccessor {
 
     /**
      * 根据传入的语言获取语言环境
-     * 
+     *
      * @param lang
      * @return
      */
@@ -108,7 +106,7 @@ public class I18nMessageResourceAccessor {
 
     /**
      * 选择语言环境
-     * 
+     *
      * @param lang
      * @return
      */
@@ -128,10 +126,9 @@ public class I18nMessageResourceAccessor {
      */
     private Locale getLocaleFromRequest() {
         ServletRequestAttributes attr = null;
-        try{
+        try {
             attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        } catch (IllegalStateException e)
-        {
+        } catch (IllegalStateException e) {
             return null;
         }
         HttpServletRequest request = attr.getRequest();

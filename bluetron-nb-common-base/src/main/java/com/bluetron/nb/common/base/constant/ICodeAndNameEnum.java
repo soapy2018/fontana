@@ -1,7 +1,6 @@
 package com.bluetron.nb.common.base.constant;
 
 
-
 /**
  * 抽象枚举类 code 和 中文名 的关系
  * excel导出时 枚举字段添加 数据有限性限制
@@ -14,12 +13,14 @@ public interface ICodeAndNameEnum {
 
     /**
      * code
+     *
      * @return
      */
     String getCode();
 
     /**
      * 中文名
+     *
      * @return
      */
     String getChineseName();

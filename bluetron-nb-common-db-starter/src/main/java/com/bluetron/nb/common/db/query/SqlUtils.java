@@ -72,12 +72,13 @@ public class SqlUtils {
 
     /**
      * 解析 select 选项
+     *
      * @param entityType
      * @param aliasMap
      * @param searchMapping
      * @param returnPropertySet
      */
-    public static void resolveSelect(Class entityType, Map<String, String> aliasMap,  Map<String, String> searchMapping, Set<String> returnPropertySet, Set<String> ignoreSet) {
+    public static void resolveSelect(Class entityType, Map<String, String> aliasMap, Map<String, String> searchMapping, Set<String> returnPropertySet, Set<String> ignoreSet) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entityType);
         if (tableInfo == null) {
             throw new RuntimeException("不是有效的实体对象:" + entityType.getSimpleName());
@@ -92,7 +93,7 @@ public class SqlUtils {
         }
 
         for (TableFieldInfo tableFieldInfo : tableInfo.getFieldList()) {
-            if(ignoreSet != null && ignoreSet.contains(tableFieldInfo.getProperty())){
+            if (ignoreSet != null && ignoreSet.contains(tableFieldInfo.getProperty())) {
                 //忽略
                 continue;
             }

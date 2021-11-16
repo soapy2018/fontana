@@ -7,7 +7,6 @@ import com.bluetron.nb.common.db.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +25,8 @@ public class ServiceAPIA {
         return "hello" + name;
     }
 
-    @Tenant(value="tenantID1")
-    @GetMapping(value="/findAll")
+    @Tenant(value = "tenantID1")
+    @GetMapping(value = "/findAll")
     public Object findAll() {
         return sysUserService.findAll();
     }

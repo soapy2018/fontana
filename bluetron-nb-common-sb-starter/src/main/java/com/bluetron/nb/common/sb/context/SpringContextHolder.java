@@ -25,8 +25,26 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
         return applicationContext.getBean(requiredType);
     }
 
-    public static <T> Map<String, T> getBeansOfType(@Nullable Class<T> type) throws BeansException{
+    public static <T> Map<String, T> getBeansOfType(@Nullable Class<T> type) throws BeansException {
         return applicationContext.getBeansOfType(type);
+    }
+
+    /**
+     * 当前生效profile
+     *
+     * @return
+     */
+    public static String getActiveProfile() {
+        return applicationContext.getEnvironment().getActiveProfiles()[0];
+    }
+
+    /**
+     * 当前生效profiles
+     *
+     * @return
+     */
+    public static String[] getActiveProfiles() {
+        return applicationContext.getEnvironment().getActiveProfiles();
     }
 
     @Override
@@ -37,21 +55,5 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     @Override
     public void destroy() throws Exception {
         applicationContext = null;
-    }
-
-    /**
-     * 当前生效profile
-     * @return
-     */
-    public static String getActiveProfile() {
-        return applicationContext.getEnvironment().getActiveProfiles()[0];
-    }
-
-    /**
-     * 当前生效profiles
-     * @return
-     */
-    public static String[] getActiveProfiles() {
-        return applicationContext.getEnvironment().getActiveProfiles();
     }
 }

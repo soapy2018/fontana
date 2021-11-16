@@ -10,7 +10,9 @@ import java.util.List;
 public abstract class BasenameSort {
     /**
      * 对baseNames进行排序
+     *
      * @param baseNames
      */
-    protected void sort(List<String> baseNames){}
+    protected void sort(List<String> baseNames) {
+    }
 }

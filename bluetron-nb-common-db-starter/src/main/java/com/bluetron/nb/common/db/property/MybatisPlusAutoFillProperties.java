@@ -12,8 +12,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
  * @author cqf
  * @date 2020/10/5
  * <p>
- *
-
  */
 @Setter
 @Getter

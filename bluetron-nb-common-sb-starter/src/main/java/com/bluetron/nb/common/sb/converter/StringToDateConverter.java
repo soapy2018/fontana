@@ -11,9 +11,10 @@ import java.util.Date;
 
 /**
  * 时间转换器 支持3种格式
- *  yyyy-MM-dd HH:mm:ss
- *  yyyy-MM-dd
- *  时间戳(毫秒级)
+ * yyyy-MM-dd HH:mm:ss
+ * yyyy-MM-dd
+ * 时间戳(毫秒级)
+ *
  * @author genx
  * @date 2021/4/8 16:54
  */
@@ -27,7 +28,7 @@ public class StringToDateConverter implements Converter<String, Date> {
     };
 
     public StringToDateConverter(GenericConversionService conversionService) {
-        if(conversionService != null) {
+        if (conversionService != null) {
             conversionService.addConverter(this);
         }
     }
@@ -36,13 +37,13 @@ public class StringToDateConverter implements Converter<String, Date> {
     public Date convert(String s) {
         Date d = null;
         for (String format : FORMATS) {
-            if(s.length() == format.length()){
-                try{
+            if (s.length() == format.length()) {
+                try {
                     d = FastDateFormat.getInstance(format).parse(s);
                 } catch (ParseException e) {
 
                 }
-                if(d != null){
+                if (d != null) {
                     return d;
                 }
             }

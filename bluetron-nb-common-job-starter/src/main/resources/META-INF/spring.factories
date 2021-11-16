@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bluetron.nb.common.job.XxlJobConfig
+com.bluetron.nb.common.job.xxlJob.XxlJobConfig

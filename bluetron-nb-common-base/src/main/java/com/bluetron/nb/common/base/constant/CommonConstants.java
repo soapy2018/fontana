@@ -82,7 +82,7 @@ public interface CommonConstants {
     /**
      * swagger2配置
      */
-    String SWAGGER2_PREFIX = "bluetron-nb.common.swagger2";
+    String SWAGGER2_PREFIX = "bluetron-nb.common.swagger";
 
     /**
      * 数据表中的tenant_id字段

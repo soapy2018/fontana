@@ -20,10 +20,10 @@ public enum TemplateType {
     /**
      * 用来存 模板信息
      * {
-     *     "name": "设备",            //名称
-     *     "listPageName": "设备台账",  //列表页名称
-     *     "detailPageName": "设备详情",  //详情页名称
-     *     "includeFooter": true        //详情页是否显示 创建人、创建时间、更新人、更新时间
+     * "name": "设备",            //名称
+     * "listPageName": "设备台账",  //列表页名称
+     * "detailPageName": "设备详情",  //详情页名称
+     * "includeFooter": true        //详情页是否显示 创建人、创建时间、更新人、更新时间
      * }
      */
     TemplateInfo

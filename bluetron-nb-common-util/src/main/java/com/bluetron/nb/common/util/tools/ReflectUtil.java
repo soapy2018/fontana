@@ -79,14 +79,14 @@ public class ReflectUtil {
         do {
             fields = clazz.getDeclaredFields();
 
-            for(int i = 0; i < fields.length; ++i) {
+            for (int i = 0; i < fields.length; ++i) {
                 list.add(fields[i]);
             }
 
             clazz = clazz.getSuperclass();
-        } while(clazz != Object.class && clazz != null);
+        } while (clazz != Object.class && clazz != null);
 
-        return (Field[])list.toArray(fields);
+        return (Field[]) list.toArray(fields);
     }
 }
 
