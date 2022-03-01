@@ -17,11 +17,20 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.bluetron.nb</groupId>
             <artifactId>bluetron-nb-common-flow-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-online-service</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>com.bluetron.nb</groupId>
             <artifactId>bluetron-nb-common-redis-starter</artifactId>

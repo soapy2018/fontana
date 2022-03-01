@@ -19,6 +19,6 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class OnlineAutoConfig {
     public OnlineAutoConfig() {
-        log.info(">>>> DATAFILTER START >>>> ");
+        log.info(">>>> ONLINE START >>>> ");
     }
 }
