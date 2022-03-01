@@ -1,8 +1,10 @@
 package com.bluetron.nb.common.util.lang;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,6 +16,19 @@ public class StringUtil extends StringUtils {
 
     private StringUtil() {
 
+    }
+
+    /**
+     * 将SQL Like中的通配符替换为字符本身的含义，以便于比较。
+     *
+     * @param str 待替换的字符串。
+     * @return 替换后的字符串。
+     */
+    public static String replaceSqlWildcard(String str) {
+        if (StrUtil.isBlank(str)) {
+            return str;
+        }
+        return StrUtil.replaceChars(StrUtil.replaceChars(str, "_", "\\_"), "%", "\\%");
     }
 
     /**
@@ -160,4 +175,26 @@ public class StringUtil extends StringUtils {
     public static List<Long> getLongListFromString(String param) {
         return getLongListFromString(param, ",");
     }
+
+    /**
+     * 将驼峰命名转化成下划线
+     * @param para
+     * @return
+     */
+    public static String camelToUnderline(String para){
+        if(para.length()<3){
+            return para.toLowerCase();
+        }
+        StringBuilder sb=new StringBuilder(para);
+        int temp=0;//定位
+        //从第三个字符开始 避免命名不规范
+        for(int i=2;i<para.length();i++){
+            if(Character.isUpperCase(para.charAt(i))){
+                sb.insert(i+temp, "_");
+                temp+=1;
+            }
+        }
+        return sb.toString().toLowerCase();
+    }
+
 }

@@ -1,4 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bluetron.nb.common.redis.config.RedisAutoConfigure,\
+com.bluetron.nb.common.redis.config.CacheManagerConfig,\
+com.bluetron.nb.common.redis.config.RedissonConfig,\
+com.bluetron.nb.common.redis.config.RedisTemplateConfig,\
 com.bluetron.nb.common.redis.lock.RedissonDistributedLock,\
-com.bluetron.nb.common.redis.template.RedisRepository
+com.bluetron.nb.common.redis.lock.LockAspect

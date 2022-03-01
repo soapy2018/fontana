@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 锁对象抽象
  *
- * @author bcloud
+ * @author cqf
  * @date 2020/7/28
  * <p>
  */

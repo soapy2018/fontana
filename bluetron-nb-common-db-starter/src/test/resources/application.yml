@@ -1,8 +1,7 @@
-bluetron-nb:
-  common:
-    tenant:
-      enable: true
-      type: db
+bluetron-nb-common:
+  tenant:
+    enable: true
+    type: db
 spring:
   datasource:
     #    driver-class-name: com.mysql.cj.jdbc.Driver

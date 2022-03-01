@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 分布式锁顶级接口
  *
- * @author bcloud
+ * @author cqf
  * @date 2018/5/29 14:12
  * <p>
  */

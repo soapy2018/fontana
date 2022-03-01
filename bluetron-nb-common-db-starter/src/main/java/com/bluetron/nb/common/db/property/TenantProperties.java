@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 多租户配置
  *
- * @author bcloud
+ * @author cqf
  * @date 2019/8/5
  */
 @Setter

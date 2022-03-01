@@ -4,7 +4,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
 import com.zaxxer.hikari.HikariDataSource;
-
 import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
 

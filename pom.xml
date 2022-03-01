@@ -7,7 +7,7 @@
     <groupId>com.bluetron.nb</groupId>
     <artifactId>bluetron-nb-common</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <modules>
         <module>bluetron-nb-common-base</module>
         <module>bluetron-nb-common-util</module>
@@ -16,6 +16,14 @@
         <module>bluetron-nb-common-redis-starter</module>
         <module>bluetron-nb-common-job-starter</module>
         <module>bluetron-nb-common-swagger2-starter</module>
+        <module>bluetron-nb-common-upms</module>
+        <module>bluetron-nb-common-gateway</module>
+        <module>bluetron-nb-common-cloud-starter</module>
+        <module>bluetron-nb-common-seata</module>
+        <module>bluetron-nb-common-log-starter</module>
+        <module>bluetron-nb-common-online</module>
+        <module>bluetron-nb-common-datafilter</module>
+        <module>bluetron-nb-common-flow</module>
     </modules>
 
     <name>bluetron-nb-common</name>
@@ -30,8 +38,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
         <java.version>1.8</java.version>
+        <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
+        <hibernate-core.version>5.4.22.Final</hibernate-core.version>
+        <druid.version>1.2.5</druid.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <pagehelper.version>1.3.0</pagehelper.version>
+        <bean.query.version>1.1.5</bean.query.version>
+        <flowable.version>6.6.0</flowable.version>
     </properties>
 
     <dependencies>
@@ -39,6 +53,11 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
 
         <!--        <dependency>-->
@@ -49,6 +68,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- api参数验证 -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
         </dependency>
 
         <!-- test -->
@@ -72,7 +98,115 @@
                 <artifactId>bluetron-nb-common-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-redis-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-sb-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-db-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-swagger2-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-cloud-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-log-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-datafilter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-online-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bluetron.nb</groupId>
+                <artifactId>bluetron-nb-common-flow-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <target>${maven.compiler.target}</target>
+                    <source>${maven.compiler.source}</source>
+                    <encoding>UTF-8</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -57,6 +57,10 @@ public class DefaultExceptionAdviceTest {
         errorResult = handler.handleGeneralException(new GeneralException(CustomerResultCode.CUSTOMER_DEFINE_ERROR));
         assertThat(errorResult.getCode()).isEqualTo(90001);
         assertThat(errorResult.getMsg()).isEqualTo("自定义系统错误");
+
+        errorResult = handler.handleGeneralException(new GeneralException("我自己定义的错误"));
+        assertThat(errorResult.getCode()).isEqualTo(-1);
+        //assertThat(errorResult.getMsg()).isEqualTo("我自己定义的错误");
     }
 
     @Test

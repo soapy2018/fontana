@@ -3,7 +3,6 @@ package com.bluetron.nb.common.sb.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 
 /**

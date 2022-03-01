@@ -1,9 +1,10 @@
 package com.bluetron.nb.common.sb;
 
-import com.bluetron.nb.common.sb.context.SpringContextHolder;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.bluetron.nb.common.sb.controller.ServiceAPIA;
 import com.bluetron.nb.common.sb.i18n.I18nMessageResourceAccessor;
 import com.bluetron.nb.common.sb.noController.ServiceAPIB;
+import com.bluetron.nb.common.util.tools.SpringContextHolder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,14 +14,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import java.util.Locale;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@SpringBootApplication(scanBasePackages = "com.bluetron", exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication(scanBasePackages = "com.bluetron", exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @ActiveProfiles("dev")
 public class SpringConfigTest {
 

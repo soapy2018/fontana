@@ -51,9 +51,9 @@ public class Result<T> implements Serializable {
     }
 
     /*不允许在这里随意定义失败code，但可以定义失败消息*/
-//    public static <T> Result<T> failed(Integer code, String msg) {
-//        return of(null, code, msg);
-//    }
+    public static <T> Result<T> failed(ResultCode code, String msg) {
+        return of(null, code.getCode(), msg);
+    }
 
     public static <T> Result<T> failed() {
         return of(null, ResultCode.FAIL.getCode(), ResultCode.FAIL.getMessage());
@@ -67,8 +67,22 @@ public class Result<T> implements Serializable {
         return of(model, ResultCode.FAIL.getCode(), msg);
     }
 
-
     public static <T> Result<T> of(T data, Integer code, String msg) {
         return new Result<>(data, code, msg);
     }
+
+    /**
+     * 根据参数中出错的Result，创建新的错误应答对象。
+     *
+     * @param errorCause 导致错误原因的应答对象。
+     * @return 返回创建的Result实例对象。
+     */
+    public static <T, E> Result<T> failed(Result<E> errorCause) {
+        return of(null, errorCause.code, errorCause.msg);
+    }
+
+    public boolean isSuccess(){
+        return code==1;
+    }
+
 }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>bluetron-nb-common</artifactId>
         <groupId>com.bluetron.nb</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,6 +18,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-base</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-util</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -27,9 +37,8 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.bluetron.nb</groupId>
-            <artifactId>bluetron-nb-common-base</artifactId>
-            <optional>true</optional>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>

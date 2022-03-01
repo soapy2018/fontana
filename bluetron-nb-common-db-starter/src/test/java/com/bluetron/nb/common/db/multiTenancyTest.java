@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootApplication(scanBasePackages = "com.bluetron.nb.common.db")
-//@SpringBootApplication(scanBasePackages = "com.bluetron.nb.common.db")
 @Slf4j
 public class multiTenancyTest {
 

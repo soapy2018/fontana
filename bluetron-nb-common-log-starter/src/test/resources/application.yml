@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: common-log
+bluetron-nb-common:
+  apilog:
+    enable: true
+    showip: true
+    showargs: true
+#    auditlog:
+#      type: db
+#      datasource:

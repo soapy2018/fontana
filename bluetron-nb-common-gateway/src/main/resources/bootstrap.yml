@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: common-gateway
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: Common
+      config:
+        server-addr: localhost:8848
+        namespace: Common
+        file-extension: yaml
+        # 共享配置文件，排序越高后，优先级越高。
+        shared-configs:
+        - data-id: gateway-dev.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+  main:
+    allow-bean-definition-overriding: true
+bluetron-nb-common:
+  tracelog:
+    enable: true

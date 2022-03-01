@@ -22,22 +22,22 @@ public class DefaultAsycTaskConfig {
     /**
      * 线程池维护线程的最小数量.
      */
-    @Value("${asyc-task.corePoolSize:10}")
+    @Value("${bluetron-nb-common.asyc-task.corePoolSize:10}")
     private int corePoolSize;
     /**
      * 线程池维护线程的最大数量
      */
-    @Value("${asyc-task.maxPoolSize:200}")
+    @Value("${bluetron-nb-common.asyc-task.maxPoolSize:200}")
     private int maxPoolSize;
     /**
      * 队列最大长度
      */
-    @Value("${asyc-task.queueCapacity:10}")
+    @Value("${bluetron-nb-common.asyc-task.queueCapacity:10}")
     private int queueCapacity;
     /**
      * 线程池前缀
      */
-    @Value("${asyc-task.threadNamePrefix:bcloudExecutor-}")
+    @Value("${bluetron-nb-common.asyc-task.threadNamePrefix:commonExecutor-}")
     private String threadNamePrefix;
 
     @Bean

@@ -9,7 +9,6 @@ import com.bluetron.nb.common.db.service.ITenantInfoService;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,7 +116,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                         //失败的处理请自行完善，例如重试 错误码
                         logger.error("数据库连接异常: {}", e);
                         throw new GeneralException("数据库连接异常");
-                        //return null;
                     }
                     //添加缓存
                     DataSourceCache.set(tenantId, newDataSource);

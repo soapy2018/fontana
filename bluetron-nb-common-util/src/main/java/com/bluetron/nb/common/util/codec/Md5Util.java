@@ -2,9 +2,7 @@
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.bluetron.nb.common.util.codec;
-
 import cn.hutool.crypto.SecureUtil;
-
 import java.io.InputStream;
 
 public class Md5Util {

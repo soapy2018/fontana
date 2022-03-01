@@ -17,6 +17,7 @@ public class DateUtil {
     public static final String UTC_PATTERN_DAY_TIME = DatePattern.UTC_PATTERN;
     public static final String UTC_PATTERN_DAY_TIME_ZONE = DatePattern.UTC_MS_WITH_ZONE_OFFSET_PATTERN;
     public static final String UTC_PATTERN_DAY_TIME_ZONE_XXX = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+
     private DateUtil() {
 
     }

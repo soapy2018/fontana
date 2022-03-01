@@ -21,12 +21,12 @@ public interface HttpConstants {
     /**
      * 用户名信息头
      */
-    String USER_NAME_HEADER = "x-username";
+    String USER_NAME_HEADER = "x-userName";
 
     /**
      * 用户id信息头
      */
-    String USER_ID_HEADER = "x-userid";
+    String USER_ID_HEADER = "x-userId";
 
     /**
      * 角色信息头
@@ -36,7 +36,7 @@ public interface HttpConstants {
     /**
      * 租户信息头
      */
-    String TENANT_ID_HEADER = "x-tenantid";
+    String TENANT_ID_HEADER = "x-tenantId";
 
     /**
      * 信息头Content-Language
@@ -47,6 +47,15 @@ public interface HttpConstants {
     // 员工的登录信息，放在header里的key
     String PERSONNEL_AUTH = "PersonnelAuth";
 
+    /**
+     * 请求头跟踪id名。
+     */
+    String TRACE_ID_HEADER = "x-traceId";
+
+    /**
+     * 日志链路块id信息头
+     */
+    String SPAN_ID_HEADER = "x-spanId";
 
 }
 

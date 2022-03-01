@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 /**
  * 分布式锁切面
  *
- * @author bcloud
+ * @author cqf
  * @date 2020/6/6
  * <p>
  */
@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class LockAspect {
+
     @Autowired(required = false)
     private DistributedLock locker;
 

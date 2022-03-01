@@ -15,7 +15,7 @@ public class AsyncUtilTest {
 
         AsyncUtil.run(() -> {
             try {
-                log.info("call some client API");
+                log.info("call some com.bluetron.nb.common.base.client API");
                 Thread.sleep(new Random().nextInt(3000)); // make the call return after 3 seconds
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -24,18 +24,18 @@ public class AsyncUtilTest {
             return "ok";
 
         }).thenAccept(result -> {
-            log.info("end >> client API return {} ", result);
+            log.info("end >> com.bluetron.nb.common.base.client API return {} ", result);
         });
 
-        log.info("after async call but before client API return");
+        log.info("after async call but before com.bluetron.nb.common.base.client API return");
 
         /**
          * the log looks like this
          *
          * 15:35:02.453 [main] INFO com.wwl.common.AsyncUtilTest - before async call
-         * 15:35:02.514 [pool-1-thread-1] INFO com.wwl.common.AsyncUtilTest - call some client API
-         * 15:35:02.514 [main] INFO com.wwl.common.AsyncUtilTest - after async call but before client API return
-         * 15:35:03.773 [pool-1-thread-1] INFO com.wwl.common.AsyncUtilTest - end >> client API return ok
+         * 15:35:02.514 [pool-1-thread-1] INFO com.wwl.common.AsyncUtilTest - call some com.bluetron.nb.common.base.client API
+         * 15:35:02.514 [main] INFO com.wwl.common.AsyncUtilTest - after async call but before com.bluetron.nb.common.base.client API return
+         * 15:35:03.773 [pool-1-thread-1] INFO com.wwl.common.AsyncUtilTest - end >> com.bluetron.nb.common.base.client API return ok
          */
 
     }
@@ -45,7 +45,7 @@ public class AsyncUtilTest {
 
         String result = AsyncUtil.run(() -> {
             try {
-                log.info("call some client API");
+                log.info("call some com.bluetron.nb.common.base.client API");
                 Thread.sleep(new Random().nextInt(3000)); // make the call return after 3 seconds
             } catch (InterruptedException e) {
                 e.printStackTrace();
