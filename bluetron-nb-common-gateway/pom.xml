@@ -18,10 +18,36 @@
 
     <dependencies>
 
-        <!--server-api-->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-redis-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-util</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bluetron.nb</groupId>
+            <artifactId>bluetron-nb-common-log-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- 网关服务 -->
@@ -54,36 +80,10 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
+        <!--server-api-->
         <dependency>
-            <groupId>com.bluetron.nb</groupId>
-            <artifactId>bluetron-nb-common-base</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.bluetron.nb</groupId>
-            <artifactId>bluetron-nb-common-redis-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.bluetron.nb</groupId>
-            <artifactId>bluetron-nb-common-util</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.bluetron.nb</groupId>
-            <artifactId>bluetron-nb-common-log-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
     </dependencies>
