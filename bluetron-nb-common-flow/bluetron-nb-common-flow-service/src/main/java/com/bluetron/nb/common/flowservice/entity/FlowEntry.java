@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationOneToOne;
 import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
 import com.bluetron.nb.common.flowapi.vo.FlowEntryVo;
+import liquibase.pro.packaged.A;
 import lombok.Data;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 

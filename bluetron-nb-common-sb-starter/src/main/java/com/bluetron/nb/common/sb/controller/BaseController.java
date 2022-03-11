@@ -221,7 +221,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
         }
         List<Map<String, Object>> resultMapList =
                 result.getData().getDataList().stream().map(BeanUtil::beanToMap).collect(Collectors.toList());
-        return Result.succeed(new Pagination<>(resultMapList, result.getData().getTotal()));
+        return Result.succeed(new Pagination<>(resultMapList, result.getData().getTotalCount()));
     }
 
     /**

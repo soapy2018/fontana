@@ -70,6 +70,12 @@ public class SysMenu extends BaseEntity {
     private Integer onlineMenuPermType;
 
     /**
+     * 仅用于在线表单的流程Id。
+     */
+    @TableField(value = "online_flow_entry_id")
+    private Long onlineFlowEntryId;
+
+    /**
      * 菜单显示顺序 (值越小，排序越靠前)。
      */
     @TableField(value = "show_order")

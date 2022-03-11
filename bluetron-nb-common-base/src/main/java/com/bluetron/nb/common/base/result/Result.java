@@ -18,11 +18,11 @@ public class Result<T> implements Serializable {
     private T data;
     private Integer code;
     private String msg;
+    //private boolean success = true;
 
     /*
      成功的返回值统一设为1
     */
-
     public static <T> Result<T> succeed() {
         return of(null, ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage());
     }
@@ -82,7 +82,7 @@ public class Result<T> implements Serializable {
     }
 
     public boolean isSuccess(){
-        return code==1;
+        return code == 1;
     }
 
 }

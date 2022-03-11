@@ -1,350 +1,1406 @@
-CREATE database if NOT EXISTS `common-flow` default character set utf8mb4 collate utf8mb4_general_ci;
-use `common-flow`;
+
+CREATE database if NOT EXISTS `common-upms` default character set utf8mb4 collate utf8mb4_general_ci;
+use `common-upms`;
+
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50720
+ Source Host           : localhost:3306
+ Source Schema         : common-upms
+
+ Target Server Type    : MySQL
+ Target Server Version : 50720
+ File Encoding         : 65001
+
+ Date: 21/10/2021 12:37:51
+*/
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for bn_flow_category
+-- Table structure for bn_sys_data_perm
 -- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_category`;
-CREATE TABLE `bn_flow_category` (
-  `category_id` bigint(20) NOT NULL COMMENT '主键Id',
-  `name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名称',
-  `code` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '分类编码',
-  `show_order` int(11) NOT NULL COMMENT '实现顺序',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
+DROP TABLE IF EXISTS `bn_sys_data_perm`;
+CREATE TABLE `bn_sys_data_perm` (
+  `data_perm_id` bigint(20) NOT NULL COMMENT '主键',
+  `data_perm_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名称',
+  `rule_type` tinyint(2) NOT NULL COMMENT '数据权限规则类型(0: 全部可见 1: 只看自己 2: 只看本部门 3: 本部门及子部门 4: 多部门及子部门 5: 自定义部门列表)。',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
-  PRIMARY KEY (`category_id`) USING BTREE,
-  UNIQUE KEY `idx_code` (`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
--- ----------------------------
--- Records of bn_flow_category
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_category` VALUES (1440940473421139968, '人事管理', 'HR', 1, '2021-09-23 15:25:55', 1440911410581213417, '2021-09-23 15:25:55', 1440911410581213417);
-INSERT INTO `bn_flow_category` VALUES (1440940520124715008, '财务管理', 'CW', 2, '2021-09-23 15:26:06', 1440911410581213417, '2021-09-23 15:26:06', 1440911410581213417);
-INSERT INTO `bn_flow_category` VALUES (1440940563934220288, '项目管理', 'XM', 3, '2021-09-23 15:26:16', 1440911410581213417, '2021-09-23 15:26:16', 1440911410581213417);
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_entry
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_entry`;
-CREATE TABLE `bn_flow_entry` (
-  `entry_id` bigint(20) NOT NULL COMMENT '主键',
-  `process_definition_name` varchar(200) NOT NULL COMMENT '流程名称',
-  `process_definition_key` varchar(150) NOT NULL COMMENT '流程标识Key',
-  `category_id` bigint(20) NOT NULL COMMENT '流程分类',
-  `main_entry_publish_id` bigint(20) DEFAULT NULL COMMENT '工作流部署的发布主版本Id',
-  `lastest_publish_time` datetime DEFAULT NULL COMMENT '最新发布时间',
-  `status` int(11) NOT NULL COMMENT '流程状态',
-  `bpmn_xml` longtext COMMENT '流程定义的xml',
-  `bind_form_type` int(11) NOT NULL COMMENT '绑定表单类型',
-  `page_id` bigint(20) DEFAULT NULL COMMENT '在线表单的页面Id',
-  `default_form_id` bigint(20) DEFAULT NULL COMMENT '在线表单Id',
-  `default_router_name` varchar(255) DEFAULT NULL COMMENT '静态表单的缺省路由名称',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
-  PRIMARY KEY (`entry_id`) USING BTREE,
-  UNIQUE KEY `idx_process_definition_key` (`process_definition_key`) USING BTREE,
-  KEY `idx_category_id` (`category_id`) USING BTREE,
-  KEY `idx_status` (`status`) USING BTREE,
-  KEY `idx_process_definition_name` (`process_definition_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of bn_flow_entry
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_entry` VALUES (1440962968085860352, '请假申请', 'flowLeave', 1440940473421139968, 1440966810131238912, '2021-09-23 17:10:34', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowLeave\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowLeave\" name=\"请假申请\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_1c9ukkq\">\n      <bpmn2:outgoing>Flow_05fy9wh</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_0sc2yuf\" name=\"请假录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632387369558\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_05fy9wh</bpmn2:incoming>\n      <bpmn2:incoming>Flow_012hd4v</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1dpnyz6</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0pme0vr</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_05fy9wh\" sourceRef=\"Event_1c9ukkq\" targetRef=\"Activity_0sc2yuf\" />\n    <bpmn2:userTask id=\"Activity_1jw5u20\" name=\"部门领导审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT_POST_LEADER&#34;}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632387389734\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632387393116\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0pme0vr</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1hbob37</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_012hd4v</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0pme0vr\" sourceRef=\"Activity_0sc2yuf\" targetRef=\"Activity_1jw5u20\" />\n    <bpmn2:userTask id=\"Activity_0olxatv\" name=\"HR审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;POST&#34;}\" flowable:candidateGroups=\"1440964221855600640\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388147727\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632388151069\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1hbob37</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0so810a</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1dpnyz6</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1hbob37\" name=\"同意\" sourceRef=\"Activity_1jw5u20\" targetRef=\"Activity_0olxatv\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:endEvent id=\"Event_04byxr7\">\n      <bpmn2:incoming>Flow_0so810a</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_0so810a\" name=\"同意\" sourceRef=\"Activity_0olxatv\" targetRef=\"Event_04byxr7\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_012hd4v\" name=\"拒绝\" sourceRef=\"Activity_1jw5u20\" targetRef=\"Activity_0sc2yuf\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_1dpnyz6\" name=\"拒绝\" sourceRef=\"Activity_0olxatv\" targetRef=\"Activity_0sc2yuf\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowLeave\">\n      <bpmndi:BPMNEdge id=\"Flow_012hd4v_di\" bpmnElement=\"Flow_012hd4v\">\n        <di:waypoint x=\"430\" y=\"300\" />\n        <di:waypoint x=\"430\" y=\"270\" />\n        <di:waypoint x=\"270\" y=\"270\" />\n        <di:waypoint x=\"270\" y=\"300\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"339\" y=\"252\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0so810a_di\" bpmnElement=\"Flow_0so810a\">\n        <di:waypoint x=\"640\" y=\"340\" />\n        <di:waypoint x=\"702\" y=\"340\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"660\" y=\"322\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1hbob37_di\" bpmnElement=\"Flow_1hbob37\">\n        <di:waypoint x=\"480\" y=\"340\" />\n        <di:waypoint x=\"540\" y=\"340\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"499\" y=\"322\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0pme0vr_di\" bpmnElement=\"Flow_0pme0vr\">\n        <di:waypoint x=\"320\" y=\"340\" />\n        <di:waypoint x=\"380\" y=\"340\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_05fy9wh_di\" bpmnElement=\"Flow_05fy9wh\">\n        <di:waypoint x=\"168\" y=\"340\" />\n        <di:waypoint x=\"220\" y=\"340\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1dpnyz6_di\" bpmnElement=\"Flow_1dpnyz6\">\n        <di:waypoint x=\"590\" y=\"380\" />\n        <di:waypoint x=\"590\" y=\"420\" />\n        <di:waypoint x=\"270\" y=\"420\" />\n        <di:waypoint x=\"270\" y=\"380\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"419\" y=\"402\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_1c9ukkq_di\" bpmnElement=\"Event_1c9ukkq\">\n        <dc:Bounds x=\"132\" y=\"322\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0sc2yuf_di\" bpmnElement=\"Activity_0sc2yuf\">\n        <dc:Bounds x=\"220\" y=\"300\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1jw5u20_di\" bpmnElement=\"Activity_1jw5u20\">\n        <dc:Bounds x=\"380\" y=\"300\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0olxatv_di\" bpmnElement=\"Activity_0olxatv\">\n        <dc:Bounds x=\"540\" y=\"300\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_04byxr7_di\" bpmnElement=\"Event_04byxr7\">\n        <dc:Bounds x=\"702\" y=\"322\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440945149889744896, 1440945411354267648, NULL, '2021-09-24 09:30:26', 1440911410581213417, '2021-09-23 16:55:18', 1440911410581213417);
-INSERT INTO `bn_flow_entry` VALUES (1440966906914803712, '报销申请', 'flowSubmit', 1440940520124715008, 1440972224344363008, '2021-09-23 17:32:05', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowSubmit\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowSubmit\" name=\"报销申请\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_17n2rw9\">\n      <bpmn2:outgoing>Flow_00ldvag</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_03kjurt\" name=\"报销单录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440947675041107968&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388352676\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_00ldvag</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1hmaykh</bpmn2:incoming>\n      <bpmn2:incoming>Flow_09b7unr</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0x9dx2t</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_00ldvag\" sourceRef=\"Event_17n2rw9\" targetRef=\"Activity_03kjurt\" />\n    <bpmn2:userTask id=\"Activity_0ywxfwu\" name=\"部门领导审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440947675041107968&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT_POST_LEADER&#34;}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388372003\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632388375866\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList>\n          <flowable:formVariable id=\"1440967581673459712\" />\n        </flowable:variableList>\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0x9dx2t</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_18p3hqb</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1hmaykh</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0x9dx2t\" sourceRef=\"Activity_03kjurt\" targetRef=\"Activity_0ywxfwu\" />\n    <bpmn2:exclusiveGateway id=\"Gateway_179zgnp\">\n      <bpmn2:incoming>Flow_18p3hqb</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1qigakr</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_058cmsb</bpmn2:outgoing>\n    </bpmn2:exclusiveGateway>\n    <bpmn2:sequenceFlow id=\"Flow_18p3hqb\" name=\"同意\" sourceRef=\"Activity_0ywxfwu\" targetRef=\"Gateway_179zgnp\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:endEvent id=\"Event_0nvjxgh\">\n      <bpmn2:incoming>Flow_1qigakr</bpmn2:incoming>\n      <bpmn2:incoming>Flow_0ycx8fb</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1qigakr\" name=\"报销金额小于1000\" sourceRef=\"Gateway_179zgnp\" targetRef=\"Event_0nvjxgh\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${totalAmount &lt;= 1000}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:userTask id=\"Activity_0qay48u\" name=\"总经理审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440947675041107968&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateGroups=\"1440911410581213416\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388536771\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632388540081\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_058cmsb</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0ycx8fb</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_09b7unr</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_058cmsb\" name=\"报销金额大于1000\" sourceRef=\"Gateway_179zgnp\" targetRef=\"Activity_0qay48u\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${totalAmount &gt; 1000}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_0ycx8fb\" name=\"同意\" sourceRef=\"Activity_0qay48u\" targetRef=\"Event_0nvjxgh\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_1hmaykh\" name=\"拒绝\" sourceRef=\"Activity_0ywxfwu\" targetRef=\"Activity_03kjurt\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_09b7unr\" name=\"拒绝\" sourceRef=\"Activity_0qay48u\" targetRef=\"Activity_03kjurt\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowSubmit\">\n      <bpmndi:BPMNEdge id=\"Flow_09b7unr_di\" bpmnElement=\"Flow_09b7unr\">\n        <di:waypoint x=\"750\" y=\"450\" />\n        <di:waypoint x=\"750\" y=\"500\" />\n        <di:waypoint x=\"240\" y=\"500\" />\n        <di:waypoint x=\"240\" y=\"350\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"484\" y=\"482\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1hmaykh_di\" bpmnElement=\"Flow_1hmaykh\">\n        <di:waypoint x=\"400\" y=\"270\" />\n        <di:waypoint x=\"400\" y=\"240\" />\n        <di:waypoint x=\"240\" y=\"240\" />\n        <di:waypoint x=\"240\" y=\"270\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"309\" y=\"222\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0ycx8fb_di\" bpmnElement=\"Flow_0ycx8fb\">\n        <di:waypoint x=\"800\" y=\"410\" />\n        <di:waypoint x=\"950\" y=\"410\" />\n        <di:waypoint x=\"950\" y=\"328\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"864\" y=\"392\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_058cmsb_di\" bpmnElement=\"Flow_058cmsb\">\n        <di:waypoint x=\"540\" y=\"335\" />\n        <di:waypoint x=\"540\" y=\"410\" />\n        <di:waypoint x=\"700\" y=\"410\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"575\" y=\"383\" width=\"90\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1qigakr_di\" bpmnElement=\"Flow_1qigakr\">\n        <di:waypoint x=\"565\" y=\"310\" />\n        <di:waypoint x=\"932\" y=\"310\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"704\" y=\"292\" width=\"90\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_18p3hqb_di\" bpmnElement=\"Flow_18p3hqb\">\n        <di:waypoint x=\"450\" y=\"310\" />\n        <di:waypoint x=\"515\" y=\"310\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"471\" y=\"292\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0x9dx2t_di\" bpmnElement=\"Flow_0x9dx2t\">\n        <di:waypoint x=\"290\" y=\"310\" />\n        <di:waypoint x=\"350\" y=\"310\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_00ldvag_di\" bpmnElement=\"Flow_00ldvag\">\n        <di:waypoint x=\"138\" y=\"310\" />\n        <di:waypoint x=\"190\" y=\"310\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_17n2rw9_di\" bpmnElement=\"Event_17n2rw9\">\n        <dc:Bounds x=\"102\" y=\"292\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_03kjurt_di\" bpmnElement=\"Activity_03kjurt\">\n        <dc:Bounds x=\"190\" y=\"270\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0ywxfwu_di\" bpmnElement=\"Activity_0ywxfwu\">\n        <dc:Bounds x=\"350\" y=\"270\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_179zgnp_di\" bpmnElement=\"Gateway_179zgnp\" isMarkerVisible=\"true\">\n        <dc:Bounds x=\"515\" y=\"285\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_0nvjxgh_di\" bpmnElement=\"Event_0nvjxgh\">\n        <dc:Bounds x=\"932\" y=\"292\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0qay48u_di\" bpmnElement=\"Activity_0qay48u\">\n        <dc:Bounds x=\"700\" y=\"370\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440946020174270464, 1440947675041107968, NULL, '2021-09-24 13:23:15', 1440911410581213417, '2021-09-23 17:10:57', 1440911410581213417);
-INSERT INTO `bn_flow_entry` VALUES (1440968423508021248, '合同审批', 'flowContract', 1440940563934220288, 1441216695006924800, '2021-09-24 09:43:31', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" id=\"diagram_flowContract\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowContract\" name=\"合同审批\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_1psmisd\">\n      <bpmn2:outgoing>Flow_00cexea</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_0nyla1r\" name=\"合同录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440954920348946432&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388965712\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_00cexea</bpmn2:incoming>\n      <bpmn2:incoming>Flow_0lloy56</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1vsrivb</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1m2406f</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_04kcajc</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_00cexea\" sourceRef=\"Event_1psmisd\" targetRef=\"Activity_0nyla1r\" />\n    <bpmn2:userTask id=\"Activity_1ucrh52\" name=\"业务部领导审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440954920348946432&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT_POST_LEADER&#34;}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388972455\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_04kcajc</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_026fvnq</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_04kcajc\" sourceRef=\"Activity_0nyla1r\" targetRef=\"Activity_1ucrh52\" />\n    <bpmn2:sequenceFlow id=\"Flow_026fvnq\" sourceRef=\"Activity_1ucrh52\" targetRef=\"Gateway_09cdxtf\" />\n    <bpmn2:parallelGateway id=\"Gateway_09cdxtf\">\n      <bpmn2:incoming>Flow_026fvnq</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0zz0u9g</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1yxqbe0</bpmn2:outgoing>\n    </bpmn2:parallelGateway>\n    <bpmn2:userTask id=\"Activity_138m4nn\" name=\"工程部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955194991972352&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateUsers=\"admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388978101\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0zz0u9g</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_124e8z3</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0zz0u9g\" sourceRef=\"Gateway_09cdxtf\" targetRef=\"Activity_138m4nn\" />\n    <bpmn2:userTask id=\"Activity_0tm3mph\" name=\"造价部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955194991972352&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388982377\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1yxqbe0</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1uvj3ds</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1yxqbe0\" sourceRef=\"Gateway_09cdxtf\" targetRef=\"Activity_0tm3mph\" />\n    <bpmn2:sequenceFlow id=\"Flow_124e8z3\" sourceRef=\"Activity_138m4nn\" targetRef=\"Gateway_0oy6ofl\" />\n    <bpmn2:parallelGateway id=\"Gateway_0oy6ofl\">\n      <bpmn2:incoming>Flow_124e8z3</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1uvj3ds</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1kyhnlz</bpmn2:outgoing>\n    </bpmn2:parallelGateway>\n    <bpmn2:sequenceFlow id=\"Flow_1uvj3ds\" sourceRef=\"Activity_0tm3mph\" targetRef=\"Gateway_0oy6ofl\" />\n    <bpmn2:userTask id=\"Activity_1yuuyie\" name=\"财务部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955127790833664&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;POST&#34;}\" flowable:candidateGroups=\"1440964519395332096,1440964519391137792\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389037814\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389042489\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1kyhnlz</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0di6qa6</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_0lloy56</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1kyhnlz\" sourceRef=\"Gateway_0oy6ofl\" targetRef=\"Activity_1yuuyie\" />\n    <bpmn2:userTask id=\"Activity_098ncvw\" name=\"法务部会签\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955001093492736&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${assignee}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389190662\" label=\"同意\" type=\"multi_agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389197406\" label=\"拒绝\" type=\"multi_refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0zmsn3x</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0jyv1zb</bpmn2:outgoing>\n      <bpmn2:multiInstanceLoopCharacteristics flowable:collection=\"assigneeList\" flowable:elementVariable=\"assignee\">\n        <bpmn2:completionCondition xsi:type=\"bpmn2:tFormalExpression\">${nrOfInstances == nrOfCompletedInstances}</bpmn2:completionCondition>\n      </bpmn2:multiInstanceLoopCharacteristics>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0di6qa6\" name=\"同意\" sourceRef=\"Activity_1yuuyie\" targetRef=\"Activity_1eewt01\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:exclusiveGateway id=\"Gateway_1m5fruz\">\n      <bpmn2:incoming>Flow_0jyv1zb</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1f8yxov</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1vsrivb</bpmn2:outgoing>\n    </bpmn2:exclusiveGateway>\n    <bpmn2:sequenceFlow id=\"Flow_0jyv1zb\" sourceRef=\"Activity_098ncvw\" targetRef=\"Gateway_1m5fruz\" />\n    <bpmn2:userTask id=\"Activity_1h3pnxy\" name=\"总经理审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440954920348946432&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateGroups=\"1440911410581213416\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389449508\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389452850\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1f8yxov</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1a3qclm</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1m2406f</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1f8yxov\" name=\"同意人数大于40%\" sourceRef=\"Gateway_1m5fruz\" targetRef=\"Activity_1h3pnxy\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${multiAgreeCount / multiNumOfInstances &gt; 0.4}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:endEvent id=\"Event_12ajo3d\">\n      <bpmn2:incoming>Flow_1a3qclm</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1a3qclm\" name=\"同意\" sourceRef=\"Activity_1h3pnxy\" targetRef=\"Event_12ajo3d\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_0lloy56\" name=\"拒绝\" sourceRef=\"Activity_1yuuyie\" targetRef=\"Activity_0nyla1r\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:userTask id=\"Activity_1eewt01\" name=\"法务部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955001093492736&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;POST&#34;}\" flowable:candidateGroups=\"1440964387979399168\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389337024\" label=\"会签\" type=\"multi_sign\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389341901\" label=\"加签\" type=\"multi_consign\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0di6qa6</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0zmsn3x</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0zmsn3x\" sourceRef=\"Activity_1eewt01\" targetRef=\"Activity_098ncvw\" />\n    <bpmn2:sequenceFlow id=\"Flow_1vsrivb\" name=\"同意人数小于40%\" sourceRef=\"Gateway_1m5fruz\" targetRef=\"Activity_0nyla1r\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${multiAgreeCount / multiNumOfInstances &lt;= 0.4}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_1m2406f\" name=\"拒绝\" sourceRef=\"Activity_1h3pnxy\" targetRef=\"Activity_0nyla1r\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowContract\">\n      <bpmndi:BPMNEdge id=\"Flow_1m2406f_di\" bpmnElement=\"Flow_1m2406f\">\n        <di:waypoint x=\"1720\" y=\"370\" />\n        <di:waypoint x=\"1720\" y=\"540\" />\n        <di:waypoint x=\"210\" y=\"540\" />\n        <di:waypoint x=\"210\" y=\"370\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"954\" y=\"522\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1vsrivb_di\" bpmnElement=\"Flow_1vsrivb\">\n        <di:waypoint x=\"1540\" y=\"305\" />\n        <di:waypoint x=\"1540\" y=\"130\" />\n        <di:waypoint x=\"230\" y=\"130\" />\n        <di:waypoint x=\"230\" y=\"290\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"841\" y=\"112\" width=\"89\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0zmsn3x_di\" bpmnElement=\"Flow_0zmsn3x\">\n        <di:waypoint x=\"1290\" y=\"330\" />\n        <di:waypoint x=\"1360\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0lloy56_di\" bpmnElement=\"Flow_0lloy56\">\n        <di:waypoint x=\"1050\" y=\"370\" />\n        <di:waypoint x=\"1050\" y=\"500\" />\n        <di:waypoint x=\"230\" y=\"500\" />\n        <di:waypoint x=\"230\" y=\"370\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"629\" y=\"482\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1a3qclm_di\" bpmnElement=\"Flow_1a3qclm\">\n        <di:waypoint x=\"1770\" y=\"330\" />\n        <di:waypoint x=\"1862\" y=\"330\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"1805\" y=\"312\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1f8yxov_di\" bpmnElement=\"Flow_1f8yxov\">\n        <di:waypoint x=\"1565\" y=\"330\" />\n        <di:waypoint x=\"1670\" y=\"330\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"1573\" y=\"312\" width=\"89\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0jyv1zb_di\" bpmnElement=\"Flow_0jyv1zb\">\n        <di:waypoint x=\"1460\" y=\"330\" />\n        <di:waypoint x=\"1515\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0di6qa6_di\" bpmnElement=\"Flow_0di6qa6\">\n        <di:waypoint x=\"1100\" y=\"330\" />\n        <di:waypoint x=\"1190\" y=\"330\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"1134\" y=\"312\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1kyhnlz_di\" bpmnElement=\"Flow_1kyhnlz\">\n        <di:waypoint x=\"905\" y=\"330\" />\n        <di:waypoint x=\"1000\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1uvj3ds_di\" bpmnElement=\"Flow_1uvj3ds\">\n        <di:waypoint x=\"760\" y=\"430\" />\n        <di:waypoint x=\"880\" y=\"430\" />\n        <di:waypoint x=\"880\" y=\"355\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_124e8z3_di\" bpmnElement=\"Flow_124e8z3\">\n        <di:waypoint x=\"760\" y=\"200\" />\n        <di:waypoint x=\"880\" y=\"200\" />\n        <di:waypoint x=\"880\" y=\"305\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1yxqbe0_di\" bpmnElement=\"Flow_1yxqbe0\">\n        <di:waypoint x=\"530\" y=\"355\" />\n        <di:waypoint x=\"530\" y=\"430\" />\n        <di:waypoint x=\"660\" y=\"430\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0zz0u9g_di\" bpmnElement=\"Flow_0zz0u9g\">\n        <di:waypoint x=\"530\" y=\"305\" />\n        <di:waypoint x=\"530\" y=\"200\" />\n        <di:waypoint x=\"660\" y=\"200\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_026fvnq_di\" bpmnElement=\"Flow_026fvnq\">\n        <di:waypoint x=\"440\" y=\"330\" />\n        <di:waypoint x=\"505\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_04kcajc_di\" bpmnElement=\"Flow_04kcajc\">\n        <di:waypoint x=\"280\" y=\"330\" />\n        <di:waypoint x=\"340\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_00cexea_di\" bpmnElement=\"Flow_00cexea\">\n        <di:waypoint x=\"128\" y=\"330\" />\n        <di:waypoint x=\"180\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_1psmisd_di\" bpmnElement=\"Event_1psmisd\">\n        <dc:Bounds x=\"92\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0nyla1r_di\" bpmnElement=\"Activity_0nyla1r\">\n        <dc:Bounds x=\"180\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1ucrh52_di\" bpmnElement=\"Activity_1ucrh52\">\n        <dc:Bounds x=\"340\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_1o9nuyj_di\" bpmnElement=\"Gateway_09cdxtf\">\n        <dc:Bounds x=\"505\" y=\"305\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_138m4nn_di\" bpmnElement=\"Activity_138m4nn\">\n        <dc:Bounds x=\"660\" y=\"160\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0tm3mph_di\" bpmnElement=\"Activity_0tm3mph\">\n        <dc:Bounds x=\"660\" y=\"390\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_0wdnsyx_di\" bpmnElement=\"Gateway_0oy6ofl\">\n        <dc:Bounds x=\"855\" y=\"305\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1yuuyie_di\" bpmnElement=\"Activity_1yuuyie\">\n        <dc:Bounds x=\"1000\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_098ncvw_di\" bpmnElement=\"Activity_098ncvw\">\n        <dc:Bounds x=\"1360\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_1m5fruz_di\" bpmnElement=\"Gateway_1m5fruz\" isMarkerVisible=\"true\">\n        <dc:Bounds x=\"1515\" y=\"305\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1h3pnxy_di\" bpmnElement=\"Activity_1h3pnxy\">\n        <dc:Bounds x=\"1670\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_12ajo3d_di\" bpmnElement=\"Event_12ajo3d\">\n        <dc:Bounds x=\"1862\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1eewt01_di\" bpmnElement=\"Activity_1eewt01\">\n        <dc:Bounds x=\"1190\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440952710487609344, 1440954920348946432, NULL, '2021-09-24 10:17:32', 1440966324770574336, '2021-09-23 17:16:59', 1440911410581213417);
-INSERT INTO `bn_flow_entry` VALUES (1440972435892473856, '多实例加签', 'flowConSign', 1440940473421139968, 1440973324426416128, '2021-09-23 17:36:27', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowConSign\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowConSign\" name=\"多实例加签\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_0wpkj6e\">\n      <bpmn2:outgoing>Flow_111kyps</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_1xk7j4n\" name=\"录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389626319\" label=\"提交\" type=\"multi_sign\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389633373\" label=\"加签\" type=\"multi_consign\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_111kyps</bpmn2:incoming>\n      <bpmn2:incoming>Flow_009p7hy</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0ct2yid</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_111kyps\" sourceRef=\"Event_0wpkj6e\" targetRef=\"Activity_1xk7j4n\" />\n    <bpmn2:userTask id=\"Activity_006g6qo\" name=\"会签\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${assignee}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389733600\" label=\"同意\" type=\"multi_agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0ct2yid</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_052kvzh</bpmn2:outgoing>\n      <bpmn2:multiInstanceLoopCharacteristics flowable:collection=\"assigneeList\" flowable:elementVariable=\"assignee\">\n        <bpmn2:completionCondition xsi:type=\"bpmn2:tFormalExpression\">${nrOfInstances == nrOfCompletedInstances}</bpmn2:completionCondition>\n      </bpmn2:multiInstanceLoopCharacteristics>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0ct2yid\" sourceRef=\"Activity_1xk7j4n\" targetRef=\"Activity_006g6qo\" />\n    <bpmn2:userTask id=\"Activity_0p7omdm\" name=\"审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389682895\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389686939\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_052kvzh</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1ng5qp7</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_009p7hy</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_052kvzh\" sourceRef=\"Activity_006g6qo\" targetRef=\"Activity_0p7omdm\" />\n    <bpmn2:endEvent id=\"Event_1e5mmxp\">\n      <bpmn2:incoming>Flow_1ng5qp7</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1ng5qp7\" name=\"同意\" sourceRef=\"Activity_0p7omdm\" targetRef=\"Event_1e5mmxp\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_009p7hy\" name=\"拒绝\" sourceRef=\"Activity_0p7omdm\" targetRef=\"Activity_1xk7j4n\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowConSign\">\n      <bpmndi:BPMNEdge id=\"Flow_009p7hy_di\" bpmnElement=\"Flow_009p7hy\">\n        <di:waypoint x=\"560\" y=\"280\" />\n        <di:waypoint x=\"560\" y=\"230\" />\n        <di:waypoint x=\"240\" y=\"230\" />\n        <di:waypoint x=\"240\" y=\"280\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"389\" y=\"212\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1ng5qp7_di\" bpmnElement=\"Flow_1ng5qp7\">\n        <di:waypoint x=\"610\" y=\"320\" />\n        <di:waypoint x=\"672\" y=\"320\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"630\" y=\"302\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_052kvzh_di\" bpmnElement=\"Flow_052kvzh\">\n        <di:waypoint x=\"450\" y=\"320\" />\n        <di:waypoint x=\"510\" y=\"320\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0ct2yid_di\" bpmnElement=\"Flow_0ct2yid\">\n        <di:waypoint x=\"290\" y=\"320\" />\n        <di:waypoint x=\"350\" y=\"320\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_111kyps_di\" bpmnElement=\"Flow_111kyps\">\n        <di:waypoint x=\"138\" y=\"320\" />\n        <di:waypoint x=\"190\" y=\"320\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_0wpkj6e_di\" bpmnElement=\"Event_0wpkj6e\">\n        <dc:Bounds x=\"102\" y=\"302\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1xk7j4n_di\" bpmnElement=\"Activity_1xk7j4n\">\n        <dc:Bounds x=\"190\" y=\"280\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_006g6qo_di\" bpmnElement=\"Activity_006g6qo\">\n        <dc:Bounds x=\"350\" y=\"280\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0p7omdm_di\" bpmnElement=\"Activity_0p7omdm\">\n        <dc:Bounds x=\"510\" y=\"280\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_1e5mmxp_di\" bpmnElement=\"Event_1e5mmxp\">\n        <dc:Bounds x=\"672\" y=\"302\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440945149889744896, 1440945411354267648, NULL, '2021-09-23 17:36:21', 1440911410581213417, '2021-09-23 17:32:55', 1440911410581213417);
-INSERT INTO `bn_flow_entry` VALUES (1440973419167354880, '转办流程', 'flowTranslate', 1440940473421139968, 1440973782771568640, '2021-09-23 17:38:16', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowTranslate\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowTranslate\" name=\"转办流程\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_1ouk8kj\">\n      <bpmn2:outgoing>Flow_08lgvo0</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_08p9kng\" name=\"录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389836108\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_08lgvo0</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0n45f5j</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_08lgvo0\" sourceRef=\"Event_1ouk8kj\" targetRef=\"Activity_08p9kng\" />\n    <bpmn2:userTask id=\"Activity_12olr01\" name=\"转办\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateUsers=\"${startUserName},admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389848554\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389853959\" label=\"转办\" type=\"transfer\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0n45f5j</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1s8i9er</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0n45f5j\" sourceRef=\"Activity_08p9kng\" targetRef=\"Activity_12olr01\" />\n    <bpmn2:endEvent id=\"Event_0lzxnw8\">\n      <bpmn2:incoming>Flow_1s8i9er</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1s8i9er\" sourceRef=\"Activity_12olr01\" targetRef=\"Event_0lzxnw8\" />\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowTranslate\">\n      <bpmndi:BPMNEdge id=\"Flow_08lgvo0_di\" bpmnElement=\"Flow_08lgvo0\">\n        <di:waypoint x=\"168\" y=\"330\" />\n        <di:waypoint x=\"220\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0n45f5j_di\" bpmnElement=\"Flow_0n45f5j\">\n        <di:waypoint x=\"320\" y=\"330\" />\n        <di:waypoint x=\"380\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1s8i9er_di\" bpmnElement=\"Flow_1s8i9er\">\n        <di:waypoint x=\"480\" y=\"330\" />\n        <di:waypoint x=\"542\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_1ouk8kj_di\" bpmnElement=\"Event_1ouk8kj\">\n        <dc:Bounds x=\"132\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_08p9kng_di\" bpmnElement=\"Activity_08p9kng\">\n        <dc:Bounds x=\"220\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_12olr01_di\" bpmnElement=\"Activity_12olr01\">\n        <dc:Bounds x=\"380\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_0lzxnw8_di\" bpmnElement=\"Event_0lzxnw8\">\n        <dc:Bounds x=\"542\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440945149889744896, 1440945411354267648, NULL, '2021-09-23 17:38:00', 1440911410581213417, '2021-09-23 17:36:50', 1440911410581213417);
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_entry_publish
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_entry_publish`;
-CREATE TABLE `bn_flow_entry_publish` (
-  `entry_publish_id` bigint(20) NOT NULL COMMENT '主键Id',
-  `entry_id` bigint(20) NOT NULL COMMENT '流程Id',
-  `process_definition_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的定义Id',
-  `deploy_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的部署Id',
-  `publish_version` int(11) NOT NULL COMMENT '发布版本',
-  `active_status` bit(1) NOT NULL COMMENT '激活状态',
-  `main_version` bit(1) NOT NULL COMMENT '是否为主版本',
-  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
-  `publish_time` datetime NOT NULL COMMENT '发布时间',
-  `init_task_info` text CHARACTER SET utf8mb4 COMMENT '第一个非开始节点任务的附加信息',
-  PRIMARY KEY (`entry_publish_id`) USING BTREE,
-  UNIQUE KEY `idx_process_definition_id` (`process_definition_id`) USING BTREE,
-  KEY `idx_entry_id` (`entry_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
--- ----------------------------
--- Records of bn_flow_entry_publish
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_entry_publish` VALUES (1440966810131238912, 1440962968085860352, 'flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', '1a075ec8-1c4e-11ec-94ee-5ef70686b817', 1, b'1', b'1', 1440911410581213417, '2021-09-23 17:10:34', '{\"assignee\":\"${startUserName}\",\"formId\":1440945411354267648,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632387369558\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0sc2yuf\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1440968302972112896, 1440966906914803712, 'flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'efd6c86c-1c4e-11ec-94ee-5ef70686b817', 1, b'1', b'0', 1440911410581213417, '2021-09-23 17:16:30', '{\"assignee\":\"${startUserName}\",\"formId\":1440947675041107968,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_03kjurt\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1440972214223507456, 1440968423508021248, 'flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', '1ba32d20-1c51-11ec-94ee-5ef70686b817', 1, b'1', b'0', 1440911410581213417, '2021-09-23 17:32:02', '{\"formId\":1440954920348946432,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0nyla1r\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1440972224344363008, 1440966906914803712, 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '1d1dbf34-1c51-11ec-94ee-5ef70686b817', 2, b'1', b'1', 1440911410581213417, '2021-09-23 17:32:05', '{\"assignee\":\"${startUserName}\",\"formId\":1440947675041107968,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_03kjurt\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1440973324426416128, 1440972435892473856, 'flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'b97761b8-1c51-11ec-94ee-5ef70686b817', 1, b'1', b'1', 1440911410581213417, '2021-09-23 17:36:27', '{\"assignee\":\"${startUserName}\",\"formId\":1440945411354267648,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632389626319\",\"label\":\"提交\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389633373\",\"label\":\"加签\",\"type\":\"multi_consign\"}],\"readOnly\":false,\"taskKey\":\"Activity_1xk7j4n\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1440973782771568640, 1440973419167354880, 'flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'fa9b683c-1c51-11ec-94ee-5ef70686b817', 1, b'1', b'1', 1440911410581213417, '2021-09-23 17:38:16', '{\"assignee\":\"${startUserName}\",\"formId\":1440945411354267648,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632389836108\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_08p9kng\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1441214529919782912, 1440968423508021248, 'flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', '9d23d445-1cd7-11ec-acd8-3ae4f1d3c3af', 2, b'1', b'0', 1440911410581213417, '2021-09-24 09:34:55', '{\"assignee\":\"${startUserName}\",\"formId\":1440954920348946432,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0nyla1r\",\"taskType\":1}');
-INSERT INTO `bn_flow_entry_publish` VALUES (1441216695006924800, 1440968423508021248, 'flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'd273a35d-1cd8-11ec-acd8-3ae4f1d3c3af', 3, b'1', b'1', 1440911410581213417, '2021-09-24 09:43:31', '{\"assignee\":\"${startUserName}\",\"formId\":1440954920348946432,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0nyla1r\",\"taskType\":1}');
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_entry_publish_variable
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_entry_publish_variable`;
-CREATE TABLE `bn_flow_entry_publish_variable` (
-  `variable_id` bigint(20) NOT NULL COMMENT '主键Id',
-  `entry_publish_id` bigint(20) NOT NULL COMMENT '流程Id',
-  `variable_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '变量名',
-  `show_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名',
-  `variable_type` int(11) NOT NULL COMMENT '变量类型',
-  `bind_datasource_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源Id',
-  `bind_relation_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源关联Id',
-  `bind_column_id` bigint(20) DEFAULT NULL COMMENT '绑定字段Id',
-  `builtin` bit(1) NOT NULL COMMENT '是否内置',
-  PRIMARY KEY (`variable_id`) USING BTREE,
-  KEY `idx_entry_publish_id` (`entry_publish_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
--- ----------------------------
--- Records of bn_flow_entry_publish_variable
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440966810181570560, 1440966810131238912, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440966810181570561, 1440966810131238912, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440968302993084416, 1440968302972112896, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440968302993084417, 1440968302972112896, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440968302993084418, 1440968302972112896, 'totalAmount', '报销金额', 1, 1440946127531675648, NULL, 1440946127493926912, b'0');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972214244478976, 1440972214223507456, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972214244478977, 1440972214223507456, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972224365334528, 1440972224344363008, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972224365334529, 1440972224344363008, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972224365334530, 1440972224344363008, 'totalAmount', '报销金额', 1, 1440946127531675648, NULL, 1440946127493926912, b'0');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973324443193344, 1440973324426416128, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973324443193345, 1440973324426416128, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973782788345856, 1440973782771568640, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973782788345857, 1440973782771568640, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441214529953337344, 1441214529919782912, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441214529953337345, 1441214529919782912, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441216695027896320, 1441216695006924800, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
-INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441216695027896321, 1441216695006924800, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_entry_variable
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_entry_variable`;
-CREATE TABLE `bn_flow_entry_variable` (
-  `variable_id` bigint(20) NOT NULL COMMENT '主键Id',
-  `entry_id` bigint(20) NOT NULL COMMENT '流程Id',
-  `variable_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '变量名',
-  `show_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名',
-  `variable_type` int(11) NOT NULL COMMENT '变量类型',
-  `bind_datasource_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源Id',
-  `bind_relation_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源关联Id',
-  `bind_column_id` bigint(20) DEFAULT NULL COMMENT '绑定字段Id',
-  `builtin` bit(1) NOT NULL COMMENT '是否内置',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`variable_id`) USING BTREE,
-  UNIQUE KEY `uk_entry_id_variable_name` (`entry_id`,`variable_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
--- ----------------------------
--- Records of bn_flow_entry_variable
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_entry_variable` VALUES (1440962968090054657, 1440962968085860352, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 16:55:18');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440962968094248961, 1440962968085860352, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 16:55:18');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440966906918998017, 1440966906914803712, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:10:57');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440966906927386625, 1440966906914803712, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:10:57');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440967581673459712, 1440966906914803712, 'totalAmount', '报销金额', 1, 1440946127531675648, NULL, 1440946127493926912, b'0', '2021-09-23 17:13:38');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440968423512215553, 1440968423508021248, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:16:59');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440968423516409857, 1440968423508021248, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:16:59');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440972435900862465, 1440972435892473856, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:32:55');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440972435905056768, 1440972435892473856, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:32:55');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440973419171549185, 1440973419167354880, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:36:50');
-INSERT INTO `bn_flow_entry_variable` VALUES (1440973419175743489, 1440973419167354880, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:36:50');
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_task_comment
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_task_comment`;
-CREATE TABLE `bn_flow_task_comment` (
-  `id` bigint(20) NOT NULL COMMENT '主键Id',
-  `process_instance_id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '流程实例Id',
-  `task_id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '任务Id',
-  `task_key` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '任务标识',
-  `task_name` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '任务名称',
-  `approval_type` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '审批类型',
-  `comment` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT '批注内容',
-  `delegate_assignee` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '委托指定人，比如加签、转办等',
-  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
-  `create_username` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '创建者用户名',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `idx_process_instance_id` (`process_instance_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ----------------------------
--- Records of bn_flow_task_comment
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_task_comment` VALUES (1441213241249239040, 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 'e7b1c912-1cd6-11ec-acd8-3ae4f1d3c3af', 'Activity_0sc2yuf', '请假录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:29:48');
-INSERT INTO `bn_flow_task_comment` VALUES (1441213342894002176, 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 'e7b80aa9-1cd6-11ec-acd8-3ae4f1d3c3af', 'Activity_1jw5u20', '部门领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:30:12');
-INSERT INTO `bn_flow_task_comment` VALUES (1441213560184115200, 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 'f62d36b1-1cd6-11ec-acd8-3ae4f1d3c3af', 'Activity_0olxatv', 'HR审批', 'agree', '同意', NULL, 1440965465605148672, '员工A', '2021-09-24 09:31:04');
-INSERT INTO `bn_flow_task_comment` VALUES (1441213876594020352, '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', '42019911-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_03kjurt', '报销单录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:32:19');
-INSERT INTO `bn_flow_task_comment` VALUES (1441213922165133312, '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', '42054298-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0ywxfwu', '部门领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:32:30');
-INSERT INTO `bn_flow_task_comment` VALUES (1441214057024589824, '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', '487ef9a2-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0qay48u', '总经理审批', 'agree', '好的', NULL, 1440969706411397120, '总部领导', '2021-09-24 09:33:02');
-INSERT INTO `bn_flow_task_comment` VALUES (1441214335085973504, '719d8e5a-1cd7-11ec-acd8-3ae4f1d3c3af', '719d8e62-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '合同录入', 'stop', '配置错误', NULL, 1440966324770574336, '员工D', '2021-09-24 09:34:09');
-INSERT INTO `bn_flow_task_comment` VALUES (1441215377718644736, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '1754a6f2-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '合同录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:38:17');
-INSERT INTO `bn_flow_task_comment` VALUES (1441215450896666624, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '1757db49-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '业务部领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:38:35');
-INSERT INTO `bn_flow_task_comment` VALUES (1441215523189690368, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '21b97ae8-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '造价部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:38:52');
-INSERT INTO `bn_flow_task_comment` VALUES (1441215553006997504, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '21b953d4-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '工程部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:38:59');
-INSERT INTO `bn_flow_task_comment` VALUES (1441215775858757632, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '3040cf64-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '财务部审批', 'agree', '没问题', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:39:52');
-INSERT INTO `bn_flow_task_comment` VALUES (1441216028087422976, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '4fec915c-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_sign', '用户 [leaderLaw] 会签 [[\"userB\",\"userC\",\"leaderLaw\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:40:52');
-INSERT INTO `bn_flow_task_comment` VALUES (1441216073780170752, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '4fec915c-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_consign', '用户 [leaderLaw] 加签 [[\"admin\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:41:03');
-INSERT INTO `bn_flow_task_comment` VALUES (1441216212972343296, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '73c18ac0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '同意', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:41:36');
-INSERT INTO `bn_flow_task_comment` VALUES (1441216292819308544, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '73c163a6-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_refuse', '不同意', NULL, 1440965586715676672, '员工B', '2021-09-24 09:41:55');
-INSERT INTO `bn_flow_task_comment` VALUES (1441216373144424448, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '73c18abb-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '同意', NULL, 1440965697961201664, '员工C', '2021-09-24 09:42:15');
-INSERT INTO `bn_flow_task_comment` VALUES (1441216770470842368, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '7a4309f7-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'stop', '多实例条件配置错误', NULL, 1440911410581213417, '管理员', '2021-09-24 09:43:49');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217206766538752, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '1b41a38d-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '合同录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:45:33');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217290182856704, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '1b4488c4-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '业务部领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:45:53');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217345438617600, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '271ebea3-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '造价部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:46:06');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217371766263808, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '271e978f-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '工程部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:46:13');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217738105163776, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '32b7097e-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '财务部审批', 'agree', '同意', NULL, 1440966186522120192, '天津经理', '2021-09-24 09:47:40');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217836524507136, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '66c6d396-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_sign', '用户 [leaderLaw] 会签 [[\"leaderLaw\",\"userC\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:48:03');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217872834596864, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '74c12a5e-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '同意', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:48:12');
-INSERT INTO `bn_flow_task_comment` VALUES (1441217994800762880, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '66c6d396-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_consign', '用户 [leaderLaw] 加签 [[\"userB\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:48:41');
-INSERT INTO `bn_flow_task_comment` VALUES (1441218049788088320, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '8b4134ba-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '拒绝', NULL, 1440965586715676672, '员工B', '2021-09-24 09:48:54');
-INSERT INTO `bn_flow_task_comment` VALUES (1441218134890516480, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '74c15172-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', 't同意', NULL, 1440965697961201664, '员工C', '2021-09-24 09:49:15');
-INSERT INTO `bn_flow_task_comment` VALUES (1441218265987682304, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '9f286bc3-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1h3pnxy', '总经理审批', 'agree', '同意', NULL, 1440969706411397120, '总部领导', '2021-09-24 09:49:46');
-INSERT INTO `bn_flow_task_comment` VALUES (1441218427363528704, 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 'c8b70062-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_08p9kng', '录入', 'agree', NULL, NULL, 1440911410581213417, '管理员', '2021-09-24 09:50:24');
-INSERT INTO `bn_flow_task_comment` VALUES (1441218497429377024, 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 'c8b9bf89-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_12olr01', '转办', 'transfer', '交给你了', 'leaderHR', 1440911410581213417, '管理员', '2021-09-24 09:50:41');
-INSERT INTO `bn_flow_task_comment` VALUES (1441218606418366464, 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 'c8b9bf89-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_12olr01', '转办', 'agree', '同意', NULL, 1440965344985354240, '人事经理', '2021-09-24 09:51:07');
-INSERT INTO `bn_flow_task_comment` VALUES (1441312737664700416, '22f398f3-1d0e-11ec-8336-3ae4f1d3c3af', '22f9b37c-1d0e-11ec-8336-3ae4f1d3c3af', 'Activity_03kjurt', '报销单录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 16:05:10');
-INSERT INTO `bn_flow_task_comment` VALUES (1441324108838080512, '22f398f3-1d0e-11ec-8336-3ae4f1d3c3af', '23032963-1d0e-11ec-8336-3ae4f1d3c3af', 'Activity_0ywxfwu', '部门领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 16:50:21');
-INSERT INTO `bn_flow_task_comment` VALUES (1441340309681213440, '7138d67d-1d1d-11ec-8336-3ae4f1d3c3af', '7138fd96-1d1d-11ec-8336-3ae4f1d3c3af', 'Activity_03kjurt', '报销单录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 17:54:43');
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_task_ext
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_task_ext`;
-CREATE TABLE `bn_flow_task_ext` (
-  `process_definition_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的定义Id',
-  `task_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎任务Id',
-  `operation_list_json` longtext COLLATE utf8mb4_bin COMMENT '操作列表JSON',
-  `variable_list_json` longtext COLLATE utf8mb4_bin COMMENT '变量列表JSON',
-  `assignee_list_json` text COLLATE utf8mb4_bin COMMENT '存储多实例的assigneeList的JSON',
-  `group_type` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '分组类型',
-  PRIMARY KEY (`process_definition_id`,`task_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
--- ----------------------------
--- Records of bn_flow_task_ext
--- ----------------------------
-BEGIN;
-INSERT INTO `bn_flow_task_ext` VALUES ('flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'Activity_006g6qo', '[{\"showOrder\":\"0\",\"id\":\"1632389733600\",\"label\":\"同意\",\"type\":\"multi_agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'Activity_0p7omdm', '[{\"showOrder\":\"0\",\"id\":\"1632389682895\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389686939\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'Activity_1xk7j4n', '[{\"showOrder\":\"0\",\"id\":\"1632389626319\",\"label\":\"提交\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389633373\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_098ncvw', '[{\"showOrder\":\"0\",\"id\":\"1632389190662\",\"label\":\"同意\",\"type\":\"multi_agree\"},{\"showOrder\":\"1\",\"id\":\"1632389197406\",\"label\":\"拒绝\",\"type\":\"multi_refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_0nyla1r', '[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_0tm3mph', '[{\"showOrder\":\"0\",\"id\":\"1632388982377\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_138m4nn', '[{\"showOrder\":\"0\",\"id\":\"1632388978101\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1eewt01', '[{\"showOrder\":\"0\",\"id\":\"1632389337024\",\"label\":\"会签\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389341901\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1h3pnxy', '[{\"showOrder\":\"0\",\"id\":\"1632389449508\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389452850\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1ucrh52', '[{\"showOrder\":\"0\",\"id\":\"1632388972455\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT_POST_LEADER');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1yuuyie', '[{\"showOrder\":\"0\",\"id\":\"1632389037814\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389042489\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '[{\"showOrder\":\"0\",\"id\":\"1632389190662\",\"label\":\"同意\",\"type\":\"multi_agree\"},{\"showOrder\":\"1\",\"id\":\"1632389197406\",\"label\":\"拒绝\",\"type\":\"multi_refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '[{\"showOrder\":\"0\",\"id\":\"1632388982377\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '[{\"showOrder\":\"0\",\"id\":\"1632388978101\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '[{\"showOrder\":\"0\",\"id\":\"1632389337024\",\"label\":\"会签\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389341901\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1h3pnxy', '[{\"showOrder\":\"0\",\"id\":\"1632389449508\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389452850\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '[{\"showOrder\":\"0\",\"id\":\"1632388972455\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT_POST_LEADER');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '[{\"showOrder\":\"0\",\"id\":\"1632389037814\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389042489\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '[{\"showOrder\":\"0\",\"id\":\"1632389190662\",\"label\":\"同意\",\"type\":\"multi_agree\"},{\"showOrder\":\"1\",\"id\":\"1632389197406\",\"label\":\"拒绝\",\"type\":\"multi_refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '[{\"showOrder\":\"0\",\"id\":\"1632388982377\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '[{\"showOrder\":\"0\",\"id\":\"1632388978101\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '[{\"showOrder\":\"0\",\"id\":\"1632389337024\",\"label\":\"会签\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389341901\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1h3pnxy', '[{\"showOrder\":\"0\",\"id\":\"1632389449508\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389452850\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '[{\"showOrder\":\"0\",\"id\":\"1632388972455\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT_POST_LEADER');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '[{\"showOrder\":\"0\",\"id\":\"1632389037814\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389042489\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'Activity_0olxatv', '[{\"showOrder\":\"0\",\"id\":\"1632388147727\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388151069\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'Activity_0sc2yuf', '[{\"showOrder\":\"0\",\"id\":\"1632387369558\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'Activity_1jw5u20', '[{\"showOrder\":\"0\",\"id\":\"1632387389734\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632387393116\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT_POST_LEADER');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'Activity_03kjurt', '[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'Activity_0qay48u', '[{\"showOrder\":\"0\",\"id\":\"1632388536771\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388540081\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'Activity_0ywxfwu', '[{\"showOrder\":\"0\",\"id\":\"1632388372003\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388375866\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', '[{\"variableType\":1,\"showName\":\"报销金额\",\"variableName\":\"totalAmount\",\"bindColumnId\":1440946127493926912,\"createTime\":1632388418000,\"builtin\":false,\"bindDatasourceId\":1440946127531675648,\"variableId\":1440967581673459712,\"entryId\":1440966906914803712}]', NULL, 'DEPT_POST_LEADER');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', 'Activity_03kjurt', '[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', 'Activity_0qay48u', '[{\"showOrder\":\"0\",\"id\":\"1632388536771\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388540081\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', 'Activity_0ywxfwu', '[{\"showOrder\":\"0\",\"id\":\"1632388372003\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388375866\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', '[{\"variableType\":1,\"showName\":\"报销金额\",\"variableName\":\"totalAmount\",\"bindColumnId\":1440946127493926912,\"createTime\":1632388418000,\"builtin\":false,\"bindDatasourceId\":1440946127531675648,\"variableId\":1440967581673459712,\"entryId\":1440966906914803712}]', NULL, 'DEPT_POST_LEADER');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'Activity_08p9kng', '[{\"showOrder\":\"0\",\"id\":\"1632389836108\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
-INSERT INTO `bn_flow_task_ext` VALUES ('flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'Activity_12olr01', '[{\"showOrder\":\"0\",\"id\":\"1632389848554\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389853959\",\"label\":\"转办\",\"type\":\"transfer\"}]', NULL, NULL, 'DEPT');
-COMMIT;
-
--- ----------------------------
--- Table structure for bn_flow_work_order
--- ----------------------------
-DROP TABLE IF EXISTS `bn_flow_work_order`;
-CREATE TABLE `bn_flow_work_order` (
-  `work_order_id` bigint(20) NOT NULL COMMENT '主键Id',
-  `process_definition_key` varchar(128) COLLATE utf8mb4_bin NOT NULL COMMENT '流程定义标识',
-  `process_definition_name` varchar(200) CHARACTER SET utf8mb4 NOT NULL COMMENT '流程名称',
-  `process_definition_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的定义Id',
-  `process_instance_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '流程实例Id',
-  `online_table_id` bigint(20) DEFAULT NULL COMMENT '在线表单的主表Id',
-  `business_key` varchar(128) COLLATE utf8mb4_bin NOT NULL COMMENT '业务主键值',
-  `task_id` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '未完成的任务Id',
-  `task_name` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '未完成的任务名称',
-  `task_definition_key` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '未完成的任务标识',
-  `flow_status` int(11) NOT NULL DEFAULT '0' COMMENT '流程状态',
-  `submit_username` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '提交用户登录名称',
-  `dept_id` bigint(20) NOT NULL COMMENT '提交用户所在部门Id',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
-  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
   `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
-  PRIMARY KEY (`work_order_id`) USING BTREE,
-  UNIQUE KEY `uk_process_instance_id` (`process_instance_id`) USING BTREE,
-  KEY `idx_process_definition_key` (`process_definition_key`) USING BTREE,
-  KEY `idx_create_user_id` (`create_user_id`) USING BTREE,
-  KEY `idx_create_time` (`create_time`) USING BTREE,
-  KEY `idx_dept_id` (`dept_id`) USING BTREE,
-  KEY `idx_business_key` (`business_key`) USING BTREE
+  PRIMARY KEY (`data_perm_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='数据权限表';
+
+-- ----------------------------
+-- Records of bn_sys_data_perm
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_data_perm` VALUES (1440965237959299072, '查看全部', 0, 1440911410581213417, '2021-09-23 17:04:19', 1440911410581213417, '2021-09-23 17:04:19', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_data_perm_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_data_perm_dept`;
+CREATE TABLE `bn_sys_data_perm_dept` (
+  `data_perm_id` bigint(20) NOT NULL COMMENT '数据权限Id',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门Id',
+  PRIMARY KEY (`data_perm_id`,`dept_id`),
+  KEY `idx_dept_id` (`dept_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='数据权限和部门关联表';
+
+-- ----------------------------
+-- Table structure for bn_sys_data_perm_user
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_data_perm_user`;
+CREATE TABLE `bn_sys_data_perm_user` (
+  `data_perm_id` bigint(20) NOT NULL COMMENT '数据权限Id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户Id',
+  PRIMARY KEY (`data_perm_id`,`user_id`),
+  KEY `idx_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='数据权限和用户关联表';
+
+-- ----------------------------
+-- Records of bn_sys_data_perm_user
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440965344985354240);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440965465605148672);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440965586715676672);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440965697961201664);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440965808049098752);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440966073686953984);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440966186522120192);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440966324770574336);
+INSERT INTO `bn_sys_data_perm_user` VALUES (1440965237959299072, 1440969706411397120);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_dept`;
+CREATE TABLE `bn_sys_dept` (
+  `dept_id` bigint(20) NOT NULL COMMENT '部门Id',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父部门Id',
+  `dept_name` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '部门名称',
+  `show_order` int(11) NOT NULL COMMENT '兄弟部分之间的显示顺序，数字越小越靠前',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(1) NOT NULL DEFAULT '0' COMMENT '删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`dept_id`) USING BTREE,
+  KEY `idx_parent_id` (`parent_id`) USING BTREE,
+  KEY `idx_show_order` (`show_order`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='部门管理表';
+
+-- ----------------------------
+-- Records of bn_sys_dept
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_dept` VALUES (1440911410581213416, NULL, '公司总部', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_dept` VALUES (1440963592970047488, 1440911410581213416, '人事部', 1, 1440911410581213417, '2021-09-23 16:57:47', 1440911410581213417, '2021-09-23 16:57:47', 1);
+INSERT INTO `bn_sys_dept` VALUES (1440963642542526464, 1440911410581213416, '法务部', 2, 1440911410581213417, '2021-09-23 16:57:59', 1440911410581213417, '2021-09-23 16:57:59', 1);
+INSERT INTO `bn_sys_dept` VALUES (1440963698460987392, NULL, '天津分公司', 2, 1440911410581213417, '2021-09-23 16:58:12', 1440911410581213417, '2021-09-23 16:58:12', 1);
+INSERT INTO `bn_sys_dept` VALUES (1440963733084966912, NULL, '北京分公司', 2, 1440911410581213417, '2021-09-23 16:58:20', 1440911410581213417, '2021-09-23 16:58:20', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_dept_post
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_dept_post`;
+CREATE TABLE `bn_sys_dept_post` (
+  `dept_post_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门Id',
+  `post_id` bigint(20) NOT NULL COMMENT '岗位Id',
+  `post_show_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '部门岗位显示名称',
+  PRIMARY KEY (`dept_post_id`) USING BTREE,
+  KEY `idx_post_id` (`post_id`) USING BTREE,
+  KEY `idx_dept_id` (`dept_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
--- Records of bn_flow_work_order
+-- Records of bn_sys_dept_post
 -- ----------------------------
 BEGIN;
-INSERT INTO `bn_flow_work_order` VALUES (1441213241270210560, 'flowLeave', '请假申请', 'flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 1440945228079960064, '1441213240326492160', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 09:31:04', 1440965465605148672, '2021-09-24 09:29:48', 1440966324770574336, 1);
-INSERT INTO `bn_flow_work_order` VALUES (1441213876598214656, 'flowSubmit', '报销申请', 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', 1440946127460372480, '1441213876367527936', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 09:33:02', 1440969706411397120, '2021-09-24 09:32:19', 1440966324770574336, 1);
-INSERT INTO `bn_flow_work_order` VALUES (1441215377722839040, 'flowContract', '合同审批', 'flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', 1440952815294877696, '1441215377508929536', NULL, NULL, NULL, 4, 'userD', 1440963698460987392, '2021-09-24 09:43:49', 1440911410581213417, '2021-09-24 09:38:17', 1440966324770574336, 1);
-INSERT INTO `bn_flow_work_order` VALUES (1441217206770733056, 'flowContract', '合同审批', 'flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', 1440952815294877696, '1441217206602960896', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 09:49:46', 1440969706411397120, '2021-09-24 09:45:33', 1440966324770574336, 1);
-INSERT INTO `bn_flow_work_order` VALUES (1441218427367723008, 'flowTranslate', '转办流程', 'flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 1440945228079960064, '1441218427220922368', NULL, NULL, NULL, 3, 'admin', 1440911410581213416, '2021-09-24 09:51:07', 1440965344985354240, '2021-09-24 09:50:24', 1440911410581213417, 1);
-INSERT INTO `bn_flow_work_order` VALUES (1441312737689866240, 'flowSubmit', '报销申请', 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '22f398f3-1d0e-11ec-8336-3ae4f1d3c3af', 1440946127460372480, '1441312736167333888', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 16:50:21', 1440966073686953984, '2021-09-24 16:05:10', 1440966324770574336, 1);
-INSERT INTO `bn_flow_work_order` VALUES (1441340309685407744, 'flowSubmit', '报销申请', 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '7138d67d-1d1d-11ec-8336-3ae4f1d3c3af', 1440946127460372480, '1441340309442138112', NULL, NULL, NULL, 0, 'userD', 1440963698460987392, '2021-09-24 17:54:43', 1440966324770574336, '2021-09-24 17:54:43', 1440966324770574336, 1);
+INSERT INTO `bn_sys_dept_post` VALUES (1440964221780103168, 1440963592970047488, 1440964097913917440, '人事部经理');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964221855600640, 1440963592970047488, 1440964157770829824, '人事专员');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964387979399168, 1440963642542526464, 1440964097913917440, '法务部经理');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964387983593472, 1440963642542526464, 1440964157770829824, '法务专员');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964519391137792, 1440963698460987392, 1440963890539139072, '天津大区总监');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964519395332096, 1440963698460987392, 1440964040611336192, '天津地区经理');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964519399526400, 1440963698460987392, 1440964157770829824, '员工');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964725134331904, 1440963733084966912, 1440963890539139072, '北京大区总监');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964725138526208, 1440963733084966912, 1440964040611336192, '北京地区经理');
+INSERT INTO `bn_sys_dept_post` VALUES (1440964725142720512, 1440963733084966912, 1440964157770829824, '员工');
+INSERT INTO `bn_sys_dept_post` VALUES (1440969551792574464, 1440911410581213416, 1440963890539139072, '总裁');
 COMMIT;
 
+-- ----------------------------
+-- Table structure for bn_sys_dept_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_dept_relation`;
+CREATE TABLE `bn_sys_dept_relation` (
+  `parent_dept_id` bigint(20) NOT NULL COMMENT '父部门Id',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门Id',
+  PRIMARY KEY (`parent_dept_id`,`dept_id`),
+  KEY `idx_dept_id` (`dept_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='部门关联关系表';
+
+-- ----------------------------
+-- Records of bn_sys_dept_relation
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_dept_relation` VALUES (1440911410581213416, 1440911410581213416);
+INSERT INTO `bn_sys_dept_relation` VALUES (1440911410581213416, 1440963592970047488);
+INSERT INTO `bn_sys_dept_relation` VALUES (1440963592970047488, 1440963592970047488);
+INSERT INTO `bn_sys_dept_relation` VALUES (1440911410581213416, 1440963642542526464);
+INSERT INTO `bn_sys_dept_relation` VALUES (1440963642542526464, 1440963642542526464);
+INSERT INTO `bn_sys_dept_relation` VALUES (1440963698460987392, 1440963698460987392);
+INSERT INTO `bn_sys_dept_relation` VALUES (1440963733084966912, 1440963733084966912);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_menu`;
+CREATE TABLE `bn_sys_menu` (
+  `menu_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父菜单Id，目录菜单的父菜单为null',
+  `menu_name` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '菜单显示名称',
+  `menu_type` int(11) NOT NULL COMMENT '(0: 目录 1: 菜单 2: 按钮 3: UI片段)',
+  `form_router_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '前端表单路由名称，仅用于menu_type为1的菜单类型',
+  `online_form_id` bigint(20) DEFAULT NULL COMMENT '在线表单主键Id',
+  `online_menu_perm_type` int(11) DEFAULT NULL COMMENT '在线表单菜单的权限控制类型',
+  `online_flow_entry_id` bigint(20) DEFAULT NULL COMMENT '仅用于在线表单的流程Id',
+  `show_order` int(11) NOT NULL COMMENT '菜单显示顺序 (值越小，排序越靠前)',
+  `icon` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '菜单图标',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`menu_id`) USING BTREE,
+  KEY `idx_show_order` (`show_order`) USING BTREE,
+  KEY `idx_parent_id` (`parent_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='菜单和操作权限管理表';
+
+-- ----------------------------
+-- Records of bn_sys_menu
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_menu` VALUES (1392786476428693504, NULL, '在线表单', 0, NULL, NULL, NULL, NULL, 2, 'el-icon-c-scale-to-original', 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 17:42:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1392786549942259712, 1392786476428693504, '字典管理', 1, 'formOnlineDict', NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1392786950682841088, 1392786476428693504, '表单管理', 1, 'formOnlinePage', NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532054578925568, NULL, '系统管理', 0, NULL, NULL, NULL, NULL, 1, 'el-icon-setting', 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 17:41:39', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434496, 1401532054578925568, '用户管理', 1, 'formSysUser', NULL, NULL, NULL, 100, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434497, 1401532054578925568, '部门管理', 1, 'formSysDept', NULL, NULL, NULL, 105, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434498, 1401532054578925568, '角色管理', 1, 'formSysRole', NULL, NULL, NULL, 110, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434499, 1401532054578925568, '数据权限管理', 1, 'formSysDataPerm', NULL, NULL, NULL, 115, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434500, 1401532054578925568, '菜单管理', 1, 'formSysMenu', NULL, NULL, NULL, 120, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434501, 1401532054578925568, '权限字管理', 1, 'formSysPermCode', NULL, NULL, NULL, 125, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434502, 1401532054578925568, '权限管理', 1, 'formSysPerm', NULL, NULL, NULL, 130, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434503, 1401532054578925568, '字典管理', 1, 'formSysDict', NULL, NULL, NULL, 135, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1401532055971434504, 1401532054578925568, '在线用户', 1, 'formSysLoginUser', NULL, NULL, NULL, 145, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418057714138877952, NULL, '流程管理', 0, NULL, NULL, NULL, NULL, 3, 'el-icon-s-operation', 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 17:42:12', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418057835631087616, 1418057714138877952, '流程分类', 1, 'formFlowCategory', NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058049951633408, 1418057835631087616, '新建', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058115667988480, 1418057835631087616, '编辑', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058170542067712, 1418057835631087616, '删除', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058289182150656, 1418057714138877952, '流程设计', 1, 'formFlowEntry', NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058515099947008, 1418058289182150656, '启动', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058602723151872, 1418058289182150656, '编辑', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058744037642240, 1418057714138877952, '流程实例', 1, 'formAllInstance', NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058844164067328, 1418058744037642240, '终止', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418058907674218496, 1418058744037642240, '删除', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418059005175009280, NULL, '任务管理', 0, NULL, NULL, NULL, NULL, 4, 'el-icon-tickets', 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 17:42:32', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418059167532322816, 1418059005175009280, '待办任务', 1, 'formMyTask', NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1418059283920064512, 1418059005175009280, '历史任务', 1, 'formMyHistoryTask', NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1423161217970606080, 1418059005175009280, '已办任务', 1, 'formMyApprovedTask', NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1433040549035642880, 1401532054578925568, '岗位管理', 1, 'formSysPost', NULL, NULL, NULL, 106, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213280, 1401532055971434496, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213281, 1401532055971434496, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213282, 1401532055971434496, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213283, 1401532055971434496, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213284, 1401532055971434496, '重置密码', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213285, 1401532055971434496, '权限详情', 3, NULL, NULL, NULL, NULL, 6, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213294, 1401532055971434497, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213295, 1401532055971434497, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213296, 1401532055971434497, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213297, 1401532055971434497, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213298, 1401532055971434497, '设置岗位', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213299, 1401532055971434497, '查看岗位', 3, NULL, NULL, NULL, NULL, 6, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213308, 1401532055971434498, '角色管理', 2, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213309, 1401532055971434498, '用户授权', 2, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213310, 1440911410581213308, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213311, 1440911410581213308, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213312, 1440911410581213308, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213313, 1440911410581213308, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213314, 1440911410581213308, '权限详情', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213315, 1440911410581213309, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213316, 1440911410581213309, '授权用户', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213317, 1440911410581213309, '移除用户', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213328, 1401532055971434499, '数据权限管理', 2, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213329, 1401532055971434499, '用户授权', 2, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213330, 1440911410581213328, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213331, 1440911410581213328, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213332, 1440911410581213328, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213333, 1440911410581213328, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213334, 1440911410581213329, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213335, 1440911410581213329, '授权用户', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213336, 1440911410581213329, '移除用户', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213346, 1401532055971434500, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213347, 1401532055971434500, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213348, 1401532055971434500, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213349, 1401532055971434500, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213350, 1401532055971434500, '权限详情', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213358, 1401532055971434501, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213359, 1401532055971434501, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213360, 1401532055971434501, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213361, 1401532055971434501, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213362, 1401532055971434501, '权限详情', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213370, 1401532055971434502, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213371, 1401532055971434502, '新增模块', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213372, 1401532055971434502, '编辑模块', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213373, 1401532055971434502, '删除模块', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213374, 1401532055971434502, '新增权限', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213375, 1401532055971434502, '编辑权限', 3, NULL, NULL, NULL, NULL, 6, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213376, 1401532055971434502, '删除权限', 3, NULL, NULL, NULL, NULL, 7, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213377, 1401532055971434502, '权限详情', 3, NULL, NULL, NULL, NULL, 8, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213388, 1401532055971434503, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213389, 1401532055971434503, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213390, 1401532055971434503, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213391, 1401532055971434503, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213392, 1401532055971434503, '同步缓存', 3, NULL, NULL, NULL, NULL, 5, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213400, 1401532055971434504, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213401, 1401532055971434504, '强制下线', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213406, 1433040549035642880, '岗位管理', 2, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213407, 1440911410581213406, '显示', 3, NULL, NULL, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213408, 1440911410581213406, '新增', 3, NULL, NULL, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213409, 1440911410581213406, '编辑', 3, NULL, NULL, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440911410581213410, 1440911410581213406, '删除', 3, NULL, NULL, NULL, NULL, 4, NULL, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440973980537196544, NULL, '业务管理', 0, NULL, NULL, NULL, NULL, 5, 'el-icon-goods', 1440911410581213417, '2021-09-23 17:39:04', 1440911410581213417, '2021-09-23 17:42:45', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974056105971712, 1440973980537196544, '甲方管理', 1, NULL, 1440959226632474624, NULL, NULL, 1, NULL, 1440911410581213417, '2021-09-23 17:39:22', 1440911410581213417, '2021-09-23 17:39:22', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974056110166016, 1440974056105971712, '查看', 3, NULL, 1440959226632474624, 0, NULL, 0, NULL, 1440911410581213417, '2021-09-23 17:39:22', 1440911410581213417, '2021-09-23 17:39:22', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974056114360320, 1440974056105971712, '编辑', 3, NULL, 1440959226632474624, 1, NULL, 1, NULL, 1440911410581213417, '2021-09-23 17:39:22', 1440911410581213417, '2021-09-23 17:39:22', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974134195523584, 1440973980537196544, '乙方管理', 1, NULL, 1440961456601305088, NULL, NULL, 2, NULL, 1440911410581213417, '2021-09-23 17:39:40', 1440911410581213417, '2021-09-23 17:39:40', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974134199717888, 1440974134195523584, '查看', 3, NULL, 1440961456601305088, 0, NULL, 0, NULL, 1440911410581213417, '2021-09-23 17:39:40', 1440911410581213417, '2021-09-23 17:39:40', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974134203912192, 1440974134195523584, '编辑', 3, NULL, 1440961456601305088, 1, NULL, 1, NULL, 1440911410581213417, '2021-09-23 17:39:40', 1440911410581213417, '2021-09-23 17:39:40', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974233613111296, 1440973980537196544, '产品管理', 1, NULL, 1440962496864194560, NULL, NULL, 3, NULL, 1440911410581213417, '2021-09-23 17:40:04', 1440911410581213417, '2021-09-23 17:40:04', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974233617305600, 1440974233613111296, '查看', 3, NULL, 1440962496864194560, 0, NULL, 0, NULL, 1440911410581213417, '2021-09-23 17:40:04', 1440911410581213417, '2021-09-23 17:40:04', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974233621499904, 1440974233613111296, '编辑', 3, NULL, 1440962496864194560, 1, NULL, 1, NULL, 1440911410581213417, '2021-09-23 17:40:04', 1440911410581213417, '2021-09-23 17:40:04', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974310754750464, NULL, '工单管理', 0, NULL, NULL, NULL, NULL, 6, 'el-icon-menu', 1440911410581213417, '2021-09-23 17:40:22', 1440911410581213417, '2021-09-23 17:43:00', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440974580402360320, 1440974310754750464, '请假申请', 1, NULL, 1440945468593934336, NULL, 1440962968085860352, 1, NULL, 1440911410581213417, '2021-09-23 17:41:27', 1440911410581213417, '2021-09-23 17:54:31', 1);
+INSERT INTO `bn_sys_menu` VALUES (1440978065088843776, 1440974310754750464, '合同工单管理', 1, NULL, 1440955483438452736, NULL, 1440968423508021248, 2, NULL, 1440911410581213417, '2021-09-23 17:55:17', 1440911410581213417, '2021-09-23 17:55:17', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_menu_perm_code
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_menu_perm_code`;
+CREATE TABLE `bn_sys_menu_perm_code` (
+  `menu_id` bigint(20) NOT NULL COMMENT '关联菜单Id',
+  `perm_code_id` bigint(20) NOT NULL COMMENT '关联权限字Id',
+  PRIMARY KEY (`menu_id`,`perm_code_id`) USING BTREE,
+  KEY `idx_perm_code_id` (`perm_code_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='菜单和权限关系表';
+
+-- ----------------------------
+-- Records of bn_sys_menu_perm_code
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1392786549942259712, 1400638885750378496);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1392786950682841088, 1400639252747784192);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418057835631087616, 1418046848794365952);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058049951633408, 1418046986677915648);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058115667988480, 1418047095188754432);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058170542067712, 1418047182946177024);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058289182150656, 1418048205177753600);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058602723151872, 1418048335343783936);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058744037642240, 1418049164754817024);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058844164067328, 1418049287106859008);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058907674218496, 1418049398776008704);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418059167532322816, 1418050322282057728);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418058515099947008, 1418050797706416128);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1418059283920064512, 1418057346877231104);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1423161217970606080, 1423636498195943424);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1423161217970606080, 1423637544578322432);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213280, 1440911410581213287);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213281, 1440911410581213288);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213282, 1440911410581213289);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213283, 1440911410581213290);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213284, 1440911410581213291);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213285, 1440911410581213292);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213294, 1440911410581213301);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213295, 1440911410581213302);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213296, 1440911410581213303);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213297, 1440911410581213304);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213298, 1440911410581213305);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213299, 1440911410581213306);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213310, 1440911410581213319);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213315, 1440911410581213320);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213311, 1440911410581213321);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213312, 1440911410581213322);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213313, 1440911410581213323);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213314, 1440911410581213324);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213316, 1440911410581213325);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213317, 1440911410581213326);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213330, 1440911410581213338);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213334, 1440911410581213339);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213331, 1440911410581213340);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213332, 1440911410581213341);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213333, 1440911410581213342);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213335, 1440911410581213343);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213336, 1440911410581213344);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213346, 1440911410581213352);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213347, 1440911410581213353);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213348, 1440911410581213354);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213349, 1440911410581213355);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213350, 1440911410581213356);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213358, 1440911410581213364);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213359, 1440911410581213365);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213360, 1440911410581213366);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213361, 1440911410581213367);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213362, 1440911410581213368);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213370, 1440911410581213379);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213371, 1440911410581213380);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213372, 1440911410581213381);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213373, 1440911410581213382);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213374, 1440911410581213383);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213375, 1440911410581213384);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213376, 1440911410581213385);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213377, 1440911410581213386);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1401532055971434503, 1440911410581213394);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213388, 1440911410581213394);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1401532055971434503, 1440911410581213395);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213389, 1440911410581213395);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1401532055971434503, 1440911410581213396);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213390, 1440911410581213396);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1401532055971434503, 1440911410581213397);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213391, 1440911410581213397);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1401532055971434503, 1440911410581213398);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213392, 1440911410581213398);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213400, 1440911410581213403);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213401, 1440911410581213404);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213407, 1440911410581213412);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213408, 1440911410581213413);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213409, 1440911410581213414);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440911410581213410, 1440911410581213415);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440974580402360320, 1440976898661289984);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440978065088843776, 1440976998183735296);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440974580402360320, 1440977405874278400);
+INSERT INTO `bn_sys_menu_perm_code` VALUES (1440978065088843776, 1440977767599443968);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_perm
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_perm`;
+CREATE TABLE `bn_sys_perm` (
+  `perm_id` bigint(20) NOT NULL COMMENT '权限id',
+  `module_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '权限所在的权限模块id',
+  `perm_name` varchar(64) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限名称',
+  `url` varchar(128) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '关联的url',
+  `show_order` int(11) NOT NULL DEFAULT '0' COMMENT '权限在当前模块下的顺序，由小到大',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`perm_id`) USING BTREE,
+  KEY `idx_show_order` (`show_order`) USING BTREE,
+  KEY `idx_module_id` (`module_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='系统权限表';
+
+-- ----------------------------
+-- Records of bn_sys_perm
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_perm` VALUES (1400626748101496832, 1400625224646397952, '显示列表', '/admin/online/onlineDblink/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400626963806162944, 1400625224646397952, '数据表列表', '/admin/online/onlineDblink/listDblinkTables', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400627109692444672, 1400625224646397952, '数据表字段列表', '/admin/online/onlineDblink/listDblinkTableColumns', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632108514283520, 1400625585851469824, '显示列表', '/admin/online/onlineDict/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632216169484288, 1400625585851469824, '详情', '/admin/online/onlineDict/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632326538399744, 1400625585851469824, '新增', '/admin/online/onlineDict/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632438635368448, 1400625585851469824, '编辑', '/admin/online/onlineDict/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632511620452352, 1400625585851469824, '删除', '/admin/online/onlineDict/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632924021198848, 1400625800033603584, '显示列表', '/admin/online/onlineTable/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400632978937221120, 1400625800033603584, '详情', '/admin/online/onlineTable/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633026181861376, 1400625800033603584, '新增', '/admin/online/onlineTable/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633077717274624, 1400625800033603584, '编辑', '/admin/online/onlineTable/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633129688895488, 1400625800033603584, '删除', '/admin/online/onlineTable/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633375525441536, 1400625906245963776, '显示列表', '/admin/online/onlineColumn/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633437093629952, 1400625906245963776, '详情', '/admin/online/onlineColumn/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633529678696448, 1400625906245963776, '新增', '/admin/online/onlineColumn/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633568027217920, 1400625906245963776, '编辑', '/admin/online/onlineColumn/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633612201627648, 1400625906245963776, '删除', '/admin/online/onlineColumn/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633713376628736, 1400625906245963776, '刷新字段', '/admin/online/onlineColumn/refresh', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633798403559424, 1400625906245963776, '字段验证规则列表', '/admin/online/onlineColumn/listOnlineColumnRule', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400633922085195776, 1400625906245963776, '未使用字段验证规则列表', '/admin/online/onlineColumn/listNotInOnlineColumnRule', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634012745076736, 1400625906245963776, '添加字段验证规则', '/admin/online/onlineColumn/addOnlineColumnRule', 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634100498305024, 1400625906245963776, '删除字段验证规则', '/admin/online/onlineColumn/deleteOnlineColumnRule', 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634280308117504, 1400625906245963776, '编辑字段验证规则', '/admin/online/onlineColumn/updateOnlineColumnRule', 11, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634354593435648, 1400625906245963776, '字段验证规则详情', '/admin/online/onlineColumn/viewOnlineColumnRule', 12, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634559896227840, 1400626018774945792, '显示列表', '/admin/online/onlineRule/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634613151305728, 1400626018774945792, '详情', '/admin/online/onlineRule/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634651944423424, 1400626018774945792, '新增', '/admin/online/onlineRule/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634693472227328, 1400626018774945792, '编辑', '/admin/online/onlineRule/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400634735549485056, 1400626018774945792, '删除', '/admin/online/onlineRule/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635131969933312, 1400625338886656000, '显示列表', '/admin/online/onlinePage/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635267726970880, 1400625338886656000, '页面以及表单列表', '/admin/online/onlinePage/listAllPageAndForm', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635341274091520, 1400625338886656000, '详情', '/admin/online/onlinePage/view', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635378506928128, 1400625338886656000, '新增', '/admin/online/onlinePage/add', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635426808532992, 1400625338886656000, '编辑', '/admin/online/onlinePage/update', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635527698321408, 1400625338886656000, '更新启用状态', '/admin/online/onlinePage/updatePublished', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635581532213248, 1400625338886656000, '删除', '/admin/online/onlinePage/delete', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635661106548736, 1400625338886656000, '页面数据源列表', '/admin/online/onlinePage/listOnlinePageDatasource', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635757332271104, 1400625338886656000, '未使用页面数据源列表', '/admin/online/onlinePage/listNotInOnlinePageDatasource', 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635827347787776, 1400625338886656000, '添加页面数据源', '/admin/online/onlinePage/addOnlinePageDatasource', 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635896461529088, 1400625338886656000, '删除页面数据源', '/admin/online/onlinePage/deleteOnlinePageDatasource', 11, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400635963469729792, 1400625338886656000, '编辑页面数据源', '/admin/online/onlinePage/updateOnlinePageDatasource', 12, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636031752998912, 1400625338886656000, '页面数据源详情', '/admin/online/onlinePage/viewOnlinePageDatasource', 13, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636182936686592, 1400626192725315584, '显示列表', '/admin/online/onlineDatasource/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636217728438272, 1400626192725315584, '详情', '/admin/online/onlineDatasource/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636258107002880, 1400626192725315584, '新增', '/admin/online/onlineDatasource/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636301480300544, 1400626192725315584, '编辑', '/admin/online/onlineDatasource/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636338838966272, 1400626192725315584, '删除', '/admin/online/onlineDatasource/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636501900922880, 1400626237478539264, '显示列表', '/admin/online/onlineDatasourceRelation/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636535371468800, 1400626237478539264, '详情', '/admin/online/onlineDatasourceRelation/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636571165659136, 1400626237478539264, '新增', '/admin/online/onlineDatasourceRelation/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636610403373056, 1400626237478539264, '编辑', '/admin/online/onlineDatasourceRelation/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400636656679129088, 1400626237478539264, '删除', '/admin/online/onlineDatasourceRelation/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400637740705386496, 1400626463740268544, '显示列表', '/admin/online/onlineForm/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400637775962705920, 1400626463740268544, '详情', '/admin/online/onlineForm/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400637822737584128, 1400626463740268544, '新增', '/admin/online/onlineForm/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400637858414333952, 1400626463740268544, '编辑', '/admin/online/onlineForm/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400637895328403456, 1400626463740268544, '删除', '/admin/online/onlineForm/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1400637970863624192, 1400626463740268544, '渲染信息', '/admin/online/onlineForm/render', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1413405061278601216, 1413404952566435840, '显示列表', '/admin/online/onlineVirtualColumn/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1413405166471745536, 1413404952566435840, '详情', '/admin/online/onlineVirtualColumn/view', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1413405224021790720, 1413404952566435840, '新增', '/admin/online/onlineVirtualColumn/add', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1413405313788284928, 1413404952566435840, '编辑', '/admin/online/onlineVirtualColumn/update', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1413405352866615296, 1413404952566435840, '删除', '/admin/online/onlineVirtualColumn/delete', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418030338508066816, 1418029566533832704, '显示列表', '/admin/flow/flowCategory/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418030386436378624, 1418029566533832704, '新增', '/admin/flow/flowCategory/add', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418030437971791872, 1418029566533832704, '编辑', '/admin/flow/flowCategory/update', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418030477918343168, 1418029566533832704, '删除', '/admin/flow/flowCategory/delete', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418030533757112320, 1418029566533832704, '详情', '/admin/flow/flowCategory/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031006660694016, 1418029615040958464, '显示列表', '/admin/flow/flowEntry/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031078391681024, 1418029615040958464, '新增', '/admin/flow/flowEntry/add', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031120481521664, 1418029615040958464, '编辑', '/admin/flow/flowEntry/update', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031174604820480, 1418029615040958464, '删除', '/admin/flow/flowEntry/delete', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031219706171392, 1418029615040958464, '详情', '/admin/flow/flowEntry/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031304779239424, 1418029615040958464, '发布', '/admin/flow/flowEntry/publish', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031515207471104, 1418029615040958464, '流程版本列表', '/admin/flow/flowEntry/listFlowEntryPublish', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031648351457280, 1418029615040958464, '设置主版本', '/admin/flow/flowEntry/updateMainVersion', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031712788549632, 1418029615040958464, '挂起', '/admin/flow/flowEntry/suspendFlowEntryPublish', 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418031801271586816, 1418029615040958464, '激活', '/admin/flow/flowEntry/activateFlowEntryPublish', 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418032222232907776, 1418031999276290048, '显示列表', '/admin/flow/flowEntryVariable/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418032258429751296, 1418031999276290048, '新增', '/admin/flow/flowEntryVariable/add', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418032300414734336, 1418031999276290048, '编辑', '/admin/flow/flowEntryVariable/update', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418032344064856064, 1418031999276290048, '删除', '/admin/flow/flowEntryVariable/delete', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418032382409183232, 1418031999276290048, '详情', '/admin/flow/flowEntryVariable/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418033804987076608, 1418030256765276160, '流程实例列表', '/admin/flow/flowOperation/listAllHistoricProcessInstance', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418033889183535104, 1418030256765276160, '我的历史流程', '/admin/flow/flowOperation/listHistoricProcessInstance', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418034243434450944, 1418030256765276160, '历史流程数据', '/admin/flow/flowOnlineOperation/viewHistoricProcessInstance', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418035997727264768, 1418030256765276160, '历史流程信息', '/admin/flow/flowOperation/viewInitialHistoricTaskInfo', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418040510253109248, 1418030256765276160, '终止流程', '/admin/flow/flowOperation/stopProcessInstance', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418040574245605376, 1418030256765276160, '删除流程', '/admin/flow/flowOperation/deleteProcessInstance', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418051334564745216, 1418051228918616064, '仅启动流程', '/admin/flow/flowOperation/startOnly', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418051485324808192, 1418051228918616064, '获取启动信息', '/admin/flow/flowOperation/viewInitialTaskInfo', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418051693639110656, 1418051634793025536, '流程审批', '/admin/flow/flowOperation/viewRuntimeTaskInfo', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418054128097038336, 1418051634793025536, '在办流程数据', '/admin/flow/flowOnlineOperation/viewUserTask', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418054519798894592, 1418054414190514176, '获取流程图', '/admin/flow/flowOperation/viewProcessBpmn', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418054618176294912, 1418054414190514176, '审批历史记录列表', '/admin/flow/flowOperation/listFlowTaskComment', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418054792965525504, 1418054414190514176, '流程审批状态', '/admin/flow/flowOperation/viewHighlightFlowData', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418055060981551104, 1418051634793025536, '提交审批数据', '/admin/flow/flowOnlineOperation/submitUserTask', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418056212146032640, 1418051634793025536, '待办任务列表', '/admin/flow/flowOperation/listRuntimeTask', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418056212146032641, 1418051634793025536, '待办任务数量', '/admin/flow/flowOperation/countRuntimeTask', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418079603167072256, 1418054414190514176, '文件上传', '/admin/flow/flowOnlineOperation/upload', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1418079670594703360, 1418054414190514176, '文件下载', '/admin/flow/flowOnlineOperation/download', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1423635764486344704, 1423635643371622400, '已办任务列表', '/admin/flow/flowOperation/listHistoricTask', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1423635851312631808, 1423635643371622400, '已办任务信息', '/admin/flow/flowOperation/viewHistoricTaskInfo', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1423636091033882624, 1423635643371622400, '加签', '/admin/flow/flowOperation/submitConsign', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1423984506028691456, 1418030256765276160, '撤销工单', '/admin/flow/flowOperation/cancelWorkOrder', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213185, 1440911410581213184, '新增', '/admin/upms/sysDept/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213186, 1440911410581213184, '编辑', '/admin/upms/sysDept/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213187, 1440911410581213184, '删除', '/admin/upms/sysDept/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213188, 1440911410581213184, '显示列表', '/admin/upms/sysDept/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213189, 1440911410581213184, '导出', '/admin/upms/sysDept/export', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213190, 1440911410581213184, '详情', '/admin/upms/sysDept/view', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213191, 1440911410581213184, '打印', '/admin/upms/sysDept/print', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213192, 1440911410581213184, '新增部门岗位', '/admin/upms/sysDept/addSysDeptPost', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213193, 1440911410581213184, '编辑部门岗位', '/admin/upms/sysDept/updateSysDeptPost', 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213194, 1440911410581213184, '移除部门岗位', '/admin/upms/sysDept/deleteSysDeptPost', 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213195, 1440911410581213184, '列表显示部门岗位', '/admin/upms/sysDept/listSysDeptPost', 11, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213196, 1440911410581213184, '列表显示未关联部门岗位', '/admin/upms/sysDept/listNotInSysDeptPost', 12, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213197, 1440911410581213184, '详情显示部门岗位', '/admin/upms/sysDept/viewSysDeptPost', 13, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213199, 1440911410581213198, '新增', '/admin/upms/sysUser/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213200, 1440911410581213198, '编辑', '/admin/upms/sysUser/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213201, 1440911410581213198, '删除', '/admin/upms/sysUser/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213202, 1440911410581213198, '显示列表', '/admin/upms/sysUser/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213203, 1440911410581213198, '导出', '/admin/upms/sysUser/export', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213204, 1440911410581213198, '详情', '/admin/upms/sysUser/view', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213205, 1440911410581213198, '打印', '/admin/upms/sysUser/print', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213206, 1440911410581213198, '重置密码', '/admin/upms/sysUser/resetPassword', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213207, 1440911410581213198, '用户权限资源分配详情', '/admin/upms/sysUser/listSysPermWithDetail', 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213208, 1440911410581213198, '用户权限字分配详情', '/admin/upms/sysUser/listSysPermCodeWithDetail', 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213209, 1440911410581213198, '用户菜单分配详情', '/admin/upms/sysUser/listSysMenuWithDetail', 11, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213211, 1440911410581213210, '新增', '/admin/upms/sysRole/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213212, 1440911410581213210, '编辑', '/admin/upms/sysRole/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213213, 1440911410581213210, '删除', '/admin/upms/sysRole/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213214, 1440911410581213210, '显示列表', '/admin/upms/sysRole/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213215, 1440911410581213210, '详情', '/admin/upms/sysRole/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213216, 1440911410581213210, '授权用户', '/admin/upms/sysRole/addUserRole', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213217, 1440911410581213210, '移除用户', '/admin/upms/sysRole/deleteUserRole', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213218, 1440911410581213210, '角色用户列表', '/admin/upms/sysRole/listUserRole', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213219, 1440911410581213210, '角色未添加用户列表', '/admin/upms/sysRole/listNotInUserRole', 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213220, 1440911410581213210, '角色权限资源分配详情', '/admin/upms/sysRole/listSysPermWithDetail', 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213221, 1440911410581213210, '角色权限字分配详情', '/admin/upms/sysRole/listSysPermCodeWithDetail', 11, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213223, 1440911410581213222, '新增', '/admin/upms/sysDataPerm/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213224, 1440911410581213222, '编辑', '/admin/upms/sysDataPerm/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213225, 1440911410581213222, '删除', '/admin/upms/sysDataPerm/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213226, 1440911410581213222, '显示列表', '/admin/upms/sysDataPerm/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213227, 1440911410581213222, '详情', '/admin/upms/sysDataPerm/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213228, 1440911410581213222, '授权用户', '/admin/upms/sysDataPerm/addDataPermUser', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213229, 1440911410581213222, '移除用户', '/admin/upms/sysDataPerm/deleteDataPermUser', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213230, 1440911410581213222, '数据权限用户列表', '/admin/upms/sysDataPerm/listDataPermUser', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213231, 1440911410581213222, '数据权限未添加用户列表', '/admin/upms/sysDataPerm/listNotInDataPermUser', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213233, 1440911410581213232, '新增', '/admin/upms/sysPost/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213234, 1440911410581213232, '编辑', '/admin/upms/sysPost/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213235, 1440911410581213232, '删除', '/admin/upms/sysPost/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213236, 1440911410581213232, '显示列表', '/admin/upms/sysPost/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213237, 1440911410581213232, '详情', '/admin/upms/sysPost/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213239, 1440911410581213238, '新增', '/admin/upms/sysMenu/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213240, 1440911410581213238, '删除', '/admin/upms/sysMenu/delete', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213241, 1440911410581213238, '编辑', '/admin/upms/sysMenu/update', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213242, 1440911410581213238, '显示列表', '/admin/upms/sysMenu/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213243, 1440911410581213238, '详情', '/admin/upms/sysMenu/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213244, 1440911410581213238, '菜单权限资源分配详情', '/admin/upms/sysMenu/listSysPermWithDetail', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213245, 1440911410581213238, '菜单用户分配详情', '/admin/upms/sysMenu/listSysUserWithDetail', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213247, 1440911410581213246, '新增', '/admin/upms/sysPermCode/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213248, 1440911410581213246, '编辑', '/admin/upms/sysPermCode/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213249, 1440911410581213246, '删除', '/admin/upms/sysPermCode/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213250, 1440911410581213246, '显示列表', '/admin/upms/sysPermCode/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213251, 1440911410581213246, '详情', '/admin/upms/sysPermCode/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213252, 1440911410581213246, '权限字用户分配详情', '/admin/upms/sysPermCode/listSysUserWithDetail', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213253, 1440911410581213246, '权限字角色分配详情', '/admin/upms/sysPermCode/listSysRoleWithDetail', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213255, 1440911410581213254, '新增', '/admin/upms/sysPermModule/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213256, 1440911410581213254, '编辑', '/admin/upms/sysPermModule/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213257, 1440911410581213254, '删除', '/admin/upms/sysPermModule/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213258, 1440911410581213254, '显示列表', '/admin/upms/sysPermModule/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213259, 1440911410581213254, '显示全部', '/admin/upms/sysPermModule/listAll', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213261, 1440911410581213260, '新增', '/admin/upms/sysPerm/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213262, 1440911410581213260, '编辑', '/admin/upms/sysPerm/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213263, 1440911410581213260, '删除', '/admin/upms/sysPerm/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213264, 1440911410581213260, '显示列表', '/admin/upms/sysPerm/list', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213265, 1440911410581213260, '详情', '/admin/upms/sysPerm/view', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213266, 1440911410581213260, '权限资源用户分配详情', '/admin/upms/sysPerm/listSysUserWithDetail', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213267, 1440911410581213260, '权限资源角色分配详情', '/admin/upms/sysPerm/listSysRoleWithDetail', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213268, 1440911410581213260, '权限资源菜单分配详情', '/admin/upms/sysPerm/listSysMenuWithDetail', 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213271, 1440911410581213270, '新增', '/admin/app/areaCode/add', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213272, 1440911410581213270, '编辑', '/admin/app/areaCode/update', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213273, 1440911410581213270, '删除', '/admin/app/areaCode/delete', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213274, 1440911410581213270, '同步缓存', '/admin/app/areaCode/reloadCachedData', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213276, 1440911410581213275, '显示列表', '/admin/upms/loginUser/list', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440911410581213277, 1440911410581213275, '删除', '/admin/upms/loginUser/delete', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440975727276068864, 1440975375537541120, '启动并提交数据', '/admin/flow/flowOnlineOperation/startAndTakeUserTask/flowLeave', 1, 1440911410581213417, '2021-09-23 17:46:00', 1440911410581213417, '2021-09-23 17:46:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440975781374201856, 1440975375537541120, '工单列表', '/admin/flow/flowOnlineOperation/listWorkOrder/flowLeave', 2, 1440911410581213417, '2021-09-23 17:46:13', 1440911410581213417, '2021-09-23 17:46:13', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440975850529886208, 1440975429199466496, '启动并提交数据', '/admin/flow/flowOnlineOperation/startAndTakeUserTask/flowSubmit', 1, 1440911410581213417, '2021-09-23 17:46:29', 1440911410581213417, '2021-09-23 17:46:29', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440975895627042816, 1440975429199466496, '工单列表', '/admin/flow/flowOnlineOperation/listWorkOrder/flowSubmit', 2, 1440911410581213417, '2021-09-23 17:46:40', 1440911410581213417, '2021-09-23 17:46:40', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440975979374710784, 1440975469133434880, '启动并提交数据', '/admin/flow/flowOnlineOperation/startAndTakeUserTask/flowContract', 1, 1440911410581213417, '2021-09-23 17:47:00', 1440911410581213417, '2021-09-23 17:47:00', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440976024471867392, 1440975469133434880, '工单列表', '/admin/flow/flowOnlineOperation/listWorkOrder/flowContract', 2, 1440911410581213417, '2021-09-23 17:47:11', 1440911410581213417, '2021-09-23 17:47:11', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440976144311521280, 1440975527128076288, '启动并提交数据', '/admin/flow/flowOnlineOperation/startAndTakeUserTask/flowConSign', 1, 1440911410581213417, '2021-09-23 17:47:40', 1440911410581213417, '2021-09-23 17:47:40', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440976188553039872, 1440975527128076288, '工单列表', '/admin/flow/flowOnlineOperation/listWorkOrder/flowConSign', 2, 1440911410581213417, '2021-09-23 17:47:50', 1440911410581213417, '2021-09-23 17:47:50', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440976259415805952, 1440975571776442368, '启动并提交数据', '/admin/flow/flowOnlineOperation/startAndTakeUserTask/flowTranslate', 1, 1440911410581213417, '2021-09-23 17:48:07', 1440911410581213417, '2021-09-23 17:48:07', 1);
+INSERT INTO `bn_sys_perm` VALUES (1440976310951219200, 1440975571776442368, '工单列表', '/admin/flow/flowOnlineOperation/listWorkOrder/flowTranslate', 2, 1440911410581213417, '2021-09-23 17:48:19', 1440911410581213417, '2021-09-23 17:48:19', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_perm_code
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_perm_code`;
+CREATE TABLE `bn_sys_perm_code` (
+  `perm_code_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '上级权限字Id',
+  `perm_code` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '权限字标识(一般为有含义的英文字符串)',
+  `perm_code_type` int(11) NOT NULL COMMENT '类型(0: 表单 1: UI片段 2: 操作)',
+  `show_name` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '显示名称',
+  `show_order` int(11) NOT NULL COMMENT '显示顺序(数值越小，越靠前)',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`perm_code_id`),
+  UNIQUE KEY `idx_perm_code` (`perm_code`) USING BTREE,
+  KEY `idx_parent_id` (`parent_id`) USING BTREE,
+  KEY `idx_show_order` (`show_order`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='系统权限资源表';
+
+-- ----------------------------
+-- Records of bn_sys_perm_code
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_perm_code` VALUES (1400638673195634688, NULL, 'formOnlineDict', 0, '在线表单字典管理', 12000, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1400638885750378496, 1400638673195634688, 'formOnlineDict:fragmentOnlineDict', 1, '在线表单字典管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1400639030462255104, NULL, 'formOnlinePage', 0, '在线表单表单管理', 12100, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1400639252747784192, 1400639030462255104, 'formOnlinePage:fragmentOnlinePage', 1, '在线表单表单管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418046729906819072, NULL, 'formFlowCategory', 0, '流程分类', 13000, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418046848794365952, 1418046729906819072, 'formFlowCategory:formFlowCategory', 1, '流程分类', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418046986677915648, 1418046848794365952, 'formFlowCategory:formFlowCategory:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418047095188754432, 1418046848794365952, 'formFlowCategory:formFlowCategory:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418047182946177024, 1418046848794365952, 'formFlowCategory:formFlowCategory:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418048134759583744, NULL, 'formFlowEntry', 0, '流程设计', 13100, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418048205177753600, 1418048134759583744, 'formFlowEntry:formFlowEntry', 1, '流程设计', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418048335343783936, 1418048205177753600, 'formFlowEntry:formFlowEntry:update', 2, '编辑', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418048872671875072, NULL, 'formAllInstance', 0, '流程实例', 13200, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418049164754817024, 1418048872671875072, 'formAllInstance:formAllInstance', 1, '流程实例', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418049287106859008, 1418049164754817024, 'formAllInstance:formAllInstance:stop', 2, '终止', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418049398776008704, 1418049164754817024, 'formAllInstance:formAllInstance:delete', 2, '删除', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418050031436435456, NULL, 'formMyTask', 0, '我的待办', 13300, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418050322282057728, 1418050031436435456, 'formMyTask:formMyTask', 1, '我的待办', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418050797706416128, 1418048205177753600, 'formFlowEntry:formFlowEntry:start', 2, '启动', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-24 09:28:39', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418057020824621056, NULL, 'formMyHistoryTask', 0, '历史流程', 13400, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1418057346877231104, 1418057020824621056, 'formMyHistoryTask:formMyHistoryTask', 1, '历史流程', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1423636498195943424, NULL, 'formMyApprovedTask', 0, '已办任务', 13500, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1423637544578322432, 1423636498195943424, 'formMyApprovedTask:formMyApprovedTask', 1, '已办任务', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213286, NULL, 'formSysUser', 0, '用户管理', 10000, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213287, 1440911410581213286, 'formSysUser:fragmentSysUser', 1, '用户管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213288, 1440911410581213287, 'formSysUser:fragmentSysUser:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213289, 1440911410581213287, 'formSysUser:fragmentSysUser:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213290, 1440911410581213287, 'formSysUser:fragmentSysUser:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213291, 1440911410581213287, 'formSysUser:fragmentSysUser:resetPassword', 2, '重置密码', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213292, 1440911410581213287, 'formSysUser:fragmentSysUser:listSysUserPermDetail', 2, '权限详情', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213300, NULL, 'formSysDept', 0, '部门管理', 10100, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213301, 1440911410581213300, 'formSysDept:fragmentSysDept', 1, '部门管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213302, 1440911410581213301, 'formSysDept:fragmentSysDept:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213303, 1440911410581213301, 'formSysDept:fragmentSysDept:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213304, 1440911410581213301, 'formSysDept:fragmentSysDept:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213305, 1440911410581213301, 'formSysDept:fragmentSysDept:editPost', 2, '设置岗位', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213306, 1440911410581213301, 'formSysDept:fragmentSysDept:viewPost', 2, '查看岗位', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213318, NULL, 'formSysRole', 0, '角色管理', 10200, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213319, 1440911410581213318, 'formSysRole:fragmentSysRole', 1, '角色管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213320, 1440911410581213318, 'formSysRole:fragmentSysRoleUser', 1, '用户授权', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213321, 1440911410581213319, 'formSysRole:fragmentSysRole:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213322, 1440911410581213319, 'formSysRole:fragmentSysRole:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213323, 1440911410581213319, 'formSysRole:fragmentSysRole:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213324, 1440911410581213319, 'formSysRole:fragmentSysRole:listSysRolePermDetail', 2, '权限详情', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213325, 1440911410581213320, 'formSysRole:fragmentSysRoleUser:addUserRole', 2, '授权用户', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213326, 1440911410581213320, 'formSysRole:fragmentSysRoleUser:deleteUserRole', 2, '移除用户', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213337, NULL, 'formSysDataPerm', 0, '数据权限管理', 10400, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213338, 1440911410581213337, 'formSysDataPerm:fragmentSysDataPerm', 1, '数据权限管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213339, 1440911410581213337, 'formSysDataPerm:fragmentSysDataPermUser', 1, '用户授权', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213340, 1440911410581213338, 'formSysDataPerm:fragmentSysDataPerm:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213341, 1440911410581213338, 'formSysDataPerm:fragmentSysDataPerm:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213342, 1440911410581213338, 'formSysDataPerm:fragmentSysDataPerm:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213343, 1440911410581213339, 'formSysDataPerm:fragmentSysDataPermUser:addDataPermUser', 2, '授权用户', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213344, 1440911410581213339, 'formSysDataPerm:fragmentSysDataPermUser:deleteDataPermUser', 2, '移除用户', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213351, NULL, 'formSysMenu', 0, '菜单管理', 10600, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213352, 1440911410581213351, 'formSysMenu:fragmentSysMenu', 1, '菜单管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213353, 1440911410581213352, 'formSysMenu:fragmentSysMenu:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213354, 1440911410581213352, 'formSysMenu:fragmentSysMenu:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213355, 1440911410581213352, 'formSysMenu:fragmentSysMenu:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213356, 1440911410581213352, 'formSysMenu:fragmentSysMenu:listSysMenuPermDetail', 2, '权限详情', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213363, NULL, 'formSysPermCode', 0, '权限字管理', 10700, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213364, 1440911410581213363, 'formSysPermCode:fragmentSysPermCode', 1, '权限字管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213365, 1440911410581213364, 'formSysPermCode:fragmentSysPermCode:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213366, 1440911410581213364, 'formSysPermCode:fragmentSysPermCode:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213367, 1440911410581213364, 'formSysPermCode:fragmentSysPermCode:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213368, 1440911410581213364, 'formSysPermCode:fragmentSysPermCode:listSysPermCodePermDetail', 2, '权限详情', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213378, NULL, 'formSysPerm', 0, '权限管理', 10800, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213379, 1440911410581213378, 'formSysPerm:fragmentSysPerm', 1, '权限管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213380, 1440911410581213379, 'formSysPerm:fragmentSysPerm:addPermModule', 2, '新增模块', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213381, 1440911410581213379, 'formSysPerm:fragmentSysPerm:updatePermModule', 2, '编辑模块', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213382, 1440911410581213379, 'formSysPerm:fragmentSysPerm:deletePermModule', 2, '删除模块', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213383, 1440911410581213379, 'formSysPerm:fragmentSysPerm:addPerm', 2, '新增权限', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213384, 1440911410581213379, 'formSysPerm:fragmentSysPerm:updatePerm', 2, '编辑权限', 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213385, 1440911410581213379, 'formSysPerm:fragmentSysPerm:deletePerm', 2, '删除权限', 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213386, 1440911410581213379, 'formSysPerm:fragmentSysPerm:listSysPermPermDetail', 2, '权限详情', 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213393, NULL, 'formSysDict', 0, '字典管理', 10900, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213394, 1440911410581213393, 'formSysDict:fragmentSysDict', 1, '字典管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213395, 1440911410581213394, 'formSysDict:fragmentSysDict:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213396, 1440911410581213394, 'formSysDict:fragmentSysDict:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213397, 1440911410581213394, 'formSysDict:fragmentSysDict:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213398, 1440911410581213394, 'formSysDict:fragmentSysDict:reloadCache', 2, '同步缓存', 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213402, NULL, 'formSysLoginUser', 0, '在线用户', 11200, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213403, 1440911410581213402, 'formSysLoginUser:fragmentLoginUser', 1, '在线用户', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213404, 1440911410581213403, 'formSysLoginUser:fragmentLoginUser:delete', 2, '强制下线', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213411, NULL, 'formSysPost', 0, '岗位管理', 10150, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213412, 1440911410581213411, 'formSysPost:fragmentSysPost', 1, '岗位管理', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213413, 1440911410581213412, 'formSysPost:fragmentSysPost:add', 2, '新增', 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213414, 1440911410581213412, 'formSysPost:fragmentSysPost:update', 2, '编辑', 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440911410581213415, 1440911410581213412, 'formSysPost:fragmentSysPost:delete', 2, '删除', 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440976898661289984, NULL, 'formFlowLeave', 0, '请假申请', 14000, 1440911410581213417, '2021-09-23 17:50:39', 1440911410581213417, '2021-09-23 17:50:39', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440976998183735296, NULL, 'formContractOrder', 0, '合同工单', 14100, 1440911410581213417, '2021-09-23 17:51:03', 1440911410581213417, '2021-09-23 17:51:03', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440977405874278400, 1440976898661289984, 'formFlowLeave:formFlowLeave', 1, '请假申请', 1, 1440911410581213417, '2021-09-23 17:52:40', 1440911410581213417, '2021-09-23 17:52:40', 1);
+INSERT INTO `bn_sys_perm_code` VALUES (1440977767599443968, 1440976998183735296, 'formContractOrder:formContractOrder', 1, '合同工单', 1, 1440911410581213417, '2021-09-23 17:54:07', 1440911410581213417, '2021-09-23 17:54:07', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_perm_code_perm
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_perm_code_perm`;
+CREATE TABLE `bn_sys_perm_code_perm` (
+  `perm_code_id` bigint(20) NOT NULL COMMENT '权限字Id',
+  `perm_id` bigint(20) NOT NULL COMMENT '权限id',
+  PRIMARY KEY (`perm_code_id`,`perm_id`),
+  KEY `idx_perm_id` (`perm_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='系统权限字和权限资源关联表';
+
+-- ----------------------------
+-- Records of bn_sys_perm_code_perm
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400626748101496832);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400626748101496832);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400626963806162944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400626963806162944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400627109692444672);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400627109692444672);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400632108514283520);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400632108514283520);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400632216169484288);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400632216169484288);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400632326538399744);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400632438635368448);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400638885750378496, 1400632511620452352);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400632924021198848);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400632978937221120);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633026181861376);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633077717274624);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633129688895488);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633375525441536);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1400633375525441536);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633437093629952);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633529678696448);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633568027217920);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633612201627648);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633713376628736);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633798403559424);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400633922085195776);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634012745076736);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634100498305024);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634280308117504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634354593435648);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634559896227840);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634613151305728);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634651944423424);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634693472227328);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400634735549485056);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635131969933312);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1400635131969933312);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635267726970880);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635341274091520);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635378506928128);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635426808532992);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635527698321408);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635581532213248);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635661106548736);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1400635661106548736);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635757332271104);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635827347787776);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635896461529088);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400635963469729792);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636031752998912);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636182936686592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636217728438272);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636258107002880);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636301480300544);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636338838966272);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636501900922880);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1400636501900922880);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636535371468800);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636571165659136);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636610403373056);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400636656679129088);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400637740705386496);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1400637740705386496);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400637775962705920);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1400637775962705920);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1400637775962705920);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1400637775962705920);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400637822737584128);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400637858414333952);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400637895328403456);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1400637970863624192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1413405061278601216);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1413405061278601216);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1413405166471745536);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1413405224021790720);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1413405313788284928);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1400639252747784192, 1413405352866615296);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418026612762349572);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418026612762349580);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418046848794365952, 1418030338508066816);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418046986677915648, 1418030386436378624);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418047095188754432, 1418030437971791872);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418047182946177024, 1418030477918343168);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418047095188754432, 1418030533757112320);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048205177753600, 1418031006660694016);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031078391681024);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031120481521664);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031174604820480);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031219706171392);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031304779239424);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031515207471104);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031648351457280);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031712788549632);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418031801271586816);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418032222232907776);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418032258429751296);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418032300414734336);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418032344064856064);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418032382409183232);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049164754817024, 1418033804987076608);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418033889183535104);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049164754817024, 1418034243434450944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418034243434450944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1418034243434450944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418034243434450944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418034243434450944);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049164754817024, 1418035997727264768);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418035997727264768);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418035997727264768);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418035997727264768);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049287106859008, 1418040510253109248);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049398776008704, 1418040574245605376);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1418051334564745216);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418051334564745216);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418051334564745216);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1418051485324808192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418051485324808192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418051485324808192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418051693639110656);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418051693639110656);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418051693639110656);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418054128097038336);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418054128097038336);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418054128097038336);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049164754817024, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418054519798894592);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418054618176294912);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418054618176294912);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1418054618176294912);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418054618176294912);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418054618176294912);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418049164754817024, 1418054792965525504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418054792965525504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418054792965525504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1418054792965525504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418054792965525504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418054792965525504);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418055060981551104);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418055060981551104);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418055060981551104);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418056212146032640);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418079603167072256);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1418079603167072256);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418079603167072256);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418079603167072256);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050322282057728, 1418079670594703360);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1418079670594703360);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418057346877231104, 1418079670594703360);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1418079670594703360);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1418079670594703360);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1423635764486344704);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1423635851312631808);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1423637544578322432, 1423636091033882624);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1423636091033882624);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1423636091033882624);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1423984506028691456);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1423984506028691456);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213302, 1440911410581213185);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213303, 1440911410581213186);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213304, 1440911410581213187);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213288, 1440911410581213188);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213289, 1440911410581213188);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213301, 1440911410581213188);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213301, 1440911410581213189);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213303, 1440911410581213190);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213303, 1440911410581213191);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213305, 1440911410581213192);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213305, 1440911410581213193);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213305, 1440911410581213194);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213305, 1440911410581213195);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213306, 1440911410581213195);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213305, 1440911410581213196);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213305, 1440911410581213197);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213306, 1440911410581213197);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213288, 1440911410581213199);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213289, 1440911410581213200);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213290, 1440911410581213201);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418048335343783936, 1440911410581213202);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213287, 1440911410581213202);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213287, 1440911410581213203);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213289, 1440911410581213204);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213289, 1440911410581213205);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213291, 1440911410581213206);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213292, 1440911410581213207);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213292, 1440911410581213208);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213292, 1440911410581213209);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213321, 1440911410581213211);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213322, 1440911410581213212);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213323, 1440911410581213213);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213288, 1440911410581213214);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213289, 1440911410581213214);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213319, 1440911410581213214);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213322, 1440911410581213215);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213325, 1440911410581213216);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213326, 1440911410581213217);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213320, 1440911410581213218);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213325, 1440911410581213219);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213324, 1440911410581213220);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213324, 1440911410581213221);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213340, 1440911410581213223);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213341, 1440911410581213224);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213342, 1440911410581213225);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213288, 1440911410581213226);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213289, 1440911410581213226);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213338, 1440911410581213226);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213341, 1440911410581213227);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213343, 1440911410581213228);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213344, 1440911410581213229);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213339, 1440911410581213230);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213343, 1440911410581213231);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213413, 1440911410581213233);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213414, 1440911410581213234);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213415, 1440911410581213235);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213412, 1440911410581213236);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213414, 1440911410581213237);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213353, 1440911410581213239);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213355, 1440911410581213240);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213354, 1440911410581213241);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213321, 1440911410581213242);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213322, 1440911410581213242);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213352, 1440911410581213242);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213354, 1440911410581213243);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213356, 1440911410581213244);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213356, 1440911410581213245);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213365, 1440911410581213247);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213366, 1440911410581213248);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213367, 1440911410581213249);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213353, 1440911410581213250);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213354, 1440911410581213250);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213364, 1440911410581213250);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213366, 1440911410581213251);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213368, 1440911410581213252);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213368, 1440911410581213253);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213380, 1440911410581213255);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213381, 1440911410581213256);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213382, 1440911410581213257);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213379, 1440911410581213258);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213365, 1440911410581213259);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213366, 1440911410581213259);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213379, 1440911410581213259);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213383, 1440911410581213261);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213384, 1440911410581213262);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213385, 1440911410581213263);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213379, 1440911410581213264);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213384, 1440911410581213265);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213386, 1440911410581213266);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213386, 1440911410581213267);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213386, 1440911410581213268);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213394, 1440911410581213271);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213394, 1440911410581213272);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213394, 1440911410581213273);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213394, 1440911410581213274);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213403, 1440911410581213276);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440911410581213404, 1440911410581213277);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1440975727276068864);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1440975727276068864);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977405874278400, 1440975781374201856);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1440975850529886208);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1440975979374710784);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1440975979374710784);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1440977767599443968, 1440976024471867392);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1440976144311521280);
+INSERT INTO `bn_sys_perm_code_perm` VALUES (1418050797706416128, 1440976259415805952);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_perm_module
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_perm_module`;
+CREATE TABLE `bn_sys_perm_module` (
+  `module_id` bigint(20) NOT NULL COMMENT '权限模块id',
+  `parent_id` bigint(20) DEFAULT '0' COMMENT '上级权限模块id',
+  `module_name` varchar(64) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限模块名称',
+  `module_type` int(11) NOT NULL COMMENT '模块类型(0: 普通模块 1: Controller模块)',
+  `show_order` int(11) NOT NULL DEFAULT '0' COMMENT '权限模块在当前层级下的顺序，由小到大',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`module_id`) USING BTREE,
+  KEY `idx_show_order` (`show_order`) USING BTREE,
+  KEY `idx_parent_id` (`parent_id`) USING BTREE,
+  KEY `idx_module_type` (`module_type`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='系统权限模块表';
+
+-- ----------------------------
+-- Records of bn_sys_perm_module
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_perm_module` VALUES (1400625106979393536, NULL, '在线表单', 0, 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400625224646397952, 1400625106979393536, '数据库连接', 1, 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400625338886656000, 1400625106979393536, '页面管理', 1, 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400625585851469824, 1400625106979393536, '在线表单字典管理', 1, 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400625800033603584, 1400625106979393536, '数据表管理', 1, 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400625906245963776, 1400625106979393536, '数据表字段', 1, 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400626018774945792, 1400625106979393536, '字段验证规则', 1, 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400626192725315584, 1400625106979393536, '数据源管理', 1, 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400626237478539264, 1400625106979393536, '数据源关联', 1, 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1400626463740268544, 1400625106979393536, '表单管理', 1, 9, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1401532052901203970, NULL, '用户权限', 0, 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1401532056508305408, NULL, '系统配置', 0, 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1401532056508305409, NULL, '缺省分组', 0, 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1413404952566435840, 1400625106979393536, '虚拟字段管理', 1, 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418028920103505920, NULL, '流程管理', 0, 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418029566533832704, 1418028920103505920, '流程分类', 1, 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418029615040958464, 1418028920103505920, '流程设计', 1, 2, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418030256765276160, 1418028920103505920, '流程操作', 1, 4, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418031999276290048, 1418028920103505920, '流程变量', 1, 3, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418038955105849344, NULL, '工单列表', 0, 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418051228918616064, 1418028920103505920, '启动流程', 1, 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418051634793025536, 1418028920103505920, '审批流程', 1, 6, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1418054414190514176, 1418028920103505920, '流程审批数据', 1, 7, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1423635643371622400, 1418028920103505920, '已办任务', 1, 8, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213184, 1401532052901203970, '部门管理', 1, 0, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213198, 1401532052901203970, '用户管理', 1, 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213210, 1401532052901203970, '角色管理', 1, 10, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213222, 1401532052901203970, '数据权限管理', 1, 15, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213232, 1401532052901203970, '岗位管理', 1, 20, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213238, 1401532052901203970, '菜单管理', 1, 25, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213246, 1401532052901203970, '权限字管理', 1, 30, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213254, 1401532052901203970, '权限模块管理', 1, 35, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213260, 1401532052901203970, '权限资源管理', 1, 40, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213269, 1401532056508305408, '字典管理', 0, 0, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213270, 1440911410581213269, '行政区划', 1, 1, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440911410581213275, 1401532056508305408, '在线用户', 1, 5, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440975375537541120, 1418038955105849344, '请假申请', 1, 1, 1440911410581213417, '2021-09-23 17:44:36', 1440911410581213417, '2021-09-23 17:44:36', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440975429199466496, 1418038955105849344, '报销申请', 1, 2, 1440911410581213417, '2021-09-23 17:44:49', 1440911410581213417, '2021-09-23 17:44:49', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440975469133434880, 1418038955105849344, '合同审批', 1, 3, 1440911410581213417, '2021-09-23 17:44:59', 1440911410581213417, '2021-09-23 17:44:59', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440975527128076288, 1418038955105849344, '多实例加签', 1, 4, 1440911410581213417, '2021-09-23 17:45:12', 1440911410581213417, '2021-09-23 17:45:12', 1);
+INSERT INTO `bn_sys_perm_module` VALUES (1440975571776442368, 1418038955105849344, '转办流程', 1, 5, 1440911410581213417, '2021-09-23 17:45:23', 1440911410581213417, '2021-09-23 17:45:32', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_perm_whitelist
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_perm_whitelist`;
+CREATE TABLE `bn_sys_perm_whitelist` (
+  `perm_url` varchar(512) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '权限资源的url',
+  `module_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '权限资源所属模块名字(通常是Controller的名字)',
+  `perm_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '权限的名称',
+  PRIMARY KEY (`perm_url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限资源白名单表(认证用户均可访问的url资源)';
+
+-- ----------------------------
+-- Records of bn_sys_perm_whitelist
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/app/areaCode/listAll', '行政区划', '字典全部列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/app/areaCode/listDict', '行政区划', '行政区划列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/app/areaCode/listDictByIds', '行政区划', '行政区划批量Id列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/app/areaCode/listDictByParentId', '行政区划', '行政区划过滤列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/flow/flowCategory/listDict', '流程管理', '流程分类字典');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/flow/flowEntry/listDict', '流程管理', '流程字典');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/flow/flowEntry/viewDict', '流程管理', '流程部分数据查看');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/flow/flowOnlineOperation/listFlowEntryForm', '流程管理', '流程列表包含在线表单列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/flow/flowOperation/countRuntimeTask', '流程管理', '待办任务列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/online/onlineOperation/listDict', '在线表单', '在线表单字典');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/login/doLogout', '登录模块', '退出登陆');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/login/getLoginInfo', '登录模块', '获取登录信息');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/sysDept/listDict', '部门管理', '部门字典字典列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/sysDept/listDictByIds', '部门管理', '部门字典字典批量Id列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/sysDept/listDictByParentId', '部门管理', '部门字典下一级字典列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/sysDept/listSysDeptPostWithRelation', '系统管理', '部门岗位关联列表');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/sysPost/listDict', '系统管理', '岗位字典接口');
+INSERT INTO `bn_sys_perm_whitelist` VALUES ('/admin/upms/sysPost/listDictByIds', '系统管理', '岗位字典接口');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_post
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_post`;
+CREATE TABLE `bn_sys_post` (
+  `post_id` bigint(20) NOT NULL COMMENT '岗位Id',
+  `post_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '岗位名称',
+  `level` int(11) NOT NULL COMMENT '岗位层级，数值越小级别越高',
+  `leader_post` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否领导岗位',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`post_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_sys_post
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_post` VALUES (1440963890539139072, '总经理', 1, b'1', 1440911410581213417, '2021-09-23 16:58:58', 1440911410581213417, '2021-09-23 16:59:27', 1);
+INSERT INTO `bn_sys_post` VALUES (1440964040611336192, '副经理', 2, b'1', 1440911410581213417, '2021-09-23 16:59:34', 1440911410581213417, '2021-09-23 16:59:34', 1);
+INSERT INTO `bn_sys_post` VALUES (1440964097913917440, '组长', 10, b'1', 1440911410581213417, '2021-09-23 16:59:47', 1440911410581213417, '2021-09-23 16:59:47', 1);
+INSERT INTO `bn_sys_post` VALUES (1440964131539652608, '副组长', 11, b'1', 1440911410581213417, '2021-09-23 16:59:55', 1440911410581213417, '2021-09-23 16:59:55', 1);
+INSERT INTO `bn_sys_post` VALUES (1440964157770829824, '组员', 20, b'0', 1440911410581213417, '2021-09-23 17:00:02', 1440911410581213417, '2021-09-23 17:00:02', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_role
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_role`;
+CREATE TABLE `bn_sys_role` (
+  `role_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `role_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '角色名称',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`role_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='系统角色表';
+
+-- ----------------------------
+-- Records of bn_sys_role
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_role` VALUES (1440965195903012864, '查看全部', 1440911410581213417, '2021-09-23 17:04:09', 1440911410581213417, '2021-09-24 09:25:49', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_role_menu`;
+CREATE TABLE `bn_sys_role_menu` (
+  `role_id` bigint(20) NOT NULL COMMENT '角色Id',
+  `menu_id` bigint(20) NOT NULL COMMENT '菜单Id',
+  PRIMARY KEY (`role_id`,`menu_id`) USING BTREE,
+  KEY `idx_menu_id` (`menu_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='角色与菜单对应关系表';
+
+-- ----------------------------
+-- Records of bn_sys_role_menu
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1392786476428693504);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1392786549942259712);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1392786950682841088);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532054578925568);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434496);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434497);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434498);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434499);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434500);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434501);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434502);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434503);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1401532055971434504);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418057714138877952);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418057835631087616);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058049951633408);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058115667988480);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058170542067712);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058289182150656);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058515099947008);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058602723151872);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058744037642240);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058844164067328);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418058907674218496);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418059005175009280);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418059167532322816);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1418059283920064512);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1423161217970606080);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1433040549035642880);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213280);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213281);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213282);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213283);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213284);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213285);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213294);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213295);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213296);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213297);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213298);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213299);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213308);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213309);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213310);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213311);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213312);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213313);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213314);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213315);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213316);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213317);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213328);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213329);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213330);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213331);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213332);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213333);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213334);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213335);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213336);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213346);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213347);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213348);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213349);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213350);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213358);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213359);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213360);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213361);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213362);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213370);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213371);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213372);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213373);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213374);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213375);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213376);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213377);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213388);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213389);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213390);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213391);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213392);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213400);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213401);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213406);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213407);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213408);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213409);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440911410581213410);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440973980537196544);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974056105971712);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974056110166016);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974056114360320);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974134195523584);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974134199717888);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974134203912192);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974233613111296);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974233617305600);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974233621499904);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974310754750464);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440974580402360320);
+INSERT INTO `bn_sys_role_menu` VALUES (1440965195903012864, 1440978065088843776);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_user`;
+CREATE TABLE `bn_sys_user` (
+  `user_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `login_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '用户登录名称',
+  `password` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
+  `show_name` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '用户显示名称',
+  `dept_id` bigint(20) NOT NULL COMMENT '用户所在部门Id',
+  `user_type` int(11) NOT NULL COMMENT '用户类型(0: 管理员 1: 系统管理用户 2: 系统业务用户)',
+  `head_image_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '用户头像的Url',
+  `user_status` int(11) NOT NULL COMMENT '状态(0: 正常 1: 锁定)',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `update_time` datetime NOT NULL COMMENT '最后更新时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`user_id`) USING BTREE,
+  UNIQUE KEY `uk_login_name` (`login_name`) USING BTREE,
+  KEY `idx_dept_id` (`dept_id`) USING BTREE,
+  KEY `idx_status` (`user_status`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='系统用户表';
+
+-- ----------------------------
+-- Records of bn_sys_user
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_user` VALUES (1440911410581213417, 'admin', '$2a$10$GT/GXfypSJ.2f7.npoAAHuINPkC/VJttDGYBB3xyQqWt1bi9qEnL6', '管理员', 1440911410581213416, 0, 'CHANGE TO YOUR HEAD IMAGE URL!!!', 0, 1440911410581213417, '2021-09-23 00:00:00', 1440911410581213417, '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_sys_user` VALUES (1440965344985354240, 'leaderHR', '$2a$10$tLqussQ4t4n..A274vS9luxZI8zmxdQSkmwXcOU3egPJtyFIVDYj.', '人事经理', 1440963592970047488, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:04:45', 1440911410581213417, '2021-09-23 17:04:45', 1);
+INSERT INTO `bn_sys_user` VALUES (1440965465605148672, 'userA', '$2a$10$BGsgE5KA/hKV95.kCZmMleiUssNRpOGE0qMTkCGHsSiugnqSsaSFS', '员工A', 1440963592970047488, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:05:14', 1440911410581213417, '2021-09-23 17:05:14', 1);
+INSERT INTO `bn_sys_user` VALUES (1440965586715676672, 'userB', '$2a$10$J0obwzeNt3iWoArSdRCKLeABdcMwe/rJrPIoGNW.LFgCYKhFKC9Lu', '员工B', 1440963642542526464, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:05:42', 1440911410581213417, '2021-09-23 17:05:42', 1);
+INSERT INTO `bn_sys_user` VALUES (1440965697961201664, 'userC', '$2a$10$KukIvoMoncnpSafKnueXnOLEhI5V7cW0GBsGt9EkTGq482vsRgQwm', '员工C', 1440963642542526464, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:06:09', 1440911410581213417, '2021-09-23 17:06:09', 1);
+INSERT INTO `bn_sys_user` VALUES (1440965808049098752, 'leaderLaw', '$2a$10$8o2qUYKOpizH42gIs4hDU.TjrzzWu/tOJeQebvXISkAI3wscFbAl2', '法务经理', 1440963642542526464, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:06:35', 1440911410581213417, '2021-09-23 17:06:35', 1);
+INSERT INTO `bn_sys_user` VALUES (1440966073686953984, 'leaderTJ', '$2a$10$NLZDkFP/nLkGzo/blYJ7w.HmmZF8v12ByockmYXPZZ7cr/TqILB/u', '天津总监', 1440963698460987392, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:07:39', 1440911410581213417, '2021-09-23 17:07:39', 1);
+INSERT INTO `bn_sys_user` VALUES (1440966186522120192, 'leaderTJ2', '$2a$10$F7vVIJeC7OdHTNV050aqieJwJcBdjrUOCGjAE4wq0mESLb1Pn6yoe', '天津经理', 1440963698460987392, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:08:05', 1440911410581213417, '2021-09-23 17:08:05', 1);
+INSERT INTO `bn_sys_user` VALUES (1440966324770574336, 'userD', '$2a$10$7G2Lcw1GducD2FtCxQask.7lVRPRvKZk7YVZOsT319uXVtK2LQPji', '员工D', 1440963698460987392, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:08:38', 1440911410581213417, '2021-09-23 17:08:38', 1);
+INSERT INTO `bn_sys_user` VALUES (1440969706411397120, 'leader', '$2a$10$LgJRx/7YT.F6oUs4PPVpxuSYQBOdcXqx6dvdkaJmA7ObWdpJzhOQu', '总部领导', 1440911410581213416, 2, NULL, 0, 1440911410581213417, '2021-09-23 17:22:05', 1440911410581213417, '2021-09-23 17:22:05', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_user_post
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_user_post`;
+CREATE TABLE `bn_sys_user_post` (
+  `user_id` bigint(20) NOT NULL COMMENT '用户Id',
+  `dept_post_id` bigint(20) NOT NULL COMMENT '部门岗位Id',
+  `post_id` bigint(20) NOT NULL COMMENT '岗位Id',
+  PRIMARY KEY (`user_id`,`dept_post_id`) USING BTREE,
+  KEY `idx_post_id` (`post_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_sys_user_post
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_user_post` VALUES (1440966073686953984, 1440964519391137792, 1440963890539139072);
+INSERT INTO `bn_sys_user_post` VALUES (1440969706411397120, 1440969551792574464, 1440963890539139072);
+INSERT INTO `bn_sys_user_post` VALUES (1440966186522120192, 1440964519395332096, 1440964040611336192);
+INSERT INTO `bn_sys_user_post` VALUES (1440965344985354240, 1440964221780103168, 1440964097913917440);
+INSERT INTO `bn_sys_user_post` VALUES (1440965808049098752, 1440964387979399168, 1440964097913917440);
+INSERT INTO `bn_sys_user_post` VALUES (1440965465605148672, 1440964221855600640, 1440964157770829824);
+INSERT INTO `bn_sys_user_post` VALUES (1440965586715676672, 1440964387983593472, 1440964157770829824);
+INSERT INTO `bn_sys_user_post` VALUES (1440965697961201664, 1440964387983593472, 1440964157770829824);
+INSERT INTO `bn_sys_user_post` VALUES (1440966324770574336, 1440964519399526400, 1440964157770829824);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_sys_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_sys_user_role`;
+CREATE TABLE `bn_sys_user_role` (
+  `user_id` bigint(20) NOT NULL COMMENT '用户Id',
+  `role_id` bigint(20) NOT NULL COMMENT '角色Id',
+  PRIMARY KEY (`user_id`,`role_id`) USING BTREE,
+  KEY `idx_role_id` (`role_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT COMMENT='用户与角色对应关系表';
+
+-- ----------------------------
+-- Records of bn_sys_user_role
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_sys_user_role` VALUES (1440965344985354240, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440965465605148672, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440965586715676672, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440965697961201664, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440965808049098752, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440966073686953984, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440966186522120192, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440966324770574336, 1440965195903012864);
+INSERT INTO `bn_sys_user_role` VALUES (1440969706411397120, 1440965195903012864);
+COMMIT;
 -- ----------------------------
 -- Table structure for ACT_EVT_LOG
 -- ----------------------------
@@ -2011,7 +3067,346 @@ CREATE TABLE `FLW_RU_BATCH_PART` (
   KEY `FLW_IDX_BATCH_PART` (`BATCH_ID_`),
   CONSTRAINT `FLW_FK_BATCH_PART_PARENT` FOREIGN KEY (`BATCH_ID_`) REFERENCES `FLW_RU_BATCH` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ----------------------------
+-- Table structure for bn_flow_category
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_category`;
+CREATE TABLE `bn_flow_category` (
+  `category_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名称',
+  `code` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '分类编码',
+  `show_order` int(11) NOT NULL COMMENT '实现顺序',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  PRIMARY KEY (`category_id`) USING BTREE,
+  UNIQUE KEY `idx_code` (`code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
+-- ----------------------------
+-- Records of bn_flow_category
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_category` VALUES (1440940473421139968, '人事管理', 'HR', 1, '2021-09-23 15:25:55', 1440911410581213417, '2021-09-23 15:25:55', 1440911410581213417);
+INSERT INTO `bn_flow_category` VALUES (1440940520124715008, '财务管理', 'CW', 2, '2021-09-23 15:26:06', 1440911410581213417, '2021-09-23 15:26:06', 1440911410581213417);
+INSERT INTO `bn_flow_category` VALUES (1440940563934220288, '项目管理', 'XM', 3, '2021-09-23 15:26:16', 1440911410581213417, '2021-09-23 15:26:16', 1440911410581213417);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_entry
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_entry`;
+CREATE TABLE `bn_flow_entry` (
+  `entry_id` bigint(20) NOT NULL COMMENT '主键',
+  `process_definition_name` varchar(200) NOT NULL COMMENT '流程名称',
+  `process_definition_key` varchar(150) NOT NULL COMMENT '流程标识Key',
+  `category_id` bigint(20) NOT NULL COMMENT '流程分类',
+  `main_entry_publish_id` bigint(20) DEFAULT NULL COMMENT '工作流部署的发布主版本Id',
+  `lastest_publish_time` datetime DEFAULT NULL COMMENT '最新发布时间',
+  `status` int(11) NOT NULL COMMENT '流程状态',
+  `bpmn_xml` longtext COMMENT '流程定义的xml',
+  `bind_form_type` int(11) NOT NULL COMMENT '绑定表单类型',
+  `page_id` bigint(20) DEFAULT NULL COMMENT '在线表单的页面Id',
+  `default_form_id` bigint(20) DEFAULT NULL COMMENT '在线表单Id',
+  `default_router_name` varchar(255) DEFAULT NULL COMMENT '静态表单的缺省路由名称',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  PRIMARY KEY (`entry_id`) USING BTREE,
+  UNIQUE KEY `idx_process_definition_key` (`process_definition_key`) USING BTREE,
+  KEY `idx_category_id` (`category_id`) USING BTREE,
+  KEY `idx_status` (`status`) USING BTREE,
+  KEY `idx_process_definition_name` (`process_definition_name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of bn_flow_entry
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_entry` VALUES (1440962968085860352, '请假申请', 'flowLeave', 1440940473421139968, 1440966810131238912, '2021-09-23 17:10:34', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowLeave\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowLeave\" name=\"请假申请\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_1c9ukkq\">\n      <bpmn2:outgoing>Flow_05fy9wh</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_0sc2yuf\" name=\"请假录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632387369558\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_05fy9wh</bpmn2:incoming>\n      <bpmn2:incoming>Flow_012hd4v</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1dpnyz6</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0pme0vr</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_05fy9wh\" sourceRef=\"Event_1c9ukkq\" targetRef=\"Activity_0sc2yuf\" />\n    <bpmn2:userTask id=\"Activity_1jw5u20\" name=\"部门领导审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT_POST_LEADER&#34;}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632387389734\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632387393116\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0pme0vr</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1hbob37</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_012hd4v</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0pme0vr\" sourceRef=\"Activity_0sc2yuf\" targetRef=\"Activity_1jw5u20\" />\n    <bpmn2:userTask id=\"Activity_0olxatv\" name=\"HR审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;POST&#34;}\" flowable:candidateGroups=\"1440964221855600640\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388147727\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632388151069\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1hbob37</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0so810a</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1dpnyz6</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1hbob37\" name=\"同意\" sourceRef=\"Activity_1jw5u20\" targetRef=\"Activity_0olxatv\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:endEvent id=\"Event_04byxr7\">\n      <bpmn2:incoming>Flow_0so810a</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_0so810a\" name=\"同意\" sourceRef=\"Activity_0olxatv\" targetRef=\"Event_04byxr7\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_012hd4v\" name=\"拒绝\" sourceRef=\"Activity_1jw5u20\" targetRef=\"Activity_0sc2yuf\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_1dpnyz6\" name=\"拒绝\" sourceRef=\"Activity_0olxatv\" targetRef=\"Activity_0sc2yuf\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowLeave\">\n      <bpmndi:BPMNEdge id=\"Flow_012hd4v_di\" bpmnElement=\"Flow_012hd4v\">\n        <di:waypoint x=\"430\" y=\"300\" />\n        <di:waypoint x=\"430\" y=\"270\" />\n        <di:waypoint x=\"270\" y=\"270\" />\n        <di:waypoint x=\"270\" y=\"300\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"339\" y=\"252\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0so810a_di\" bpmnElement=\"Flow_0so810a\">\n        <di:waypoint x=\"640\" y=\"340\" />\n        <di:waypoint x=\"702\" y=\"340\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"660\" y=\"322\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1hbob37_di\" bpmnElement=\"Flow_1hbob37\">\n        <di:waypoint x=\"480\" y=\"340\" />\n        <di:waypoint x=\"540\" y=\"340\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"499\" y=\"322\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0pme0vr_di\" bpmnElement=\"Flow_0pme0vr\">\n        <di:waypoint x=\"320\" y=\"340\" />\n        <di:waypoint x=\"380\" y=\"340\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_05fy9wh_di\" bpmnElement=\"Flow_05fy9wh\">\n        <di:waypoint x=\"168\" y=\"340\" />\n        <di:waypoint x=\"220\" y=\"340\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1dpnyz6_di\" bpmnElement=\"Flow_1dpnyz6\">\n        <di:waypoint x=\"590\" y=\"380\" />\n        <di:waypoint x=\"590\" y=\"420\" />\n        <di:waypoint x=\"270\" y=\"420\" />\n        <di:waypoint x=\"270\" y=\"380\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"419\" y=\"402\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_1c9ukkq_di\" bpmnElement=\"Event_1c9ukkq\">\n        <dc:Bounds x=\"132\" y=\"322\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0sc2yuf_di\" bpmnElement=\"Activity_0sc2yuf\">\n        <dc:Bounds x=\"220\" y=\"300\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1jw5u20_di\" bpmnElement=\"Activity_1jw5u20\">\n        <dc:Bounds x=\"380\" y=\"300\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0olxatv_di\" bpmnElement=\"Activity_0olxatv\">\n        <dc:Bounds x=\"540\" y=\"300\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_04byxr7_di\" bpmnElement=\"Event_04byxr7\">\n        <dc:Bounds x=\"702\" y=\"322\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440945149889744896, 1440945411354267648, NULL, '2021-09-24 09:30:26', 1440911410581213417, '2021-09-23 16:55:18', 1440911410581213417);
+INSERT INTO `bn_flow_entry` VALUES (1440966906914803712, '报销申请', 'flowSubmit', 1440940520124715008, 1440972224344363008, '2021-09-23 17:32:05', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowSubmit\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowSubmit\" name=\"报销申请\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_17n2rw9\">\n      <bpmn2:outgoing>Flow_00ldvag</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_03kjurt\" name=\"报销单录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440947675041107968&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388352676\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_00ldvag</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1hmaykh</bpmn2:incoming>\n      <bpmn2:incoming>Flow_09b7unr</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0x9dx2t</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_00ldvag\" sourceRef=\"Event_17n2rw9\" targetRef=\"Activity_03kjurt\" />\n    <bpmn2:userTask id=\"Activity_0ywxfwu\" name=\"部门领导审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440947675041107968&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT_POST_LEADER&#34;}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388372003\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632388375866\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList>\n          <flowable:formVariable id=\"1440967581673459712\" />\n        </flowable:variableList>\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0x9dx2t</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_18p3hqb</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1hmaykh</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0x9dx2t\" sourceRef=\"Activity_03kjurt\" targetRef=\"Activity_0ywxfwu\" />\n    <bpmn2:exclusiveGateway id=\"Gateway_179zgnp\">\n      <bpmn2:incoming>Flow_18p3hqb</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1qigakr</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_058cmsb</bpmn2:outgoing>\n    </bpmn2:exclusiveGateway>\n    <bpmn2:sequenceFlow id=\"Flow_18p3hqb\" name=\"同意\" sourceRef=\"Activity_0ywxfwu\" targetRef=\"Gateway_179zgnp\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:endEvent id=\"Event_0nvjxgh\">\n      <bpmn2:incoming>Flow_1qigakr</bpmn2:incoming>\n      <bpmn2:incoming>Flow_0ycx8fb</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1qigakr\" name=\"报销金额小于1000\" sourceRef=\"Gateway_179zgnp\" targetRef=\"Event_0nvjxgh\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${totalAmount &lt;= 1000}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:userTask id=\"Activity_0qay48u\" name=\"总经理审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440947675041107968&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateGroups=\"1440911410581213416\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388536771\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632388540081\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_058cmsb</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0ycx8fb</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_09b7unr</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_058cmsb\" name=\"报销金额大于1000\" sourceRef=\"Gateway_179zgnp\" targetRef=\"Activity_0qay48u\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${totalAmount &gt; 1000}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_0ycx8fb\" name=\"同意\" sourceRef=\"Activity_0qay48u\" targetRef=\"Event_0nvjxgh\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_1hmaykh\" name=\"拒绝\" sourceRef=\"Activity_0ywxfwu\" targetRef=\"Activity_03kjurt\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_09b7unr\" name=\"拒绝\" sourceRef=\"Activity_0qay48u\" targetRef=\"Activity_03kjurt\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowSubmit\">\n      <bpmndi:BPMNEdge id=\"Flow_09b7unr_di\" bpmnElement=\"Flow_09b7unr\">\n        <di:waypoint x=\"750\" y=\"450\" />\n        <di:waypoint x=\"750\" y=\"500\" />\n        <di:waypoint x=\"240\" y=\"500\" />\n        <di:waypoint x=\"240\" y=\"350\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"484\" y=\"482\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1hmaykh_di\" bpmnElement=\"Flow_1hmaykh\">\n        <di:waypoint x=\"400\" y=\"270\" />\n        <di:waypoint x=\"400\" y=\"240\" />\n        <di:waypoint x=\"240\" y=\"240\" />\n        <di:waypoint x=\"240\" y=\"270\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"309\" y=\"222\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0ycx8fb_di\" bpmnElement=\"Flow_0ycx8fb\">\n        <di:waypoint x=\"800\" y=\"410\" />\n        <di:waypoint x=\"950\" y=\"410\" />\n        <di:waypoint x=\"950\" y=\"328\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"864\" y=\"392\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_058cmsb_di\" bpmnElement=\"Flow_058cmsb\">\n        <di:waypoint x=\"540\" y=\"335\" />\n        <di:waypoint x=\"540\" y=\"410\" />\n        <di:waypoint x=\"700\" y=\"410\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"575\" y=\"383\" width=\"90\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1qigakr_di\" bpmnElement=\"Flow_1qigakr\">\n        <di:waypoint x=\"565\" y=\"310\" />\n        <di:waypoint x=\"932\" y=\"310\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"704\" y=\"292\" width=\"90\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_18p3hqb_di\" bpmnElement=\"Flow_18p3hqb\">\n        <di:waypoint x=\"450\" y=\"310\" />\n        <di:waypoint x=\"515\" y=\"310\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"471\" y=\"292\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0x9dx2t_di\" bpmnElement=\"Flow_0x9dx2t\">\n        <di:waypoint x=\"290\" y=\"310\" />\n        <di:waypoint x=\"350\" y=\"310\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_00ldvag_di\" bpmnElement=\"Flow_00ldvag\">\n        <di:waypoint x=\"138\" y=\"310\" />\n        <di:waypoint x=\"190\" y=\"310\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_17n2rw9_di\" bpmnElement=\"Event_17n2rw9\">\n        <dc:Bounds x=\"102\" y=\"292\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_03kjurt_di\" bpmnElement=\"Activity_03kjurt\">\n        <dc:Bounds x=\"190\" y=\"270\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0ywxfwu_di\" bpmnElement=\"Activity_0ywxfwu\">\n        <dc:Bounds x=\"350\" y=\"270\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_179zgnp_di\" bpmnElement=\"Gateway_179zgnp\" isMarkerVisible=\"true\">\n        <dc:Bounds x=\"515\" y=\"285\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_0nvjxgh_di\" bpmnElement=\"Event_0nvjxgh\">\n        <dc:Bounds x=\"932\" y=\"292\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0qay48u_di\" bpmnElement=\"Activity_0qay48u\">\n        <dc:Bounds x=\"700\" y=\"370\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440946020174270464, 1440947675041107968, NULL, '2021-09-24 13:23:15', 1440911410581213417, '2021-09-23 17:10:57', 1440911410581213417);
+INSERT INTO `bn_flow_entry` VALUES (1440968423508021248, '合同审批', 'flowContract', 1440940563934220288, 1441216695006924800, '2021-09-24 09:43:31', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" id=\"diagram_flowContract\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowContract\" name=\"合同审批\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_1psmisd\">\n      <bpmn2:outgoing>Flow_00cexea</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_0nyla1r\" name=\"合同录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440954920348946432&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388965712\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_00cexea</bpmn2:incoming>\n      <bpmn2:incoming>Flow_0lloy56</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1vsrivb</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1m2406f</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_04kcajc</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_00cexea\" sourceRef=\"Event_1psmisd\" targetRef=\"Activity_0nyla1r\" />\n    <bpmn2:userTask id=\"Activity_1ucrh52\" name=\"业务部领导审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440954920348946432&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT_POST_LEADER&#34;}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388972455\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_04kcajc</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_026fvnq</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_04kcajc\" sourceRef=\"Activity_0nyla1r\" targetRef=\"Activity_1ucrh52\" />\n    <bpmn2:sequenceFlow id=\"Flow_026fvnq\" sourceRef=\"Activity_1ucrh52\" targetRef=\"Gateway_09cdxtf\" />\n    <bpmn2:parallelGateway id=\"Gateway_09cdxtf\">\n      <bpmn2:incoming>Flow_026fvnq</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0zz0u9g</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1yxqbe0</bpmn2:outgoing>\n    </bpmn2:parallelGateway>\n    <bpmn2:userTask id=\"Activity_138m4nn\" name=\"工程部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955194991972352&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateUsers=\"admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388978101\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0zz0u9g</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_124e8z3</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0zz0u9g\" sourceRef=\"Gateway_09cdxtf\" targetRef=\"Activity_138m4nn\" />\n    <bpmn2:userTask id=\"Activity_0tm3mph\" name=\"造价部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955194991972352&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632388982377\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1yxqbe0</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1uvj3ds</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1yxqbe0\" sourceRef=\"Gateway_09cdxtf\" targetRef=\"Activity_0tm3mph\" />\n    <bpmn2:sequenceFlow id=\"Flow_124e8z3\" sourceRef=\"Activity_138m4nn\" targetRef=\"Gateway_0oy6ofl\" />\n    <bpmn2:parallelGateway id=\"Gateway_0oy6ofl\">\n      <bpmn2:incoming>Flow_124e8z3</bpmn2:incoming>\n      <bpmn2:incoming>Flow_1uvj3ds</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1kyhnlz</bpmn2:outgoing>\n    </bpmn2:parallelGateway>\n    <bpmn2:sequenceFlow id=\"Flow_1uvj3ds\" sourceRef=\"Activity_0tm3mph\" targetRef=\"Gateway_0oy6ofl\" />\n    <bpmn2:userTask id=\"Activity_1yuuyie\" name=\"财务部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955127790833664&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;POST&#34;}\" flowable:candidateGroups=\"1440964519395332096,1440964519391137792\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389037814\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389042489\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1kyhnlz</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0di6qa6</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_0lloy56</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1kyhnlz\" sourceRef=\"Gateway_0oy6ofl\" targetRef=\"Activity_1yuuyie\" />\n    <bpmn2:userTask id=\"Activity_098ncvw\" name=\"法务部会签\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955001093492736&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${assignee}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389190662\" label=\"同意\" type=\"multi_agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389197406\" label=\"拒绝\" type=\"multi_refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0zmsn3x</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0jyv1zb</bpmn2:outgoing>\n      <bpmn2:multiInstanceLoopCharacteristics flowable:collection=\"assigneeList\" flowable:elementVariable=\"assignee\">\n        <bpmn2:completionCondition xsi:type=\"bpmn2:tFormalExpression\">${nrOfInstances == nrOfCompletedInstances}</bpmn2:completionCondition>\n      </bpmn2:multiInstanceLoopCharacteristics>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0di6qa6\" name=\"同意\" sourceRef=\"Activity_1yuuyie\" targetRef=\"Activity_1eewt01\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:exclusiveGateway id=\"Gateway_1m5fruz\">\n      <bpmn2:incoming>Flow_0jyv1zb</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1f8yxov</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1vsrivb</bpmn2:outgoing>\n    </bpmn2:exclusiveGateway>\n    <bpmn2:sequenceFlow id=\"Flow_0jyv1zb\" sourceRef=\"Activity_098ncvw\" targetRef=\"Gateway_1m5fruz\" />\n    <bpmn2:userTask id=\"Activity_1h3pnxy\" name=\"总经理审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440954920348946432&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateGroups=\"1440911410581213416\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389449508\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389452850\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_1f8yxov</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1a3qclm</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_1m2406f</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_1f8yxov\" name=\"同意人数大于40%\" sourceRef=\"Gateway_1m5fruz\" targetRef=\"Activity_1h3pnxy\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${multiAgreeCount / multiNumOfInstances &gt; 0.4}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:endEvent id=\"Event_12ajo3d\">\n      <bpmn2:incoming>Flow_1a3qclm</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1a3qclm\" name=\"同意\" sourceRef=\"Activity_1h3pnxy\" targetRef=\"Event_12ajo3d\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_0lloy56\" name=\"拒绝\" sourceRef=\"Activity_1yuuyie\" targetRef=\"Activity_0nyla1r\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:userTask id=\"Activity_1eewt01\" name=\"法务部审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440955001093492736&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;POST&#34;}\" flowable:candidateGroups=\"1440964387979399168\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389337024\" label=\"会签\" type=\"multi_sign\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389341901\" label=\"加签\" type=\"multi_consign\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0di6qa6</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0zmsn3x</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0zmsn3x\" sourceRef=\"Activity_1eewt01\" targetRef=\"Activity_098ncvw\" />\n    <bpmn2:sequenceFlow id=\"Flow_1vsrivb\" name=\"同意人数小于40%\" sourceRef=\"Gateway_1m5fruz\" targetRef=\"Activity_0nyla1r\">\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${multiAgreeCount / multiNumOfInstances &lt;= 0.4}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_1m2406f\" name=\"拒绝\" sourceRef=\"Activity_1h3pnxy\" targetRef=\"Activity_0nyla1r\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowContract\">\n      <bpmndi:BPMNEdge id=\"Flow_1m2406f_di\" bpmnElement=\"Flow_1m2406f\">\n        <di:waypoint x=\"1720\" y=\"370\" />\n        <di:waypoint x=\"1720\" y=\"540\" />\n        <di:waypoint x=\"210\" y=\"540\" />\n        <di:waypoint x=\"210\" y=\"370\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"954\" y=\"522\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1vsrivb_di\" bpmnElement=\"Flow_1vsrivb\">\n        <di:waypoint x=\"1540\" y=\"305\" />\n        <di:waypoint x=\"1540\" y=\"130\" />\n        <di:waypoint x=\"230\" y=\"130\" />\n        <di:waypoint x=\"230\" y=\"290\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"841\" y=\"112\" width=\"89\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0zmsn3x_di\" bpmnElement=\"Flow_0zmsn3x\">\n        <di:waypoint x=\"1290\" y=\"330\" />\n        <di:waypoint x=\"1360\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0lloy56_di\" bpmnElement=\"Flow_0lloy56\">\n        <di:waypoint x=\"1050\" y=\"370\" />\n        <di:waypoint x=\"1050\" y=\"500\" />\n        <di:waypoint x=\"230\" y=\"500\" />\n        <di:waypoint x=\"230\" y=\"370\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"629\" y=\"482\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1a3qclm_di\" bpmnElement=\"Flow_1a3qclm\">\n        <di:waypoint x=\"1770\" y=\"330\" />\n        <di:waypoint x=\"1862\" y=\"330\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"1805\" y=\"312\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1f8yxov_di\" bpmnElement=\"Flow_1f8yxov\">\n        <di:waypoint x=\"1565\" y=\"330\" />\n        <di:waypoint x=\"1670\" y=\"330\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"1573\" y=\"312\" width=\"89\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0jyv1zb_di\" bpmnElement=\"Flow_0jyv1zb\">\n        <di:waypoint x=\"1460\" y=\"330\" />\n        <di:waypoint x=\"1515\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0di6qa6_di\" bpmnElement=\"Flow_0di6qa6\">\n        <di:waypoint x=\"1100\" y=\"330\" />\n        <di:waypoint x=\"1190\" y=\"330\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"1134\" y=\"312\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1kyhnlz_di\" bpmnElement=\"Flow_1kyhnlz\">\n        <di:waypoint x=\"905\" y=\"330\" />\n        <di:waypoint x=\"1000\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1uvj3ds_di\" bpmnElement=\"Flow_1uvj3ds\">\n        <di:waypoint x=\"760\" y=\"430\" />\n        <di:waypoint x=\"880\" y=\"430\" />\n        <di:waypoint x=\"880\" y=\"355\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_124e8z3_di\" bpmnElement=\"Flow_124e8z3\">\n        <di:waypoint x=\"760\" y=\"200\" />\n        <di:waypoint x=\"880\" y=\"200\" />\n        <di:waypoint x=\"880\" y=\"305\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1yxqbe0_di\" bpmnElement=\"Flow_1yxqbe0\">\n        <di:waypoint x=\"530\" y=\"355\" />\n        <di:waypoint x=\"530\" y=\"430\" />\n        <di:waypoint x=\"660\" y=\"430\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0zz0u9g_di\" bpmnElement=\"Flow_0zz0u9g\">\n        <di:waypoint x=\"530\" y=\"305\" />\n        <di:waypoint x=\"530\" y=\"200\" />\n        <di:waypoint x=\"660\" y=\"200\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_026fvnq_di\" bpmnElement=\"Flow_026fvnq\">\n        <di:waypoint x=\"440\" y=\"330\" />\n        <di:waypoint x=\"505\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_04kcajc_di\" bpmnElement=\"Flow_04kcajc\">\n        <di:waypoint x=\"280\" y=\"330\" />\n        <di:waypoint x=\"340\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_00cexea_di\" bpmnElement=\"Flow_00cexea\">\n        <di:waypoint x=\"128\" y=\"330\" />\n        <di:waypoint x=\"180\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_1psmisd_di\" bpmnElement=\"Event_1psmisd\">\n        <dc:Bounds x=\"92\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0nyla1r_di\" bpmnElement=\"Activity_0nyla1r\">\n        <dc:Bounds x=\"180\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1ucrh52_di\" bpmnElement=\"Activity_1ucrh52\">\n        <dc:Bounds x=\"340\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_1o9nuyj_di\" bpmnElement=\"Gateway_09cdxtf\">\n        <dc:Bounds x=\"505\" y=\"305\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_138m4nn_di\" bpmnElement=\"Activity_138m4nn\">\n        <dc:Bounds x=\"660\" y=\"160\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0tm3mph_di\" bpmnElement=\"Activity_0tm3mph\">\n        <dc:Bounds x=\"660\" y=\"390\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_0wdnsyx_di\" bpmnElement=\"Gateway_0oy6ofl\">\n        <dc:Bounds x=\"855\" y=\"305\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1yuuyie_di\" bpmnElement=\"Activity_1yuuyie\">\n        <dc:Bounds x=\"1000\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_098ncvw_di\" bpmnElement=\"Activity_098ncvw\">\n        <dc:Bounds x=\"1360\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Gateway_1m5fruz_di\" bpmnElement=\"Gateway_1m5fruz\" isMarkerVisible=\"true\">\n        <dc:Bounds x=\"1515\" y=\"305\" width=\"50\" height=\"50\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1h3pnxy_di\" bpmnElement=\"Activity_1h3pnxy\">\n        <dc:Bounds x=\"1670\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_12ajo3d_di\" bpmnElement=\"Event_12ajo3d\">\n        <dc:Bounds x=\"1862\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1eewt01_di\" bpmnElement=\"Activity_1eewt01\">\n        <dc:Bounds x=\"1190\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440952710487609344, 1440954920348946432, NULL, '2021-09-24 10:17:32', 1440966324770574336, '2021-09-23 17:16:59', 1440911410581213417);
+INSERT INTO `bn_flow_entry` VALUES (1440972435892473856, '多实例加签', 'flowConSign', 1440940473421139968, 1440973324426416128, '2021-09-23 17:36:27', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowConSign\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowConSign\" name=\"多实例加签\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_0wpkj6e\">\n      <bpmn2:outgoing>Flow_111kyps</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_1xk7j4n\" name=\"录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389626319\" label=\"提交\" type=\"multi_sign\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389633373\" label=\"加签\" type=\"multi_consign\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_111kyps</bpmn2:incoming>\n      <bpmn2:incoming>Flow_009p7hy</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0ct2yid</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_111kyps\" sourceRef=\"Event_0wpkj6e\" targetRef=\"Activity_1xk7j4n\" />\n    <bpmn2:userTask id=\"Activity_006g6qo\" name=\"会签\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${assignee}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389733600\" label=\"同意\" type=\"multi_agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0ct2yid</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_052kvzh</bpmn2:outgoing>\n      <bpmn2:multiInstanceLoopCharacteristics flowable:collection=\"assigneeList\" flowable:elementVariable=\"assignee\">\n        <bpmn2:completionCondition xsi:type=\"bpmn2:tFormalExpression\">${nrOfInstances == nrOfCompletedInstances}</bpmn2:completionCondition>\n      </bpmn2:multiInstanceLoopCharacteristics>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0ct2yid\" sourceRef=\"Activity_1xk7j4n\" targetRef=\"Activity_006g6qo\" />\n    <bpmn2:userTask id=\"Activity_0p7omdm\" name=\"审批\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389682895\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389686939\" label=\"拒绝\" type=\"refuse\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_052kvzh</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1ng5qp7</bpmn2:outgoing>\n      <bpmn2:outgoing>Flow_009p7hy</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_052kvzh\" sourceRef=\"Activity_006g6qo\" targetRef=\"Activity_0p7omdm\" />\n    <bpmn2:endEvent id=\"Event_1e5mmxp\">\n      <bpmn2:incoming>Flow_1ng5qp7</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1ng5qp7\" name=\"同意\" sourceRef=\"Activity_0p7omdm\" targetRef=\"Event_1e5mmxp\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"agree\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'agree\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n    <bpmn2:sequenceFlow id=\"Flow_009p7hy\" name=\"拒绝\" sourceRef=\"Activity_0p7omdm\" targetRef=\"Activity_1xk7j4n\">\n      <bpmn2:extensionElements>\n        <flowable:customCondition type=\"operation\" operationType=\"refuse\" />\n      </bpmn2:extensionElements>\n      <bpmn2:conditionExpression xsi:type=\"bpmn2:tFormalExpression\">${operationType == \'refuse\'}</bpmn2:conditionExpression>\n    </bpmn2:sequenceFlow>\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowConSign\">\n      <bpmndi:BPMNEdge id=\"Flow_009p7hy_di\" bpmnElement=\"Flow_009p7hy\">\n        <di:waypoint x=\"560\" y=\"280\" />\n        <di:waypoint x=\"560\" y=\"230\" />\n        <di:waypoint x=\"240\" y=\"230\" />\n        <di:waypoint x=\"240\" y=\"280\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"389\" y=\"212\" width=\"22\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1ng5qp7_di\" bpmnElement=\"Flow_1ng5qp7\">\n        <di:waypoint x=\"610\" y=\"320\" />\n        <di:waypoint x=\"672\" y=\"320\" />\n        <bpmndi:BPMNLabel>\n          <dc:Bounds x=\"630\" y=\"302\" width=\"23\" height=\"14\" />\n        </bpmndi:BPMNLabel>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_052kvzh_di\" bpmnElement=\"Flow_052kvzh\">\n        <di:waypoint x=\"450\" y=\"320\" />\n        <di:waypoint x=\"510\" y=\"320\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0ct2yid_di\" bpmnElement=\"Flow_0ct2yid\">\n        <di:waypoint x=\"290\" y=\"320\" />\n        <di:waypoint x=\"350\" y=\"320\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_111kyps_di\" bpmnElement=\"Flow_111kyps\">\n        <di:waypoint x=\"138\" y=\"320\" />\n        <di:waypoint x=\"190\" y=\"320\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_0wpkj6e_di\" bpmnElement=\"Event_0wpkj6e\">\n        <dc:Bounds x=\"102\" y=\"302\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_1xk7j4n_di\" bpmnElement=\"Activity_1xk7j4n\">\n        <dc:Bounds x=\"190\" y=\"280\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_006g6qo_di\" bpmnElement=\"Activity_006g6qo\">\n        <dc:Bounds x=\"350\" y=\"280\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_0p7omdm_di\" bpmnElement=\"Activity_0p7omdm\">\n        <dc:Bounds x=\"510\" y=\"280\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_1e5mmxp_di\" bpmnElement=\"Event_1e5mmxp\">\n        <dc:Bounds x=\"672\" y=\"302\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440945149889744896, 1440945411354267648, NULL, '2021-09-23 17:36:21', 1440911410581213417, '2021-09-23 17:32:55', 1440911410581213417);
+INSERT INTO `bn_flow_entry` VALUES (1440973419167354880, '转办流程', 'flowTranslate', 1440940473421139968, 1440973782771568640, '2021-09-23 17:38:16', 1, '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:flowable=\"http://flowable.org/bpmn\" id=\"diagram_flowTranslate\" targetNamespace=\"http://flowable.org/bpmn\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd\">\n  <bpmn2:process id=\"flowTranslate\" name=\"转办流程\" isExecutable=\"true\">\n    <bpmn2:startEvent id=\"Event_1ouk8kj\">\n      <bpmn2:outgoing>Flow_08lgvo0</bpmn2:outgoing>\n    </bpmn2:startEvent>\n    <bpmn2:userTask id=\"Activity_08p9kng\" name=\"录入\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:false,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:assignee=\"${startUserName}\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389836108\" label=\"提交\" type=\"agree\" showOrder=\"0\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_08lgvo0</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_0n45f5j</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_08lgvo0\" sourceRef=\"Event_1ouk8kj\" targetRef=\"Activity_08p9kng\" />\n    <bpmn2:userTask id=\"Activity_12olr01\" name=\"转办\" flowable:formKey=\"{&#34;formId&#34;:&#34;1440945411354267648&#34;,&#34;readOnly&#34;:true,&#34;groupType&#34;:&#34;DEPT&#34;}\" flowable:candidateUsers=\"${startUserName},admin\">\n      <bpmn2:extensionElements>\n        <flowable:operationList>\n          <flowable:formOperation id=\"1632389848554\" label=\"同意\" type=\"agree\" showOrder=\"0\" />\n          <flowable:formOperation id=\"1632389853959\" label=\"转办\" type=\"transfer\" showOrder=\"1\" />\n        </flowable:operationList>\n        <flowable:variableList />\n      </bpmn2:extensionElements>\n      <bpmn2:incoming>Flow_0n45f5j</bpmn2:incoming>\n      <bpmn2:outgoing>Flow_1s8i9er</bpmn2:outgoing>\n    </bpmn2:userTask>\n    <bpmn2:sequenceFlow id=\"Flow_0n45f5j\" sourceRef=\"Activity_08p9kng\" targetRef=\"Activity_12olr01\" />\n    <bpmn2:endEvent id=\"Event_0lzxnw8\">\n      <bpmn2:incoming>Flow_1s8i9er</bpmn2:incoming>\n    </bpmn2:endEvent>\n    <bpmn2:sequenceFlow id=\"Flow_1s8i9er\" sourceRef=\"Activity_12olr01\" targetRef=\"Event_0lzxnw8\" />\n  </bpmn2:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"flowTranslate\">\n      <bpmndi:BPMNEdge id=\"Flow_08lgvo0_di\" bpmnElement=\"Flow_08lgvo0\">\n        <di:waypoint x=\"168\" y=\"330\" />\n        <di:waypoint x=\"220\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_0n45f5j_di\" bpmnElement=\"Flow_0n45f5j\">\n        <di:waypoint x=\"320\" y=\"330\" />\n        <di:waypoint x=\"380\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"Flow_1s8i9er_di\" bpmnElement=\"Flow_1s8i9er\">\n        <di:waypoint x=\"480\" y=\"330\" />\n        <di:waypoint x=\"542\" y=\"330\" />\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNShape id=\"Event_1ouk8kj_di\" bpmnElement=\"Event_1ouk8kj\">\n        <dc:Bounds x=\"132\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_08p9kng_di\" bpmnElement=\"Activity_08p9kng\">\n        <dc:Bounds x=\"220\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Activity_12olr01_di\" bpmnElement=\"Activity_12olr01\">\n        <dc:Bounds x=\"380\" y=\"290\" width=\"100\" height=\"80\" />\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"Event_0lzxnw8_di\" bpmnElement=\"Event_0lzxnw8\">\n        <dc:Bounds x=\"542\" y=\"312\" width=\"36\" height=\"36\" />\n      </bpmndi:BPMNShape>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn2:definitions>\n', 0, 1440945149889744896, 1440945411354267648, NULL, '2021-09-23 17:38:00', 1440911410581213417, '2021-09-23 17:36:50', 1440911410581213417);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_entry_publish
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_entry_publish`;
+CREATE TABLE `bn_flow_entry_publish` (
+  `entry_publish_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `entry_id` bigint(20) NOT NULL COMMENT '流程Id',
+  `process_definition_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的定义Id',
+  `deploy_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的部署Id',
+  `publish_version` int(11) NOT NULL COMMENT '发布版本',
+  `active_status` bit(1) NOT NULL COMMENT '激活状态',
+  `main_version` bit(1) NOT NULL COMMENT '是否为主版本',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `publish_time` datetime NOT NULL COMMENT '发布时间',
+  `init_task_info` text CHARACTER SET utf8mb4 COMMENT '第一个非开始节点任务的附加信息',
+  PRIMARY KEY (`entry_publish_id`) USING BTREE,
+  UNIQUE KEY `idx_process_definition_id` (`process_definition_id`) USING BTREE,
+  KEY `idx_entry_id` (`entry_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_flow_entry_publish
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_entry_publish` VALUES (1440966810131238912, 1440962968085860352, 'flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', '1a075ec8-1c4e-11ec-94ee-5ef70686b817', 1, b'1', b'1', 1440911410581213417, '2021-09-23 17:10:34', '{\"assignee\":\"${startUserName}\",\"formId\":1440945411354267648,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632387369558\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0sc2yuf\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1440968302972112896, 1440966906914803712, 'flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'efd6c86c-1c4e-11ec-94ee-5ef70686b817', 1, b'1', b'0', 1440911410581213417, '2021-09-23 17:16:30', '{\"assignee\":\"${startUserName}\",\"formId\":1440947675041107968,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_03kjurt\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1440972214223507456, 1440968423508021248, 'flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', '1ba32d20-1c51-11ec-94ee-5ef70686b817', 1, b'1', b'0', 1440911410581213417, '2021-09-23 17:32:02', '{\"formId\":1440954920348946432,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0nyla1r\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1440972224344363008, 1440966906914803712, 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '1d1dbf34-1c51-11ec-94ee-5ef70686b817', 2, b'1', b'1', 1440911410581213417, '2021-09-23 17:32:05', '{\"assignee\":\"${startUserName}\",\"formId\":1440947675041107968,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_03kjurt\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1440973324426416128, 1440972435892473856, 'flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'b97761b8-1c51-11ec-94ee-5ef70686b817', 1, b'1', b'1', 1440911410581213417, '2021-09-23 17:36:27', '{\"assignee\":\"${startUserName}\",\"formId\":1440945411354267648,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632389626319\",\"label\":\"提交\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389633373\",\"label\":\"加签\",\"type\":\"multi_consign\"}],\"readOnly\":false,\"taskKey\":\"Activity_1xk7j4n\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1440973782771568640, 1440973419167354880, 'flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'fa9b683c-1c51-11ec-94ee-5ef70686b817', 1, b'1', b'1', 1440911410581213417, '2021-09-23 17:38:16', '{\"assignee\":\"${startUserName}\",\"formId\":1440945411354267648,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632389836108\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_08p9kng\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1441214529919782912, 1440968423508021248, 'flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', '9d23d445-1cd7-11ec-acd8-3ae4f1d3c3af', 2, b'1', b'0', 1440911410581213417, '2021-09-24 09:34:55', '{\"assignee\":\"${startUserName}\",\"formId\":1440954920348946432,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0nyla1r\",\"taskType\":1}');
+INSERT INTO `bn_flow_entry_publish` VALUES (1441216695006924800, 1440968423508021248, 'flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'd273a35d-1cd8-11ec-acd8-3ae4f1d3c3af', 3, b'1', b'1', 1440911410581213417, '2021-09-24 09:43:31', '{\"assignee\":\"${startUserName}\",\"formId\":1440954920348946432,\"groupType\":\"DEPT\",\"operationList\":[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}],\"readOnly\":false,\"taskKey\":\"Activity_0nyla1r\",\"taskType\":1}');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_entry_publish_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_entry_publish_variable`;
+CREATE TABLE `bn_flow_entry_publish_variable` (
+  `variable_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `entry_publish_id` bigint(20) NOT NULL COMMENT '流程Id',
+  `variable_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '变量名',
+  `show_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名',
+  `variable_type` int(11) NOT NULL COMMENT '变量类型',
+  `bind_datasource_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源Id',
+  `bind_relation_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源关联Id',
+  `bind_column_id` bigint(20) DEFAULT NULL COMMENT '绑定字段Id',
+  `builtin` bit(1) NOT NULL COMMENT '是否内置',
+  PRIMARY KEY (`variable_id`) USING BTREE,
+  KEY `idx_entry_publish_id` (`entry_publish_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_flow_entry_publish_variable
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440966810181570560, 1440966810131238912, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440966810181570561, 1440966810131238912, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440968302993084416, 1440968302972112896, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440968302993084417, 1440968302972112896, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440968302993084418, 1440968302972112896, 'totalAmount', '报销金额', 1, 1440946127531675648, NULL, 1440946127493926912, b'0');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972214244478976, 1440972214223507456, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972214244478977, 1440972214223507456, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972224365334528, 1440972224344363008, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972224365334529, 1440972224344363008, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440972224365334530, 1440972224344363008, 'totalAmount', '报销金额', 1, 1440946127531675648, NULL, 1440946127493926912, b'0');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973324443193344, 1440973324426416128, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973324443193345, 1440973324426416128, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973782788345856, 1440973782771568640, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1440973782788345857, 1440973782771568640, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441214529953337344, 1441214529919782912, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441214529953337345, 1441214529919782912, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441216695027896320, 1441216695006924800, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1');
+INSERT INTO `bn_flow_entry_publish_variable` VALUES (1441216695027896321, 1441216695006924800, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_entry_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_entry_variable`;
+CREATE TABLE `bn_flow_entry_variable` (
+  `variable_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `entry_id` bigint(20) NOT NULL COMMENT '流程Id',
+  `variable_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '变量名',
+  `show_name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '显示名',
+  `variable_type` int(11) NOT NULL COMMENT '变量类型',
+  `bind_datasource_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源Id',
+  `bind_relation_id` bigint(20) DEFAULT NULL COMMENT '绑定数据源关联Id',
+  `bind_column_id` bigint(20) DEFAULT NULL COMMENT '绑定字段Id',
+  `builtin` bit(1) NOT NULL COMMENT '是否内置',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`variable_id`) USING BTREE,
+  UNIQUE KEY `uk_entry_id_variable_name` (`entry_id`,`variable_name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_flow_entry_variable
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_entry_variable` VALUES (1440962968090054657, 1440962968085860352, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 16:55:18');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440962968094248961, 1440962968085860352, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 16:55:18');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440966906918998017, 1440966906914803712, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:10:57');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440966906927386625, 1440966906914803712, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:10:57');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440967581673459712, 1440966906914803712, 'totalAmount', '报销金额', 1, 1440946127531675648, NULL, 1440946127493926912, b'0', '2021-09-23 17:13:38');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440968423512215553, 1440968423508021248, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:16:59');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440968423516409857, 1440968423508021248, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:16:59');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440972435900862465, 1440972435892473856, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:32:55');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440972435905056768, 1440972435892473856, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:32:55');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440973419171549185, 1440973419167354880, 'operationType', '审批类型', 1, NULL, NULL, NULL, b'1', '2021-09-23 17:36:50');
+INSERT INTO `bn_flow_entry_variable` VALUES (1440973419175743489, 1440973419167354880, 'startUserName', '流程启动用户', 0, NULL, NULL, NULL, b'1', '2021-09-23 17:36:50');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_task_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_task_comment`;
+CREATE TABLE `bn_flow_task_comment` (
+  `id` bigint(20) NOT NULL COMMENT '主键Id',
+  `process_instance_id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '流程实例Id',
+  `task_id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '任务Id',
+  `task_key` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '任务标识',
+  `task_name` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '任务名称',
+  `approval_type` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '审批类型',
+  `comment` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT '批注内容',
+  `delegate_assignee` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '委托指定人，比如加签、转办等',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `create_username` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '创建者用户名',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_process_instance_id` (`process_instance_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of bn_flow_task_comment
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_task_comment` VALUES (1441213241249239040, 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 'e7b1c912-1cd6-11ec-acd8-3ae4f1d3c3af', 'Activity_0sc2yuf', '请假录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:29:48');
+INSERT INTO `bn_flow_task_comment` VALUES (1441213342894002176, 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 'e7b80aa9-1cd6-11ec-acd8-3ae4f1d3c3af', 'Activity_1jw5u20', '部门领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:30:12');
+INSERT INTO `bn_flow_task_comment` VALUES (1441213560184115200, 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 'f62d36b1-1cd6-11ec-acd8-3ae4f1d3c3af', 'Activity_0olxatv', 'HR审批', 'agree', '同意', NULL, 1440965465605148672, '员工A', '2021-09-24 09:31:04');
+INSERT INTO `bn_flow_task_comment` VALUES (1441213876594020352, '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', '42019911-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_03kjurt', '报销单录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:32:19');
+INSERT INTO `bn_flow_task_comment` VALUES (1441213922165133312, '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', '42054298-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0ywxfwu', '部门领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:32:30');
+INSERT INTO `bn_flow_task_comment` VALUES (1441214057024589824, '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', '487ef9a2-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0qay48u', '总经理审批', 'agree', '好的', NULL, 1440969706411397120, '总部领导', '2021-09-24 09:33:02');
+INSERT INTO `bn_flow_task_comment` VALUES (1441214335085973504, '719d8e5a-1cd7-11ec-acd8-3ae4f1d3c3af', '719d8e62-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '合同录入', 'stop', '配置错误', NULL, 1440966324770574336, '员工D', '2021-09-24 09:34:09');
+INSERT INTO `bn_flow_task_comment` VALUES (1441215377718644736, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '1754a6f2-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '合同录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:38:17');
+INSERT INTO `bn_flow_task_comment` VALUES (1441215450896666624, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '1757db49-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '业务部领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:38:35');
+INSERT INTO `bn_flow_task_comment` VALUES (1441215523189690368, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '21b97ae8-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '造价部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:38:52');
+INSERT INTO `bn_flow_task_comment` VALUES (1441215553006997504, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '21b953d4-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '工程部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:38:59');
+INSERT INTO `bn_flow_task_comment` VALUES (1441215775858757632, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '3040cf64-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '财务部审批', 'agree', '没问题', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:39:52');
+INSERT INTO `bn_flow_task_comment` VALUES (1441216028087422976, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '4fec915c-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_sign', '用户 [leaderLaw] 会签 [[\"userB\",\"userC\",\"leaderLaw\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:40:52');
+INSERT INTO `bn_flow_task_comment` VALUES (1441216073780170752, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '4fec915c-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_consign', '用户 [leaderLaw] 加签 [[\"admin\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:41:03');
+INSERT INTO `bn_flow_task_comment` VALUES (1441216212972343296, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '73c18ac0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '同意', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:41:36');
+INSERT INTO `bn_flow_task_comment` VALUES (1441216292819308544, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '73c163a6-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_refuse', '不同意', NULL, 1440965586715676672, '员工B', '2021-09-24 09:41:55');
+INSERT INTO `bn_flow_task_comment` VALUES (1441216373144424448, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '73c18abb-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '同意', NULL, 1440965697961201664, '员工C', '2021-09-24 09:42:15');
+INSERT INTO `bn_flow_task_comment` VALUES (1441216770470842368, '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', '7a4309f7-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'stop', '多实例条件配置错误', NULL, 1440911410581213417, '管理员', '2021-09-24 09:43:49');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217206766538752, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '1b41a38d-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '合同录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 09:45:33');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217290182856704, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '1b4488c4-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '业务部领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 09:45:53');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217345438617600, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '271ebea3-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '造价部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:46:06');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217371766263808, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '271e978f-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '工程部审批', 'agree', '同意', NULL, 1440911410581213417, '管理员', '2021-09-24 09:46:13');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217738105163776, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '32b7097e-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '财务部审批', 'agree', '同意', NULL, 1440966186522120192, '天津经理', '2021-09-24 09:47:40');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217836524507136, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '66c6d396-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_sign', '用户 [leaderLaw] 会签 [[\"leaderLaw\",\"userC\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:48:03');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217872834596864, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '74c12a5e-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '同意', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:48:12');
+INSERT INTO `bn_flow_task_comment` VALUES (1441217994800762880, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '66c6d396-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '法务部审批', 'multi_consign', '用户 [leaderLaw] 加签 [[\"userB\"]]。', NULL, 1440965808049098752, '法务经理', '2021-09-24 09:48:41');
+INSERT INTO `bn_flow_task_comment` VALUES (1441218049788088320, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '8b4134ba-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', '拒绝', NULL, 1440965586715676672, '员工B', '2021-09-24 09:48:54');
+INSERT INTO `bn_flow_task_comment` VALUES (1441218134890516480, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '74c15172-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '法务部会签', 'multi_agree', 't同意', NULL, 1440965697961201664, '员工C', '2021-09-24 09:49:15');
+INSERT INTO `bn_flow_task_comment` VALUES (1441218265987682304, '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', '9f286bc3-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_1h3pnxy', '总经理审批', 'agree', '同意', NULL, 1440969706411397120, '总部领导', '2021-09-24 09:49:46');
+INSERT INTO `bn_flow_task_comment` VALUES (1441218427363528704, 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 'c8b70062-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_08p9kng', '录入', 'agree', NULL, NULL, 1440911410581213417, '管理员', '2021-09-24 09:50:24');
+INSERT INTO `bn_flow_task_comment` VALUES (1441218497429377024, 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 'c8b9bf89-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_12olr01', '转办', 'transfer', '交给你了', 'leaderHR', 1440911410581213417, '管理员', '2021-09-24 09:50:41');
+INSERT INTO `bn_flow_task_comment` VALUES (1441218606418366464, 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 'c8b9bf89-1cd9-11ec-acd8-3ae4f1d3c3af', 'Activity_12olr01', '转办', 'agree', '同意', NULL, 1440965344985354240, '人事经理', '2021-09-24 09:51:07');
+INSERT INTO `bn_flow_task_comment` VALUES (1441312737664700416, '22f398f3-1d0e-11ec-8336-3ae4f1d3c3af', '22f9b37c-1d0e-11ec-8336-3ae4f1d3c3af', 'Activity_03kjurt', '报销单录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 16:05:10');
+INSERT INTO `bn_flow_task_comment` VALUES (1441324108838080512, '22f398f3-1d0e-11ec-8336-3ae4f1d3c3af', '23032963-1d0e-11ec-8336-3ae4f1d3c3af', 'Activity_0ywxfwu', '部门领导审批', 'agree', '同意', NULL, 1440966073686953984, '天津总监', '2021-09-24 16:50:21');
+INSERT INTO `bn_flow_task_comment` VALUES (1441340309681213440, '7138d67d-1d1d-11ec-8336-3ae4f1d3c3af', '7138fd96-1d1d-11ec-8336-3ae4f1d3c3af', 'Activity_03kjurt', '报销单录入', 'agree', NULL, NULL, 1440966324770574336, '员工D', '2021-09-24 17:54:43');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_task_ext
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_task_ext`;
+CREATE TABLE `bn_flow_task_ext` (
+  `process_definition_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的定义Id',
+  `task_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎任务Id',
+  `operation_list_json` longtext COLLATE utf8mb4_bin COMMENT '操作列表JSON',
+  `variable_list_json` longtext COLLATE utf8mb4_bin COMMENT '变量列表JSON',
+  `assignee_list_json` text COLLATE utf8mb4_bin COMMENT '存储多实例的assigneeList的JSON',
+  `group_type` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '分组类型',
+  PRIMARY KEY (`process_definition_id`,`task_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_flow_task_ext
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_task_ext` VALUES ('flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'Activity_006g6qo', '[{\"showOrder\":\"0\",\"id\":\"1632389733600\",\"label\":\"同意\",\"type\":\"multi_agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'Activity_0p7omdm', '[{\"showOrder\":\"0\",\"id\":\"1632389682895\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389686939\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowConSign:1:b981c1fb-1c51-11ec-94ee-5ef70686b817', 'Activity_1xk7j4n', '[{\"showOrder\":\"0\",\"id\":\"1632389626319\",\"label\":\"提交\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389633373\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_098ncvw', '[{\"showOrder\":\"0\",\"id\":\"1632389190662\",\"label\":\"同意\",\"type\":\"multi_agree\"},{\"showOrder\":\"1\",\"id\":\"1632389197406\",\"label\":\"拒绝\",\"type\":\"multi_refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_0nyla1r', '[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_0tm3mph', '[{\"showOrder\":\"0\",\"id\":\"1632388982377\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_138m4nn', '[{\"showOrder\":\"0\",\"id\":\"1632388978101\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1eewt01', '[{\"showOrder\":\"0\",\"id\":\"1632389337024\",\"label\":\"会签\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389341901\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1h3pnxy', '[{\"showOrder\":\"0\",\"id\":\"1632389449508\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389452850\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1ucrh52', '[{\"showOrder\":\"0\",\"id\":\"1632388972455\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT_POST_LEADER');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:1:1bbc0c53-1c51-11ec-94ee-5ef70686b817', 'Activity_1yuuyie', '[{\"showOrder\":\"0\",\"id\":\"1632389037814\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389042489\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '[{\"showOrder\":\"0\",\"id\":\"1632389190662\",\"label\":\"同意\",\"type\":\"multi_agree\"},{\"showOrder\":\"1\",\"id\":\"1632389197406\",\"label\":\"拒绝\",\"type\":\"multi_refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '[{\"showOrder\":\"0\",\"id\":\"1632388982377\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '[{\"showOrder\":\"0\",\"id\":\"1632388978101\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '[{\"showOrder\":\"0\",\"id\":\"1632389337024\",\"label\":\"会签\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389341901\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1h3pnxy', '[{\"showOrder\":\"0\",\"id\":\"1632389449508\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389452850\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '[{\"showOrder\":\"0\",\"id\":\"1632388972455\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT_POST_LEADER');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '[{\"showOrder\":\"0\",\"id\":\"1632389037814\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389042489\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_098ncvw', '[{\"showOrder\":\"0\",\"id\":\"1632389190662\",\"label\":\"同意\",\"type\":\"multi_agree\"},{\"showOrder\":\"1\",\"id\":\"1632389197406\",\"label\":\"拒绝\",\"type\":\"multi_refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0nyla1r', '[{\"showOrder\":\"0\",\"id\":\"1632388965712\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_0tm3mph', '[{\"showOrder\":\"0\",\"id\":\"1632388982377\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_138m4nn', '[{\"showOrder\":\"0\",\"id\":\"1632388978101\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1eewt01', '[{\"showOrder\":\"0\",\"id\":\"1632389337024\",\"label\":\"会签\",\"type\":\"multi_sign\"},{\"showOrder\":\"1\",\"id\":\"1632389341901\",\"label\":\"加签\",\"type\":\"multi_consign\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1h3pnxy', '[{\"showOrder\":\"0\",\"id\":\"1632389449508\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389452850\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1ucrh52', '[{\"showOrder\":\"0\",\"id\":\"1632388972455\",\"label\":\"同意\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT_POST_LEADER');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', 'Activity_1yuuyie', '[{\"showOrder\":\"0\",\"id\":\"1632389037814\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389042489\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'Activity_0olxatv', '[{\"showOrder\":\"0\",\"id\":\"1632388147727\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388151069\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'POST');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'Activity_0sc2yuf', '[{\"showOrder\":\"0\",\"id\":\"1632387369558\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'Activity_1jw5u20', '[{\"showOrder\":\"0\",\"id\":\"1632387389734\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632387393116\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT_POST_LEADER');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'Activity_03kjurt', '[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'Activity_0qay48u', '[{\"showOrder\":\"0\",\"id\":\"1632388536771\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388540081\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:1:efe9db3f-1c4e-11ec-94ee-5ef70686b817', 'Activity_0ywxfwu', '[{\"showOrder\":\"0\",\"id\":\"1632388372003\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388375866\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', '[{\"variableType\":1,\"showName\":\"报销金额\",\"variableName\":\"totalAmount\",\"bindColumnId\":1440946127493926912,\"createTime\":1632388418000,\"builtin\":false,\"bindDatasourceId\":1440946127531675648,\"variableId\":1440967581673459712,\"entryId\":1440966906914803712}]', NULL, 'DEPT_POST_LEADER');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', 'Activity_03kjurt', '[{\"showOrder\":\"0\",\"id\":\"1632388352676\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', 'Activity_0qay48u', '[{\"showOrder\":\"0\",\"id\":\"1632388536771\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388540081\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', 'Activity_0ywxfwu', '[{\"showOrder\":\"0\",\"id\":\"1632388372003\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632388375866\",\"label\":\"拒绝\",\"type\":\"refuse\"}]', '[{\"variableType\":1,\"showName\":\"报销金额\",\"variableName\":\"totalAmount\",\"bindColumnId\":1440946127493926912,\"createTime\":1632388418000,\"builtin\":false,\"bindDatasourceId\":1440946127531675648,\"variableId\":1440967581673459712,\"entryId\":1440966906914803712}]', NULL, 'DEPT_POST_LEADER');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'Activity_08p9kng', '[{\"showOrder\":\"0\",\"id\":\"1632389836108\",\"label\":\"提交\",\"type\":\"agree\"}]', NULL, NULL, 'DEPT');
+INSERT INTO `bn_flow_task_ext` VALUES ('flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'Activity_12olr01', '[{\"showOrder\":\"0\",\"id\":\"1632389848554\",\"label\":\"同意\",\"type\":\"agree\"},{\"showOrder\":\"1\",\"id\":\"1632389853959\",\"label\":\"转办\",\"type\":\"transfer\"}]', NULL, NULL, 'DEPT');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_flow_work_order
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_flow_work_order`;
+CREATE TABLE `bn_flow_work_order` (
+  `work_order_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `process_definition_key` varchar(128) COLLATE utf8mb4_bin NOT NULL COMMENT '流程定义标识',
+  `process_definition_name` varchar(200) CHARACTER SET utf8mb4 NOT NULL COMMENT '流程名称',
+  `process_definition_id` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '流程引擎的定义Id',
+  `process_instance_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '流程实例Id',
+  `online_table_id` bigint(20) DEFAULT NULL COMMENT '在线表单的主表Id',
+  `business_key` varchar(128) COLLATE utf8mb4_bin NOT NULL COMMENT '业务主键值',
+  `task_id` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '未完成的任务Id',
+  `task_name` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '未完成的任务名称',
+  `task_definition_key` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '未完成的任务标识',
+  `flow_status` int(11) NOT NULL DEFAULT '0' COMMENT '流程状态',
+  `submit_username` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '提交用户登录名称',
+  `dept_id` bigint(20) NOT NULL COMMENT '提交用户所在部门Id',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `update_user_id` bigint(20) NOT NULL COMMENT '更新者Id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建者Id',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记(1: 正常 -1: 已删除)',
+  PRIMARY KEY (`work_order_id`) USING BTREE,
+  UNIQUE KEY `uk_process_instance_id` (`process_instance_id`) USING BTREE,
+  KEY `idx_process_definition_key` (`process_definition_key`) USING BTREE,
+  KEY `idx_create_user_id` (`create_user_id`) USING BTREE,
+  KEY `idx_create_time` (`create_time`) USING BTREE,
+  KEY `idx_dept_id` (`dept_id`) USING BTREE,
+  KEY `idx_business_key` (`business_key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_flow_work_order
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_flow_work_order` VALUES (1441213241270210560, 'flowLeave', '请假申请', 'flowLeave:1:1bc2a35b-1c4e-11ec-94ee-5ef70686b817', 'e7ac71d9-1cd6-11ec-acd8-3ae4f1d3c3af', 1440945228079960064, '1441213240326492160', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 09:31:04', 1440965465605148672, '2021-09-24 09:29:48', 1440966324770574336, 1);
+INSERT INTO `bn_flow_work_order` VALUES (1441213876598214656, 'flowSubmit', '报销申请', 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '420171f8-1cd7-11ec-acd8-3ae4f1d3c3af', 1440946127460372480, '1441213876367527936', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 09:33:02', 1440969706411397120, '2021-09-24 09:32:19', 1440966324770574336, 1);
+INSERT INTO `bn_flow_work_order` VALUES (1441215377722839040, 'flowContract', '合同审批', 'flowContract:2:9edd1d08-1cd7-11ec-acd8-3ae4f1d3c3af', '17547fd9-1cd8-11ec-acd8-3ae4f1d3c3af', 1440952815294877696, '1441215377508929536', NULL, NULL, NULL, 4, 'userD', 1440963698460987392, '2021-09-24 09:43:49', 1440911410581213417, '2021-09-24 09:38:17', 1440966324770574336, 1);
+INSERT INTO `bn_flow_work_order` VALUES (1441217206770733056, 'flowContract', '合同审批', 'flowContract:3:d28aadd0-1cd8-11ec-acd8-3ae4f1d3c3af', '1b41a384-1cd9-11ec-acd8-3ae4f1d3c3af', 1440952815294877696, '1441217206602960896', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 09:49:46', 1440969706411397120, '2021-09-24 09:45:33', 1440966324770574336, 1);
+INSERT INTO `bn_flow_work_order` VALUES (1441218427367723008, 'flowTranslate', '转办流程', 'flowTranslate:1:faa41acf-1c51-11ec-94ee-5ef70686b817', 'c8b7005a-1cd9-11ec-acd8-3ae4f1d3c3af', 1440945228079960064, '1441218427220922368', NULL, NULL, NULL, 3, 'admin', 1440911410581213416, '2021-09-24 09:51:07', 1440965344985354240, '2021-09-24 09:50:24', 1440911410581213417, 1);
+INSERT INTO `bn_flow_work_order` VALUES (1441312737689866240, 'flowSubmit', '报销申请', 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '22f398f3-1d0e-11ec-8336-3ae4f1d3c3af', 1440946127460372480, '1441312736167333888', NULL, NULL, NULL, 3, 'userD', 1440963698460987392, '2021-09-24 16:50:21', 1440966073686953984, '2021-09-24 16:05:10', 1440966324770574336, 1);
+INSERT INTO `bn_flow_work_order` VALUES (1441340309685407744, 'flowSubmit', '报销申请', 'flowSubmit:2:1d2bc8f7-1c51-11ec-94ee-5ef70686b817', '7138d67d-1d1d-11ec-8336-3ae4f1d3c3af', 1440946127460372480, '1441340309442138112', NULL, NULL, NULL, 0, 'userD', 1440963698460987392, '2021-09-24 17:54:43', 1440966324770574336, '2021-09-24 17:54:43', 1440966324770574336, 1);
+COMMIT;
 -- ----------------------------
 -- Table structure for bn_test_flow_contract
 -- ----------------------------
@@ -2315,6 +3710,607 @@ INSERT INTO `bn_test_flow_submit_detail` VALUES (1424636815813382144, 1424636815
 INSERT INTO `bn_test_flow_submit_detail` VALUES (1441213876384305152, 1441213876367527936, 1, '2021-09-23 00:00:00', 600, '[{\"name\":\"logo.png\",\"filename\":\"38b7e4a097654ff38e176846ba005fcf.png\"}]', NULL);
 INSERT INTO `bn_test_flow_submit_detail` VALUES (1441312736230248448, 1441312736167333888, 1, '2021-09-24 00:00:00', 600, '[{\"name\":\"logo.png\",\"filename\":\"1252138daaf744a3b1fdf06a07c5a173.png\"}]', '吃饭');
 INSERT INTO `bn_test_flow_submit_detail` VALUES (1441340309446332416, 1441340309442138112, 1, '2021-09-30 00:00:00', 500, '[{\"name\":\"logo.png\",\"filename\":\"f33b658b052f487c9a34af274f48dcd3.png\"}]', '团建费用');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_page
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_page`;
+CREATE TABLE `bn_online_page` (
+  `page_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `page_code` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '页面编码',
+  `page_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '页面名称',
+  `page_type` int(11) NOT NULL COMMENT '页面类型',
+  `status` int(11) NOT NULL COMMENT '页面编辑状态',
+  `published` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否发布',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`page_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_page
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_page` VALUES (1440945149889744896, 'pageFlowLeave', '请假申请', 10, 2, b'1', '2021-09-23 15:45:08', '2021-09-23 15:44:30');
+INSERT INTO `bn_online_page` VALUES (1440946020174270464, 'pageSubmit', '报销申请', 10, 2, b'1', '2021-09-23 15:57:43', '2021-09-23 15:47:57');
+INSERT INTO `bn_online_page` VALUES (1440952710487609344, 'pageFlowContract', '合同审批', 10, 2, b'1', '2021-09-23 16:23:02', '2021-09-23 16:14:32');
+INSERT INTO `bn_online_page` VALUES (1440958861153406976, 'formFirstParty', '甲方企业', 1, 2, b'1', '2021-09-23 16:40:03', '2021-09-23 16:38:59');
+INSERT INTO `bn_online_page` VALUES (1440961119001776128, 'pageSecondParty', '乙方企业管理', 1, 2, b'1', '2021-09-23 16:48:58', '2021-09-23 16:47:57');
+INSERT INTO `bn_online_page` VALUES (1440962061336055808, 'pageProduct', '产品管理', 1, 2, b'1', '2021-09-23 16:53:12', '2021-09-23 16:51:42');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_column
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_column`;
+CREATE TABLE `bn_online_column` (
+  `column_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `column_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '字段名',
+  `table_id` bigint(20) NOT NULL COMMENT '数据表Id',
+  `column_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '数据表中的字段类型',
+  `full_column_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '数据表中的完整字段类型(包括了精度和刻度)',
+  `primary_key` bit(1) NOT NULL COMMENT '是否为主键',
+  `auto_increment` bit(1) NOT NULL COMMENT '是否是自增主键(0: 不是 1: 是)',
+  `nullable` bit(1) NOT NULL COMMENT '是否可以为空 (0: 不可以为空 1: 可以为空)',
+  `column_default` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '缺省值',
+  `column_show_order` int(11) NOT NULL COMMENT '字段在数据表中的显示位置',
+  `column_comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '数据表中的字段注释',
+  `object_field_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '对象映射字段名称',
+  `object_field_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '对象映射字段类型',
+  `filter_type` int(11) NOT NULL DEFAULT '1' COMMENT '字段过滤类型',
+  `parent_key` bit(1) NOT NULL COMMENT '是否是主键的父Id',
+  `dept_filter` bit(1) NOT NULL COMMENT '是否部门过滤字段',
+  `user_filter` bit(1) NOT NULL COMMENT '是否用户过滤字段',
+  `field_kind` int(11) DEFAULT NULL COMMENT '字段类别',
+  `max_file_count` int(11) DEFAULT NULL COMMENT '包含的文件文件数量，0表示无限制',
+  `dict_id` bigint(20) DEFAULT NULL COMMENT '字典Id',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`column_id`),
+  KEY `idx_table_id` (`table_id`) USING BTREE,
+  KEY `idx_dict_id` (`dict_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_column
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_column` VALUES (1440945228088348672, 'id', 1440945228079960064, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'id', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:44:49', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440945228092542976, 'user_id', 1440945228079960064, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 2, '请假用户', 'userId', 'Long', 0, b'0', b'0', b'0', 21, NULL, 1440944417170001920, '2021-09-24 09:29:41', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440945228100931584, 'leave_reason', 1440945228079960064, 'varchar', 'varchar(512)', b'0', b'0', b'0', NULL, 3, '请假原因', 'leaveReason', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:44:49', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440945228105125888, 'leave_type', 1440945228079960064, 'int', 'int(11)', b'0', b'0', b'0', NULL, 4, '请假类型', 'leaveType', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, 1440943031288074240, '2021-09-23 15:45:01', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440945228113514496, 'leave_begin_time', 1440945228079960064, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 5, '请假开始时间', 'leaveBeginTime', 'Date', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:44:49', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440945228117708800, 'leave_end_time', 1440945228079960064, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 6, '请假结束时间', 'leaveEndTime', 'Date', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:44:49', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440945228126097408, 'apply_time', 1440945228079960064, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 7, '申请时间', 'applyTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 15:45:06', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_column` VALUES (1440946127468761088, 'id', 1440946127460372480, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'id', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:48:23', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127481344000, 'submit_name', 1440946127460372480, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 2, '报销名称', 'submitName', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:48:23', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127489732608, 'submit_kind', 1440946127460372480, 'int', 'int(11)', b'0', b'0', b'0', NULL, 3, '报销类别', 'submitKind', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, 1440943168626364416, '2021-09-23 15:49:11', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127493926912, 'total_amount', 1440946127460372480, 'int', 'int(11)', b'0', b'0', b'0', NULL, 4, '报销金额', 'totalAmount', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:49:52', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127498121216, 'description', 1440946127460372480, 'varchar', 'varchar(512)', b'0', b'0', b'0', NULL, 5, '报销描述', 'description', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:48:23', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127506509824, 'memo', 1440946127460372480, 'varchar', 'varchar(512)', b'0', b'0', b'1', NULL, 6, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:48:23', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127510704128, 'update_user_id', 1440946127460372480, 'bigint', 'bigint(20)', b'0', b'0', b'1', NULL, 7, '修改人', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 15:50:04', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127514898432, 'update_time', 1440946127460372480, 'datetime', 'datetime', b'0', b'0', b'1', NULL, 8, '修改时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 15:50:08', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127523287040, 'create_user_id', 1440946127460372480, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '创建人', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 15:50:12', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440946127527481344, 'create_time', 1440946127460372480, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 15:50:16', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_column` VALUES (1440947089222668288, 'id', 1440947089218473984, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'id', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:52:12', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440947089231056896, 'submit_id', 1440947089218473984, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 2, '报销单据Id', 'submitId', 'Long', 1, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:57:41', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440947089235251200, 'expense_type', 1440947089218473984, 'int', 'int(11)', b'0', b'0', b'0', NULL, 3, '费用类型', 'expenseType', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, 1440943309924077568, '2021-09-23 15:53:15', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440947089243639808, 'expense_time', 1440947089218473984, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 4, '发生日期', 'expenseTime', 'Date', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:52:12', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440947089252028416, 'amount', 1440947089218473984, 'int', 'int(11)', b'0', b'0', b'0', NULL, 5, '金额', 'amount', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:52:12', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440947089260417024, 'image_url', 1440947089218473984, 'varchar', 'varchar(512)', b'0', b'0', b'1', NULL, 6, '报销凭证', 'imageUrl', 'String', 0, b'0', b'0', b'0', 2, 1, NULL, '2021-09-23 15:53:53', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440947089264611328, 'description', 1440947089218473984, 'varchar', 'varchar(255)', b'0', b'0', b'1', NULL, 7, '费用描述', 'description', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 15:52:12', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_column` VALUES (1440952815303266304, 'contract_id', 1440952815294877696, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'contractId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:14:57', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815307460608, 'first_party_id', 1440952815294877696, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 2, '甲方企业', 'firstPartyId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, 1440943452526219264, '2021-09-23 16:16:50', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815311654912, 'second_party_id', 1440952815294877696, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 3, '乙方企业', 'secondPartyId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, 1440943955939168256, '2021-09-23 16:16:59', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815315849216, 'contract_type', 1440952815294877696, 'int', 'int(11)', b'0', b'0', b'0', NULL, 4, '合同类型', 'contractType', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, 1440944300799037440, '2021-09-23 16:17:03', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815320043520, 'due_date', 1440952815294877696, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 5, '到期日期', 'dueDate', 'Date', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:14:57', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815324237824, 'sales_id', 1440952815294877696, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 6, '业务员', 'salesId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, 1440944417170001920, '2021-09-23 16:17:10', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815332626432, 'commission_rate', 1440952815294877696, 'int', 'int(11)', b'0', b'0', b'0', NULL, 7, '提成比例（%）', 'commissionRate', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:17:38', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815336820736, 'attachment', 1440952815294877696, 'varchar', 'varchar(512)', b'0', b'0', b'1', NULL, 8, '合同附件', 'attachment', 'String', 0, b'0', b'0', b'0', 1, 1, NULL, '2021-09-23 16:17:46', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815341015040, 'security_attachment', 1440952815294877696, 'varchar', 'varchar(512)', b'0', b'0', b'1', NULL, 9, '保密协议', 'securityAttachment', 'String', 0, b'0', b'0', b'0', 1, 1, NULL, '2021-09-23 16:17:53', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815345209344, 'intellectual_property_attachment', 1440952815294877696, 'varchar', 'varchar(512)', b'0', b'0', b'1', NULL, 10, '知识产权协议', 'intellectualPropertyAttachment', 'String', 0, b'0', b'0', b'0', 1, 1, NULL, '2021-09-23 16:18:00', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815349403648, 'other_attachment', 1440952815294877696, 'varchar', 'varchar(512)', b'0', b'0', b'1', NULL, 11, '其他附件', 'otherAttachment', 'String', 0, b'0', b'0', b'0', 1, 1, NULL, '2021-09-23 16:18:05', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815353597952, 'create_user_id', 1440952815294877696, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 12, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:18:09', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815357792256, 'create_time', 1440952815294877696, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 13, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:18:15', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815361986560, 'update_user_id', 1440952815294877696, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 14, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:18:19', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815366180864, 'update_time', 1440952815294877696, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 15, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:18:24', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952815370375168, 'deleted_flag', 1440952815294877696, 'int', 'int(11)', b'0', b'0', b'0', '0', 16, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:18:28', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_column` VALUES (1440952921037475840, 'first_party_id', 1440952921024892928, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'firstPartyId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921041670144, 'company_name', 1440952921024892928, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 2, '公司名称', 'companyName', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921050058752, 'legal_person', 1440952921024892928, 'varchar', 'varchar(64)', b'0', b'0', b'0', NULL, 3, '公司法人', 'legalPerson', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:18:38', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921054253056, 'legal_person_id', 1440952921024892928, 'char', 'char(18)', b'0', b'0', b'0', NULL, 4, '法人身份证号', 'legalPersonId', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921058447360, 'registry_address', 1440952921024892928, 'varchar', 'varchar(512)', b'0', b'0', b'0', NULL, 5, '注册地址', 'registryAddress', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921066835968, 'contact_info', 1440952921024892928, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 6, '联系方式', 'contactInfo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921079418880, 'business_scope', 1440952921024892928, 'varchar', 'varchar(4000)', b'0', b'0', b'0', NULL, 7, '经营范围', 'businessScope', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921087807488, 'memo', 1440952921024892928, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 8, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921092001792, 'create_user_id', 1440952921024892928, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:18:48', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921100390400, 'create_time', 1440952921024892928, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:18:51', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921104584704, 'update_user_id', 1440952921024892928, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 11, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:18:54', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921108779008, 'update_time', 1440952921024892928, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 12, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:19:00', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952921112973312, 'deleted_flag', 1440952921024892928, 'int', 'int(11)', b'0', b'0', b'0', '0', 13, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:19:04', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_column` VALUES (1440952988393803776, 'second_party_id', 1440952988389609472, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'secondPartyId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988406386688, 'company_name', 1440952988389609472, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 2, '公司名称', 'companyName', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988456718336, 'legal_person', 1440952988389609472, 'varchar', 'varchar(64)', b'0', b'0', b'0', NULL, 3, '公司法人', 'legalPerson', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:19:12', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988469301248, 'legal_person_id', 1440952988389609472, 'char', 'char(18)', b'0', b'0', b'0', NULL, 4, '法人身份证号', 'legalPersonId', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988473495552, 'registry_address', 1440952988389609472, 'varchar', 'varchar(512)', b'0', b'0', b'0', NULL, 5, '注册地址', 'registryAddress', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988486078464, 'contact_info', 1440952988389609472, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 6, '联系方式', 'contactInfo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988494467072, 'business_scope', 1440952988389609472, 'varchar', 'varchar(4000)', b'0', b'0', b'0', NULL, 7, '经营范围', 'businessScope', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988498661376, 'memo', 1440952988389609472, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 8, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988502855680, 'create_user_id', 1440952988389609472, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:19:17', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988507049984, 'create_time', 1440952988389609472, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:19:21', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988515438592, 'update_user_id', 1440952988389609472, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 11, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:19:24', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988519632896, 'update_time', 1440952988389609472, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 12, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:19:28', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440952988528021504, 'deleted_flag', 1440952988389609472, 'int', 'int(11)', b'0', b'0', b'0', '0', 13, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:19:33', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_column` VALUES (1440953088910299136, 'contract_detail_id', 1440953088901910528, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'contractDetailId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:03', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088918687744, 'contract_id', 1440953088901910528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 2, '合同Id', 'contractId', 'Long', 1, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:42:59', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088922882048, 'product_id', 1440953088901910528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 3, '合同产品', 'productId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, 1440944049128214528, '2021-09-23 16:20:03', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088927076352, 'total_count', 1440953088901910528, 'int', 'int(11)', b'0', b'0', b'0', NULL, 4, '产品数量', 'totalCount', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:20:10', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088935464960, 'total_amount', 1440953088901910528, 'int', 'int(11)', b'0', b'0', b'0', NULL, 5, '产品总价', 'totalAmount', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:20:56', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088939659264, 'meno', 1440953088901910528, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 6, '备注', 'meno', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:03', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088948047872, 'create_user_id', 1440953088901910528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 7, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:21:00', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088952242176, 'create_time', 1440953088901910528, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 8, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:21:04', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088960630784, 'update_user_id', 1440953088901910528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:21:07', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088964825088, 'update_time', 1440953088901910528, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:21:12', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953088973213696, 'deleted_flag', 1440953088901910528, 'int', 'int(11)', b'0', b'0', b'0', '0', 11, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:21:15', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_column` VALUES (1440953170518872064, 'pay_detail_id', 1440953170514677760, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'payDetailId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:22', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170531454976, 'contract_id', 1440953170514677760, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 2, '合同Id', 'contractId', 'Long', 1, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:43:04', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170535649280, 'pay_date', 1440953170514677760, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 3, '付款日期', 'payDate', 'Date', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:22', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170539843584, 'pay_type', 1440953170514677760, 'int', 'int(11)', b'0', b'0', b'0', NULL, 4, '付款类型', 'payType', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, 1440944184381935616, '2021-09-23 16:21:27', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170548232192, 'percentage', 1440953170514677760, 'int', 'int(11)', b'0', b'0', b'0', NULL, 5, '百分比', 'percentage', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:22', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170552426496, 'memo', 1440953170514677760, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 6, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:22', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170560815104, 'create_user_id', 1440953170514677760, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 7, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:21:43', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170569203712, 'create_time', 1440953170514677760, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 8, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:21:46', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170573398016, 'update_user_id', 1440953170514677760, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:21:49', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170581786624, 'update_time', 1440953170514677760, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:21:52', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953170585980928, 'deleted_flag', 1440953170514677760, 'int', 'int(11)', b'0', b'0', b'0', '0', 11, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:21:55', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_column` VALUES (1440953245668216832, 'delivery_id', 1440953245664022528, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'deliveryId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:40', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245676605440, 'contract_id', 1440953245664022528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 2, '合同Id', 'contractId', 'Long', 1, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:43:09', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245684994048, 'delivery_date', 1440953245664022528, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 3, '交付日期', 'deliveryDate', 'Date', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:40', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245697576960, 'product_id', 1440953245664022528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 4, '交付产品', 'productId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, 1440944049128214528, '2021-09-23 16:22:18', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245705965568, 'total_count', 1440953245664022528, 'int', 'int(11)', b'0', b'0', b'0', NULL, 5, '交付数量', 'totalCount', 'Integer', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:22:21', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245718548480, 'memo', 1440953245664022528, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 6, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:16:40', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245722742784, 'create_user_id', 1440953245664022528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 7, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:22:45', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245726937088, 'create_time', 1440953245664022528, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 8, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:22:48', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245731131392, 'update_user_id', 1440953245664022528, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:22:52', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245735325696, 'update_time', 1440953245664022528, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:22:56', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440953245743714304, 'deleted_flag', 1440953245664022528, 'int', 'int(11)', b'0', b'0', b'0', '0', 11, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:22:59', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_column` VALUES (1440958971132252160, 'first_party_id', 1440958971128057856, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'firstPartyId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971140640768, 'company_name', 1440958971128057856, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 2, '公司名称', 'companyName', 'String', 3, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:41:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971144835072, 'legal_person', 1440958971128057856, 'varchar', 'varchar(64)', b'0', b'0', b'0', NULL, 3, '公司法人', 'legalPerson', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:32', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971149029376, 'legal_person_id', 1440958971128057856, 'char', 'char(18)', b'0', b'0', b'0', NULL, 4, '法人身份证号', 'legalPersonId', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971153223680, 'registry_address', 1440958971128057856, 'varchar', 'varchar(512)', b'0', b'0', b'0', NULL, 5, '注册地址', 'registryAddress', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971157417984, 'contact_info', 1440958971128057856, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 6, '联系方式', 'contactInfo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971161612288, 'business_scope', 1440958971128057856, 'varchar', 'varchar(4000)', b'0', b'0', b'0', NULL, 7, '经营范围', 'businessScope', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971165806592, 'memo', 1440958971128057856, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 8, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971170000896, 'create_user_id', 1440958971128057856, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:39:40', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971174195200, 'create_time', 1440958971128057856, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:39:43', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971178389504, 'update_user_id', 1440958971128057856, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 11, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:39:46', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971182583808, 'update_time', 1440958971128057856, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 12, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:39:53', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440958971186778112, 'deleted_flag', 1440958971128057856, 'int', 'int(11)', b'0', b'0', b'0', '0', 13, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:39:58', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_column` VALUES (1440961208285925376, 'second_party_id', 1440961208273342464, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'secondPartyId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208294313984, 'company_name', 1440961208273342464, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 2, '公司名称', 'companyName', 'String', 3, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:23', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208298508288, 'legal_person', 1440961208273342464, 'varchar', 'varchar(64)', b'0', b'0', b'0', NULL, 3, '公司法人', 'legalPerson', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:28', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208302702592, 'legal_person_id', 1440961208273342464, 'char', 'char(18)', b'0', b'0', b'0', NULL, 4, '法人身份证号', 'legalPersonId', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208306896896, 'registry_address', 1440961208273342464, 'varchar', 'varchar(512)', b'0', b'0', b'0', NULL, 5, '注册地址', 'registryAddress', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208315285504, 'contact_info', 1440961208273342464, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 6, '联系方式', 'contactInfo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208319479808, 'business_scope', 1440961208273342464, 'varchar', 'varchar(4000)', b'0', b'0', b'0', NULL, 7, '经营范围', 'businessScope', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208323674112, 'memo', 1440961208273342464, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 8, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208327868416, 'create_user_id', 1440961208273342464, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:48:36', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208332062720, 'create_time', 1440961208273342464, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:48:40', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208336257024, 'update_user_id', 1440961208273342464, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 11, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:48:44', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208340451328, 'update_time', 1440961208273342464, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 12, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:48:49', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440961208344645632, 'deleted_flag', 1440961208273342464, 'int', 'int(11)', b'0', b'0', b'0', '0', 13, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:48:55', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_column` VALUES (1440962162720772096, 'product_id', 1440962162712383488, 'bigint', 'bigint(20)', b'1', b'0', b'0', NULL, 1, '主键Id', 'productId', 'Long', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:52:06', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162729160704, 'product_name', 1440962162712383488, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 2, '产品名称', 'productName', 'String', 3, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:52:10', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162733355008, 'product_spec', 1440962162712383488, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 3, '规格', 'productSpec', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:52:06', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162737549312, 'type', 1440962162712383488, 'varchar', 'varchar(255)', b'0', b'0', b'0', NULL, 4, '型号', 'type', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:52:06', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162741743616, 'cost_price', 1440962162712383488, 'int', 'int(11)', b'0', b'0', b'0', NULL, 5, '产品价格', 'costPrice', 'Integer', 2, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:53:05', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162745937920, 'memo', 1440962162712383488, 'varchar', 'varchar(1024)', b'0', b'0', b'1', NULL, 6, '备注', 'memo', 'String', 0, b'0', b'0', b'0', NULL, NULL, NULL, '2021-09-23 16:52:06', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162750132224, 'create_user_id', 1440962162712383488, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 7, '创建者', 'createUserId', 'Long', 0, b'0', b'0', b'0', 21, NULL, NULL, '2021-09-23 16:52:20', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162754326528, 'create_time', 1440962162712383488, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 8, '创建时间', 'createTime', 'Date', 0, b'0', b'0', b'0', 20, NULL, NULL, '2021-09-23 16:52:23', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162762715136, 'update_user_id', 1440962162712383488, 'bigint', 'bigint(20)', b'0', b'0', b'0', NULL, 9, '更新者', 'updateUserId', 'Long', 0, b'0', b'0', b'0', 23, NULL, NULL, '2021-09-23 16:52:27', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162766909440, 'update_time', 1440962162712383488, 'datetime', 'datetime', b'0', b'0', b'0', NULL, 10, '最后更新时间', 'updateTime', 'Date', 0, b'0', b'0', b'0', 22, NULL, NULL, '2021-09-23 16:52:31', '2021-09-23 16:52:06');
+INSERT INTO `bn_online_column` VALUES (1440962162771103744, 'deleted_flag', 1440962162712383488, 'int', 'int(11)', b'0', b'0', b'0', '0', 11, '删除标记(1: 正常 -1: 已删除)', 'deletedFlag', 'Integer', 0, b'0', b'0', b'0', 31, NULL, NULL, '2021-09-23 16:52:34', '2021-09-23 16:52:06');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_column_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_column_rule`;
+CREATE TABLE `bn_online_column_rule` (
+  `column_id` bigint(20) NOT NULL COMMENT '字段Id',
+  `rule_id` bigint(20) NOT NULL COMMENT '规则Id',
+  `prop_data_json` text COLLATE utf8mb4_bin COMMENT '规则属性数据',
+  PRIMARY KEY (`column_id`,`rule_id`) USING BTREE,
+  KEY `idx_rule_id` (`rule_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_column_rule
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_column_rule` VALUES (1440946127493926912, 2, '{\"message\":\"报销金额必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440946127493926912, 4, '{\"message\":\"报销金额必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440946261518716928, 2, '{\"message\":\"报销金额必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440946261518716928, 4, '{\"message\":\"报销金额必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440947089252028416, 2, '{\"message\":\"报销金额必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440947089252028416, 4, '{\"message\":\"报销金额必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949025019793408, 2, '{\"message\":\"提成比例必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949025019793408, 4, '{\"message\":\"提成比例必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949181786099712, 6, '{\"message\":\"请输入正确的手机号码\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949481989214208, 1, '{\"message\":\"产品数量必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949481989214208, 4, '{\"message\":\"产品数量必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949481993408512, 2, '{\"message\":\"产品总价必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949481993408512, 4, '{\"message\":\"产品总价必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949804128538624, 2, '{\"message\":\"交付商品数量必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440949804128538624, 4, '{\"message\":\"交付商品数量必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440952815332626432, 2, '{\"message\":\"提成比例必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440952815332626432, 4, '{\"message\":\"提成比例必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440953088927076352, 2, '{\"message\":\"产品数量必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440953088927076352, 4, '{\"message\":\"产品数量必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440953088935464960, 2, '{\"message\":\"产品总价必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440953088935464960, 4, '{\"message\":\"产品总价必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440953245705965568, 2, '{\"message\":\"交付数量必须大于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440953245705965568, 4, '{\"message\":\"交付数量必须大于0\",\"min\":0}');
+INSERT INTO `bn_online_column_rule` VALUES (1440962162741743616, 2, '{\"message\":\"产品价格不能小于0\"}');
+INSERT INTO `bn_online_column_rule` VALUES (1440962162741743616, 4, '{\"message\":\"产品价格不能小于0\",\"min\":0}');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_datasource
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_datasource`;
+CREATE TABLE `bn_online_datasource` (
+  `datasource_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `datasource_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '数据源名称',
+  `variable_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '数据源变量名',
+  `dblink_id` bigint(20) NOT NULL COMMENT '数据库链接Id',
+  `master_table_id` bigint(20) NOT NULL COMMENT '主表Id',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`datasource_id`),
+  UNIQUE KEY `idx_variable_name` (`variable_name`) USING BTREE,
+  KEY `idx_master_table_id` (`master_table_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_datasource
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_datasource` VALUES (1440945228130291712, '请假申请', 'dsFlowLeave', 1, 1440945228079960064, '2021-09-23 15:44:49', '2021-09-23 15:44:49');
+INSERT INTO `bn_online_datasource` VALUES (1440946127531675648, '报销申请', 'dsFlowSubmit', 1, 1440946127460372480, '2021-09-23 15:48:23', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_datasource` VALUES (1440952815374569472, '合同审批', 'dsFlowContract', 1, 1440952815294877696, '2021-09-23 16:14:57', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_datasource` VALUES (1440958971190972416, '甲方管理', 'dsFirstParty', 1, 1440958971128057856, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_datasource` VALUES (1440961208344645633, '乙方管理', 'dsSecondParty', 1, 1440961208273342464, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_datasource` VALUES (1440962162771103745, '产品管理', 'dsProduct', 1, 1440962162712383488, '2021-09-23 16:52:06', '2021-09-23 16:52:06');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_datasource_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_datasource_relation`;
+CREATE TABLE `bn_online_datasource_relation` (
+  `relation_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `relation_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '关联名称',
+  `variable_name` varchar(128) COLLATE utf8mb4_bin NOT NULL COMMENT '变量名',
+  `datasource_id` bigint(20) NOT NULL COMMENT '主数据源Id',
+  `relation_type` int(11) NOT NULL COMMENT '关联类型',
+  `master_column_id` bigint(20) NOT NULL COMMENT '主表关联字段Id',
+  `slave_table_id` bigint(20) NOT NULL COMMENT '从表Id',
+  `slave_column_id` bigint(20) NOT NULL COMMENT '从表关联字段Id',
+  `cascade_delete` bit(1) NOT NULL COMMENT '删除主表的时候是否级联删除一对一和一对多的从表数据，多对多只是删除关联，不受到这个标记的影响。',
+  `left_join` bit(1) NOT NULL COMMENT '是否左连接',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`relation_id`) USING BTREE,
+  KEY `idx_datasource_id` (`datasource_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_datasource_relation
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_datasource_relation` VALUES (1440947089268805632, '报销详情', 'id_bn_test_flow_submit_detail_submit_idRelation', 1440946127531675648, 1, 1440946127468761088, 1440947089218473984, 1440947089231056896, b'1', b'1', '2021-09-23 15:52:12', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_datasource_relation` VALUES (1440952921117167616, '甲方企业', 'first_party_id_bn_test_flow_first_party_first_party_idRelation', 1440952815374569472, 0, 1440952815307460608, 1440952921024892928, 1440952921037475840, b'0', b'1', '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_datasource_relation` VALUES (1440952988536410112, '乙方企业', 'second_party_id_bn_test_flow_second_party_second_party_idRelation', 1440952815374569472, 0, 1440952815311654912, 1440952988389609472, 1440952988393803776, b'0', b'1', '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_datasource_relation` VALUES (1440953088977408000, '合同详情', 'contract_id_bn_test_flow_contract_detail_contract_idRelation', 1440952815374569472, 1, 1440952815303266304, 1440953088901910528, 1440953088918687744, b'1', b'1', '2021-09-23 16:16:03', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_datasource_relation` VALUES (1440953170590175232, '付款详情', 'contract_id_bn_test_flow_pay_detail_contract_idRelation', 1440952815374569472, 1, 1440952815303266304, 1440953170514677760, 1440953170531454976, b'1', b'1', '2021-09-23 16:16:22', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_datasource_relation` VALUES (1440953245747908608, '交付详情', 'contract_id_bn_test_flow_delivery_detail_contract_idRelation', 1440952815374569472, 1, 1440952815303266304, 1440953245664022528, 1440953245676605440, b'1', b'1', '2021-09-23 16:16:40', '2021-09-23 16:16:40');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_datasource_table
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_datasource_table`;
+CREATE TABLE `bn_online_datasource_table` (
+  `id` bigint(20) NOT NULL COMMENT '主键Id',
+  `datasource_id` bigint(20) NOT NULL COMMENT '数据源Id',
+  `relation_id` bigint(20) DEFAULT NULL COMMENT '数据源关联Id',
+  `table_id` bigint(20) NOT NULL COMMENT '数据表Id',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_relation_id` (`relation_id`) USING BTREE,
+  KEY `idx_datasource_id` (`datasource_id`) USING BTREE,
+  KEY `idx_table_id` (`table_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_datasource_table
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_datasource_table` VALUES (1440945228134486016, 1440945228130291712, NULL, 1440945228079960064);
+INSERT INTO `bn_online_datasource_table` VALUES (1440946127535869952, 1440946127531675648, NULL, 1440946127460372480);
+INSERT INTO `bn_online_datasource_table` VALUES (1440947089272999936, 1440946127531675648, 1440947089268805632, 1440947089218473984);
+INSERT INTO `bn_online_datasource_table` VALUES (1440952815378763776, 1440952815374569472, NULL, 1440952815294877696);
+INSERT INTO `bn_online_datasource_table` VALUES (1440952921121361920, 1440952815374569472, 1440952921117167616, 1440952921024892928);
+INSERT INTO `bn_online_datasource_table` VALUES (1440952988540604416, 1440952815374569472, 1440952988536410112, 1440952988389609472);
+INSERT INTO `bn_online_datasource_table` VALUES (1440953088981602304, 1440952815374569472, 1440953088977408000, 1440953088901910528);
+INSERT INTO `bn_online_datasource_table` VALUES (1440953170594369536, 1440952815374569472, 1440953170590175232, 1440953170514677760);
+INSERT INTO `bn_online_datasource_table` VALUES (1440953245752102912, 1440952815374569472, 1440953245747908608, 1440953245664022528);
+INSERT INTO `bn_online_datasource_table` VALUES (1440958971195166720, 1440958971190972416, NULL, 1440958971128057856);
+INSERT INTO `bn_online_datasource_table` VALUES (1440961208348839936, 1440961208344645633, NULL, 1440961208273342464);
+INSERT INTO `bn_online_datasource_table` VALUES (1440962162775298048, 1440962162771103745, NULL, 1440962162712383488);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_dblink
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_dblink`;
+CREATE TABLE `bn_online_dblink` (
+  `dblink_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `dblink_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '链接中文名称',
+  `variable_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '链接英文名称',
+  `dblink_desc` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '链接描述',
+  `dblink_config_constant` int(255) NOT NULL COMMENT '数据源配置常量',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`dblink_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_dblink
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_dblink` VALUES (1, 'first', 'first', '第一个链接', 0, '2021-09-23 00:00:00');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_dict
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_dict`;
+CREATE TABLE `bn_online_dict` (
+  `dict_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `dict_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '字典名称',
+  `dict_type` int(11) NOT NULL COMMENT '字典类型',
+  `dblink_id` bigint(20) DEFAULT NULL COMMENT '数据库链接Id',
+  `table_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '字典表名称',
+  `key_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '字典表键字段名称',
+  `parent_key_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '字典表父键字段名称',
+  `value_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '字典值字段名称',
+  `deleted_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '逻辑删除字段',
+  `user_filter_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '用户过滤滤字段名称',
+  `dept_filter_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'dept_filter_column_name',
+  `tenant_filter_column_name` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '租户过滤字段名称',
+  `tree_flag` bit(1) NOT NULL COMMENT '是否树形标记',
+  `dict_list_url` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '获取字典列表数据的url',
+  `dict_ids_url` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '根据主键id批量获取字典数据的url',
+  `dict_data_json` text COLLATE utf8mb4_bin COMMENT '字典的JSON数据',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`dict_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_dict
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_dict` VALUES (1440943031288074240, '请假类型', 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', NULL, NULL, '{\"dictData\":[{\"type\":\"Integer\",\"id\":1,\"name\":\"年假\"},{\"type\":\"Integer\",\"id\":2,\"name\":\"事假\"},{\"type\":\"Integer\",\"id\":3,\"name\":\"婚假\"}],\"paramList\":[]}', '2021-09-23 15:36:05', '2021-09-23 15:36:05');
+INSERT INTO `bn_online_dict` VALUES (1440943168626364416, '报销类别', 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', NULL, NULL, '{\"dictData\":[{\"type\":\"Integer\",\"id\":1,\"name\":\"差旅报销\"},{\"type\":\"Integer\",\"id\":2,\"name\":\"日常报销\"}],\"paramList\":[]}', '2021-09-23 15:36:37', '2021-09-23 15:36:37');
+INSERT INTO `bn_online_dict` VALUES (1440943309924077568, '费用类别', 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', NULL, NULL, '{\"dictData\":[{\"type\":\"Integer\",\"id\":1,\"name\":\"食宿费用\"},{\"type\":\"Integer\",\"id\":2,\"name\":\"交通费用\"}],\"paramList\":[]}', '2021-09-23 15:37:11', '2021-09-23 15:37:11');
+INSERT INTO `bn_online_dict` VALUES (1440943452526219264, '甲方企业', 1, 1, 'bn_test_flow_first_party', 'first_party_id', NULL, 'company_name', 'deleted_flag', NULL, NULL, NULL, b'0', NULL, NULL, '{\"paramList\":[]}', '2021-09-23 15:37:45', '2021-09-23 15:37:45');
+INSERT INTO `bn_online_dict` VALUES (1440943955939168256, '乙方企业', 1, 1, 'bn_test_flow_second_party', 'second_party_id', NULL, 'company_name', 'deleted_flag', NULL, NULL, NULL, b'0', NULL, NULL, '{\"paramList\":[]}', '2021-09-23 15:39:45', '2021-09-23 15:39:45');
+INSERT INTO `bn_online_dict` VALUES (1440944049128214528, '商品字典', 1, 1, 'bn_test_flow_product', 'product_id', NULL, 'product_name', 'deleted_flag', NULL, NULL, NULL, b'0', NULL, NULL, '{\"paramList\":[]}', '2021-09-23 15:40:07', '2021-09-23 15:40:07');
+INSERT INTO `bn_online_dict` VALUES (1440944184381935616, '付款类型', 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', NULL, NULL, '{\"dictData\":[{\"type\":\"Integer\",\"id\":1,\"name\":\"预付款\"},{\"type\":\"Integer\",\"id\":2,\"name\":\"分期款\"},{\"type\":\"Integer\",\"id\":3,\"name\":\"项目尾款\"}],\"paramList\":[]}', '2021-09-23 15:40:40', '2021-09-23 15:40:40');
+INSERT INTO `bn_online_dict` VALUES (1440944300799037440, '合同类型', 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', NULL, NULL, '{\"dictData\":[{\"type\":\"Integer\",\"id\":1,\"name\":\"生产合同\"},{\"type\":\"Integer\",\"id\":2,\"name\":\"代工合同\"}],\"paramList\":[]}', '2021-09-23 15:41:07', '2021-09-23 15:41:07');
+INSERT INTO `bn_online_dict` VALUES (1440944417170001920, '用户字典', 1, 1, 'bn_sys_user', 'user_id', NULL, 'show_name', 'deleted_flag', NULL, NULL, NULL, b'0', NULL, NULL, '{\"paramList\":[]}', '2021-09-23 15:41:35', '2021-09-23 15:41:35');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_form
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_form`;
+CREATE TABLE `bn_online_form` (
+  `form_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `page_id` bigint(20) NOT NULL COMMENT '页面id',
+  `form_code` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '表单编码',
+  `form_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '表单名称',
+  `form_kind` int(11) NOT NULL COMMENT '表单类别',
+  `form_type` int(11) NOT NULL COMMENT '表单类型',
+  `master_table_id` bigint(20) NOT NULL COMMENT '表单主表id',
+  `widget_json` mediumtext COLLATE utf8mb4_bin COMMENT '表单组件JSON',
+  `params_json` text COLLATE utf8mb4_bin COMMENT '表单参数JSON',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`form_id`) USING BTREE,
+  UNIQUE KEY `uk_page_id_form_code` (`page_id`,`form_code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_form
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_form` VALUES (1440945411354267648, 1440945149889744896, 'formFlowLeave', '请假申请', 5, 10, 1440945228079960064, '{\"formConfig\":{\"formKind\":5,\"formType\":10,\"gutter\":20,\"labelWidth\":120,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":24,\"placeholder\":\"\",\"id\":1632383156919,\"datasourceId\":\"1440945228130291712\",\"tableId\":\"1440945228079960064\",\"columnId\":\"1440945228105125888\",\"columnName\":\"leave_type\",\"showName\":\"请假类型\",\"variableName\":\"leaveType\",\"dictParamList\":[],\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":20,\"span\":24,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632383163405,\"datasourceId\":\"1440945228130291712\",\"tableId\":\"1440945228079960064\",\"columnId\":\"1440945228113514496\",\"columnName\":\"leave_begin_time\",\"showName\":\"开始时间\",\"variableName\":\"leaveBeginTime\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":20,\"span\":24,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632383171595,\"datasourceId\":\"1440945228130291712\",\"tableId\":\"1440945228079960064\",\"columnId\":\"1440945228117708800\",\"columnName\":\"leave_end_time\",\"showName\":\"结束时间\",\"variableName\":\"leaveEndTime\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632383177429,\"datasourceId\":\"1440945228130291712\",\"tableId\":\"1440945228079960064\",\"columnId\":\"1440945228100931584\",\"columnName\":\"leave_reason\",\"showName\":\"请假原因\",\"variableName\":\"leaveReason\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440945228088348672\",\"columnName\":\"id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 15:44:49\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"id\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440945228079960064\",\"updateTime\":\"2021-09-23 15:44:49\",\"userFilter\":false}]', '2021-09-23 15:46:50', '2021-09-23 15:45:32');
+INSERT INTO `bn_online_form` VALUES (1440945468593934336, 1440945149889744896, 'formOrderLeave', '请假工单', 5, 11, 1440945228079960064, '{\"formConfig\":{\"formKind\":5,\"formType\":11,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}],\"tableWidget\":{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440945228092542976\",\"tableId\":\"1440945228079960064\",\"showName\":\"请假用户\",\"showOrder\":1,\"sortable\":false},{\"columnId\":\"1440945228105125888\",\"tableId\":\"1440945228079960064\",\"showName\":\"请假类型\",\"showOrder\":2,\"sortable\":false},{\"columnId\":\"1440945228113514496\",\"tableId\":\"1440945228079960064\",\"showName\":\"开始时间\",\"showOrder\":3,\"sortable\":false},{\"columnId\":\"1440945228117708800\",\"tableId\":\"1440945228079960064\",\"showName\":\"结束时间\",\"showOrder\":4,\"sortable\":false}],\"operationList\":[],\"queryParamList\":[],\"tableId\":\"1440945228079960064\",\"variableName\":\"formOrderLeave\",\"showName\":\"请假工单\",\"hasError\":false,\"datasourceId\":\"1440945228130291712\"}},\"widgetList\":[]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440945228088348672\",\"columnName\":\"id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 15:44:49\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"id\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440945228079960064\",\"updateTime\":\"2021-09-23 15:44:49\",\"userFilter\":false}]', '2021-09-23 17:56:51', '2021-09-23 15:45:46');
+INSERT INTO `bn_online_form` VALUES (1440947675041107968, 1440946020174270464, 'formFlowSubmit', '报销申请', 5, 10, 1440946127460372480, '{\"formConfig\":{\"formKind\":5,\"formType\":10,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632383719604,\"datasourceId\":\"1440946127531675648\",\"tableId\":\"1440946127460372480\",\"columnId\":\"1440946127481344000\",\"columnName\":\"submit_name\",\"showName\":\"报销名称\",\"variableName\":\"submitName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632383720428,\"datasourceId\":\"1440946127531675648\",\"tableId\":\"1440946127460372480\",\"columnId\":\"1440946127489732608\",\"columnName\":\"submit_kind\",\"showName\":\"报销类别\",\"variableName\":\"submitKind\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":3,\"span\":12,\"defaultValue\":0,\"min\":0,\"step\":1,\"precision\":2,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632383724574,\"datasourceId\":\"1440946127531675648\",\"tableId\":\"1440946127460372480\",\"columnId\":\"1440946127493926912\",\"columnName\":\"total_amount\",\"showName\":\"报销金额\",\"variableName\":\"totalAmount\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632383744379,\"datasourceId\":\"1440946127531675648\",\"tableId\":\"1440946127460372480\",\"columnId\":\"1440946127498121216\",\"columnName\":\"description\",\"showName\":\"报销描述\",\"variableName\":\"description\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632383752809,\"datasourceId\":\"1440946127531675648\",\"tableId\":\"1440946127460372480\",\"columnId\":\"1440946127506509824\",\"columnName\":\"memo\",\"showName\":\"备注\",\"variableName\":\"memo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440947089235251200\",\"tableId\":\"1440947089218473984\",\"showName\":\"费用类型\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440947089268805632\",\"dataFieldName\":null},{\"columnId\":\"1440947089252028416\",\"tableId\":\"1440947089218473984\",\"showName\":\"金额\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440947089268805632\",\"dataFieldName\":null},{\"columnId\":\"1440947089260417024\",\"tableId\":\"1440947089218473984\",\"showName\":\"报销凭证\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440947089268805632\",\"dataFieldName\":null},{\"columnId\":\"1440947089264611328\",\"tableId\":\"1440947089218473984\",\"showName\":\"费用描述\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440947089268805632\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440947791881834496\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440947791881834496\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440947089218473984\",\"columnId\":\"1440947089231056896\",\"paramValueType\":0,\"paramValue\":\"id\"}],\"id\":1632383762135,\"relationId\":\"1440947089268805632\",\"tableId\":\"1440947089218473984\",\"columnName\":\"id_bn_test_flow_submit_detail_submit_idRelation\",\"showName\":\"报销详情\",\"variableName\":\"id_bn_test_flow_submit_detail_submit_idRelation\",\"dictParamList\":null,\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440946127468761088\",\"columnName\":\"id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 15:48:23\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"id\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440946127460372480\",\"updateTime\":\"2021-09-23 15:48:23\",\"userFilter\":false}]', '2021-09-23 15:58:07', '2021-09-23 15:54:32');
+INSERT INTO `bn_online_form` VALUES (1440947791881834496, 1440946020174270464, 'formEditFlowSubmitDetail', '编辑报销详情', 1, 5, 1440947089218473984, '{\"formConfig\":{\"formKind\":1,\"formType\":5,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":24,\"placeholder\":\"\",\"id\":1632383900080,\"datasourceId\":\"1440946127531675648\",\"relationId\":\"1440947089268805632\",\"tableId\":\"1440947089218473984\",\"columnId\":\"1440947089235251200\",\"columnName\":\"expense_type\",\"showName\":\"费用类型\",\"variableName\":\"expenseType\",\"dictParamList\":[],\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":20,\"span\":24,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632383900902,\"datasourceId\":\"1440946127531675648\",\"relationId\":\"1440947089268805632\",\"tableId\":\"1440947089218473984\",\"columnId\":\"1440947089243639808\",\"columnName\":\"expense_time\",\"showName\":\"发生日期\",\"variableName\":\"expenseTime\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":3,\"span\":24,\"defaultValue\":0,\"min\":0,\"step\":1,\"precision\":2,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632383906027,\"datasourceId\":\"1440946127531675648\",\"relationId\":\"1440947089268805632\",\"tableId\":\"1440947089218473984\",\"columnId\":\"1440947089252028416\",\"columnName\":\"amount\",\"showName\":\"金额\",\"variableName\":\"amount\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":4,\"readOnly\":false,\"disabled\":false,\"id\":1632383907850,\"datasourceId\":\"1440946127531675648\",\"relationId\":\"1440947089268805632\",\"tableId\":\"1440947089218473984\",\"columnId\":\"1440947089264611328\",\"columnName\":\"description\",\"showName\":\"费用描述\",\"variableName\":\"description\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":31,\"span\":24,\"isImage\":true,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632383908452,\"datasourceId\":\"1440946127531675648\",\"relationId\":\"1440947089268805632\",\"tableId\":\"1440947089218473984\",\"columnId\":\"1440947089260417024\",\"columnName\":\"image_url\",\"showName\":\"报销凭证\",\"variableName\":\"imageUrl\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440947089222668288\",\"columnName\":\"id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 15:52:12\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"id\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440947089218473984\",\"updateTime\":\"2021-09-23 15:52:12\",\"userFilter\":false}]', '2021-09-23 15:59:08', '2021-09-23 15:55:00');
+INSERT INTO `bn_online_form` VALUES (1440954920348946432, 1440952710487609344, 'formFlowContract', '合同审批', 5, 10, 1440952815294877696, '{\"formConfig\":{\"formKind\":5,\"formType\":10,\"gutter\":20,\"labelWidth\":120,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"contract_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385543720,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815307460608\",\"columnName\":\"first_party_id\",\"showName\":\"甲方企业\",\"variableName\":\"firstPartyId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385544316,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815311654912\",\"columnName\":\"second_party_id\",\"showName\":\"乙方企业\",\"variableName\":\"secondPartyId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385545012,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815315849216\",\"columnName\":\"contract_type\",\"showName\":\"合同类型\",\"variableName\":\"contractType\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385545729,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815324237824\",\"columnName\":\"sales_id\",\"showName\":\"业务员\",\"variableName\":\"salesId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":20,\"span\":12,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632385550074,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815320043520\",\"columnName\":\"due_date\",\"showName\":\"到期日期\",\"variableName\":\"dueDate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":3,\"span\":12,\"defaultValue\":0,\"min\":0,\"step\":1,\"precision\":2,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632385552142,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815332626432\",\"columnName\":\"commission_rate\",\"showName\":\"提成比例\",\"variableName\":\"commissionRate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385586521,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815336820736\",\"columnName\":\"attachment\",\"showName\":\"合同附件\",\"variableName\":\"attachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385587136,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815341015040\",\"columnName\":\"security_attachment\",\"showName\":\"保密协议\",\"variableName\":\"securityAttachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385587746,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815345209344\",\"columnName\":\"intellectual_property_attachment\",\"showName\":\"知识产权协议\",\"variableName\":\"intellectualPropertyAttachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385589128,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815349403648\",\"columnName\":\"other_attachment\",\"showName\":\"其他附件\",\"variableName\":\"otherAttachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":1,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440953088922882048\",\"tableId\":\"1440953088901910528\",\"showName\":\"合同产品\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null},{\"columnId\":\"1440953088927076352\",\"tableId\":\"1440953088901910528\",\"showName\":\"产品数量\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null},{\"columnId\":\"1440953088935464960\",\"tableId\":\"1440953088901910528\",\"showName\":\"产品总价\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null},{\"columnId\":\"1440953088939659264\",\"tableId\":\"1440953088901910528\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440955295755931648\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440955295755931648\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440953088901910528\",\"columnId\":\"1440953088918687744\",\"paramValueType\":1,\"paramValue\":\"1440952815303266304\"}],\"id\":1632385613866,\"relationId\":\"1440953088977408000\",\"tableId\":\"1440953088901910528\",\"columnName\":\"contract_id_bn_test_flow_contract_detail_contract_idRelation\",\"showName\":\"合同详情\",\"variableName\":\"contract_id_bn_test_flow_contract_detail_contract_idRelation\",\"dictParamList\":null,\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":1,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440953245684994048\",\"tableId\":\"1440953245664022528\",\"showName\":\"交付日期\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null},{\"columnId\":\"1440953245697576960\",\"tableId\":\"1440953245664022528\",\"showName\":\"交付产品\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null},{\"columnId\":\"1440953245705965568\",\"tableId\":\"1440953245664022528\",\"showName\":\"交付数量\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null},{\"columnId\":\"1440953245718548480\",\"tableId\":\"1440953245664022528\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440955424638504960\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440955424638504960\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440953245664022528\",\"columnId\":\"1440953245676605440\",\"paramValueType\":1,\"paramValue\":\"1440952815303266304\"}],\"id\":1632385617093,\"relationId\":\"1440953245747908608\",\"tableId\":\"1440953245664022528\",\"columnName\":\"contract_id_bn_test_flow_delivery_detail_contract_idRelation\",\"showName\":\"交付详情\",\"variableName\":\"contract_id_bn_test_flow_delivery_detail_contract_idRelation\",\"dictParamList\":null,\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440953170535649280\",\"tableId\":\"1440953170514677760\",\"showName\":\"付款日期\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null},{\"columnId\":\"1440953170539843584\",\"tableId\":\"1440953170514677760\",\"showName\":\"付款类型\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null},{\"columnId\":\"1440953170548232192\",\"tableId\":\"1440953170514677760\",\"showName\":\"付款比例（%）\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null},{\"columnId\":\"1440953170552426496\",\"tableId\":\"1440953170514677760\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440955361006718976\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440955361006718976\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440953170514677760\",\"columnId\":\"1440953170531454976\",\"paramValueType\":1,\"paramValue\":\"1440952815303266304\"}],\"id\":1632385617965,\"relationId\":\"1440953170590175232\",\"tableId\":\"1440953170514677760\",\"columnName\":\"contract_id_bn_test_flow_pay_detail_contract_idRelation\",\"showName\":\"付款详情\",\"variableName\":\"contract_id_bn_test_flow_pay_detail_contract_idRelation\",\"dictParamList\":null,\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440952815303266304\",\"columnName\":\"contract_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:14:57\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"contractId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440952815294877696\",\"updateTime\":\"2021-09-23 16:14:57\",\"userFilter\":false}]', '2021-09-24 09:36:35', '2021-09-23 16:23:19');
+INSERT INTO `bn_online_form` VALUES (1440955001093492736, 1440952710487609344, 'formFlowContractLaw', '法务信息', 5, 10, 1440952815294877696, '{\"formConfig\":{\"formKind\":5,\"formType\":10,\"gutter\":20,\"labelWidth\":120,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"contract_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":2,\"widgetType\":40,\"span\":24,\"position\":\"center\",\"id\":1632385804854,\"columnName\":\"divider\",\"showName\":\"甲方信息\",\"variableName\":\"divider\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385840611,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952921117167616\",\"tableId\":\"1440952921024892928\",\"columnId\":\"1440952921041670144\",\"columnName\":\"company_name\",\"showName\":\"公司名称\",\"variableName\":\"companyName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385850871,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952921117167616\",\"tableId\":\"1440952921024892928\",\"columnId\":\"1440952921066835968\",\"columnName\":\"contact_info\",\"showName\":\"联系方式\",\"variableName\":\"contactInfo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385854474,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952921117167616\",\"tableId\":\"1440952921024892928\",\"columnId\":\"1440952921058447360\",\"columnName\":\"registry_address\",\"showName\":\"注册地址\",\"variableName\":\"registryAddress\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385855796,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952921117167616\",\"tableId\":\"1440952921024892928\",\"columnId\":\"1440952921079418880\",\"columnName\":\"business_scope\",\"showName\":\"经营范围\",\"variableName\":\"businessScope\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":2,\"widgetType\":40,\"span\":24,\"position\":\"center\",\"id\":1632385870258,\"columnName\":\"divider\",\"showName\":\"乙方信息\",\"variableName\":\"divider1\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385881057,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952988536410112\",\"tableId\":\"1440952988389609472\",\"columnId\":\"1440952988406386688\",\"columnName\":\"company_name\",\"showName\":\"公司名称\",\"variableName\":\"companyName1\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385882845,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952988536410112\",\"tableId\":\"1440952988389609472\",\"columnId\":\"1440952988486078464\",\"columnName\":\"contact_info\",\"showName\":\"联系方式\",\"variableName\":\"contactInfo1\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385886068,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952988536410112\",\"tableId\":\"1440952988389609472\",\"columnId\":\"1440952988473495552\",\"columnName\":\"registry_address\",\"showName\":\"注册地址\",\"variableName\":\"registryAddress1\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632385886979,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440952988536410112\",\"tableId\":\"1440952988389609472\",\"columnId\":\"1440952988494467072\",\"columnName\":\"business_scope\",\"showName\":\"经营范围\",\"variableName\":\"businessScope1\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":2,\"widgetType\":40,\"span\":24,\"position\":\"center\",\"id\":1632385900924,\"columnName\":\"divider\",\"showName\":\"合同信息\",\"variableName\":\"divider2\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385921859,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815315849216\",\"columnName\":\"contract_type\",\"showName\":\"合同类型\",\"variableName\":\"contractType\",\"readOnly\":true,\"dictParamList\":[],\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":20,\"span\":12,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":true,\"disabled\":false,\"id\":1632385943091,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815320043520\",\"columnName\":\"due_date\",\"showName\":\"到期日期\",\"variableName\":\"dueDate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385951296,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815336820736\",\"columnName\":\"attachment\",\"showName\":\"合同附件\",\"variableName\":\"attachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385954049,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815341015040\",\"columnName\":\"security_attachment\",\"showName\":\"保密协议\",\"variableName\":\"securityAttachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385954722,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815345209344\",\"columnName\":\"intellectual_property_attachment\",\"showName\":\"知识产权协议\",\"variableName\":\"intellectualPropertyAttachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":31,\"span\":12,\"isImage\":false,\"fileFieldName\":\"uploadFile\",\"actionUrl\":\"/admin/flow/flowOnlineOperation/upload\",\"downloadUrl\":\"/admin/flow/flowOnlineOperation/download\",\"id\":1632385955926,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815349403648\",\"columnName\":\"other_attachment\",\"showName\":\"其他附件\",\"variableName\":\"otherAttachment\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440952815303266304\",\"columnName\":\"contract_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:14:57\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"contractId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440952815294877696\",\"updateTime\":\"2021-09-23 16:14:57\",\"userFilter\":false}]', '2021-09-23 16:32:45', '2021-09-23 16:23:39');
+INSERT INTO `bn_online_form` VALUES (1440955127790833664, 1440952710487609344, 'formFlowContractPay', '付款详情', 5, 10, 1440952815294877696, '{\"formConfig\":{\"formKind\":5,\"formType\":10,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"contract_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385985050,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815307460608\",\"columnName\":\"first_party_id\",\"showName\":\"甲方企业\",\"variableName\":\"firstPartyId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385985722,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815311654912\",\"columnName\":\"second_party_id\",\"showName\":\"乙方企业\",\"variableName\":\"secondPartyId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385986562,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815315849216\",\"columnName\":\"contract_type\",\"showName\":\"合同类型\",\"variableName\":\"contractType\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632385987354,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815324237824\",\"columnName\":\"sales_id\",\"showName\":\"业务员\",\"variableName\":\"salesId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":20,\"span\":12,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632385998420,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815320043520\",\"columnName\":\"due_date\",\"showName\":\"到期日期\",\"variableName\":\"dueDate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440953170535649280\",\"tableId\":\"1440953170514677760\",\"showName\":\"付款日期\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null},{\"columnId\":\"1440953170539843584\",\"tableId\":\"1440953170514677760\",\"showName\":\"付款类型\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null},{\"columnId\":\"1440953170548232192\",\"tableId\":\"1440953170514677760\",\"showName\":\"付款比例（%）\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null},{\"columnId\":\"1440953170552426496\",\"tableId\":\"1440953170514677760\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440953170590175232\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":false,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":false,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":false,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440953170514677760\",\"columnId\":\"1440953170531454976\",\"paramValueType\":1,\"paramValue\":\"1440952815303266304\"}],\"id\":1632386005350,\"relationId\":\"1440953170590175232\",\"tableId\":\"1440953170514677760\",\"columnName\":\"contract_id_bn_test_flow_pay_detail_contract_idRelation\",\"showName\":\"付款详情\",\"variableName\":\"contract_id_bn_test_flow_pay_detail_contract_idRelation\",\"dictParamList\":null,\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440952815303266304\",\"columnName\":\"contract_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:14:57\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"contractId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440952815294877696\",\"updateTime\":\"2021-09-23 16:14:57\",\"userFilter\":false}]', '2021-09-23 16:45:43', '2021-09-23 16:24:09');
+INSERT INTO `bn_online_form` VALUES (1440955194991972352, 1440952710487609344, 'formFlowContractDetail', '合同详情', 5, 10, 1440952815294877696, '{\"formConfig\":{\"formKind\":5,\"formType\":10,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"contract_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632386076617,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815307460608\",\"columnName\":\"first_party_id\",\"showName\":\"甲方企业\",\"variableName\":\"firstPartyId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632386077249,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815311654912\",\"columnName\":\"second_party_id\",\"showName\":\"乙方企业\",\"variableName\":\"secondPartyId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632386077906,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815315849216\",\"columnName\":\"contract_type\",\"showName\":\"合同类型\",\"variableName\":\"contractType\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":12,\"placeholder\":\"\",\"id\":1632386078973,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815324237824\",\"columnName\":\"sales_id\",\"showName\":\"业务员\",\"variableName\":\"salesId\",\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":20,\"span\":12,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632386079478,\"datasourceId\":\"1440952815374569472\",\"tableId\":\"1440952815294877696\",\"columnId\":\"1440952815320043520\",\"columnName\":\"due_date\",\"showName\":\"到期日期\",\"variableName\":\"dueDate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440953088922882048\",\"tableId\":\"1440953088901910528\",\"showName\":\"合同产品\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null},{\"columnId\":\"1440953088927076352\",\"tableId\":\"1440953088901910528\",\"showName\":\"产品数量\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null},{\"columnId\":\"1440953088935464960\",\"tableId\":\"1440953088901910528\",\"showName\":\"产品总价\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null},{\"columnId\":\"1440953088939659264\",\"tableId\":\"1440953088901910528\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440953088977408000\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":false,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":false,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":false,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440953088901910528\",\"columnId\":\"1440953088918687744\",\"paramValueType\":1,\"paramValue\":\"1440952815303266304\"}],\"id\":1632386082967,\"relationId\":\"1440953088977408000\",\"tableId\":\"1440953088901910528\",\"columnName\":\"contract_id_bn_test_flow_contract_detail_contract_idRelation\",\"showName\":\"合同详情\",\"variableName\":\"contract_id_bn_test_flow_contract_detail_contract_idRelation\",\"dictParamList\":null,\"hasError\":false},{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440953245684994048\",\"tableId\":\"1440953245664022528\",\"showName\":\"交付日期\",\"showOrder\":1,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null},{\"columnId\":\"1440953245697576960\",\"tableId\":\"1440953245664022528\",\"showName\":\"交付产品\",\"showOrder\":2,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null},{\"columnId\":\"1440953245705965568\",\"tableId\":\"1440953245664022528\",\"showName\":\"交付数量\",\"showOrder\":3,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null},{\"columnId\":\"1440953245718548480\",\"tableId\":\"1440953245664022528\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false,\"relationId\":\"1440953245747908608\",\"dataFieldName\":null}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":false,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":false,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":false,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[{\"tableId\":\"1440953245664022528\",\"columnId\":\"1440953245676605440\",\"paramValueType\":1,\"paramValue\":\"1440952815303266304\"}],\"id\":1632386085719,\"relationId\":\"1440953245747908608\",\"tableId\":\"1440953245664022528\",\"columnName\":\"contract_id_bn_test_flow_delivery_detail_contract_idRelation\",\"showName\":\"交付详情\",\"variableName\":\"contract_id_bn_test_flow_delivery_detail_contract_idRelation\",\"dictParamList\":null,\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440952815303266304\",\"columnName\":\"contract_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:14:57\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"contractId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440952815294877696\",\"updateTime\":\"2021-09-23 16:14:57\",\"userFilter\":false}]', '2021-09-23 16:46:06', '2021-09-23 16:24:25');
+INSERT INTO `bn_online_form` VALUES (1440955295755931648, 1440952710487609344, 'formEditProduct', '编辑商品信息', 1, 5, 1440953088901910528, '{\"formConfig\":{\"formKind\":1,\"formType\":5,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"contract_detail_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":24,\"placeholder\":\"\",\"id\":1632386167477,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953088977408000\",\"tableId\":\"1440953088901910528\",\"columnId\":\"1440953088922882048\",\"columnName\":\"product_id\",\"showName\":\"合同产品\",\"variableName\":\"productId\",\"dictParamList\":[],\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":3,\"span\":24,\"defaultValue\":0,\"min\":0,\"step\":1,\"precision\":0,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632386168097,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953088977408000\",\"tableId\":\"1440953088901910528\",\"columnId\":\"1440953088927076352\",\"columnName\":\"total_count\",\"showName\":\"产品数量\",\"variableName\":\"totalCount\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":3,\"span\":24,\"defaultValue\":0,\"min\":0,\"step\":1,\"precision\":2,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632386168937,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953088977408000\",\"tableId\":\"1440953088901910528\",\"columnId\":\"1440953088935464960\",\"columnName\":\"total_amount\",\"showName\":\"产品总价\",\"variableName\":\"totalAmount\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":4,\"readOnly\":false,\"disabled\":false,\"id\":1632386170038,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953088977408000\",\"tableId\":\"1440953088901910528\",\"columnId\":\"1440953088939659264\",\"columnName\":\"meno\",\"showName\":\"备注\",\"variableName\":\"meno\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440953088910299136\",\"columnName\":\"contract_detail_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:16:03\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"contractDetailId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440953088901910528\",\"updateTime\":\"2021-09-23 16:16:03\",\"userFilter\":false}]', '2021-09-23 16:40:38', '2021-09-23 16:24:49');
+INSERT INTO `bn_online_form` VALUES (1440955361006718976, 1440952710487609344, 'formEditPay', '编辑付款信息', 1, 5, 1440953170514677760, '{\"formConfig\":{\"formKind\":1,\"formType\":5,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"pay_detail_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":10,\"span\":24,\"placeholder\":\"\",\"id\":1632386206508,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953170590175232\",\"tableId\":\"1440953170514677760\",\"columnId\":\"1440953170539843584\",\"columnName\":\"pay_type\",\"showName\":\"付款类型\",\"variableName\":\"payType\",\"dictParamList\":[],\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":20,\"span\":24,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632386207312,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953170590175232\",\"tableId\":\"1440953170514677760\",\"columnId\":\"1440953170535649280\",\"columnName\":\"pay_date\",\"showName\":\"付款日期\",\"variableName\":\"payDate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":3,\"span\":24,\"defaultValue\":0,\"min\":0,\"max\":100,\"step\":1,\"precision\":2,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632386208455,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953170590175232\",\"tableId\":\"1440953170514677760\",\"columnId\":\"1440953170548232192\",\"columnName\":\"percentage\",\"showName\":\"百分比\",\"variableName\":\"percentage\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386209209,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953170590175232\",\"tableId\":\"1440953170514677760\",\"columnId\":\"1440953170552426496\",\"columnName\":\"memo\",\"showName\":\"备注\",\"variableName\":\"memo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440953170518872064\",\"columnName\":\"pay_detail_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:16:22\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"payDetailId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440953170514677760\",\"updateTime\":\"2021-09-23 16:16:22\",\"userFilter\":false}]', '2021-09-23 16:40:43', '2021-09-23 16:25:04');
+INSERT INTO `bn_online_form` VALUES (1440955424638504960, 1440952710487609344, 'formEditDelivery', '编辑交付信息', 1, 5, 1440953245664022528, '{\"formConfig\":{\"formKind\":1,\"formType\":5,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"delivery_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":20,\"span\":24,\"placeholder\":\"\",\"type\":\"date\",\"format\":\"yyyy-MM-dd\",\"valueFormat\":\"yyyy-MM-dd\",\"readOnly\":false,\"disabled\":false,\"id\":1632386237515,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953245747908608\",\"tableId\":\"1440953245664022528\",\"columnId\":\"1440953245684994048\",\"columnName\":\"delivery_date\",\"showName\":\"交付日期\",\"variableName\":\"deliveryDate\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":10,\"span\":24,\"placeholder\":\"\",\"id\":1632386238087,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953245747908608\",\"tableId\":\"1440953245664022528\",\"columnId\":\"1440953245697576960\",\"columnName\":\"product_id\",\"showName\":\"交付产品\",\"variableName\":\"productId\",\"dictParamList\":[],\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":3,\"span\":24,\"defaultValue\":0,\"min\":0,\"step\":1,\"precision\":0,\"controlVisible\":1,\"controlPosition\":0,\"readOnly\":false,\"disabled\":false,\"id\":1632386238799,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953245747908608\",\"tableId\":\"1440953245664022528\",\"columnId\":\"1440953245705965568\",\"columnName\":\"total_count\",\"showName\":\"交付数量\",\"variableName\":\"totalCount\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":4,\"readOnly\":false,\"disabled\":false,\"id\":1632386239345,\"datasourceId\":\"1440952815374569472\",\"relationId\":\"1440953245747908608\",\"tableId\":\"1440953245664022528\",\"columnId\":\"1440953245718548480\",\"columnName\":\"memo\",\"showName\":\"备注\",\"variableName\":\"memo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440953245668216832\",\"columnName\":\"delivery_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:16:40\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"deliveryId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440953245664022528\",\"updateTime\":\"2021-09-23 16:16:40\",\"userFilter\":false}]', '2021-09-23 16:40:49', '2021-09-23 16:25:20');
+INSERT INTO `bn_online_form` VALUES (1440955483438452736, 1440952710487609344, 'formOrderContract', '合同工单', 5, 11, 1440952815294877696, '{\"formConfig\":{\"formKind\":5,\"formType\":11,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"contract_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}],\"tableWidget\":{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440952815307460608\",\"tableId\":\"1440952815294877696\",\"showName\":\"甲方企业\",\"showOrder\":1,\"sortable\":false},{\"columnId\":\"1440952815311654912\",\"tableId\":\"1440952815294877696\",\"showName\":\"乙方企业\",\"showOrder\":2,\"sortable\":false},{\"columnId\":\"1440952815315849216\",\"tableId\":\"1440952815294877696\",\"showName\":\"合同类型\",\"showOrder\":3,\"sortable\":false},{\"columnId\":\"1440952815320043520\",\"tableId\":\"1440952815294877696\",\"showName\":\"到期日期\",\"showOrder\":4,\"sortable\":false},{\"columnId\":\"1440952815324237824\",\"tableId\":\"1440952815294877696\",\"showName\":\"业务员\",\"showOrder\":5,\"sortable\":false}],\"operationList\":[],\"queryParamList\":[],\"tableId\":\"1440952815294877696\",\"variableName\":\"formOrderContract\",\"showName\":\"合同工单\",\"hasError\":false,\"datasourceId\":\"1440952815374569472\"}},\"widgetList\":[]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440952815303266304\",\"columnName\":\"contract_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:14:57\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"contractId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440952815294877696\",\"updateTime\":\"2021-09-23 16:14:57\",\"userFilter\":false}]', '2021-09-23 16:38:33', '2021-09-23 16:25:34');
+INSERT INTO `bn_online_form` VALUES (1440959226632474624, 1440958861153406976, 'formFirstParty', '甲方企业管理', 5, 1, 1440958971128057856, '{\"formConfig\":{\"formKind\":5,\"formType\":1,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[],\"tableWidget\":{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440958971140640768\",\"tableId\":\"1440958971128057856\",\"showName\":\"公司名称\",\"showOrder\":1,\"sortable\":false},{\"columnId\":\"1440958971144835072\",\"tableId\":\"1440958971128057856\",\"showName\":\"公司法人\",\"showOrder\":2,\"sortable\":false},{\"columnId\":\"1440958971157417984\",\"tableId\":\"1440958971128057856\",\"showName\":\"联系方式\",\"showOrder\":3,\"sortable\":false},{\"columnId\":\"1440958971153223680\",\"tableId\":\"1440958971128057856\",\"showName\":\"注册地址\",\"showOrder\":4,\"sortable\":false}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440959420396736512\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440959420396736512\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[],\"tableId\":\"1440958971128057856\",\"variableName\":\"formFirstParty\",\"showName\":\"甲方企业管理\",\"datasourceId\":\"1440958971190972416\",\"hasError\":false}},\"widgetList\":[{\"widgetKind\":0,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386494962,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971140640768\",\"columnName\":\"company_name\",\"showName\":\"公司名称\",\"variableName\":\"companyName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"公司名称\",\"columnId\":\"1440958971140640768\",\"columnName\":\"company_name\",\"columnShowOrder\":2,\"columnType\":\"varchar\",\"createTime\":\"2021-09-23 16:39:25\",\"deptFilter\":false,\"filterType\":3,\"fullColumnType\":\"varchar(255)\",\"nullable\":false,\"objectFieldName\":\"companyName\",\"objectFieldType\":\"String\",\"parentKey\":false,\"primaryKey\":false,\"tableId\":\"1440958971128057856\",\"updateTime\":\"2021-09-23 16:41:25\",\"userFilter\":false}]', '2021-09-23 16:42:32', '2021-09-23 16:40:26');
+INSERT INTO `bn_online_form` VALUES (1440959420396736512, 1440958861153406976, 'formViewFirstParty', '编辑甲方企业', 1, 5, 1440958971128057856, '{\"formConfig\":{\"formKind\":1,\"formType\":5,\"gutter\":20,\"labelWidth\":120,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"first_party_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386807099,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971140640768\",\"columnName\":\"company_name\",\"showName\":\"公司名称\",\"variableName\":\"companyName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386808030,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971144835072\",\"columnName\":\"legal_person\",\"showName\":\"公司法人\",\"variableName\":\"legalPerson\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386809518,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971149029376\",\"columnName\":\"legal_person_id\",\"showName\":\"法人身份证号\",\"variableName\":\"legalPersonId\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386811364,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971157417984\",\"columnName\":\"contact_info\",\"showName\":\"联系方式\",\"variableName\":\"contactInfo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386814864,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971153223680\",\"columnName\":\"registry_address\",\"showName\":\"注册地址\",\"variableName\":\"registryAddress\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386817801,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971161612288\",\"columnName\":\"business_scope\",\"showName\":\"经营范围\",\"variableName\":\"businessScope\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386819192,\"datasourceId\":\"1440958971190972416\",\"tableId\":\"1440958971128057856\",\"columnId\":\"1440958971165806592\",\"columnName\":\"memo\",\"showName\":\"备注\",\"variableName\":\"memo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440958971132252160\",\"columnName\":\"first_party_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:39:25\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"firstPartyId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440958971128057856\",\"updateTime\":\"2021-09-23 16:39:25\",\"userFilter\":false}]', '2021-09-23 16:47:25', '2021-09-23 16:41:12');
+INSERT INTO `bn_online_form` VALUES (1440961456601305088, 1440961119001776128, 'formSecondParty', '乙方管理', 5, 1, 1440961208273342464, '{\"formConfig\":{\"formKind\":5,\"formType\":1,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[],\"tableWidget\":{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440961208294313984\",\"tableId\":\"1440961208273342464\",\"showName\":\"公司名称\",\"showOrder\":1,\"sortable\":false,\"dataFieldName\":\"company_name\"},{\"columnId\":\"1440961208298508288\",\"tableId\":\"1440961208273342464\",\"showName\":\"公司法人\",\"showOrder\":2,\"sortable\":false,\"dataFieldName\":\"legal_person\"},{\"columnId\":\"1440961208315285504\",\"tableId\":\"1440961208273342464\",\"showName\":\"联系方式\",\"showOrder\":3,\"sortable\":false,\"dataFieldName\":\"contact_info\"},{\"columnId\":\"1440961208306896896\",\"tableId\":\"1440961208273342464\",\"showName\":\"注册地址\",\"showOrder\":4,\"sortable\":false,\"dataFieldName\":\"registry_address\"}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440961779596267520\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440961779596267520\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[],\"tableId\":\"1440961208273342464\",\"variableName\":\"formSecondParty\",\"showName\":\"乙方管理\",\"datasourceId\":\"1440961208344645633\",\"hasError\":false}},\"widgetList\":[{\"widgetKind\":0,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632386975051,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208294313984\",\"columnName\":\"company_name\",\"showName\":\"公司名称\",\"variableName\":\"companyName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[],\"hasError\":false}]}', '[{\"autoIncrement\":false,\"columnComment\":\"公司名称\",\"columnId\":\"1440961208294313984\",\"columnName\":\"company_name\",\"columnShowOrder\":2,\"columnType\":\"varchar\",\"createTime\":\"2021-09-23 16:48:18\",\"deptFilter\":false,\"filterType\":3,\"fullColumnType\":\"varchar(255)\",\"nullable\":false,\"objectFieldName\":\"companyName\",\"objectFieldType\":\"String\",\"parentKey\":false,\"primaryKey\":false,\"tableId\":\"1440961208273342464\",\"updateTime\":\"2021-09-23 16:48:23\",\"userFilter\":false}]', '2021-09-23 16:50:51', '2021-09-23 16:49:18');
+INSERT INTO `bn_online_form` VALUES (1440961779596267520, 1440961119001776128, 'formViewSecondParty', '编辑乙方信息', 1, 5, 1440961208273342464, '{\"formConfig\":{\"formKind\":1,\"formType\":5,\"gutter\":20,\"labelWidth\":120,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[{\"columnName\":\"second_party_id\",\"primaryKey\":true,\"slaveClumn\":false,\"builtin\":true}]},\"widgetList\":[{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632387055657,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208294313984\",\"columnName\":\"company_name\",\"showName\":\"公司名称\",\"variableName\":\"companyName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632387056269,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208298508288\",\"columnName\":\"legal_person\",\"showName\":\"公司法人\",\"variableName\":\"legalPerson\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632387056789,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208302702592\",\"columnName\":\"legal_person_id\",\"showName\":\"法人身份证号\",\"variableName\":\"legalPersonId\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632387059360,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208315285504\",\"columnName\":\"contact_info\",\"showName\":\"联系方式\",\"variableName\":\"contactInfo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632387060899,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208306896896\",\"columnName\":\"registry_address\",\"showName\":\"注册地址\",\"variableName\":\"registryAddress\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":4,\"readOnly\":false,\"disabled\":false,\"id\":1632387061874,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208319479808\",\"columnName\":\"business_scope\",\"showName\":\"经营范围\",\"variableName\":\"businessScope\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":1,\"widgetType\":1,\"span\":24,\"type\":\"textarea\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":4,\"readOnly\":false,\"disabled\":false,\"id\":1632387062646,\"datasourceId\":\"1440961208344645633\",\"tableId\":\"1440961208273342464\",\"columnId\":\"1440961208323674112\",\"columnName\":\"memo\",\"showName\":\"备注\",\"variableName\":\"memo\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"主键Id\",\"columnId\":\"1440961208285925376\",\"columnName\":\"second_party_id\",\"columnShowOrder\":1,\"columnType\":\"bigint\",\"createTime\":\"2021-09-23 16:48:18\",\"deptFilter\":false,\"filterType\":0,\"fullColumnType\":\"bigint(20)\",\"nullable\":false,\"objectFieldName\":\"secondPartyId\",\"objectFieldType\":\"Long\",\"parentKey\":false,\"primaryKey\":true,\"tableId\":\"1440961208273342464\",\"updateTime\":\"2021-09-23 16:48:18\",\"userFilter\":false}]', '2021-09-23 16:51:20', '2021-09-23 16:50:35');
+INSERT INTO `bn_online_form` VALUES (1440962496864194560, 1440962061336055808, 'formProduct', '产品管理', 5, 1, 1440962162712383488, '{\"formConfig\":{\"formKind\":5,\"formType\":1,\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"paramList\":[],\"tableWidget\":{\"widgetKind\":2,\"widgetType\":100,\"span\":24,\"supportBottom\":0,\"tableInfo\":{\"paged\":true,\"optionColumnWidth\":150},\"titleColor\":\"#409EFF\",\"tableColumnList\":[{\"columnId\":\"1440962162729160704\",\"tableId\":\"1440962162712383488\",\"showName\":\"产品名称\",\"showOrder\":1,\"sortable\":false},{\"columnId\":\"1440962162733355008\",\"tableId\":\"1440962162712383488\",\"showName\":\"规格\",\"showOrder\":2,\"sortable\":false},{\"columnId\":\"1440962162741743616\",\"tableId\":\"1440962162712383488\",\"showName\":\"产品价格\",\"showOrder\":3,\"sortable\":false},{\"columnId\":\"1440962162745937920\",\"tableId\":\"1440962162712383488\",\"showName\":\"备注\",\"showOrder\":4,\"sortable\":false}],\"operationList\":[{\"id\":1,\"type\":0,\"name\":\"新建\",\"enabled\":true,\"builtin\":true,\"rowOperation\":false,\"btnType\":\"primary\",\"plain\":false,\"formId\":\"1440962547132928000\"},{\"id\":2,\"type\":1,\"name\":\"编辑\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn success\",\"formId\":\"1440962547132928000\"},{\"id\":3,\"type\":2,\"name\":\"删除\",\"enabled\":true,\"builtin\":true,\"rowOperation\":true,\"btnClass\":\"table-btn delete\"}],\"queryParamList\":[],\"tableId\":\"1440962162712383488\",\"variableName\":\"formProduct\",\"showName\":\"产品管理\",\"datasourceId\":\"1440962162771103745\",\"hasError\":false}},\"widgetList\":[{\"widgetKind\":0,\"widgetType\":1,\"span\":12,\"type\":\"text\",\"placeholder\":\"\",\"defaultValue\":\"\",\"minRows\":2,\"maxRows\":2,\"readOnly\":false,\"disabled\":false,\"id\":1632387220352,\"datasourceId\":\"1440962162771103745\",\"tableId\":\"1440962162712383488\",\"columnId\":\"1440962162729160704\",\"columnName\":\"product_name\",\"showName\":\"产品名称\",\"variableName\":\"productName\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]},{\"widgetKind\":0,\"widgetType\":4,\"readOnly\":false,\"disabled\":false,\"id\":1632387221253,\"datasourceId\":\"1440962162771103745\",\"tableId\":\"1440962162712383488\",\"columnId\":\"1440962162741743616\",\"columnName\":\"cost_price\",\"showName\":\"产品价格\",\"variableName\":\"costPrice\",\"dictParamList\":null,\"queryParamList\":[],\"tableColumnList\":[]}]}', '[{\"autoIncrement\":false,\"columnComment\":\"产品名称\",\"columnId\":\"1440962162729160704\",\"columnName\":\"product_name\",\"columnShowOrder\":2,\"columnType\":\"varchar\",\"createTime\":\"2021-09-23 16:52:06\",\"deptFilter\":false,\"filterType\":3,\"fullColumnType\":\"varchar(255)\",\"nullable\":false,\"objectFieldName\":\"productName\",\"objectFieldType\":\"String\",\"parentKey\":false,\"primaryKey\":false,\"tableId\":\"1440962162712383488\",\"updateTime\":\"2021-09-23 16:52:10\",\"userFilter\":false},{\"autoIncrement\":false,\"columnComment\":\"产品价格\",\"columnId\":\"1440962162741743616\",\"columnName\":\"cost_price\",\"columnShowOrder\":5,\"columnType\":\"int\",\"createTime\":\"2021-09-23 16:52:06\",\"deptFilter\":false,\"filterType\":2,\"fullColumnType\":\"int(11)\",\"nullable\":false,\"objectFieldName\":\"costPrice\",\"objectFieldType\":\"Integer\",\"parentKey\":false,\"primaryKey\":false,\"tableId\":\"1440962162712383488\",\"updateTime\":\"2021-09-23 16:53:05\",\"userFilter\":false}]', '2021-09-23 16:54:15', '2021-09-23 16:53:26');
+INSERT INTO `bn_online_form` VALUES (1440962547132928000, 1440962061336055808, 'formEditProduct', '编辑产品', 1, 5, 1440962162712383488, '{\"formConfig\":{\"gutter\":20,\"labelWidth\":100,\"labelPosition\":\"right\",\"width\":800,\"widgetList\":[],\"paramList\":[]},\"widgetList\":[]}', '[]', '2021-09-23 16:53:38', '2021-09-23 16:53:38');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_form_datasource
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_form_datasource`;
+CREATE TABLE `bn_online_form_datasource` (
+  `id` bigint(20) NOT NULL COMMENT '主键Id',
+  `form_id` bigint(20) NOT NULL COMMENT '表单Id',
+  `datasource_id` bigint(20) NOT NULL COMMENT '数据源Id',
+  PRIMARY KEY (`id`),
+  KEY `idx_form_id` (`form_id`) USING BTREE,
+  KEY `idx_datasource_id` (`datasource_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_form_datasource
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_form_datasource` VALUES (1440945738333818880, 1440945411354267648, 1440945228130291712);
+INSERT INTO `bn_online_form_datasource` VALUES (1440948576577392640, 1440947675041107968, 1440946127531675648);
+INSERT INTO `bn_online_form_datasource` VALUES (1440948832954224640, 1440947791881834496, 1440946127531675648);
+INSERT INTO `bn_online_form_datasource` VALUES (1440957294211764224, 1440955001093492736, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440958752122474496, 1440955483438452736, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440959275592585216, 1440955295755931648, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440959299529478144, 1440955361006718976, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440959323269238784, 1440955424638504960, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440959757073518592, 1440959226632474624, 1440958971190972416);
+INSERT INTO `bn_online_form_datasource` VALUES (1440960555518005248, 1440955127790833664, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440960654734266368, 1440955194991972352, 1440952815374569472);
+INSERT INTO `bn_online_form_datasource` VALUES (1440960985459331072, 1440959420396736512, 1440958971190972416);
+INSERT INTO `bn_online_form_datasource` VALUES (1440961848324132864, 1440961456601305088, 1440961208344645633);
+INSERT INTO `bn_online_form_datasource` VALUES (1440961970739089408, 1440961779596267520, 1440961208344645633);
+INSERT INTO `bn_online_form_datasource` VALUES (1440962547137122304, 1440962547132928000, 1440962162771103745);
+INSERT INTO `bn_online_form_datasource` VALUES (1440962702619971584, 1440962496864194560, 1440962162771103745);
+INSERT INTO `bn_online_form_datasource` VALUES (1440978457667309568, 1440945468593934336, 1440945228130291712);
+INSERT INTO `bn_online_form_datasource` VALUES (1441214948859449344, 1440954920348946432, 1440952815374569472);
+COMMIT;
+
+
+-- ----------------------------
+-- Table structure for bn_online_page_datasource
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_page_datasource`;
+CREATE TABLE `bn_online_page_datasource` (
+  `id` bigint(20) NOT NULL COMMENT '主键Id',
+  `page_id` bigint(20) NOT NULL COMMENT '页面主键Id',
+  `datasource_id` bigint(20) NOT NULL COMMENT '数据源主键Id',
+  PRIMARY KEY (`id`),
+  KEY `idx_page_id` (`page_id`) USING BTREE,
+  KEY `idx_datasource_id` (`datasource_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_page_datasource
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_page_datasource` VALUES (1440945228138680320, 1440945149889744896, 1440945228130291712);
+INSERT INTO `bn_online_page_datasource` VALUES (1440946127540064256, 1440946020174270464, 1440946127531675648);
+INSERT INTO `bn_online_page_datasource` VALUES (1440952815382958080, 1440952710487609344, 1440952815374569472);
+INSERT INTO `bn_online_page_datasource` VALUES (1440958971195166721, 1440958861153406976, 1440958971190972416);
+INSERT INTO `bn_online_page_datasource` VALUES (1440961208353034240, 1440961119001776128, 1440961208344645633);
+INSERT INTO `bn_online_page_datasource` VALUES (1440962162779492352, 1440962061336055808, 1440962162771103745);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_rule`;
+CREATE TABLE `bn_online_rule` (
+  `rule_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `rule_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '规则名称',
+  `rule_type` int(11) NOT NULL COMMENT '规则类型',
+  `builtin` bit(1) NOT NULL COMMENT '内置规则标记',
+  `pattern` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '自定义规则的正则表达式',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `deleted_flag` int(11) NOT NULL COMMENT '逻辑删除标记',
+  PRIMARY KEY (`rule_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_rule
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_rule` VALUES (1, '只允许整数', 1, b'1', NULL, '2021-09-23 00:00:00', '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_online_rule` VALUES (2, '只允许数字', 2, b'1', NULL, '2021-09-23 00:00:00', '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_online_rule` VALUES (3, '只允许英文字符', 3, b'1', NULL, '2021-09-23 00:00:00', '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_online_rule` VALUES (4, '范围验证', 4, b'1', NULL, '2021-09-23 00:00:00', '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_online_rule` VALUES (5, '邮箱格式验证', 5, b'1', NULL, '2021-09-23 00:00:00', '2021-09-23 00:00:00', 1);
+INSERT INTO `bn_online_rule` VALUES (6, '手机格式验证', 6, b'1', NULL, '2021-09-23 00:00:00', '2021-09-23 00:00:00', 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_table
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_table`;
+CREATE TABLE `bn_online_table` (
+  `table_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `table_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '表名称',
+  `model_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '实体名称',
+  `dblink_id` bigint(20) NOT NULL COMMENT '数据库链接Id',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`table_id`),
+  KEY `idx_dblink_id` (`dblink_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_table
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_table` VALUES (1440945228079960064, 'bn_test_flow_leave', 'BnTestFlowLeave', 1, '2021-09-23 15:44:48', '2021-09-23 15:44:48');
+INSERT INTO `bn_online_table` VALUES (1440946127460372480, 'bn_test_flow_submit', 'BnTestFlowSubmit', 1, '2021-09-23 15:48:23', '2021-09-23 15:48:23');
+INSERT INTO `bn_online_table` VALUES (1440947089218473984, 'bn_test_flow_submit_detail', 'BnTestFlowSubmitDetail', 1, '2021-09-23 15:52:12', '2021-09-23 15:52:12');
+INSERT INTO `bn_online_table` VALUES (1440952815294877696, 'bn_test_flow_contract', 'BnTestFlowContract', 1, '2021-09-23 16:14:57', '2021-09-23 16:14:57');
+INSERT INTO `bn_online_table` VALUES (1440952921024892928, 'bn_test_flow_first_party', 'BnTestFlowFirstParty', 1, '2021-09-23 16:15:23', '2021-09-23 16:15:23');
+INSERT INTO `bn_online_table` VALUES (1440952988389609472, 'bn_test_flow_second_party', 'BnTestFlowSecondParty', 1, '2021-09-23 16:15:39', '2021-09-23 16:15:39');
+INSERT INTO `bn_online_table` VALUES (1440953088901910528, 'bn_test_flow_contract_detail', 'BnTestFlowContractDetail', 1, '2021-09-23 16:16:03', '2021-09-23 16:16:03');
+INSERT INTO `bn_online_table` VALUES (1440953170514677760, 'bn_test_flow_pay_detail', 'BnTestFlowPayDetail', 1, '2021-09-23 16:16:22', '2021-09-23 16:16:22');
+INSERT INTO `bn_online_table` VALUES (1440953245664022528, 'bn_test_flow_delivery_detail', 'BnTestFlowDeliveryDetail', 1, '2021-09-23 16:16:40', '2021-09-23 16:16:40');
+INSERT INTO `bn_online_table` VALUES (1440958971128057856, 'bn_test_flow_first_party', 'BnTestFlowFirstParty', 1, '2021-09-23 16:39:25', '2021-09-23 16:39:25');
+INSERT INTO `bn_online_table` VALUES (1440961208273342464, 'bn_test_flow_second_party', 'BnTestFlowSecondParty', 1, '2021-09-23 16:48:18', '2021-09-23 16:48:18');
+INSERT INTO `bn_online_table` VALUES (1440962162712383488, 'bn_test_flow_product', 'BnTestFlowProduct', 1, '2021-09-23 16:52:06', '2021-09-23 16:52:06');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for bn_online_virtual_column
+-- ----------------------------
+DROP TABLE IF EXISTS `bn_online_virtual_column`;
+CREATE TABLE `bn_online_virtual_column` (
+  `virtual_column_id` bigint(20) NOT NULL COMMENT '主键Id',
+  `table_id` bigint(20) NOT NULL COMMENT '所在表Id',
+  `object_field_name` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '字段名称',
+  `object_field_type` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '属性类型',
+  `column_prompt` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '字段提示名',
+  `virtual_type` int(11) NOT NULL COMMENT '虚拟字段类型(0: 聚合)',
+  `datasource_id` bigint(20) NOT NULL COMMENT '关联数据源Id',
+  `relation_id` bigint(20) DEFAULT NULL COMMENT '关联Id',
+  `aggregation_table_id` bigint(20) DEFAULT NULL COMMENT '聚合字段所在关联表Id',
+  `aggregation_column_id` bigint(20) DEFAULT NULL COMMENT '关联表聚合字段Id',
+  `aggregation_type` int(11) DEFAULT NULL COMMENT '聚合类型(0: sum 1: count 2: avg 3: min 4: max)',
+  `where_clause_json` varchar(1024) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '存储过滤条件的json',
+  PRIMARY KEY (`virtual_column_id`) USING BTREE,
+  KEY `idx_database_id` (`datasource_id`) USING BTREE,
+  KEY `idx_relation_id` (`relation_id`) USING BTREE,
+  KEY `idx_table_id` (`table_id`) USING BTREE,
+  KEY `idx_aggregation_column_id` (`aggregation_column_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of bn_online_virtual_column
+-- ----------------------------
+BEGIN;
+INSERT INTO `bn_online_virtual_column` VALUES (1440947297541165056, 1440946127460372480, 'totalAmount', 'Long', '报销总金额', 0, 1440946127531675648, 1440947089268805632, 1440947089218473984, 1440947089252028416, 0, '[]');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

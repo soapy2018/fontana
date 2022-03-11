@@ -1,14 +1,13 @@
 package com.bluetron.nb.common.upmsservice.jpa;
 
 
+import com.bluetron.nb.common.upmsservice.service.SysUserService;
 import lombok.Data;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.annotation.Resource;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +24,7 @@ import java.util.stream.Stream;
 @Table(name = "bn_sys_user")
 @Data
 public class JpaUser  extends JpaBaseEntity implements Serializable{
+
     /**
      * 用户Id。
      */
@@ -89,6 +89,10 @@ public class JpaUser  extends JpaBaseEntity implements Serializable{
     @AfterDomainEventPublication
     void callback() {
         System.err.println("After DomainEvent Publication");
+    }
+
+    public void remove(UserRepository userRepository, Long userId){
+        userRepository.deleteById(userId);
     }
 
     // 事件定义

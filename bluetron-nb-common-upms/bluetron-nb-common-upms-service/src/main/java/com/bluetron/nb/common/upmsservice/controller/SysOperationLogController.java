@@ -63,7 +63,7 @@
 //        List<SysOperationLogVo> operationLogVoList = MyModelUtil.copyCollectionTo(operationLogList, SysOperationLogVo.class);
 //        long totalCount = 0L;
 //        if (operationLogList instanceof Page) {
-//            totalCount = ((Page<SysOperationLog>) operationLogList).getTotal();
+//            totalCount = ((Page<SysOperationLog>) operationLogList).getTotalCount();
 //        }
 //        return Result.succeed(MyPageUtil.makeResponseData(operationLogVoList, totalCount));
 //    }

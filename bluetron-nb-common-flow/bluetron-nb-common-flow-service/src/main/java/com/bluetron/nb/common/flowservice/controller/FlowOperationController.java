@@ -270,7 +270,7 @@ public class FlowOperationController {
         String username = WebContextUtil.takeTokenFromRequest().getLoginName();
         Pagination<Task> pageData = flowApiService.getTaskListByUserName(username, processDefinitionKey, pageParam);
         List<FlowTaskVo> flowTaskVoList = flowApiService.convertToFlowTaskList(pageData.getDataList());
-        return Result.succeed(MyPageUtil.makeResponseData(flowTaskVoList, pageData.getTotal()));
+        return Result.succeed(MyPageUtil.makeResponseData(flowTaskVoList, pageData.getTotalCount()));
     }
 
     /**
@@ -398,7 +398,7 @@ public class FlowOperationController {
                 result.put("startUser", instance.getStartUserId());
             });
         }
-        return Result.succeed(MyPageUtil.makeResponseData(resultList, pageData.getTotal()));
+        return Result.succeed(MyPageUtil.makeResponseData(resultList, pageData.getTotalCount()));
     }
 
     /**
@@ -421,7 +421,7 @@ public class FlowOperationController {
                 null, processDefinitionName, loginName, beginDate, endDate, pageParam, true);
         List<Map<String, Object>> resultList = new LinkedList<>();
         pageData.getDataList().forEach(instance -> resultList.add(BeanUtil.beanToMap(instance)));
-        return Result.succeed(MyPageUtil.makeResponseData(resultList, pageData.getTotal()));
+        return Result.succeed(MyPageUtil.makeResponseData(resultList, pageData.getTotalCount()));
     }
 
     /**
@@ -445,7 +445,7 @@ public class FlowOperationController {
                 null, processDefinitionName, startUser, beginDate, endDate, pageParam, false);
         List<Map<String, Object>> resultList = new LinkedList<>();
         pageData.getDataList().forEach(instance -> resultList.add(BeanUtil.beanToMap(instance)));
-        return Result.succeed(MyPageUtil.makeResponseData(resultList, pageData.getTotal()));
+        return Result.succeed(MyPageUtil.makeResponseData(resultList, pageData.getTotalCount()));
     }
 
     /**

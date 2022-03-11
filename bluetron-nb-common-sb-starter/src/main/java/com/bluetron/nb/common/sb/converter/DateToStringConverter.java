@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * Description:
+ * Description: Get请求入参转换，声明为bean后自动加入，不需要WebMvcConfigurer显示配置
  *
  * @author genx
  * @date 2021/5/12 15:06

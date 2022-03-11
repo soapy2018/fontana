@@ -1,5 +1,6 @@
 package com.bluetron.nb.common.upmsservice.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.bluetron.nb.common.base.annotation.MyRequestBody;
 import com.bluetron.nb.common.base.result.CallResult;
@@ -188,6 +189,8 @@ public class SysUserController extends BaseController<SysUser, SysUserVo, Long> 
         SysUser sysUserFilter = MyModelUtil.copyTo(sysUserDtoFilter, SysUser.class);
         String orderBy = MyOrderParam.buildOrderBy(orderParam, SysUser.class);
         List<SysUser> sysUserList = sysUserService.getSysUserListWithRelation(sysUserFilter, orderBy);
+
+        String text = JSON.toJSONString(Result.succeed(MyPageUtil.makeResponseData(sysUserList, SysUser.INSTANCE)));
         return Result.succeed(MyPageUtil.makeResponseData(sysUserList, SysUser.INSTANCE));
     }
 

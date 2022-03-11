@@ -20,22 +20,18 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class Pagination<T> {
 
-    protected Long page;
-
-    private Long pageSize;
-
-    private Long total;
-
+    /**
+     * 数据列表。
+     */
     private List<T> dataList;
 
-    public Pagination(long page, long pageSize, long total) {
-        this.page = page;
-        this.pageSize = pageSize;
-        this.total = total;
-    }
+    /**
+     * 数据总数量。
+     */
+    private Long totalCount;
 
-    public Pagination(List<T> dataList, long total) {
-        this.total = total;
+    public Pagination(List<T> dataList, long totalCount) {
+        this.totalCount = totalCount;
         this.dataList = dataList;
     }
 
@@ -45,7 +41,7 @@ public class Pagination<T> {
      * @return 空分页对象。
      */
     public static <T> Pagination<T> emptyPageData() {
-        return new Pagination<>(0L, 0L,0L,new LinkedList<>());
+        return new Pagination<>(new LinkedList<>(), 0L);
     }
 
 }

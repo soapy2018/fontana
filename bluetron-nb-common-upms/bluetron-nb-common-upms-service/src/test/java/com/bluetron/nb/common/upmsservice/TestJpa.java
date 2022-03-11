@@ -7,6 +7,7 @@ import com.bluetron.nb.common.upmsservice.jpa.JpaUser;
 import com.bluetron.nb.common.upmsservice.jpa.UserRepository;
 import com.bluetron.nb.common.util.date.DateUtil;
 import com.bluetron.nb.common.util.tools.IdUtil;
+import com.bluetron.nb.common.util.tools.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -108,7 +109,10 @@ public class TestJpa {
         user.setUpdateUserId(11L);
 
         user = userRepositoy.save(user);
-        log.info("user: {}", JSONArray.toJSON(user));
+        log.info("create user: {}", JSONArray.toJSON(user));
+
+        user.remove(userRepositoy,user.getUserId());
+
         Assert.assertNotNull(user);
 
     }

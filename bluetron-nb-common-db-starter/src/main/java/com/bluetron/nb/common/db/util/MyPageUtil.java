@@ -48,7 +48,7 @@ public class MyPageUtil {
         Pagination<T> pageData = new Pagination<>();
         pageData.setDataList(dataList);
         if (dataList instanceof Page) {
-            pageData.setTotal(((Page<?>)dataList).getTotal());
+            pageData.setTotalCount(((Page<?>)dataList).getTotal());
         }
         return pageData;
     }
@@ -65,7 +65,7 @@ public class MyPageUtil {
         Pagination<T> pageData = new Pagination<>();
         pageData.setDataList(dataList);
         if (totalCount != null) {
-            pageData.setTotal(totalCount);
+            pageData.setTotalCount(totalCount);
         }
         return pageData;
     }

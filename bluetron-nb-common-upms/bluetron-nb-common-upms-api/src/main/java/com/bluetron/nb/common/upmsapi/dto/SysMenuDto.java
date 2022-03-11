@@ -61,6 +61,12 @@ public class SysMenuDto {
     private Long onlineFormId;
 
     /**
+     * 仅用于在线表单的流程Id。
+     */
+    @ApiModelProperty(value = "在线表单流程Id")
+    private Long onlineFlowEntryId;
+
+    /**
      * 菜单显示顺序 (值越小，排序越靠前)。
      */
     @ApiModelProperty(value = "菜单显示顺序", required = true)

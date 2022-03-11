@@ -9,9 +9,15 @@ import com.bluetron.nb.common.base.object.TokenData;
 import com.bluetron.nb.common.base.result.Result;
 import com.bluetron.nb.common.base.result.ResultCode;
 import com.bluetron.nb.common.log.auditLog.AuditLog;
+import com.bluetron.nb.common.onlineservice.config.OnlineProperties;
+import com.bluetron.nb.common.onlineservice.entity.OnlineDatasource;
 import com.bluetron.nb.common.onlineservice.service.OnlineColumnService;
+import com.bluetron.nb.common.onlineservice.service.OnlineDatasourceService;
+import com.bluetron.nb.common.onlineservice.util.OnlineUtil;
 import com.bluetron.nb.common.redis.util.RedisTemplateUtil;
 import com.bluetron.nb.common.redis.util.SessionCacheHelper;
+import com.bluetron.nb.common.upmsapi.dict.SysMenuType;
+import com.bluetron.nb.common.upmsapi.dict.SysOnlineMenuPermType;
 import com.bluetron.nb.common.upmsapi.dict.SysUserStatus;
 import com.bluetron.nb.common.upmsapi.dict.SysUserType;
 import com.bluetron.nb.common.upmsservice.entity.SysMenu;
@@ -28,6 +34,7 @@ import com.bluetron.nb.common.util.tools.RedisKeyUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,8 +43,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @Author cqf
@@ -74,6 +80,11 @@ public class LoginController {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private SessionCacheHelper cacheHelper;
+
+	@Autowired
+	private OnlineDatasourceService onlineDatasourceService;
+	@Autowired
+	private OnlineProperties onlineProperties;
 
 	@ApiOperation("获取验证码")
 	@NoAuthInterface
@@ -127,47 +138,6 @@ public class LoginController {
 		JSONObject jsonData = this.buildLoginData(user);
 		return Result.succeed(jsonData);
 
-	}
-
-	private JSONObject buildLoginData(SysUser user) {
-		int deviceType = WebContextUtil.getDeviceType();
-		boolean isAdmin = user.getUserType() == SysUserType.TYPE_ADMIN;
-		TokenData tokenData = new TokenData();
-		String sessionId = user.getLoginName() + "_" + deviceType + "_" + IdUtil.generateUUID();
-		tokenData.setUserId(user.getUserId());
-		tokenData.setDeptId(user.getDeptId());
-		tokenData.setIsAdmin(isAdmin);
-		tokenData.setLoginName(user.getLoginName());
-		tokenData.setShowName(user.getShowName());
-		tokenData.setSessionId(sessionId);
-		tokenData.setLoginIp(IpUtil.getRemoteIpAddress(WebContextUtil.getHttpRequest()));
-		tokenData.setLoginTime(new Date());
-		tokenData.setDeviceType(deviceType);
-		// 这里手动将TokenData存入request，便于OperationLogAspect统一处理操作日志。
-		WebContextUtil.addTokenToRequest(tokenData);
-		JSONObject jsonData = new JSONObject();
-		jsonData.put(TokenData.REQUEST_ATTRIBUTE_NAME, tokenData);
-		jsonData.put("showName", user.getShowName());
-		jsonData.put("isAdmin", isAdmin);
-		Collection<SysMenu> menuList;
-		Collection<String> permCodeList;
-		if (isAdmin) {
-			menuList = sysMenuService.getAllMenuList();
-			permCodeList = sysPermCodeService.getAllPermCodeList();
-		} else {
-			menuList = sysMenuService.getMenuListByUserId(tokenData.getUserId());
-			permCodeList = sysPermCodeService.getPermCodeListByUserId(user.getUserId());
-			// 将白名单url列表合并到当前用户的权限资源列表中，便于网关一并处理。
-			Collection<String> permList = sysPermService.getPermListByUserId(user.getUserId());
-			permList.addAll(sysPermWhitelistService.getWhitelistPermList());
-			jsonData.put("permSet", permList);
-		}
-		jsonData.put("menuList", menuList);
-		jsonData.put("permCodeList", permCodeList);
-		if (user.getUserType() != SysUserType.TYPE_ADMIN) {
-			sysDataPermService.putDataPermCache(sessionId, user.getUserId(), user.getDeptId());
-		}
-		return jsonData;
 	}
 
 	/**
@@ -243,5 +213,105 @@ public class LoginController {
 			return Result.failed(ResultCode.DATA_NOT_EXIST);
 		}
 		return Result.succeed();
+	}
+
+	private JSONObject buildLoginData(SysUser user) {
+		int deviceType = WebContextUtil.getDeviceType();
+		boolean isAdmin = user.getUserType() == SysUserType.TYPE_ADMIN;
+		TokenData tokenData = new TokenData();
+		String sessionId = user.getLoginName() + "_" + deviceType + "_" + IdUtil.generateUUID();
+		tokenData.setUserId(user.getUserId());
+		tokenData.setDeptId(user.getDeptId());
+		tokenData.setIsAdmin(isAdmin);
+		tokenData.setLoginName(user.getLoginName());
+		tokenData.setShowName(user.getShowName());
+		tokenData.setSessionId(sessionId);
+		tokenData.setLoginIp(IpUtil.getRemoteIpAddress(WebContextUtil.getHttpRequest()));
+		tokenData.setLoginTime(new Date());
+		tokenData.setDeviceType(deviceType);
+		// 这里手动将TokenData存入request，便于OperationLogAspect统一处理操作日志。
+		WebContextUtil.addTokenToRequest(tokenData);
+		JSONObject jsonData = new JSONObject();
+		jsonData.put(TokenData.REQUEST_ATTRIBUTE_NAME, tokenData);
+		jsonData.put("showName", user.getShowName());
+		jsonData.put("isAdmin", isAdmin);
+		Collection<SysMenu> menuList;
+		Collection<String> permCodeList;
+		if (isAdmin) {
+			menuList = sysMenuService.getAllMenuList();
+			permCodeList = sysPermCodeService.getAllPermCodeList();
+		} else {
+			menuList = sysMenuService.getMenuListByUserId(tokenData.getUserId());
+			permCodeList = sysPermCodeService.getPermCodeListByUserId(user.getUserId());
+			// 将白名单url列表合并到当前用户的权限资源列表中，便于网关一并处理。
+			Collection<String> permList = sysPermService.getPermListByUserId(user.getUserId());
+			permList.addAll(sysPermWhitelistService.getWhitelistPermList());
+			jsonData.put("permSet", permList);
+		}
+
+		//在线表单
+		List<SysMenu> onlineMenuList;
+		if (isAdmin) {
+			onlineMenuList = sysMenuService.getAllOnlineMenuList(SysMenuType.TYPE_BUTTON);
+		} else {
+			onlineMenuList = sysMenuService.getOnlineMenuListByUserId(user.getUserId(), SysMenuType.TYPE_BUTTON);
+		}
+		OnlinePermData onlinePermData = this.getOnlinePermCodeSet(onlineMenuList);
+		if (CollectionUtils.isNotEmpty(onlinePermData.permCodeSet)) {
+			permCodeList.addAll(onlinePermData.permCodeSet);
+		}
+
+		jsonData.put("menuList", menuList);
+		jsonData.put("permCodeList", permCodeList);
+		if (user.getUserType() != SysUserType.TYPE_ADMIN) {
+			sysDataPermService.putDataPermCache(sessionId, user.getUserId(), user.getDeptId());
+		}
+		return jsonData;
+	}
+
+	private OnlinePermData getOnlinePermCodeSet(List<SysMenu> onlineMenuList) {
+		OnlinePermData permData = new OnlinePermData();
+		if (CollectionUtils.isEmpty(onlineMenuList)) {
+			return permData;
+		}
+		Set<Long> viewFormIdSet = new HashSet<>();
+		Set<Long> editFormIdSet = new HashSet<>();
+		for (SysMenu menu : onlineMenuList) {
+			if (menu.getOnlineMenuPermType() == SysOnlineMenuPermType.TYPE_VIEW) {
+				viewFormIdSet.add(menu.getOnlineFormId());
+			} else if (menu.getOnlineMenuPermType() == SysOnlineMenuPermType.TYPE_EDIT) {
+				editFormIdSet.add(menu.getOnlineFormId());
+			}
+		}
+		if (CollectionUtils.isNotEmpty(viewFormIdSet)) {
+			List<OnlineDatasource> viewDatasourceList =
+					onlineDatasourceService.getOnlineDatasourceListByFormIds(viewFormIdSet);
+			for (OnlineDatasource datasource : viewDatasourceList) {
+				permData.permCodeSet.add(OnlineUtil.makeViewPermCode(datasource.getVariableName()));
+				for (String permUrl : onlineProperties.getViewUrlList()) {
+					permData.permUrlSet.add(permUrl + datasource.getVariableName());
+				}
+			}
+		}
+		if (CollectionUtils.isNotEmpty(editFormIdSet)) {
+			List<OnlineDatasource> editableDatasourceList =
+					onlineDatasourceService.getOnlineDatasourceListByFormIds(editFormIdSet);
+			for (OnlineDatasource datasource : editableDatasourceList) {
+				permData.permCodeSet.add(OnlineUtil.makeEditPermCode(datasource.getVariableName()));
+				for (String permUrl : onlineProperties.getEditUrlList()) {
+					permData.permUrlSet.add(permUrl + datasource.getVariableName());
+				}
+			}
+		}
+		// 这个非常非常重要，不能删除。因为在线票单的url前缀是可以配置的，那么表单字典接口的url也是动态。
+		// 所以就不能把这个字典列表接口放到数据库的白名单表中。
+		permData.permUrlSet.add(onlineProperties.getUrlPrefix() + "/onlineOperation/listDict");
+		permData.permUrlSet.add(onlineProperties.getUrlPrefix() + "/onlineForm/render");
+		return permData;
+	}
+
+	static class OnlinePermData {
+		public final Set<String> permCodeSet = new HashSet<>();
+		public final Set<String> permUrlSet = new HashSet<>();
 	}
 }

@@ -1,5 +1,6 @@
 package com.bluetron.nb.common.sb;
 
+import com.alibaba.fastjson.JSON;
 import com.bluetron.nb.common.base.result.Result;
 import org.junit.Test;
 
@@ -18,6 +19,15 @@ public class ResultTest {
         assertThat(Result.succeed().getCode()).isEqualTo(1);
         assertThat(Result.succeed().getMsg()).isEqualTo("成功");
     }
+
+    @Test
+    public void test2(){
+        Result result = new Result();
+        result.setCode(1);
+
+        System.out.println(JSON.toJSONString(result));
+    }
+
 }
 
 
