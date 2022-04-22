@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationManyToMany;
-import com.bluetron.nb.common.db.entity.BaseEntity;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.model.BaseModel;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.upmsapi.vo.SysMenuVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +25,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_menu")
-public class SysMenu extends BaseEntity {
+public class SysMenu extends BaseModel {
 
     /**
      * 主键Id。
@@ -101,7 +101,7 @@ public class SysMenu extends BaseEntity {
     private List<SysMenuPermCode> sysMenuPermCodeList;
 
     @Mapper
-    public interface SysMenuModelMapper extends BaseEntityMapper<SysMenuVo, SysMenu> {
+    public interface SysMenuModelMapper extends BaseModelMapper<SysMenuVo, SysMenu> {
         /**
          * 转换VO对象到实体对象。
          *

@@ -3,6 +3,8 @@ package com.bluetron.nb.common.util.tools;
 import com.bluetron.nb.common.base.exception.GeneralException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.Nullable;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author
@@ -46,6 +49,20 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     public static <T> Map<String, T> getBeansOfType(@Nullable Class<T> type) throws BeansException {
         assertApplicationContext();
         return applicationContext.getBeansOfType(type);
+    }
+
+
+    public static void createBean(Class beanClass) {
+        assertApplicationContext();
+        //获取BeanFactory
+        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory)applicationContext.getAutowireCapableBeanFactory();
+        //创建bean信息
+        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
+        //beanDefinitionBuilder.addPropertyValue("name","张三");
+        //动态注册bean
+        if (!defaultListableBeanFactory.containsBean(beanClass.getSimpleName())) {
+            defaultListableBeanFactory.registerBeanDefinition(beanClass.getSimpleName(), beanDefinitionBuilder.getBeanDefinition());
+        }
     }
 
     /**

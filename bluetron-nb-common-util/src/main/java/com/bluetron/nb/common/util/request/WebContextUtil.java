@@ -5,11 +5,18 @@ import com.alibaba.fastjson.JSON;
 import com.bluetron.nb.common.base.constant.AppDeviceType;
 import com.bluetron.nb.common.base.object.TokenData;
 import com.bluetron.nb.common.base.result.Result;
+import com.bluetron.nb.common.util.tools.ClassUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,7 +32,7 @@ import java.nio.charset.StandardCharsets;
  * @date 2021-06-06
  */
 @Slf4j
-public class WebContextUtil {
+public class WebContextUtil extends WebUtils {
 
     /**
      * 判断当前是否处于HttpServletRequest上下文环境。
@@ -53,6 +60,71 @@ public class WebContextUtil {
     public static HttpServletResponse getHttpResponse() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
+
+    /**
+     * 判断是否ajax请求
+     * spring ajax 返回含有 ResponseBody 或者 RestController注解
+     *
+     * @param handlerMethod HandlerMethod
+     * @return 是否ajax请求
+     */
+    public static boolean isBody(HandlerMethod handlerMethod) {
+        ResponseBody responseBody = ClassUtil.getAnnotation(handlerMethod, ResponseBody.class);
+        return responseBody != null;
+    }
+
+    /**
+     * 读取cookie
+     *
+     * @param name cookie name
+     * @return cookie value
+     */
+    @Nullable
+    public static String getCookieVal(String name) {
+        HttpServletRequest request = WebContextUtil.getHttpRequest();
+        Assert.notNull(request, "request from RequestContextHolder is null");
+        return getCookieVal(request, name);
+    }
+
+    /**
+     * 读取cookie
+     *
+     * @param request HttpServletRequest
+     * @param name    cookie name
+     * @return cookie value
+     */
+    @Nullable
+    public static String getCookieVal(HttpServletRequest request, String name) {
+        Cookie cookie = getCookie(request, name);
+        return cookie != null ? cookie.getValue() : null;
+    }
+
+    /**
+     * 清除 某个指定的cookie
+     *
+     * @param response HttpServletResponse
+     * @param key      cookie key
+     */
+    public static void removeCookie(HttpServletResponse response, String key) {
+        setCookie(response, key, null, 0);
+    }
+
+    /**
+     * 设置cookie
+     *
+     * @param response        HttpServletResponse
+     * @param name            cookie name
+     * @param value           cookie value
+     * @param maxAgeInSeconds maxage
+     */
+    public static void setCookie(HttpServletResponse response, String name, @Nullable String value, int maxAgeInSeconds) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAgeInSeconds);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+    }
+
 
     /**
      * 获取请求头中的设备信息。

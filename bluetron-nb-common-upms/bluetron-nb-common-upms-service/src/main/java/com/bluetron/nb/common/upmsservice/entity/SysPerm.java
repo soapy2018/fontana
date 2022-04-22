@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationDict;
-import com.bluetron.nb.common.db.entity.BaseEntity;
+import com.bluetron.nb.common.db.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_perm")
-public class SysPerm extends BaseEntity {
+public class SysPerm extends BaseModel {
 
     /**
      * 权限Id。

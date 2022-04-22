@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
 import com.bluetron.nb.common.base.annotation.RelationDict;
 import com.bluetron.nb.common.base.annotation.RelationOneToOne;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.dict.RelationType;
 import com.bluetron.nb.common.onlineapi.vo.OnlineDatasourceRelationVo;
 import lombok.Data;
@@ -161,7 +161,7 @@ public class OnlineDatasourceRelation {
 
     @Mapper
     public interface OnlineDatasourceRelationModelMapper
-            extends BaseEntityMapper<OnlineDatasourceRelationVo, OnlineDatasourceRelation> {
+            extends BaseModelMapper<OnlineDatasourceRelationVo, OnlineDatasourceRelation> {
         /**
          * 转换Vo对象到实体对象。
          *

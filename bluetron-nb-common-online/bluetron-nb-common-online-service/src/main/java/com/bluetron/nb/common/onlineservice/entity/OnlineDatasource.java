@@ -3,7 +3,7 @@ package com.bluetron.nb.common.onlineservice.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.base.annotation.RelationDict;
 import com.bluetron.nb.common.onlineapi.vo.OnlineDatasourceVo;
 import lombok.Data;
@@ -85,7 +85,7 @@ public class OnlineDatasource {
     private OnlineTable masterTable;
 
     @Mapper
-    public interface OnlineDatasourceModelMapper extends BaseEntityMapper<OnlineDatasourceVo, OnlineDatasource> {
+    public interface OnlineDatasourceModelMapper extends BaseModelMapper<OnlineDatasourceVo, OnlineDatasource> {
         /**
          * 转换Vo对象到实体对象。
          *

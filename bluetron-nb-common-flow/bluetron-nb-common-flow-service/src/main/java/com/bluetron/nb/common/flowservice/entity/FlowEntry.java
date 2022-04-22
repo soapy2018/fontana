@@ -4,14 +4,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationOneToOne;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.flowapi.vo.FlowEntryVo;
-import liquibase.pro.packaged.A;
 import lombok.Data;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -133,7 +131,7 @@ public class FlowEntry {
     private FlowCategory flowCategory;
 
     @Mapper
-    public interface FlowEntryModelMapper extends BaseEntityMapper<FlowEntryVo, FlowEntry> {
+    public interface FlowEntryModelMapper extends BaseModelMapper<FlowEntryVo, FlowEntry> {
         /**
          * 转换Vo对象到实体对象。
          *

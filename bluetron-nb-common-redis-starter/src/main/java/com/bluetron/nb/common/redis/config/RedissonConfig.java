@@ -4,24 +4,15 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bluetron.nb.common.base.exception.GeneralException;
 import com.bluetron.nb.common.redis.properties.CacheManagerProperties;
-import com.bluetron.nb.common.redis.util.RedisTemplateUtil;
 import com.bluetron.nb.common.redis.util.SessionCacheHelper;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import org.redisson.spring.cache.CacheConfig;
-import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Redisson配置类。

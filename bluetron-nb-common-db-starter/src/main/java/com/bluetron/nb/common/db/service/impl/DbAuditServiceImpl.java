@@ -3,7 +3,7 @@ package com.bluetron.nb.common.db.service.impl;
 import com.bluetron.nb.common.base.constant.CommonConstants;
 import com.bluetron.nb.common.base.log.Audit;
 import com.bluetron.nb.common.base.log.IAuditService;
-import com.bluetron.nb.common.db.properties.LogDbProperties;
+import com.bluetron.nb.common.db.property.LogDbProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;

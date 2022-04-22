@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationManyToMany;
-import com.bluetron.nb.common.db.entity.BaseEntity;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.model.BaseModel;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.upmsapi.vo.SysPermCodeVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_perm_code")
-public class SysPermCode extends BaseEntity {
+public class SysPermCode extends BaseModel {
 
     /**
      * 主键Id。
@@ -77,7 +77,7 @@ public class SysPermCode extends BaseEntity {
     private List<SysPermCodePerm> sysPermCodePermList;
 
     @Mapper
-    public interface SysPermCodeModelMapper extends BaseEntityMapper<SysPermCodeVo, SysPermCode> {
+    public interface SysPermCodeModelMapper extends BaseModelMapper<SysPermCodeVo, SysPermCode> {
         /**
          * 转换VO对象到实体对象。
          *

@@ -3,6 +3,7 @@
  */
 package com.bluetron.nb.common.util.json;
 
+import com.bluetron.nb.common.base.exception.GeneralException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -87,7 +88,7 @@ public class JacksonMapperUtil extends ObjectMapper {
      * 如果对象为Null, 返回"null".
      * 如果集合为空集合, 返回"[]".
      */
-    public String toJsonString(Object object) {
+    private String toJsonString(Object object) {
         try {
             return this.writeValueAsString(object);
         } catch (IOException e) {
@@ -150,11 +151,26 @@ public class JacksonMapperUtil extends ObjectMapper {
     }
 
     /**
+     * 将对象序列化成 json byte 数组
+     *
+     * @param object javaBean
+     * @return jsonString json字符串
+     */
+    public static byte[] toJsonAsBytes(Object object) {
+        try {
+            return getInstance().writeValueAsBytes(object);
+        } catch (JsonProcessingException e) {
+            throw new GeneralException(e.getMessage());
+        }
+    }
+
+    /**
      * 当前类的实例持有者（静态内部类，延迟加载，懒汉式，线程安全的单例模式）
      */
     private static final class JsonMapperHolder {
         private static final JacksonMapperUtil INSTANCE = new JacksonMapperUtil();
     }
+
 
 
 }

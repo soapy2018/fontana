@@ -1,10 +1,12 @@
 package com.bluetron.nb.common.util.lang;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import org.apache.commons.lang3.ObjectUtils;
+import com.bluetron.nb.common.base.constant.StringPool;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.lang.Nullable;
+import org.springframework.web.util.HtmlUtils;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,48 @@ public class StringUtil extends StringUtils {
 
     private StringUtil() {
 
+    }
+
+    /**
+     * 首字母变小写
+     *
+     * @param str 字符串
+     * @return {String}
+     */
+    public static String lowerFirst(String str) {
+        char firstChar = str.charAt(0);
+        if (firstChar >= StringPool.U_A && firstChar <= StringPool.U_Z) {
+            char[] arr = str.toCharArray();
+            arr[0] += (StringPool.L_A - StringPool.U_A);
+            return new String(arr);
+        }
+        return str;
+    }
+
+    /**
+     * 首字母变大写
+     *
+     * @param str 字符串
+     * @return {String}
+     */
+    public static String upperFirst(String str) {
+        char firstChar = str.charAt(0);
+        if (firstChar >= StringPool.L_A && firstChar <= StringPool.L_Z) {
+            char[] arr = str.toCharArray();
+            arr[0] -= (StringPool.L_A - StringPool.U_A);
+            return new String(arr);
+        }
+        return str;
+    }
+
+    /**
+     * 转义HTML用于安全过滤
+     *
+     * @param html html
+     * @return {String}
+     */
+    public static String escapeHtml(String html) {
+        return StringUtil.isBlank(html) ? StringPool.EMPTY : HtmlUtils.htmlEscape(html);
     }
 
     /**
@@ -195,6 +239,27 @@ public class StringUtil extends StringUtils {
             }
         }
         return sb.toString().toLowerCase();
+    }
+
+    /**
+     * 获取标识符，用于参数清理
+     *
+     * @param param 参数
+     * @return 清理后的标识符
+     */
+    @Nullable
+    public static String cleanIdentifier(@Nullable String param) {
+        if (param == null) {
+            return null;
+        }
+        StringBuilder paramBuilder = new StringBuilder();
+        for (int i = 0; i < param.length(); i++) {
+            char c = param.charAt(i);
+            if (Character.isJavaIdentifierPart(c)) {
+                paramBuilder.append(c);
+            }
+        }
+        return paramBuilder.toString();
     }
 
 }

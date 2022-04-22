@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.upmsapi.vo.SysPostVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -84,7 +84,7 @@ public class SysPost {
     private SysDeptPost sysDeptPost;
 
     @Mapper
-    public interface SysPostModelMapper extends BaseEntityMapper<SysPostVo, SysPost> {
+    public interface SysPostModelMapper extends BaseModelMapper<SysPostVo, SysPost> {
         /**
          * 转换Vo对象到实体对象。
          *

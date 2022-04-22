@@ -8,7 +8,7 @@ import com.bluetron.nb.common.base.context.DataFilterThreadLocal;
 import com.bluetron.nb.common.base.result.Pagination;
 import com.bluetron.nb.common.base.result.ResultCode;
 import com.bluetron.nb.common.base.constant.AggregationType;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.db.object.*;
 import com.bluetron.nb.common.db.service.IBaseService;
 import com.bluetron.nb.common.db.util.MyModelUtil;
@@ -86,7 +86,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @return 应答结果对象，包含主对象集合。
      */
     public Result<List<V>> baseListByIds(
-            Set<K> filterIds, Boolean withDict, BaseEntityMapper<V, M> modelMapper) {
+            Set<K> filterIds, Boolean withDict, BaseModelMapper<V, M> modelMapper) {
         if (ObjectUtil.isAnyBlankOrNull(filterIds, withDict)) {
             return Result.failed(ResultCode.PARAM_IS_BLANK);
         }
@@ -110,7 +110,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @param modelMapper 对象映射函数对象。如果为空，则使用MyModelUtil中的缺省转换函数。
      * @return 应答结果对象，包含主对象数据。
      */
-    public Result<V> baseGetById(K id, Boolean withDict, BaseEntityMapper<V, M> modelMapper) {
+    public Result<V> baseGetById(K id, Boolean withDict, BaseModelMapper<V, M> modelMapper) {
         if (ObjectUtil.isAnyBlankOrNull(id, withDict)) {
             return Result.failed(ResultCode.PARAM_IS_BLANK);
         }
@@ -167,7 +167,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @return 分页数据集合对象。如MyQueryParam参数的分页属性为空，则不会执行分页操作，只是基于Pagination对象返回数据结果。
      * @throw  buildRelationForDataList会抛出此异常。
      */
-    public Result<Pagination<V>> baseListBy(MyQueryParam queryParam, BaseEntityMapper<V, M> modelMapper) {
+    public Result<Pagination<V>> baseListBy(MyQueryParam queryParam, BaseModelMapper<V, M> modelMapper) {
         boolean dataFilterEnabled = DataFilterThreadLocal.setDataFilter(queryParam.getUseDataFilter());
         if (CollectionUtils.isNotEmpty(queryParam.getSelectFieldList())) {
             for (String fieldName : queryParam.getSelectFieldList()) {
@@ -214,7 +214,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @return 分页数据集合对象。如MyQueryParam参数的分页属性为空，则不会执行分页操作，只是基于Pagination对象返回数据结果。
      */
     public Result<Pagination<Map<String, Object>>> baseListMapBy(
-            MyQueryParam queryParam, BaseEntityMapper<V, M> modelMapper) {
+            MyQueryParam queryParam, BaseModelMapper<V, M> modelMapper) {
         Result<Pagination<V>> result = this.baseListBy(queryParam, modelMapper);
         if (!result.isSuccess()) {
             return Result.failed(result);
@@ -231,7 +231,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @param modelMapper 对象映射函数对象。如果为空，则使用MyModelUtil中的缺省转换函数。
      * @return 应答结果对象，包含符合查询过滤条件的单条实体对象。
      */
-    public Result<V> baseGetBy(MyQueryParam queryParam, BaseEntityMapper<V, M> modelMapper) {
+    public Result<V> baseGetBy(MyQueryParam queryParam, BaseModelMapper<V, M> modelMapper) {
         Result<Pagination<V>> result = baseListBy(queryParam, modelMapper);
         if (!result.isSuccess()) {
             return Result.failed(result);
@@ -329,7 +329,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @param modelMapper 从实体对象到VO对象的映射对象。
      * @return 转换后的VO域对象列表。
      */
-    protected List<V> convertToVoList(List<M> modelList, BaseEntityMapper<V, M> modelMapper) {
+    protected List<V> convertToVoList(List<M> modelList, BaseModelMapper<V, M> modelMapper) {
         List<V> resultVoList;
         if (modelMapper != null) {
             resultVoList = modelMapper.fromModelList(modelList);
@@ -347,7 +347,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @param modelMapper 从实体对象到VO对象的映射对象。
      * @return 转换后的VO域对象。
      */
-    protected V convertToVo(M model, BaseEntityMapper<V, M> modelMapper) {
+    protected V convertToVo(M model, BaseModelMapper<V, M> modelMapper) {
         V resultVo;
         if (modelMapper != null) {
             resultVo = modelMapper.fromModel(model);

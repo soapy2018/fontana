@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bluetron.app.xxx.mapper.DeptMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="deptResultMap" type="com.bluetron.app.xxx.entity.Dept">
+        <id column="id" property="id"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="ancestors" property="ancestors"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="full_name" property="fullName"/>
+        <result column="sort" property="sort"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+    <select id="selectDeptPage" resultMap="deptResultMap">
+        select * from blade_dept where is_deleted = 0
+    </select>
+
+</mapper>

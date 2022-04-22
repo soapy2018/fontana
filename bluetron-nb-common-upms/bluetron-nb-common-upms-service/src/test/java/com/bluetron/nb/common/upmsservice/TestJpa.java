@@ -2,12 +2,9 @@ package com.bluetron.nb.common.upmsservice;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.bluetron.nb.common.db.util.MyModelUtil;
 import com.bluetron.nb.common.upmsservice.jpa.JpaUser;
 import com.bluetron.nb.common.upmsservice.jpa.UserRepository;
-import com.bluetron.nb.common.util.date.DateUtil;
 import com.bluetron.nb.common.util.tools.IdUtil;
-import com.bluetron.nb.common.util.tools.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,10 +40,24 @@ public class TestJpa {
     }
 
     @Test
+    public void countByNameTest() {
+
+        int count = userRepositoy.countByLoginName("admin");
+        Assert.assertTrue(count>1);
+    }
+
+    @Test
+    public void existByNameTest() {
+
+        boolean exists = userRepositoy.existsByLoginName("admin");
+        Assert.assertTrue(exists);
+    }
+
+    @Test
     public void findByLoginNameTest() {
 
-        JpaUser user = userRepositoy.findByLoginName("admin");
-        log.info("user: {}--{}", user.toString(), JSONObject.toJSON(user));
+        List<JpaUser> user = userRepositoy.findByLoginName("admin");
+        log.info("user: {}--{}", user.toString(), JSONArray.toJSON(user));
         Assert.assertNotNull(user);
 
     }

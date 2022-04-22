@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationOneToMany;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.vo.OnlineTableVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -87,7 +87,7 @@ public class OnlineTable {
     private OnlineColumn logicDeleteColumn;
 
     @Mapper
-    public interface OnlineTableModelMapper extends BaseEntityMapper<OnlineTableVo, OnlineTable> {
+    public interface OnlineTableModelMapper extends BaseModelMapper<OnlineTableVo, OnlineTable> {
         /**
          * 转换Vo对象到实体对象。
          *

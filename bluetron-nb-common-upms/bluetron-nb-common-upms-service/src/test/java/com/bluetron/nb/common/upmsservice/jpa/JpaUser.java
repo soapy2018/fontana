@@ -1,13 +1,15 @@
 package com.bluetron.nb.common.upmsservice.jpa;
 
 
-import com.bluetron.nb.common.upmsservice.service.SysUserService;
+import com.bluetron.nb.common.db.entity.JpaBaseEntity;
 import lombok.Data;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 
-import javax.annotation.Resource;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,7 @@
 package com.bluetron.nb.common.log.traceLog;
 
 import com.bluetron.nb.common.base.constant.HttpConstants;
-import com.bluetron.nb.common.util.tools.MDCTraceUtils;
+import com.bluetron.nb.common.util.tools.MDCTraceUtil;
 import feign.RequestInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +28,7 @@ public class FeignTraceConfig {
         return template -> {
             if (traceProperties.getEnable()) {
                 //传递日志traceId
-                String traceId = MDCTraceUtils.getTraceId();
+                String traceId = MDCTraceUtil.getTraceId();
                 if (!StringUtils.isEmpty(traceId)) {
                     template.header(HttpConstants.TRACE_ID_HEADER, traceId);
                 }

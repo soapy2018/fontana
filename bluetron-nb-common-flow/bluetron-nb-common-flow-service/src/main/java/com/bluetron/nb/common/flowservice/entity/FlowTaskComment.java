@@ -3,7 +3,7 @@ package com.bluetron.nb.common.flowservice.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.flowapi.vo.FlowTaskCommentVo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -102,7 +102,7 @@ public class FlowTaskComment {
     }
 
     @Mapper
-    public interface FlowTaskCommentModelMapper extends BaseEntityMapper<FlowTaskCommentVo, FlowTaskComment> {
+    public interface FlowTaskCommentModelMapper extends BaseModelMapper<FlowTaskCommentVo, FlowTaskComment> {
     }
     public static final FlowTaskCommentModelMapper INSTANCE = Mappers.getMapper(FlowTaskCommentModelMapper.class);
 }

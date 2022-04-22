@@ -85,4 +85,8 @@ public class Result<T> implements Serializable {
         return code == 1;
     }
 
+    public static <T> Result<T> status(boolean flag) {
+        return flag ? succeed("操作成功") : failed("操作失败");
+    }
+
 }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.*;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.dict.FormType;
 import com.bluetron.nb.common.onlineapi.vo.OnlineFormVo;
 import lombok.Data;
@@ -116,7 +116,7 @@ public class OnlineForm {
     private Map<String, Object> formTypeDictMap;
 
     @Mapper
-    public interface OnlineFormModelMapper extends BaseEntityMapper<OnlineFormVo, OnlineForm> {
+    public interface OnlineFormModelMapper extends BaseModelMapper<OnlineFormVo, OnlineForm> {
         /**
          * 转换Vo对象到实体对象。
          *

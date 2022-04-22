@@ -69,24 +69,6 @@ public class CacheManagerConfig {
                 .build();
     }
 
- /**
-  * redission的catchManager
-  */
-//    @Bean
-//    CacheManager cacheManager(RedissonClient redissonClient) {
-//
-//        //自定义的缓存过期时间配置
-//        int configSize = cacheManagerProperties.getConfigs() == null ? 0 : cacheManagerProperties.getConfigs().size();
-//        Map<String, CacheConfig> redisCacheConfigurationMap = new HashMap<>(configSize);
-//
-//        if (configSize > 0) {
-//            cacheManagerProperties.getConfigs().forEach(e -> {
-//                redisCacheConfigurationMap.put(e.getKey(), new CacheConfig(e.getSecond()*1000, 0));
-//            });
-//        }
-//        return new RedissonSpringCacheManager(redissonClient, redisCacheConfigurationMap);
-//    }
-
     @Bean
     public KeyGenerator keyGenerator() {
         return (target, method, objects) -> {

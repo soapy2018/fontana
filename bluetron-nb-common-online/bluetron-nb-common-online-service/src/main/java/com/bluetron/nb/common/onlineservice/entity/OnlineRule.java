@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.dict.RuleType;
 import com.bluetron.nb.common.onlineapi.vo.OnlineRuleVo;
 import lombok.Data;
@@ -88,7 +88,7 @@ public class OnlineRule {
     private Map<String, Object> ruleTypeDictMap;
 
     @Mapper
-    public interface OnlineRuleModelMapper extends BaseEntityMapper<OnlineRuleVo, OnlineRule> {
+    public interface OnlineRuleModelMapper extends BaseModelMapper<OnlineRuleVo, OnlineRule> {
         /**
          * 转换Vo对象到实体对象。
          *

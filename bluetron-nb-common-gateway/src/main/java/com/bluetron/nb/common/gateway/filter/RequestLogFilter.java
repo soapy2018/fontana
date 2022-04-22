@@ -2,11 +2,9 @@ package com.bluetron.nb.common.gateway.filter;
 
 import com.bluetron.nb.common.base.constant.HttpConstants;
 import com.bluetron.nb.common.log.traceLog.TraceProperties;
-import com.bluetron.nb.common.util.tools.IdUtil;
 import com.bluetron.nb.common.gateway.constant.GatewayConstant;
-import com.bluetron.nb.common.util.tools.MDCTraceUtils;
+import com.bluetron.nb.common.util.tools.MDCTraceUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -32,8 +30,8 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         if (traceProperties.getEnable()) {
-            final String traceId = MDCTraceUtils.createTraceId();
-            MDCTraceUtils.putTrace(traceId);
+            final String traceId = MDCTraceUtil.createTraceId();
+            MDCTraceUtil.putTrace(traceId);
             log.info("开始请求，app={common-gateway}, url={}", exchange.getRequest().getURI().getPath());
             // 分别记录traceId和执行开始时间。
             exchange.getAttributes().put(GatewayConstant.START_TIME_ATTRIBUTE, System.currentTimeMillis());

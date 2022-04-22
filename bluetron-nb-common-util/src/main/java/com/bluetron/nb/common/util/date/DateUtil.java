@@ -14,6 +14,7 @@ public class DateUtil {
 
     public static final String DEFAULT_PATTERN_DAY = DatePattern.NORM_DATE_PATTERN;
     public static final String DEFAULT_PATTERN_DAY_TIME = DatePattern.NORM_DATETIME_PATTERN;
+    public static final String DEFAULT_PATTERN_TIME = DatePattern.NORM_TIME_PATTERN;
     public static final String UTC_PATTERN_DAY_TIME = DatePattern.UTC_PATTERN;
     public static final String UTC_PATTERN_DAY_TIME_ZONE = DatePattern.UTC_MS_WITH_ZONE_OFFSET_PATTERN;
     public static final String UTC_PATTERN_DAY_TIME_ZONE_XXX = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";

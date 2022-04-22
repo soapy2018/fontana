@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.DeptFilterColumn;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.flowapi.dict.FlowTaskStatus;
 import com.bluetron.nb.common.flowapi.vo.FlowWorkOrderVo;
 import lombok.Data;
@@ -137,7 +137,7 @@ public class FlowWorkOrder {
     private Map<String, Object> flowStatusDictMap;
 
     @Mapper
-    public interface FlowWorkOrderModelMapper extends BaseEntityMapper<FlowWorkOrderVo, FlowWorkOrder> {
+    public interface FlowWorkOrderModelMapper extends BaseModelMapper<FlowWorkOrderVo, FlowWorkOrder> {
     }
     public static final FlowWorkOrderModelMapper INSTANCE = Mappers.getMapper(FlowWorkOrderModelMapper.class);
 }

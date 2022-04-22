@@ -3,7 +3,7 @@ package com.bluetron.nb.common.onlineservice.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.vo.OnlineColumnVo;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
 import com.bluetron.nb.common.base.annotation.RelationOneToOne;
@@ -174,7 +174,7 @@ public class OnlineColumn {
     private OnlineDict dictInfo;
 
     @Mapper
-    public interface OnlineColumnModelMapper extends BaseEntityMapper<OnlineColumnVo, OnlineColumn> {
+    public interface OnlineColumnModelMapper extends BaseModelMapper<OnlineColumnVo, OnlineColumn> {
         /**
          * 转换Vo对象到实体对象。
          *

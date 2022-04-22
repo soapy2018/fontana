@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface UserRepository extends JpaRepository<JpaUser, Long> {
 
-    JpaUser findByLoginName(String name);
+    List<JpaUser> findByLoginName(String name);
 
     JpaUser findByLoginNameAndDeptId(String name, Long deptId);
 
@@ -30,6 +30,12 @@ public interface UserRepository extends JpaRepository<JpaUser, Long> {
     //使用@Query注解查询
     @Query(value="from #{#entityName} where loginName = :loginName and deptId = :deptId")
     List<JpaUser> queryUserByNameAndDeptIdUseJPQL(@Param("loginName") String name, @Param("deptId") Long deptId);
+
+    int countByLoginName(String name);
+
+    boolean existsByLoginName(String name);
+
+
 }
 
 

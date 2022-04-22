@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.entity.BaseEntity;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.model.BaseModel;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.upmsapi.vo.SysDeptVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +21,7 @@ import org.mapstruct.factory.Mappers;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_dept")
-public class SysDept extends BaseEntity {
+public class SysDept extends BaseModel {
 
     /**
      * 部门Id。
@@ -55,7 +55,7 @@ public class SysDept extends BaseEntity {
     private Integer deletedFlag;
 
     @Mapper
-    public interface SysDeptModelMapper extends BaseEntityMapper<SysDeptVo, SysDept> {
+    public interface SysDeptModelMapper extends BaseModelMapper<SysDeptVo, SysDept> {
     }
     public static final SysDeptModelMapper INSTANCE = Mappers.getMapper(SysDeptModelMapper.class);
 }

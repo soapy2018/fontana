@@ -24,6 +24,8 @@
         <module>bluetron-nb-common-online</module>
         <module>bluetron-nb-common-datafilter</module>
         <module>bluetron-nb-common-flow</module>
+        <module>blutron-nb-common-multitenancy</module>
+        <module>bluetron-nb-common-codegenerate</module>
     </modules>
 
     <name>bluetron-nb-common</name>
@@ -46,6 +48,20 @@
         <pagehelper.version>1.3.0</pagehelper.version>
         <bean.query.version>1.1.5</bean.query.version>
         <flowable.version>6.6.0</flowable.version>
+
+        <jacoco.version>0.8.7</jacoco.version>
+        <!-- docker image build props -->
+        <docker.registry>docker.bluetron.com</docker.registry>
+        <docker.image.prefix>${project.groupId}</docker.image.prefix>
+        <docker.image.tag.suffix/>
+        <!-- 默认不开启镜像构建 -->
+        <dockerfile.skip>true</dockerfile.skip>
+        <!-- 宁波sonar环境 -->
+        <sonar.host.url>http://192.168.8.92:9000</sonar.host.url>
+<!--        sonar用户名和密码，默认是admin/admin，如果没改过，可以不配-->
+        <sonar.login>admin</sonar.login>
+        <sonar.password>admin</sonar.password>
+
     </properties>
 
     <dependencies>
@@ -124,30 +140,197 @@
         </dependencies>
     </dependencyManagement>
 
+<!--    <build>-->
+<!--        <finalName>${project.name}</finalName>-->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.*</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
+<!--            <resource>-->
+<!--                <directory>src/main/java</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.xml</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
+<!--        </resources>-->
+<!--        <pluginManagement>-->
+<!--            <plugins>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                    <version>${spring-boot.version}</version>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <goals>-->
+<!--                                <goal>repackage</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
+
+<!--                &lt;!&ndash; 测试插件 &ndash;&gt;-->
+<!--                &lt;!&ndash; 版本默认跟着 spring-boot-parent走 &ndash;&gt;-->
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-surefire-plugin</artifactId>-->
+<!--                    <configuration>-->
+<!--                        &lt;!&ndash; 忽略测试失败 &ndash;&gt;-->
+<!--                        <testFailureIgnore>true</testFailureIgnore>-->
+<!--                        &lt;!&ndash; 是否跳过测试 &ndash;&gt;-->
+<!--                        <skipTests>true</skipTests>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
+
+<!--                &lt;!&ndash;jacoco 配置 &ndash;&gt;-->
+<!--                <plugin>-->
+<!--                    <groupId>org.jacoco</groupId>-->
+<!--                    <artifactId>jacoco-maven-plugin</artifactId>-->
+<!--                    <version>${jacoco.version}</version>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <id>default-prepare-agent</id>-->
+<!--                            <goals>-->
+<!--                                <goal>prepare-agent</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                        <execution>-->
+<!--                            <id>jacoco-report</id>-->
+<!--                            &lt;!&ndash; <configuration> <outputDirectory>${basedir}/target/coverage-reports</outputDirectory>-->
+<!--                                </configuration> &ndash;&gt;-->
+<!--                            <phase>test</phase>-->
+<!--                            <goals>-->
+<!--                                <goal>report</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                        <execution>-->
+<!--                            <id>jacoco-check</id>-->
+<!--                            <goals>-->
+<!--                                <goal>check</goal>-->
+<!--                            </goals>-->
+<!--                            <phase>test</phase>-->
+<!--                            <configuration>-->
+<!--                                <rules>-->
+<!--                                    <rule>-->
+<!--                                        <element>BUNDLE</element>-->
+<!--                                        <limits>-->
+<!--                                            <limit>-->
+<!--                                                <counter>INSTRUCTION</counter>-->
+<!--                                                <value>COVEREDRATIO</value>-->
+<!--                                                <minimum>0.6</minimum>-->
+<!--                                            </limit>-->
+<!--                                        </limits>-->
+<!--                                    </rule>-->
+<!--                                </rules>-->
+<!--                            </configuration>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
+
+<!--            </plugins>-->
+
+<!--        </pluginManagement>-->
+
+<!--        <plugins>-->
+<!--            -->
+<!--            <plugin>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.8.0</version>-->
+<!--                <configuration>-->
+<!--                    <target>${maven.compiler.target}</target>-->
+<!--                    <source>${maven.compiler.source}</source>-->
+<!--                    <encoding>UTF-8</encoding>-->
+<!--                    <annotationProcessorPaths>-->
+<!--                        <path>-->
+<!--                            <groupId>org.projectlombok</groupId>-->
+<!--                            <artifactId>lombok</artifactId>-->
+<!--                            <version>${lombok.version}</version>-->
+<!--                        </path>-->
+<!--                        <path>-->
+<!--                            <groupId>org.projectlombok</groupId>-->
+<!--                            <artifactId>lombok-mapstruct-binding</artifactId>-->
+<!--                            <version>0.2.0</version>-->
+<!--                        </path>-->
+<!--                        <path>-->
+<!--                            <groupId>org.mapstruct</groupId>-->
+<!--                            <artifactId>mapstruct-processor</artifactId>-->
+<!--                            <version>${mapstruct.version}</version>-->
+<!--                        </path>-->
+<!--                    </annotationProcessorPaths>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+
+    <!-- 内部 build配置 -->
     <build>
-        <finalName>${project.name}</finalName>
+
+        <!-- 指定JAVA源文件目录 -->
+        <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
                 <includes>
-                    <include>**/*.*</include>
+                    <include>**/*</include>
                 </includes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>false</filtering>
             </resource>
         </resources>
+        <!-- 测试文件 -->
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <plugins></plugins>
+
         <pluginManagement>
+
+<!--    分为基础插件和补充插件，基础插件是maven默认的，-->
+<!--    两者区别是： 基础插件在在父pom的pluginManagement定义后，子插件不用再定义直接使用父pom配置；
+        而补充插件需要在子pom的plugins中进行定义才能生效，不过version不用定义-->
+
             <plugins>
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+<!--                最基本插件，maven是个项目管理工具，如果不告诉它我们的代码要使用什么样的jdk版本编译的话，-->
+<!--                它就会用maven-compiler-plugin默认的jdk版本来进行处理，这样就容易出现版本不匹配-->
+<!--                以至于可能导致编译不通过的问题。-->
+                <!-- Compiler , jdk1.8 -->
+                <!-- 版本默认跟着 spring-boot-parent走 -->
+                <!--基础插件-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${java.version}</source> <!-- bluetron-app-parent定义 -->
+                        <target>${java.version}</target> <!-- bluetron-app-parent定义 -->
+                        <showWarnings>true</showWarnings>
+                        <encoding>${project.build.sourceEncoding}</encoding> <!-- bluetron-app-parent定义 -->
+                        <compilerArguments>
+                            <extdirs>src\main\webapp\WEB-INF\lib</extdirs>
+                        </compilerArguments>
+                    </configuration>
+                </plugin>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+<!--                添加了spring-boot-maven-plugin插件后，当运行mvn package时，-->
+<!--                项目会被打包成一个可以直接运行的jar包，使用"java -jar"可以直接运行。-->
+<!--                如果是一个不需要执行的jar包，类似common这种，在本身的项目配置里-->
+<!--                下面两个只能二选一                -->
+                <!-- 可执行jar 打包插件 -->
+                <!-- 版本默认跟着 spring-boot-parent走 -->
+                <!--基础插件-->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -156,35 +339,211 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <!-- 打包不需要执行的jar-->
+<!--                <plugin>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                    <configuration>-->
+<!--                        &lt;!&ndash; 跳过 repackage &ndash;&gt;-->
+<!--                        <skip>true</skip>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                Maven通过Maven Surefire Plugin插件执行单元测试，生成的测试报告默认在目录target/surefire-reports-->
+                <!-- 测试插件 -->
+                <!-- 版本默认跟着 spring-boot-parent走 -->
+                <!--基础插件-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <!-- 忽略测试失败 -->
+                        <testFailureIgnore>true</testFailureIgnore>
+                        <!-- 是否跳过测试 -->
+                        <skipTests>false</skipTests>
+                    </configuration>
+                </plugin>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+<!--                使用该插件，可以打出包含源码的jar包-->
+<!--                部分jar包，需要内部开源调试时可用-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+<!--                Jacoco是一个开源的Java代码覆盖率工具-->
+<!--                目前使用 0.8.7-->
+<!--                默认测试文档生成位置为 target/site/jacoco，需要给sonar的文件为target/jacoco.exec-->
+                <!--jacoco 配置 -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <!-- 对于运行简单的单元测试，在执行标签中设置的两个目标可以正常工作。
+                    最低限度是设置准备代理(prepare-agent)和报告目标(report)-->
+                    <executions>
+                        <!-- prepare-agent 目标准备 JaCoCo 运行时代理以记录执行数据。它记录了执行的行数、回溯的行数等。-->
+                        <!-- 默认情况下，将执行数据写入文件target/jacoco-ut.exec。-->
+                        <execution>
+                            <id>default-prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <!-- 报告目标根据 JaCoCo 运行时代理记录的执行数据创建代码覆盖率报告。由于我们已经指定了阶段属性，报告将在测试阶段编译后创建-->
+                        <!-- 默认从文件中读取执行数据target/jacoco-ut.exec，将代码覆盖率报告写入目录target/site/jacoco/index.html。-->
+                        <execution>
+                            <id>jacoco-report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+<!--                            就用默认吧，下面的都注释了-->
+<!--                            <configuration>-->
+<!--                                &lt;!&ndash;定义输出的文件夹&ndash;&gt;-->
+<!--                                <outputDirectory>target/jacoco-report</outputDirectory>-->
+<!--                                &lt;!&ndash;执行数据的文件&ndash;&gt;-->
+<!--                                <dataFile>${project.build.directory}/jacoco.exec</dataFile>-->
+<!--                                &lt;!&ndash;要从报告中排除的类文件列表，支持通配符(*和?)。如果未指定则不会排除任何内容&ndash;&gt;-->
+<!--                                <excludes>**/test/*.class</excludes>-->
+<!--                                &lt;!&ndash;包含生成报告的文件列表，支持通配符(*和?)。如果未指定则包含所有内容&ndash;&gt;-->
+<!--                                <includes></includes>-->
+<!--                                &lt;!&ndash;HTML 报告页面中使用的页脚文本。&ndash;&gt;-->
+<!--                                <footer></footer>-->
+<!--                                &lt;!&ndash;生成报告的文件类型，HTML(默认)、XML、CSV&ndash;&gt;-->
+<!--                                <formats>HTML</formats>-->
+<!--                                &lt;!&ndash;生成报告的编码格式，默认UTF-8&ndash;&gt;-->
+<!--                                <outputEncoding>UTF-8</outputEncoding>-->
+<!--                                &lt;!&ndash;抑制执行的标签&ndash;&gt;-->
+<!--                                <skip></skip>-->
+<!--                                &lt;!&ndash;源文件编码&ndash;&gt;-->
+<!--                                <sourceEncoding>UTF-8</sourceEncoding>-->
+<!--                                &lt;!&ndash;HTML报告的标题&ndash;&gt;-->
+<!--                                <title>${project.name}</title>-->
+<!--                            </configuration>-->
+                        </execution>
+                        <!-- check goal可以配置检查相关的设置，比如配置最低覆盖率为0.6(60%),如果覆盖率未达到最低限制，则mvn test会报错-->
+                        <execution>
+                            <id>jacoco-check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <phase>test</phase>
+                            <configuration>
+                                <rules>
+                                    <rule>
+                                        <element>BUNDLE</element>
+                                        <limits>
+                                            <limit>
+                                                <counter>INSTRUCTION</counter>
+                                                <value>COVEREDRATIO</value>
+                                                <minimum>0.6</minimum> <!-- 最低覆盖率-->
+                                            </limit>
+                                        </limits>
+                                    </rule>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+<!--                dockerfile-maven-plugin是一个maven的插件，主要作用是在项目构建的时候生成基于项目的docker镜像文件-->
+                <!-- docker install 阶段打包-->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.13</version>
+                    <executions>
+                        <execution>
+                            <id>tag-version</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>tag</goal>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <skip>${dockerfile.skip}</skip>
+                        <repository>${docker.registry}/${docker.image.prefix}/${project.artifactId}</repository>
+                        <tag>${project.version}${docker.image.tag.suffix}</tag>
+                        <contextDirectory>${project.basedir}</contextDirectory>
+                        <verbose>true</verbose>
+                        <username>admin</username>
+                        <password>1qaz2wsx</password>
+                        <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                        <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                        <buildArgs>
+                            <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
+                </plugin>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--sonar扫描插件配置 -->
+<!--            若不配置，则执行 mvn sonar:sonar命令时会自动下载最新版本，可能会产生与SonarQube的兼容性问题-->
+<!--            使用命令 mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar 可以指定版本-->
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.9.0.2155</version>
+                </plugin>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--  FindBugs是对编译后的class进行扫描，藉以发现一些隐藏的bug-->
+                <!--  设定为package阶段触发-->
+                <!-- findbugs-maven-plugin 配置-->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>3.0.5</version>
+                    <configuration>
+                        <skip>true</skip><!-- 默认跳过 -->
+                        <effort>Low</effort>
+                        <!-- Low、Medium和High (Low最严格) High只扫描严重错误。建议用Medium-->
+                        <threshold>Medium</threshold>
+                        <failOnError>true</failOnError>
+                        <includeTests>false</includeTests>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>run-findbugs</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
+<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <target>${maven.compiler.target}</target>
-                    <source>${maven.compiler.source}</source>
-                    <encoding>UTF-8</encoding>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.2.0</version>
-                        </path>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-        </plugins>
+
     </build>
+
 </project>

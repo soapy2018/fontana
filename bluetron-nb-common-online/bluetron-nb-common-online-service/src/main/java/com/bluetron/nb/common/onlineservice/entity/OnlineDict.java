@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
 import com.bluetron.nb.common.base.annotation.RelationDict;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.dict.DictType;
 import com.bluetron.nb.common.onlineapi.vo.OnlineDictVo;
 import lombok.Data;
@@ -149,7 +149,7 @@ public class OnlineDict {
     private Map<String, Object> dblinkIdDictMap;
 
     @Mapper
-    public interface OnlineDictModelMapper extends BaseEntityMapper<OnlineDictVo, OnlineDict> {
+    public interface OnlineDictModelMapper extends BaseModelMapper<OnlineDictVo, OnlineDict> {
         /**
          * 转换Vo对象到实体对象。
          *

@@ -1,9 +1,8 @@
 package com.bluetron.nb.common.log.traceLog;
 
 import com.bluetron.nb.common.base.constant.HttpConstants;
-import com.bluetron.nb.common.util.tools.MDCTraceUtils;
+import com.bluetron.nb.common.util.tools.MDCTraceUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,7 +24,7 @@ import java.io.IOException;
  */
 @Component
 @ConditionalOnClass(value = {HttpServletRequest.class, OncePerRequestFilter.class})
-@Order(value = MDCTraceUtils.FILTER_ORDER)
+@Order(value = MDCTraceUtil.FILTER_ORDER)
 public class WebTraceFilter extends OncePerRequestFilter {
     @Resource
     private TraceProperties traceProperties;
@@ -41,13 +40,13 @@ public class WebTraceFilter extends OncePerRequestFilter {
         try {
             String traceId = request.getHeader(HttpConstants.TRACE_ID_HEADER);
             if (StringUtils.isEmpty(traceId)) {
-                MDCTraceUtils.addTrace();
+                MDCTraceUtil.addTrace();
             } else {
-                MDCTraceUtils.putTrace(traceId);
+                MDCTraceUtil.putTrace(traceId);
             }
             filterChain.doFilter(request, response);
         } finally {
-            MDCTraceUtils.removeTrace();
+            MDCTraceUtil.removeTrace();
         }
     }
 }

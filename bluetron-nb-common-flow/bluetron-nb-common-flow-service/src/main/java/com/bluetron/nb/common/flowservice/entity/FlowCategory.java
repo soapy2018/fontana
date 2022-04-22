@@ -3,7 +3,7 @@ package com.bluetron.nb.common.flowservice.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.flowapi.vo.FlowCategoryVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -70,7 +70,7 @@ public class FlowCategory {
     private Long createUserId;
 
     @Mapper
-    public interface FlowCategoryModelMapper extends BaseEntityMapper<FlowCategoryVo, FlowCategory> {
+    public interface FlowCategoryModelMapper extends BaseModelMapper<FlowCategoryVo, FlowCategory> {
     }
     public static final FlowCategoryModelMapper INSTANCE = Mappers.getMapper(FlowCategoryModelMapper.class);
 }

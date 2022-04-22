@@ -12,7 +12,7 @@ public class IdUtilTest {
 
     @Test
     public void testCreateSimpleUUID() {
-        String uuid = IdUtil.generateUUID();
+        String uuid = IdUtil.simpleRandomUUID();
         System.out.println(uuid);
     }
 

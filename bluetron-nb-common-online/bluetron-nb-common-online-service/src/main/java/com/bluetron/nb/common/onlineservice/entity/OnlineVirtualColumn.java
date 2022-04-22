@@ -3,7 +3,7 @@ package com.bluetron.nb.common.onlineservice.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.vo.OnlineVirtualColumnVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -92,7 +92,7 @@ public class OnlineVirtualColumn {
     private String whereClauseJson;
 
     @Mapper
-    public interface OnlineVirtualColumnModelMapper extends BaseEntityMapper<OnlineVirtualColumnVo, OnlineVirtualColumn> {
+    public interface OnlineVirtualColumnModelMapper extends BaseModelMapper<OnlineVirtualColumnVo, OnlineVirtualColumn> {
     }
     public static final OnlineVirtualColumnModelMapper INSTANCE = Mappers.getMapper(OnlineVirtualColumnModelMapper.class);
 }

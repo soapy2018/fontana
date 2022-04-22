@@ -19,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@SpringBootApplication(scanBasePackages = "com.bluetron", exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
+//@SpringBootApplication(scanBasePackages = "com.bluetron", exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
+@SpringBootApplication
 @ActiveProfiles("dev")
 public class SpringConfigTest {
 
@@ -33,6 +34,14 @@ public class SpringConfigTest {
     @Test
     public void testSpringContextHolder() {
         Assert.assertEquals("dev", SpringContextHolder.getActiveProfile());
+        SpringContextHolder.createBean(TestBean.class);
+        SpringContextHolder.createBean(TestBean.class);
+        TestBean bean1 = SpringContextHolder.getBean("TestBean");
+        TestBean bean2 = SpringContextHolder.getBean(TestBean.class);
+        bean1.setName("lili");
+        bean2.setName("lucy");
+        System.err.println(bean1);
+        System.err.println(bean2);
     }
 
     @Test

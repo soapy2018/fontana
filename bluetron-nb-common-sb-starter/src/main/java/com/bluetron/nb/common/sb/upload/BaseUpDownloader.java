@@ -68,7 +68,7 @@ public abstract class BaseUpDownloader {
             downloadUri = serviceContextPath + uri + "/download";
         }
         StringBuilder filenameBuilder = new StringBuilder(64);
-        filenameBuilder.append(IdUtil.generateUUID())
+        filenameBuilder.append(IdUtil.simpleRandomUUID())
                 .append(".").append(FilenameUtils.getExtension(originalFilename));
         responseInfo.setDownloadUri(downloadUri);
         responseInfo.setFilename(filenameBuilder.toString());

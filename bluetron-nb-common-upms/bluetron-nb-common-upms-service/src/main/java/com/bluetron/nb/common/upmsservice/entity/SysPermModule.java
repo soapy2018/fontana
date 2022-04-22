@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.entity.BaseEntity;
+import com.bluetron.nb.common.db.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_perm_module")
-public class SysPermModule extends BaseEntity {
+public class SysPermModule extends BaseModel {
 
     /**
      * 权限模块Id。

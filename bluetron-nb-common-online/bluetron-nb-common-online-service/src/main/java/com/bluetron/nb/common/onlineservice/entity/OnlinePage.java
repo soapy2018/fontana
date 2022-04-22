@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.dict.PageStatus;
 import com.bluetron.nb.common.onlineapi.dict.PageType;
 import com.bluetron.nb.common.onlineapi.vo.OnlinePageVo;
@@ -86,7 +86,7 @@ public class OnlinePage {
     private Map<String, Object> statusDictMap;
 
     @Mapper
-    public interface OnlinePageModelMapper extends BaseEntityMapper<OnlinePageVo, OnlinePage> {
+    public interface OnlinePageModelMapper extends BaseModelMapper<OnlinePageVo, OnlinePage> {
         /**
          * 转换Vo对象到实体对象。
          *

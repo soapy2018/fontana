@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationManyToMany;
-import com.bluetron.nb.common.db.entity.BaseEntity;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.model.BaseModel;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.upmsapi.vo.SysRoleVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_role")
-public class SysRole extends BaseEntity {
+public class SysRole extends BaseModel {
 
     /**
      * 主键Id。
@@ -53,7 +53,7 @@ public class SysRole extends BaseEntity {
     private List<SysRoleMenu> sysRoleMenuList;
 
     @Mapper
-    public interface SysRoleModelMapper extends BaseEntityMapper<SysRoleVo, SysRole> {
+    public interface SysRoleModelMapper extends BaseModelMapper<SysRoleVo, SysRole> {
         /**
          * 转换VO对象到实体对象。
          *

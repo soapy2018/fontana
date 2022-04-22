@@ -26,7 +26,7 @@ public class IdUtil {
      *
      * @return
      */
-    public static String generateUUID() {
+    public static String simpleRandomUUID() {
         return cn.hutool.core.util.IdUtil.fastSimpleUUID();
 
     }

@@ -14,6 +14,7 @@ import java.util.Date;
  * <p>
  */
 public class DateMetaObjectHandler implements MetaObjectHandler {
+
     private MybatisPlusAutoFillProperties autoFillProperties;
 
     public DateMetaObjectHandler(MybatisPlusAutoFillProperties autoFillProperties) {

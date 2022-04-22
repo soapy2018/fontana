@@ -4,7 +4,7 @@ import cn.jimmyshi.beanquery.BeanQuery;
 import com.alibaba.fastjson.JSONObject;
 import com.bluetron.nb.common.base.object.Tuple2;
 import com.bluetron.nb.common.base.result.Pagination;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.github.pagehelper.Page;
 import org.apache.commons.collections4.CollectionUtils;
 import java.util.List;
@@ -79,7 +79,7 @@ public class MyPageUtil {
      * @param <T>         实体对象类型。
      * @return 返回分页数据对象。
      */
-    public static <D, T> Pagination<D> makeResponseData(List<T> dataList, BaseEntityMapper<D, T> modelMapper) {
+    public static <D, T> Pagination<D> makeResponseData(List<T> dataList, BaseModelMapper<D, T> modelMapper) {
         long totalCount = 0L;
         if (CollectionUtils.isEmpty(dataList)) {
             // 这里需要构建分页数据对象，统一前端数据格式

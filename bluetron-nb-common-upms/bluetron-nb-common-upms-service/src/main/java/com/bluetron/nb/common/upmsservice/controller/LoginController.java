@@ -219,7 +219,7 @@ public class LoginController {
 		int deviceType = WebContextUtil.getDeviceType();
 		boolean isAdmin = user.getUserType() == SysUserType.TYPE_ADMIN;
 		TokenData tokenData = new TokenData();
-		String sessionId = user.getLoginName() + "_" + deviceType + "_" + IdUtil.generateUUID();
+		String sessionId = user.getLoginName() + "_" + deviceType + "_" + IdUtil.simpleRandomUUID();
 		tokenData.setUserId(user.getUserId());
 		tokenData.setDeptId(user.getDeptId());
 		tokenData.setIsAdmin(isAdmin);

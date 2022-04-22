@@ -3,7 +3,7 @@ package com.bluetron.nb.common.onlineservice.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.onlineapi.vo.OnlineDblinkVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -58,7 +58,7 @@ public class OnlineDblink {
     private Date createTime;
 
     @Mapper
-    public interface OnlineDblinkModelMapper extends BaseEntityMapper<OnlineDblinkVo, OnlineDblink> {
+    public interface OnlineDblinkModelMapper extends BaseModelMapper<OnlineDblinkVo, OnlineDblink> {
     }
     public static final OnlineDblinkModelMapper INSTANCE = Mappers.getMapper(OnlineDblinkModelMapper.class);
 }

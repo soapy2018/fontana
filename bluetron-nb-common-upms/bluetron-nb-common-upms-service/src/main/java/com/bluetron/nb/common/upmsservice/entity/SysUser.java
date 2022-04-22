@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.bluetron.nb.common.base.annotation.RelationConstDict;
 import com.bluetron.nb.common.base.annotation.RelationDict;
 import com.bluetron.nb.common.base.annotation.RelationManyToMany;
-import com.bluetron.nb.common.db.entity.BaseEntity;
-import com.bluetron.nb.common.db.mapper.BaseEntityMapper;
+import com.bluetron.nb.common.db.model.BaseModel;
+import com.bluetron.nb.common.db.mapper.BaseModelMapper;
 import com.bluetron.nb.common.upmsapi.dict.SysUserStatus;
 import com.bluetron.nb.common.upmsapi.dict.SysUserType;
 import com.bluetron.nb.common.upmsapi.vo.SysUserVo;
@@ -29,7 +29,7 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "bn_sys_user")
-public class SysUser extends BaseEntity {
+public class SysUser extends BaseModel {
 
     /**
      * 用户Id。
@@ -139,7 +139,7 @@ public class SysUser extends BaseEntity {
     private Map<String, Object> userStatusDictMap;
 
     @Mapper
-    public interface SysUserModelMapper extends BaseEntityMapper<SysUserVo, SysUser> {
+    public interface SysUserModelMapper extends BaseModelMapper<SysUserVo, SysUser> {
         /**
          * 转换Vo对象到实体对象。
          *

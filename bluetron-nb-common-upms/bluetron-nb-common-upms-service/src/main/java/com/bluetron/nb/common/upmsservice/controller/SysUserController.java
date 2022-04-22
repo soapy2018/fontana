@@ -41,7 +41,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @RequestMapping("/sysUser")
-public class SysUserController extends BaseController<SysUser, SysUserVo, Long> {
+public class SysUserController extends BaseController {
 
     @Autowired
     private SysUserService sysUserService;
@@ -189,8 +189,6 @@ public class SysUserController extends BaseController<SysUser, SysUserVo, Long> 
         SysUser sysUserFilter = MyModelUtil.copyTo(sysUserDtoFilter, SysUser.class);
         String orderBy = MyOrderParam.buildOrderBy(orderParam, SysUser.class);
         List<SysUser> sysUserList = sysUserService.getSysUserListWithRelation(sysUserFilter, orderBy);
-
-        String text = JSON.toJSONString(Result.succeed(MyPageUtil.makeResponseData(sysUserList, SysUser.INSTANCE)));
         return Result.succeed(MyPageUtil.makeResponseData(sysUserList, SysUser.INSTANCE));
     }
 

@@ -1,8 +1,8 @@
 package com.bluetron.nb.common.util.pdf;
 
 import cn.hutool.core.date.DateUtil;
+import com.bluetron.nb.common.util.bean.BeanUtil;
 import com.bluetron.nb.common.util.excel.SysUserExcel;
-import com.bluetron.nb.common.util.tools.BeanUtil;
 import com.lowagie.text.Font;
 import com.lowagie.text.List;
 import com.lowagie.text.*;
