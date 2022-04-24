@@ -118,27 +118,29 @@
     <build>
         <plugins>
 
-<!--            &lt;!&ndash; 版本默认跟着 spring-boot-parent走 &ndash;&gt;-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-surefire-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    &lt;!&ndash; 忽略测试失败 &ndash;&gt;-->
-<!--                    <testFailureIgnore>true</testFailureIgnore>-->
-<!--                    &lt;!&ndash; 是否跳过测试 &ndash;&gt;-->
-<!--                    <skipTests>false</skipTests>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!-- 版本默认跟着 spring-boot-parent走 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- 忽略测试失败 -->
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <!-- 是否跳过测试 -->
+                    <skipTests>false</skipTests>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version>
             </plugin>
 
             <!-- 加入 jacoco 统计，覆盖父对象的 60% 要求-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
                 <configuration>
                     <skip>false</skip>
                     <excludes>
