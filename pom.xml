@@ -288,45 +288,6 @@
             </testResource>
         </testResources>
 
-        <plugins>
-
-            <!-- 加入 jacoco 统计，覆盖父对象的 60% 要求-->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <configuration>
-                    <skip>false</skip>
-                    <excludes>
-                        <exclude>**/model/auto/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>jacoco-check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>test</phase>
-                        <configuration>
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.0</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-
         <pluginManagement>
 
 <!--    分为基础插件和补充插件，基础插件是maven默认的，-->
@@ -389,7 +350,7 @@
 <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
 <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-                <!--                Maven通过Maven Surefire Plugin插件执行单元测试，生成的测试报告默认在目录target/surefire-reports-->
+                <!-- Maven通过Maven Surefire Plugin插件执行单元测试，生成的测试报告默认在目录target/surefire-reports-->
                 <!-- 测试插件 -->
                 <!-- 版本默认跟着 spring-boot-parent走 -->
                 <!--基础插件-->
