@@ -13,6 +13,7 @@ public class GeneralException extends RuntimeException {
 
     public GeneralException(String msg) {
         super(msg);
+        this.resultCode.setMessage(msg);
     }
 
     public GeneralException(ICodeAndMessageEnum resultCode) {

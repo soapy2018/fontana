@@ -90,12 +90,16 @@ public class DefaultExceptionAdvice {
     }
 
     private Result defHandler(GeneralException e) {
+
         String message = messageResource.getMessage(e.getKey());
         log.error(message, e);
-        if (StringUtils.isNotBlank(message)) {
-            return Result.failed(e.getCode(), message);
-        } else {
-            return Result.failed(e.getResultCode());
-        }
+
+        return Result.failed(e.getResultCode());
+
+//        if (StringUtils.isNotBlank(message)) {
+//            return Result.failed(e.getCode(), message);
+//        } else {
+//            return Result.failed(e.getResultCode());
+//        }
     }
 }

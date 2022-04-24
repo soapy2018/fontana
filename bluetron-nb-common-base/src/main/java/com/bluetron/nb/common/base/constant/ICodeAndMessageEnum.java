@@ -24,5 +24,7 @@ public interface ICodeAndMessageEnum {
      */
     String getMessage();
 
+    void setMessage(String message);
+
     String name();
 }
