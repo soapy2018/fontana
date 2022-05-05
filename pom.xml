@@ -4,31 +4,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bluetron.nb</groupId>
-    <artifactId>bluetron-nb-common</artifactId>
+    <groupId>com.fontana</groupId>
+    <artifactId>fontana</artifactId>
     <packaging>pom</packaging>
     <version>1.1.0-SNAPSHOT</version>
     <modules>
-        <module>bluetron-nb-common-base</module>
-        <module>bluetron-nb-common-util</module>
-        <module>bluetron-nb-common-sb-starter</module>
-        <module>bluetron-nb-common-db-starter</module>
-        <module>bluetron-nb-common-redis-starter</module>
-        <module>bluetron-nb-common-job-starter</module>
-        <module>bluetron-nb-common-swagger2-starter</module>
-        <module>bluetron-nb-common-upms</module>
-        <module>bluetron-nb-common-gateway</module>
-        <module>bluetron-nb-common-cloud-starter</module>
-        <module>bluetron-nb-common-seata</module>
-        <module>bluetron-nb-common-log-starter</module>
-        <module>bluetron-nb-common-online</module>
-        <module>bluetron-nb-common-datafilter</module>
-        <module>bluetron-nb-common-flow</module>
-        <module>blutron-nb-common-multitenancy</module>
-        <module>bluetron-nb-common-codegenerate</module>
+        <module>fontana-base</module>
+        <module>fontana-util</module>
+        <module>fontana-sb-starter</module>
+        <module>fontana-db-starter</module>
+        <module>fontana-redis-starter</module>
+        <module>fontana-job-starter</module>
+        <module>fontana-swagger2-starter</module>
+        <module>fontana-upms</module>
+        <module>fontana-gateway</module>
+        <module>fontana-cloud-starter</module>
+        <module>fontana-seata</module>
+        <module>fontana-log-starter</module>
+        <module>fontana-online</module>
+        <module>fontana-datafilter</module>
+        <module>fontana-flow</module>
+        <module>fontana-multitenancy</module>
+        <module>fontana-codegenerate</module>
+        <module>fontana-rabbitmq-starter</module>
+        <module>fontana-oss</module>
     </modules>
 
-    <name>bluetron-nb-common</name>
+    <name>fontana</name>
 
     <parent>
         <groupId>com.bluetron.app</groupId>
@@ -48,6 +50,8 @@
         <pagehelper.version>1.3.0</pagehelper.version>
         <bean.query.version>1.1.5</bean.query.version>
         <flowable.version>6.6.0</flowable.version>
+        <fastdfs-client.version>1.27.2</fastdfs-client.version>
+        <aws-java-sdk-s3.version>1.11.792</aws-java-sdk-s3.version>
 
         <jacoco.version>0.8.7</jacoco.version>
         <!-- docker image build props -->
@@ -83,167 +87,93 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-base</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-util</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-redis-starter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-redis-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-sb-starter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-sb-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-db-starter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-db-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-swagger2-starter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-swagger2-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-cloud-starter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-cloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-log-starter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-log-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-datafilter</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-datafilter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-online-service</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-online-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bluetron.nb</groupId>
-                <artifactId>bluetron-nb-common-flow-service</artifactId>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-flow-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
-<!--    <build>-->
-<!--        <finalName>${project.name}</finalName>-->
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src/main/resources</directory>-->
-<!--                <includes>-->
-<!--                    <include>**/*.*</include>-->
-<!--                </includes>-->
-<!--                <filtering>false</filtering>-->
-<!--            </resource>-->
-<!--            <resource>-->
-<!--                <directory>src/main/java</directory>-->
-<!--                <includes>-->
-<!--                    <include>**/*.xml</include>-->
-<!--                </includes>-->
-<!--                <filtering>false</filtering>-->
-<!--            </resource>-->
-<!--        </resources>-->
-<!--        <pluginManagement>-->
-<!--            <plugins>-->
-<!--                <plugin>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                    <version>${spring-boot.version}</version>-->
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <goals>-->
-<!--                                <goal>repackage</goal>-->
-<!--                            </goals>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                </plugin>-->
 
-<!--                &lt;!&ndash; 测试插件 &ndash;&gt;-->
-<!--                &lt;!&ndash; 版本默认跟着 spring-boot-parent走 &ndash;&gt;-->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-surefire-plugin</artifactId>-->
-<!--                    <configuration>-->
-<!--                        &lt;!&ndash; 忽略测试失败 &ndash;&gt;-->
-<!--                        <testFailureIgnore>true</testFailureIgnore>-->
-<!--                        &lt;!&ndash; 是否跳过测试 &ndash;&gt;-->
-<!--                        <skipTests>true</skipTests>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
+    <!-- 内部 build配置 -->
+    <build>
 
-<!--                &lt;!&ndash;jacoco 配置 &ndash;&gt;-->
-<!--                <plugin>-->
-<!--                    <groupId>org.jacoco</groupId>-->
-<!--                    <artifactId>jacoco-maven-plugin</artifactId>-->
-<!--                    <version>${jacoco.version}</version>-->
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <id>default-prepare-agent</id>-->
-<!--                            <goals>-->
-<!--                                <goal>prepare-agent</goal>-->
-<!--                            </goals>-->
-<!--                        </execution>-->
-<!--                        <execution>-->
-<!--                            <id>jacoco-report</id>-->
-<!--                            &lt;!&ndash; <configuration> <outputDirectory>${basedir}/target/coverage-reports</outputDirectory>-->
-<!--                                </configuration> &ndash;&gt;-->
-<!--                            <phase>test</phase>-->
-<!--                            <goals>-->
-<!--                                <goal>report</goal>-->
-<!--                            </goals>-->
-<!--                        </execution>-->
-<!--                        <execution>-->
-<!--                            <id>jacoco-check</id>-->
-<!--                            <goals>-->
-<!--                                <goal>check</goal>-->
-<!--                            </goals>-->
-<!--                            <phase>test</phase>-->
-<!--                            <configuration>-->
-<!--                                <rules>-->
-<!--                                    <rule>-->
-<!--                                        <element>BUNDLE</element>-->
-<!--                                        <limits>-->
-<!--                                            <limit>-->
-<!--                                                <counter>INSTRUCTION</counter>-->
-<!--                                                <value>COVEREDRATIO</value>-->
-<!--                                                <minimum>0.6</minimum>-->
-<!--                                            </limit>-->
-<!--                                        </limits>-->
-<!--                                    </rule>-->
-<!--                                </rules>-->
-<!--                            </configuration>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                </plugin>-->
-
-<!--            </plugins>-->
-
-<!--        </pluginManagement>-->
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                   <include>**/*.xml</include>  <!-- 将xml文件也打进包里，默认是不会的-->
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
 
 <!--        <plugins>-->
-<!--            -->
+
 <!--            <plugin>-->
 <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.8.0</version>-->
 <!--                <configuration>-->
 <!--                    <target>${maven.compiler.target}</target>-->
 <!--                    <source>${maven.compiler.source}</source>-->
-<!--                    <encoding>UTF-8</encoding>-->
+<!--                    <encoding>${project.build.sourceEncoding}</encoding>-->
 <!--                    <annotationProcessorPaths>-->
 <!--                        <path>-->
 <!--                            <groupId>org.projectlombok</groupId>-->
@@ -264,29 +194,6 @@
 <!--                </configuration>-->
 <!--            </plugin>-->
 <!--        </plugins>-->
-<!--    </build>-->
-
-    <!-- 内部 build配置 -->
-    <build>
-
-        <!-- 指定JAVA源文件目录 -->
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-        </resources>
-        <!-- 测试文件 -->
-        <testSourceDirectory>src/test/java</testSourceDirectory>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-            </testResource>
-        </testResources>
 
         <pluginManagement>
 
@@ -311,9 +218,29 @@
                         <target>${java.version}</target> <!-- bluetron-app-parent定义 -->
                         <showWarnings>true</showWarnings>
                         <encoding>${project.build.sourceEncoding}</encoding> <!-- bluetron-app-parent定义 -->
-                        <compilerArguments>
-                            <extdirs>src\main\webapp\WEB-INF\lib</extdirs>
-                        </compilerArguments>
+                        <!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+                        <!-- Classpath elements to supply as annotation processor path. If specified, the compiler   -->
+                        <!-- will detect annotation processors only in those classpath elements. If omitted, the     -->
+                        <!-- default classpath is used to detect annotation processors. The detection itself depends -->
+                        <!-- on the configuration of annotationProcessors.                                           -->
+                        <!-- 因为MapStruct需要在编译器生成转换代码，所以需要在maven-compiler-plugin插件中配置上对mapstruct-processor的引用-->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>0.2.0</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
 <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->

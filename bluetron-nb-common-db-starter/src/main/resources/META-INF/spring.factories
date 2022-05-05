@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bluetron.nb.common.db.service.impl.DbAuditServiceImpl,\
-com.bluetron.nb.common.db.config.MybatisPlusAutoConfigure,\
-com.bluetron.nb.common.db.listener.LoadServiceRelationListener

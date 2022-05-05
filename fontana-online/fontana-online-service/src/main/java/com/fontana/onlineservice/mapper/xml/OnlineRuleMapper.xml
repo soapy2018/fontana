@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fontana.onlineservice.mapper.OnlineRuleMapper">
+    <resultMap id="BaseResultMap" type="com.fontana.onlineservice.entity.OnlineRule">
+        <id column="rule_id" jdbcType="BIGINT" property="ruleId"/>
+        <result column="rule_name" jdbcType="VARCHAR" property="ruleName"/>
+        <result column="rule_type" jdbcType="INTEGER" property="ruleType"/>
+        <result column="builtin" jdbcType="BIT" property="builtin"/>
+        <result column="pattern" jdbcType="VARCHAR" property="pattern"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted_flag" jdbcType="INTEGER" property="deletedFlag"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapWithOnlineColumnRule" type="com.fontana.onlineservice.entity.OnlineRule" extends="BaseResultMap">
+        <association property="onlineColumnRule" column="rule_id" foreignColumn="rule_id"
+                     notNullColumn="rule_id" resultMap="com.fontana.onlineservice.mapper.OnlineColumnRuleMapper.BaseResultMap" />
+    </resultMap>
+
+    <!-- 如果有逻辑删除字段过滤，请写到这里 -->
+    <sql id="filterRef">
+        AND bn_online_rule.deleted_flag = ${@com.fontana.db.constant.GlobalDeletedFlag@NORMAL}
+    </sql>
+
+    <select id="getOnlineRuleList" resultMap="BaseResultMap" parameterType="com.fontana.onlineservice.entity.OnlineRule">
+        SELECT * FROM bn_online_rule
+        <where>
+            <include refid="filterRef"/>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+
+    <select id="getOnlineRuleListByColumnId" resultMap="BaseResultMapWithOnlineColumnRule">
+        SELECT
+            bn_online_rule.*,
+            bn_online_column_rule.*
+        FROM
+            bn_online_rule,
+            bn_online_column_rule
+        <where>
+            AND bn_online_column_rule.column_id = #{columnId}
+            AND bn_online_column_rule.rule_id = bn_online_rule.rule_id
+            <include refid="filterRef"/>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+
+    <select id="getNotInOnlineRuleListByColumnId" resultMap="BaseResultMap">
+        SELECT
+            bn_online_rule.*
+        FROM
+            bn_online_rule
+        <where>
+            AND NOT EXISTS (SELECT * FROM bn_online_column_rule
+                WHERE bn_online_column_rule.column_id = #{columnId} AND bn_online_column_rule.rule_id = bn_online_rule.rule_id)
+            <include refid="filterRef"/>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+</mapper>

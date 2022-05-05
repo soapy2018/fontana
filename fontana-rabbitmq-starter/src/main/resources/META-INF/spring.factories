@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.fontana.rabbitmq.config.RabbitMqConfig,\
+com.fontana.rabbitmq.event.BaseApplicationEvent

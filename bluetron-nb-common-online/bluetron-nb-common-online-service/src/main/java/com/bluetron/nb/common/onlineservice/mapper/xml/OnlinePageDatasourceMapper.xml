@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bluetron.nb.common.onlineservice.mapper.OnlinePageDatasourceMapper">
-    <resultMap id="BaseResultMap" type="com.bluetron.nb.common.onlineservice.entity.OnlinePageDatasource">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="page_id" jdbcType="BIGINT" property="pageId"/>
-        <result column="datasource_id" jdbcType="BIGINT" property="datasourceId"/>
-    </resultMap>
-</mapper>

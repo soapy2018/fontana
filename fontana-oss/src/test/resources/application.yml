@@ -1,0 +1,20 @@
+fontana:
+  oss:
+#    ##### fastDFS配置
+#    type: fdfs
+#    fdfs:
+#      web-url: 192.168.8.133
+#      trackerList: ${fontana.oss.fdfs.web-url}:22122
+#### 如下是fastDFS自动配置内容
+#fdfs:
+#  web-url: 192.168.8.133
+#  trackerList: ${fdfs.web-url}:22122
+
+    ##### s3配置
+    type: s3
+    s3:
+      access-key: admin
+      accessKeySecret: admin123
+      endpoint: http://192.168.8.133:59010
+      bucketName: test
+

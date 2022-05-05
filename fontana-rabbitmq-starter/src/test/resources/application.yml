@@ -1,0 +1,20 @@
+fontana:
+  #rabbitmq配置
+spring:
+  rabbitmq:
+    addresses: 192.168.8.133:5672,192.168.8.133:5673,192.168.8.133:5674
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        #消费者的最小数量
+        concurrency: 1
+        #消费者的最大数量
+        max-concurrency: 1
+        #是否支持重试
+        retry:
+          enabled: true

@@ -1,0 +1,72 @@
+################# nacos配置文件 #################
+server:
+  port: 8002
+#  servlet:
+#    context-path: /flow
+
+logging:
+  level:
+    # 这里设置的日志级别优先于log4j2.xml文件Loggers中的日志级别。
+    com.fontana: info
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/common-flow?characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# 存储session数据的Redis，所有服务均需要，因此放到公共配置中。
+# 根据实际情况，该Redis也可以用于存储其他数据。
+redis:
+  # redisson的配置。每个服务可以自己的配置文件中覆盖此选项。
+  redisson:
+    # 如果该值为false，系统将不会创建RedissionClient的bean。
+    enabled: true
+    # mode的可用值为，single/cluster/sentinel/master-slave
+    mode: single
+    # single: 单机模式
+    #   address: redis://localhost:6379
+    # cluster: 集群模式
+    #   每个节点逗号分隔，同时每个节点前必须以redis://开头。
+    #   address: redis://localhost:6379,redis://localhost:6378,...
+    # sentinel:
+    #   每个节点逗号分隔，同时每个节点前必须以redis://开头。
+    #   address: redis://localhost:6379,redis://localhost:6378,...
+    # master-slave:
+    #   每个节点逗号分隔，第一个为主节点，其余为从节点。同时每个节点前必须以redis://开头。
+    #   address: redis://localhost:6379,redis://localhost:6378,...
+    address: redis://localhost:6379
+    # 链接超时，单位毫秒。
+    timeout: 6000
+    # 单位毫秒。分布式锁的超时检测时长。
+    # 如果一次锁内操作超该毫秒数，或在释放锁之前异常退出，Redis会在该时长之后主动删除该锁使用的key。
+    lockWatchdogTimeout: 60000
+    # redis 密码，空可以不填。
+    password:
+    pool:
+      # 连接池数量。
+      poolSize: 20
+      # 连接池中最小空闲数量。
+      minIdle: 5
+      
+mybatis-plus:
+  mapper-locations: classpath:com/fontana/flowservice/mapper/xml/*.xml
+  type-aliases-package: com.fontana.flowservice.entity
+  global-config:
+    db-config:
+      logic-delete-value: -1
+      logic-not-delete-value: 1
+
+flowable:
+  #关闭定时任务JOB
+  async-executor-activate: false
+  #  将databaseSchemaUpdate设置为true。当Flowable发现库与数据库表结构不一致时，会自动将数据库表结构升级至新版本。
+  database-schema-update: false
+
+fontana:
+  tracelog:
+    enable: true
+  common-flow:
+    # 请慎重修改urlPrefix的缺省配置，注意不要以反斜杠(/)结尾。如必须修改其他路径，请同步修改数据库脚本。
+    urlPrefix: /flow

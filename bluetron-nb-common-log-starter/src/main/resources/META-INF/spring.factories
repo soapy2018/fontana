@@ -1,5 +1,0 @@
-org.springframework.context.ApplicationContextInitializer=\
-com.bluetron.nb.common.log.mdc.TtlMDCAdapterInitializer
-
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bluetron.nb.common.log.LogAutoConfigure

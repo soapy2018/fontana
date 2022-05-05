@@ -1,0 +1,5 @@
+org.springframework.context.ApplicationContextInitializer=\
+com.fontana.log.mdc.TtlMDCAdapterInitializer
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.fontana.log.LogAutoConfigure
