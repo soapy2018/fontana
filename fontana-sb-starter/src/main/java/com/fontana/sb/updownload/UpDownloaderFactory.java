@@ -1,4 +1,4 @@
-package com.fontana.sb.upload;
+package com.fontana.sb.updownload;
 
 import com.fontana.base.upload.UploadStoreTypeEnum;
 import org.springframework.stereotype.Component;

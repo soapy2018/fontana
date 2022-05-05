@@ -1,5 +1,6 @@
 package com.fontana.oss.tests3;
 
+import com.fontana.oss.model.ObjectInfo;
 import com.fontana.oss.template.S3Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.entity.ContentType;
@@ -36,8 +37,11 @@ public class S3Test {
     public void testS3() throws IOException {
 
 
+        ObjectInfo objectInfo;
         s3Template.delete("美女1.jpeg");
-        s3Template.upload("美女1.jpeg", new FileInputStream("src/test/resources/美女.jpeg"));
+        objectInfo = s3Template.upload("美女1.jpeg", new FileInputStream("src/test/resources/美女.jpeg"));
+        log.info("ObjectInfo: {}--{}", objectInfo.getObjectPath(), objectInfo.getObjectUrl());
+
 
         s3Template.delete("美女2.jpeg");
         File file = new File("src/test/resources/美女.jpeg");
@@ -47,7 +51,9 @@ public class S3Test {
                 ContentType.APPLICATION_OCTET_STREAM.toString(), //文件类型
                 new FileInputStream(file) //文件流
         );
-        s3Template.upload(mulFile2);
+        objectInfo = s3Template.upload(mulFile2);
+        log.info("ObjectInfo: {}--{}", objectInfo.getObjectPath(), objectInfo.getObjectUrl());
+
 
         s3Template.download("美女1.jpeg", "src/test/resources/美女1.jpeg");
 

@@ -1,4 +1,4 @@
-package com.fontana.sb.upload;
+package com.fontana.sb.updownload;
 
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.result.ResultCode;
