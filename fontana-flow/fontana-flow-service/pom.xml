@@ -41,6 +41,12 @@
             <groupId>com.fontana</groupId>
             <artifactId>fontana-sb-starter</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-db-starter</artifactId>
+            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <artifactId>mysql-connector-java</artifactId>

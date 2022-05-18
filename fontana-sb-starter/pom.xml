@@ -25,11 +25,6 @@
 
         <dependency>
             <groupId>com.fontana</groupId>
-            <artifactId>fontana-db-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fontana</groupId>
             <artifactId>fontana-log-starter</artifactId>
         </dependency>
 

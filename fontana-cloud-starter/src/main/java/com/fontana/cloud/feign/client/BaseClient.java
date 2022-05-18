@@ -1,12 +1,8 @@
 package com.fontana.cloud.feign.client;
 
-import com.fontana.base.result.Pagination;
 import com.fontana.base.result.Result;
-import com.fontana.db.object.MyAggregationParam;
-import com.fontana.db.object.MyQueryParam;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -74,68 +70,4 @@ public interface BaseClient<D, V, K> {
          throw new UnsupportedOperationException();
      }
 
-    /**
-     * 获取远程主对象中符合查询条件的数据列表。
-     * 缺省实现是因为字典类型的远程调用客户端中，不需要实现该方法，因此尽早抛出异常，用户可自行修改。
-     *
-     * @param queryParam 查询参数。
-     * @return 分页数据集合对象。如MyQueryParam参数的分页属性为空，则不会执行分页操作，只是基于Pagination对象返回数据结果。
-     */
-    default Result<Pagination<V>> listBy(MyQueryParam queryParam) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 获取远程主对象中符合查询条件的单条数据对象。
-     * 缺省实现是因为字典类型的远程调用客户端中，不需要实现该方法，因此尽早抛出异常，用户可自行修改。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含主对象集合。
-     */
-    default Result<V> getBy(MyQueryParam queryParam) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 获取远程主对象中符合查询条件的数据列表。
-     * 缺省实现是因为字典类型的远程调用客户端中，不需要实现该方法，因此尽早抛出异常，用户可自行修改。
-     *
-     * @param queryParam 查询参数。
-     * @return 分页数据集合对象。如MyQueryParam参数的分页属性为空，则不会执行分页操作，只是基于Pagination对象返回数据结果。
-     */
-    default Result<Pagination<Map<String, Object>>> listMapBy(MyQueryParam queryParam) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 获取远程主对象中符合查询条件的数据数量。
-     * 缺省实现是因为字典类型的远程调用客户端中，不需要实现该方法，因此尽早抛出异常，用户可自行修改。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含结果数量。
-     */
-    default Result<Integer> countBy(MyQueryParam queryParam) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 获取远程主对象中符合过滤条件的分组聚合数据。
-     * 缺省实现是因为字典类型的远程调用客户端中，不需要实现该方法，因此尽早抛出异常，用户可自行修改。
-     *
-     * @param aggregationParam 聚合参数。
-     * @return 应答结果对象，包含聚合计算后的数据列表。
-     */
-    default Result<List<Map<String, Object>>> aggregateBy(MyAggregationParam aggregationParam) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 根据主键Id及其列表数据(not in list)进行过滤，返回给定的数据。返回的对象数据中，仅仅包含实体对象自己的数据，以及配置的字典关联数据。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含分页查询数据列表。
-     */
-    default Result<Pagination<V>> listByNotInList(MyQueryParam queryParam) {
-        throw new UnsupportedOperationException();
-    }
 }

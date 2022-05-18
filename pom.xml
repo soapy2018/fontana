@@ -28,15 +28,16 @@
         <module>fontana-codegenerate</module>
         <module>fontana-rabbitmq-starter</module>
         <module>fontana-oss</module>
+        <module>fontana-demo</module>
     </modules>
 
     <name>fontana</name>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.12.RELEASE</version>
-    </parent>
+<!--    <parent>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--        <version>2.3.12.RELEASE</version>-->
+<!--    </parent>-->
 
     <properties>
 
@@ -45,9 +46,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- 三大版本 -->
+        <!-- 三大版本适配说明：https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E-->
         <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
-        <spring.cloud.version>Hoxton.SR11</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.5.RELEASE</spring.cloud.alibaba.version>
+        <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
+        <spring.cloud.alibaba.version>2.2.7.RELEASE</spring.cloud.alibaba.version>
 
         <!-- 1.0.26 -> 1.2.5 -->
         <druid.version>1.2.5</druid.version>
@@ -136,6 +138,7 @@
         <fastdfs-client.version>1.27.2</fastdfs-client.version>
         <aws-java-sdk-s3.version>1.11.792</aws-java-sdk-s3.version>
 
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <jacoco.version>0.8.7</jacoco.version>
         <!-- docker image build props -->
         <docker.registry>docker.bluetron.com</docker.registry>
@@ -232,6 +235,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -301,21 +305,21 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.auth0</groupId>
-                <artifactId>java-jwt</artifactId>
-                <version>${java-jwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sf.jasperreports</groupId>
-                <artifactId>jasperreports</artifactId>
-                <version>${jasperreports.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.junf</groupId>
-                <artifactId>jasperreports-fonts-SimSun</artifactId>
-                <version>${jasperreports-fonts.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.auth0</groupId>-->
+<!--                <artifactId>java-jwt</artifactId>-->
+<!--                <version>${java-jwt.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>net.sf.jasperreports</groupId>-->
+<!--                <artifactId>jasperreports</artifactId>-->
+<!--                <version>${jasperreports.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>com.junf</groupId>-->
+<!--                <artifactId>jasperreports-fonts-SimSun</artifactId>-->
+<!--                <version>${jasperreports-fonts.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
@@ -326,11 +330,11 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus-boot-starter.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.tika</groupId>
-                <artifactId>tika-core</artifactId>
-                <version>${tika-core.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.tika</groupId>-->
+<!--                <artifactId>tika-core</artifactId>-->
+<!--                <version>${tika-core.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>io.github.openfeign.form</groupId>
                 <artifactId>feign-form-spring</artifactId>
@@ -341,41 +345,42 @@
                 <artifactId>feign-form</artifactId>
                 <version>${feign-form.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.netflix.feign</groupId>
-                <artifactId>feign-core</artifactId>
-                <version>${feign-core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.netflix.feign</groupId>
-                <artifactId>feign-jackson</artifactId>
-                <version>${feign-jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security.oauth</groupId>
-                <artifactId>spring-security-oauth2</artifactId>
-                <version>${spring-security-oauth2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                <version>${elasticsearch-rest-high-level-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch</groupId>
-                <artifactId>elasticsearch</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.netflix.feign</groupId>-->
+<!--                <artifactId>feign-core</artifactId>-->
+<!--                <version>${feign-core.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>com.netflix.feign</groupId>-->
+<!--                <artifactId>feign-jackson</artifactId>-->
+<!--                <version>${feign-jackson.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.security.oauth</groupId>-->
+<!--                <artifactId>spring-security-oauth2</artifactId>-->
+<!--                <version>${spring-security-oauth2.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.elasticsearch.client</groupId>-->
+<!--                <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+<!--                <version>${elasticsearch-rest-high-level-client.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.elasticsearch</groupId>-->
+<!--                <artifactId>elasticsearch</artifactId>-->
+<!--                <version>${elasticsearch.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>com.googlecode.aviator</groupId>-->
+<!--                <artifactId>aviator</artifactId>-->
+<!--                <version>${aviator.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.googlecode.aviator</groupId>
-                <artifactId>aviator</artifactId>
-                <version>${aviator.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
@@ -669,7 +674,7 @@
                                             <limit>
                                                 <counter>INSTRUCTION</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.6</minimum> <!-- 最低覆盖率-->
+                                                <minimum>0.3</minimum> <!-- 最低覆盖率-->
                                             </limit>
                                         </limits>
                                     </rule>

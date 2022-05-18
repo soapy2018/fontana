@@ -1,9 +1,11 @@
 package com.fontana.util.lang;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.Nullable;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.Collection;

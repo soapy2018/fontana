@@ -1,4 +1,4 @@
-package com.fontana.base.dto;
+package com.fontana.base.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

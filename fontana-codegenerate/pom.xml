@@ -17,9 +17,15 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-sb-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-db-starter</artifactId>
         </dependency>
 
         <!--Mybatis-Plus-->

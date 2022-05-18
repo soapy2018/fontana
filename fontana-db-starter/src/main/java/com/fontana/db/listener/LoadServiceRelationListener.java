@@ -1,4 +1,4 @@
-package com.fontana.sb.listener;
+package com.fontana.db.listener;
 
 import com.fontana.db.service.impl.ABaseService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

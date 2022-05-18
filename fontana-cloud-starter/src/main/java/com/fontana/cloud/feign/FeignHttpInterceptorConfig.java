@@ -28,6 +28,7 @@ public class FeignHttpInterceptorConfig {
         requestHeaders.add(HttpConstants.ROLE_HEADER);
         requestHeaders.add(HttpConstants.TENANT_ID_HEADER);
         requestHeaders.add(HttpConstants.AUTHORIZATION_HEADER);
+        requestHeaders.add(HttpConstants.TRACE_ID_HEADER);
     }
 
     /**
@@ -46,7 +47,8 @@ public class FeignHttpInterceptorConfig {
                     String headerValue;
                     while (headerNames.hasMoreElements()) {
                         headerName = headerNames.nextElement();
-                        if (requestHeaders.contains(headerName)) {
+                        //if (requestHeaders.contains(headerName)) {
+                        if(requestHeaders.parallelStream().anyMatch(headerName::equalsIgnoreCase)){
                             headerValue = request.getHeader(headerName);
                             template.header(headerName, headerValue);
                         }

@@ -45,6 +45,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.invoke.SerializedLambda;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -282,6 +283,7 @@ public class FlowEntryServiceImpl extends ABaseService<FlowEntry, Long> implemen
         LambdaQueryWrapper<FlowEntryPublish> queryWrapper = new LambdaQueryWrapper<>(filter);
         queryWrapper.orderByDesc(FlowEntryPublish::getEntryPublishId);
         return flowEntryPublishMapper.selectList(queryWrapper);
+
     }
 
     /**

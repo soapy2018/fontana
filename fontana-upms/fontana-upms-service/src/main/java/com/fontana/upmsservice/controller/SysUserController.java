@@ -10,7 +10,7 @@ import com.fontana.db.object.*;
 import com.fontana.db.service.IBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.db.util.MyPageUtil;
-import com.fontana.sb.controller.BaseController;
+import com.fontana.db.controller.BaseController;
 import com.fontana.upmsapi.dto.SysUserDto;
 import com.fontana.upmsapi.vo.SysUserVo;
 import com.fontana.upmsservice.config.ApplicationConfig;
@@ -268,6 +268,7 @@ public class SysUserController extends BaseController<SysUser, SysUserVo, Long> 
     @PostMapping("/listByIds")
     public Result<List<SysUserVo>> listByIds(
             @RequestParam Set<Long> userIds, @RequestParam Boolean withDict) {
+        //System.out.println(1/0);
         return super.baseListByIds(userIds, withDict, SysUser.INSTANCE);
     }
 

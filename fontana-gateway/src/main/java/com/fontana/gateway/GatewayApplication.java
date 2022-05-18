@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.function.Function;
+
 /**
  * 网关服务启动类。
  *
@@ -49,6 +51,8 @@ public class GatewayApplication {
 //    }
 
     public static void main(String[] args) {
+        //设置为网关类型sentinel，若是类型改变了，sentinel dashboard需要重启才能刷新
+        System.setProperty("csp.sentinel.app.type", "1");
         SpringApplication.run(GatewayApplication.class, args);
     }
 }

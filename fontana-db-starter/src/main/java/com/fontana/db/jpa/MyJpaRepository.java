@@ -1,6 +1,6 @@
 package com.fontana.db.jpa;
 
-import com.fontana.base.dto.BasePageQueryDTO;
+import com.fontana.base.query.BasePageQueryDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

@@ -4,6 +4,61 @@ server:
 
 spring:
   cloud:
+    ## 整合sentinel，配置sentinel控制台的地址
+    sentinel:
+      transport:
+        ## 指定控制台的地址，默认端口58858
+        dashboard: 192.168.8.133:58858
+        ## 默认取服务ip，我这里是配置路由器ip，因为dashboard无法连到我的局域网ip
+        clientip: 192.168.9.92
+        ## 默认是8719，我这里改一下，且在路由器上配置端口映射，将192.168.9.92:58719转到我的局域网ip:58719
+        port: 58719
+      ## Sentinel 网关流控默认的粒度是 route 维度以及自定义 API 分组维度，默认不支持 URL 粒度（若在网关流控控制台上看到了 URL 资源，就是此配置项没有置为 false）。
+      filter: false
+      ## 是否立即注册，为true时，服务启动就注册到dashboard，dashboard马上就能看到服务；为false时，需要有接口访问才能在dashboard上看到服务
+      eager: true
+      #配置限流之后，响应内容
+      scg:
+        fallback:
+          ## 两种模式，一种是response返回文字提示信息，一种是redirect，重定向跳转，需要同时配置redirect(跳转的uri)
+          ## 返回模式
+          mode: response
+          ## 响应的状态
+          response-status: 200
+          ## 响应体
+          response-body: '{"code": 200,"message": "当前请求繁忙，请休息一下稍后再试哦！","success": false}'
+          ## 跳转模式
+#          mode: redirect
+#          ## 跳转的URL
+#          redirect: http://www.baidu.com
+      datasource:
+        # 规则名称，可自定义，此处是一个留空规则
+        r1:
+          nacos:
+            # nacos地址
+            server-addr: localhost:8848
+            namespace: Common
+            # nacos中配置文件的data-id
+            dataId: ${spring.application.name}-sentinel-flow
+            # nacos中存储规则的groupId
+            groupId: DEFAULT_GROUP
+            # 定义存储的规则类型,表示流控规则，主要网关类型要设成gw-flow，否则控制台看不到，普通类型设成flow
+            rule-type: gw-flow
+            data-type: json
+        # 规则名称，可自定义，此处是个降级规则
+        r2:
+          nacos:
+            # nacos地址
+            server-addr: localhost:8848
+            namespace: Common
+            # nacos中配置文件的data-id
+            dataId: ${spring.application.name}-sentinel-degrade
+            # nacos中存储规则的groupId
+            groupId: DEFAULT_GROUP
+            # 定义存储的规则类型,表示降级规则
+            rule-type: degrade
+            data-type: json
+
     gateway:
       discovery:
         locator:

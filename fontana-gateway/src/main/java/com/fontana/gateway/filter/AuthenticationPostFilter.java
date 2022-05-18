@@ -173,11 +173,11 @@ public class AuthenticationPostFilter implements GlobalFilter, Ordered {
 
     @SuppressWarnings("unchecked")
     private Result<JSONObject> processLoginResponse(String responseBody) {
-        Result<JSONObject> Result = JSON.parseObject(responseBody, Result.class);
-        if (!Result.isSuccess()) {
-            return Result;
+        Result<JSONObject> response = JSON.parseObject(responseBody, Result.class);
+        if (!response.isSuccess()) {
+            return response;
         }
-        JSONObject loginData = Result.getData();
+        JSONObject loginData = response.getData();
         // 1. 先验证登陆服务器返回的应答数据是否正确
         JSONObject tokenData = loginData.getJSONObject(TokenData.REQUEST_ATTRIBUTE_NAME);
         if (tokenData == null) {

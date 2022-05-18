@@ -1,11 +1,8 @@
 package com.fontana.upmsapi.client;
 
-import com.fontana.base.result.Pagination;
 import com.fontana.base.result.Result;
 import com.fontana.cloud.feign.client.BaseClient;
 import com.fontana.cloud.feign.client.BaseFallbackFactory;
-import com.fontana.db.object.MyAggregationParam;
-import com.fontana.db.object.MyQueryParam;
 import com.fontana.upmsapi.dto.SysDeptDto;
 import com.fontana.upmsapi.vo.SysDeptVo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,7 +22,7 @@ import java.util.Set;
  * @date 2020-08-08
  */
 @FeignClient(
-        name = "common-upms",
+        name = "common-upms", contextId="dept",
         fallbackFactory = SysDeptClient.SysDeptClientFallbackFactory.class)
 public interface SysDeptClient extends BaseClient<SysDeptDto, SysDeptVo, Long> {
 
@@ -95,56 +92,6 @@ public interface SysDeptClient extends BaseClient<SysDeptDto, SysDeptVo, Long> {
     @PostMapping("/sysDept/deleteBy")
     Result<Integer> deleteBy(@RequestBody SysDeptDto filter);
 
-    /**
-     * 获取远程主对象中符合查询条件的数据列表。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含实体对象集合。
-     */
-    @Override
-    @PostMapping("/sysDept/listBy")
-    Result<Pagination<SysDeptVo>> listBy(@RequestBody MyQueryParam queryParam);
-
-    /**
-     * 获取远程主对象中符合查询条件的单条数据对象。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含实体对象。
-     */
-    @Override
-    @PostMapping("/sysDept/getBy")
-    Result<SysDeptVo> getBy(@RequestBody MyQueryParam queryParam);
-
-    /**
-     * 获取远程主对象中符合查询条件的数据列表。
-     * 和listBy接口相比，以Map列表的方式返回的主要目的是，降低服务之间的耦合度。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含主对象集合。
-     */
-    @Override
-    @PostMapping("/sysDept/listMapBy")
-    Result<Pagination<Map<String, Object>>> listMapBy(@RequestBody MyQueryParam queryParam);
-
-    /**
-     * 获取远程主对象中符合查询条件的数据数量。
-     *
-     * @param queryParam 查询参数。
-     * @return 应答结果对象，包含结果数量。
-     */
-    @Override
-    @PostMapping("/sysDept/countBy")
-    Result<Integer> countBy(@RequestBody MyQueryParam queryParam);
-
-    /**
-     * 获取远程对象中符合查询条件的分组聚合计算Map列表。
-     *
-     * @param aggregationParam 聚合参数。
-     * @return 应该结果对象，包含聚合计算后的分组Map列表。
-     */
-    @Override
-    @PostMapping("/sysDept/aggregateBy")
-    Result<List<Map<String, Object>>> aggregateBy(@RequestBody MyAggregationParam aggregationParam);
 
     @Component("UpmsSysDeptClientFallbackFactory")
     @Slf4j
@@ -156,5 +103,6 @@ public interface SysDeptClient extends BaseClient<SysDeptDto, SysDeptVo, Long> {
             log.error("Exception For Feign Remote Call.", throwable);
             return new SysDeptClientFallbackFactory();
         }
+
     }
 }

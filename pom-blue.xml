@@ -53,6 +53,7 @@
         <fastdfs-client.version>1.27.2</fastdfs-client.version>
         <aws-java-sdk-s3.version>1.11.792</aws-java-sdk-s3.version>
 
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <jacoco.version>0.8.7</jacoco.version>
         <!-- docker image build props -->
         <docker.registry>docker.bluetron.com</docker.registry>

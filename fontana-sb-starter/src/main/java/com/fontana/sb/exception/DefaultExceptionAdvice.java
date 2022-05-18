@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.net.SocketTimeoutException;
 import java.sql.SQLException;
 
 /**
@@ -62,6 +63,27 @@ public class DefaultExceptionAdvice {
     public Result handleSQLException(SQLException e) {
         return defHandler("服务运行SQLException异常", e);
     }
+
+    /**
+     * SocketTimeoutException 超時异常处理
+     * 返回状态码:500
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({SocketTimeoutException.class})
+    public Result handleSocketTimeoutException(SocketTimeoutException e) {
+        return defHandler("超时SocketTimeoutException异常", e);
+    }
+
+    /**
+     * SocketTimeoutException 超時异常处理
+     * 返回状态码:500
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({ArithmeticException.class})
+    public Result handleArithmeticException(ArithmeticException e) {
+        return defHandler("算数计算异常", e);
+    }
+
 
     /**
      * GeneralException 自定义异常处理基础类

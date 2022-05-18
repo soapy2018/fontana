@@ -1,0 +1,85 @@
+spring:
+  application:
+    name: feign-demo
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        # 需要跟feign服务提供者在一个namespace下
+        namespace: Common
+
+    ## 整合sentinel，配置sentinel控制台的地址
+    sentinel:
+      transport:
+        ## 指定控制台的地址，默认端口58858
+        dashboard: 192.168.8.133:58858
+        ## 默认取服务ip，我这里是配置路由器ip，因为dashboard无法连到我的局域网ip
+        clientip: 192.168.9.92
+        ## 默认是8719，我这里改一下，且在路由器上配置端口映射，将192.168.9.92:58719转到我的局域网ip:58719
+        port: 58719
+      ## 是否立即注册，为true时，服务启动就注册到dashboard，dashboard马上就能看到服务；为false时，需要有接口访问才能在dashboard上看到服务
+      eager: true
+
+fontana:
+  tracelog:
+    enable: true
+
+#  openFeign集成了Ribbon，如果openFeign没有设置对应的超时时间，则默认使用Ribbon的超时连接时间、读超时时间（默认都是1s）
+
+# 设置ribbon超时时间，不设置，默认为1s
+ribbon:
+  # 值的是建立链接所用的时间，适用于网络状况正常的情况下， 两端链接所用的时间
+  ConectTimeout: 5000
+  # 指的是建立链接后从服务器读取可用资源所用的时间
+  ReadTimeout: 5000
+
+# 设置feign超时时间，则ribbon的超时时间设置将失效
+feign:
+  httpclient:
+    # 开启 Http Client
+    enabled: true
+  ## openFeign支持请求/响应开启GZIP压缩
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  ## 使用sentinel熔断降级
+  sentinel:
+    enabled: true
+  client:
+    config:
+      ## default 设置的全局超时时间，指定服务名称可以设置单个服务的超时时间
+      default:
+        connectTimeout: 5000
+        readTimeout: 50000
+#        openFeign虽然提供了日志增强功能，但是默认是不显示任何日志的，不过开发者在调试阶段可以自己配置日志的级别。
+#        openFeign的日志级别如下：
+#        NONE：默认的，不显示任何日志;
+#        BASIC：仅记录请求方法、URL、响应状态码及执行时间;
+#        HEADERS：除了BASIC中定义的信息之外，还有请求和响应的头信息;
+#        FULL：除了HEADERS中定义的信息之外，还有请求和响应的正文及元数据。
+#        配置起来也很简单，步骤如下：
+#        1、yaml文件中设置feign日志级别
+#        2、同时需要把feignclient类所在包的日志级别设置为debug时才生效，例如：
+#        logging:
+#          level:
+#            com.fontana.upmsapi.client: debug
+        loggerLevel: full
+      ## 为服务单独配置超时时间，将会覆盖默认配置
+      common-upms:
+        connectTimeout: 5000
+        readTimeout: 50000
+
+#  只需要在配置文件中调整指定包或者openFeign的接口日志级别，如下:
+#  当然你也可以配置一个特定的openFeign接口。
+logging:
+  level:
+    com.fontana.upmsapi.client: debug
+
+
+
+
+

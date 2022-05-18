@@ -21,16 +21,13 @@
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-cloud-starter</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-base</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fontana</groupId>
-            <artifactId>fontana-db-starter</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

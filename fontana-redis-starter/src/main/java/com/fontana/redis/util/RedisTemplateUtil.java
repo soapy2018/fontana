@@ -323,7 +323,7 @@ public class RedisTemplateUtil {
      * @param key the key
      * @return the long
      */
-    public long incr(final String key) {
+    public Long incr(final String key) {
         return redisTemplate.opsForValue().increment(key);
     }
 

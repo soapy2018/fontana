@@ -83,7 +83,7 @@ public class DefaultWebMvcConfig implements WebMvcConfigurer {
                 SerializerFeature.DisableCircularReferenceDetect
 //                , SerializerFeature.IgnoreNonFieldGetter //设置后会导致对象中只有方法没有变量的字段被忽略，例如Result#success
         );
-        //配置日期格式
+        //配置全局日期格式
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         fastConverter.setFastJsonConfig(fastJsonConfig);
         return fastConverter;

@@ -23,14 +23,39 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.fontana</groupId>
-            <artifactId>fontana-db-starter</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+
+
+<!--        Feign在默认情况下使用的是JDK原生的URLConnection发送HTTP请求，没有连接池，但是对每个地址会保持一个长连接，即利用HTTP的persistence connection。-->
+<!--        在生产环境中，通常不使用默认的http client，通常有如下两种选择：-->
+<!--        1、使用ApacheHttpClient-->
+<!--        2、使用OkHttp-->
+<!--        至于哪个更好，其实各有千秋，我比较倾向于ApacheHttpClient，毕竟老牌子了，稳定性不在话下。-->
+<!--        具体怎么替换，可以参考org.springframework.cloud.openfeign.FeignAutoConfiguration-->
+<!--        以ApacheHttpClient为例替换步骤：-->
+<!--        1、添加如下两个ApacheHttpClient依赖-->
+<!--        2、配置文件中开启：feign.httpclient.enabled这个配置要设置为true-->
+<!--        3、验证：feign.SynchronousMethodHandler#executeAndDecode()这个方法中可以清楚的看出调用哪个client-->
+
+        <!--     使用Apache HttpClient替换Feign原生httpclient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+
         <!--server-api-->
         <dependency>
             <groupId>javax.servlet</groupId>

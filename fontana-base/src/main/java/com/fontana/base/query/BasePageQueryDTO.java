@@ -1,4 +1,4 @@
-package com.fontana.base.dto;
+package com.fontana.base.query;
 
 import lombok.Getter;
 
@@ -11,8 +11,8 @@ import lombok.Getter;
  */
 @Getter
 public class BasePageQueryDTO {
- private PageParam pageParam;
- private OrderParam orderParam;
+    private PageParam pageParam;
+    private OrderParam orderParam;
 }
 
 

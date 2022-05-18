@@ -1,4 +1,4 @@
-package com.fontana.base.dto;
+package com.fontana.base.query;
 
 import lombok.Getter;
 
@@ -11,6 +11,7 @@ import lombok.Getter;
  */
 @Getter
 public class PageParam {
+
     public static final int DEFAULT_PAGE_NUM = 1;
     public static final int DEFAULT_PAGE_SIZE = 10;
     public static final int DEFAULT_MAX_SIZE = 100;

@@ -14,8 +14,6 @@ public class CopyUtil {
      * @param src
      * @param <T>
      * @return
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public static <T> List<T> deepCopy(List<T> src) {
 

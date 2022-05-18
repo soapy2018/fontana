@@ -41,6 +41,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-db-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--nacos 注册中心客户端-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

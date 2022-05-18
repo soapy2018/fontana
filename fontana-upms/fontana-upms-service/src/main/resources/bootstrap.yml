@@ -17,6 +17,19 @@ spring:
           - data-id: upms-dev.yaml
             group: DEFAULT_GROUP
             refresh: true
+
+    ## 整合sentinel，配置sentinel控制台的地址
+    sentinel:
+      transport:
+        ## 指定控制台的地址，默认端口58858
+        dashboard: 192.168.8.133:58858
+        ## 默认取服务ip，我这里是配置路由器ip，因为dashboard无法连到我的局域网ip
+        clientip: 192.168.9.92
+        ## 默认是8719，我这里改一下，且在路由器上配置端口映射，将192.168.9.92:58720转到我的局域网ip:58720
+        port: 58720
+      ## 是否立即注册，为true时，服务启动就注册到dashboard，dashboard马上就能看到服务；为false时，需要有接口访问才能在dashboard上看到服务
+      eager: true
+
 fontana:
   tracelog:
     enable: true
