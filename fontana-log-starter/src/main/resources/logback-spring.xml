@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出 -->
 <configuration>
     <contextName>${APP_NAME}</contextName>
     <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
-    <springProperty name="LOG_FILE" scope="context" source="logging.file" defaultValue="../logs/application/${APP_NAME}"/>
-    <springProperty name="LOG_POINT_FILE" scope="context" source="logging.file" defaultValue="../logs/point"/>
-    <springProperty name="LOG_AUDIT_FILE" scope="context" source="logging.file" defaultValue="../logs/audit"/>
+    <springProperty name="LOG_FILE" scope="context" source="logging.appfile" defaultValue="./logs/${APP_NAME}/application/"/>
+    <springProperty name="LOG_API_FILE" scope="context" source="logging.apifile" defaultValue="./logs/${APP_NAME}/api"/>
+    <springProperty name="LOG_POINT_FILE" scope="context" source="logging.pointfile" defaultValue="./logs/${APP_NAME}/point"/>
+    <springProperty name="LOG_AUDIT_FILE" scope="context" source="logging.auditfile" defaultValue="./logs/${APP_NAME}/audit"/>
     <springProperty name="LOG_MAXFILESIZE" scope="context" source="logback.filesize" defaultValue="50MB"/>
     <springProperty name="LOG_FILEMAXDAY" scope="context" source="logback.filemaxday" defaultValue="7"/>
-    <springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="0.0.0.0"/>
+    <springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="127.0.0.1"/>
     <springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
 
     <!-- 彩色日志 -->
@@ -31,6 +33,7 @@
     </appender>
     <!-- 按照每天生成常规日志文件 -->
     <appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${LOG_FILE}/${APP_NAME}.log</file>
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN_NO_COLOR}</pattern>
@@ -38,6 +41,7 @@
         </encoder>
         <!-- 基于时间的分包策略 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
             <fileNamePattern>${LOG_FILE}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--保留时间,单位:天-->
             <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
@@ -50,7 +54,9 @@
         </filter>
     </appender>
 
+    <!-- 时间滚动输出日志 -->
     <appender name="point_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${LOG_POINT_FILE}/point.log</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}|${APP_NAME}|%msg%n</pattern>
@@ -58,6 +64,7 @@
         </encoder>
         <!-- 基于时间的分包策略 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
             <fileNamePattern>${LOG_POINT_FILE}/point.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--保留时间,单位:天-->
             <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
@@ -84,8 +91,39 @@
         </rollingPolicy>
     </appender>
 
+    <!-- 时间滚动输出日志 -->
+    <appender name="api_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${LOG_API_FILE}/api.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}|${APP_NAME}|%msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
+            <fileNamePattern>${LOG_API_FILE}/point.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--保留时间,单位:天-->
+            <maxHistory>${LOG_FILEMAXDAY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG_MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- 异步输出 -->
+    <!--
+        AsyncAppender并不处理日志, 只是将日志缓冲到一个BlockingQueue里面去, 并在内部创建一个工作线程从队列头部获取日志,
+        之后将获取的日志循环记录到附加的其他appender上去, 从而达到不阻塞主线程的效果。
+        因此AsynAppender仅仅充当事件转发器, 必须引用另一个appender来工作。
+    -->
     <appender name="point_log_async" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
         <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+<!--        <queueSize>512</queueSize>-->
+        <!-- 添加附加的appender,最多只能添加一个 -->
         <appender-ref ref="point_log"/>
     </appender>
     <appender name="file_async" class="ch.qos.logback.classic.AsyncAppender">
@@ -96,15 +134,71 @@
         <discardingThreshold>0</discardingThreshold>
         <appender-ref ref="audit_log"/>
     </appender>
+    <appender name="api_log_async" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="api_log"/>
+    </appender>
+
+    <appender name="applog" class="com.bluetron.common.log.producer.appender.AppLogAppender">
+        <appName>${APP_NAME}</appName>
+        <logServ>http://192.168.8.133:8983</logServ>
+    </appender>
+    <appender name="performanceLog" class="com.bluetron.common.log.producer.appender.PerformanceLogAppender">
+        <appName>${APP_NAME}</appName>
+        <logServ>http://192.168.8.133:8983</logServ>
+    </appender>
+
+    <!--
+        <logger>用来设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender>。
+        <logger>仅有一个name属性、一个可选的level和一个可选的addtivity属性。
+        name:用来指定受此logger约束的某一个包或者具体的某一个类。
+        level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，还有一个特俗值INHERITED或者同义词NULL，代表强制执行上级的级别。如果未设置此属性，那么当前logger将会继承上级的级别。
+        addtivity:是否向上级logger传递打印信息。默认是true。
+    -->
+    <!--
+    logger在实际使用的时候有两种情况：
+    第一种：不指定级别，不指定appender
+    例如：<logger name="com.fontana.log.monitor" />
+    monitor类的日志没有设置打印级别，所以继承他的上级的日志级别“info”；
+    没有设置addtivity，默认为true，将此loger的打印信息向上级传递；
+    没有设置appender，此logger本身不打印任何信息。
+    将级别为“info”及大于“info”的日志信息传递给root，本身并不打印；
+    root接到下级传递的信息，交给已经配置好的名字为“StdoutAppender”和”file_async“的appender，这两个appender 将信息分别打印到控制台和文件；
+    第二种：指定级别，指定appender
+    例如：
+    <logger name="com.fontana.log.monitor" level="debug" addtivity="false">
+        <appender-ref ref="point_log_async" />
+    </logger>
+    将级别为“debug”及大于“debug”的日志信息交给此logger指定的名为“point_log_async”的appender处理，在文件中打出日志，不再向上级root传递打印信息。
+    注：当然如果你把additivity="false"改成additivity="true"的话，就会打印两次，因为打印信息向上级传递，logger本身打印一次，root接到后又打印一次。
+    -->
     <logger name="com.fontana.log.monitor" level="debug" addtivity="false">
         <appender-ref ref="point_log_async" />
     </logger>
     <logger name="com.fontana.log.auditLog.LoggerAuditServiceImpl" level="debug" addtivity="false">
         <appender-ref ref="audit_log_async" />
     </logger>
+    <logger name="com.fontana.log.apiLog.ApiLogAspect" level="debug" addtivity="false">
+        <appender-ref ref="api_log_async" />
+    </logger>
+    <logger name="performanceLog" level="info" additivity="false">
+        <appender-ref ref="performanceLog"/>
+    </logger>
 
+    <!--
+        root节点: 必选节点，用来指定最基础的日志输出级别，只有一个level属性
+        level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，
+        不能设置为INHERITED或者同义词NULL。默认是DEBUG
+        可以包含零个或多个元素，标识这个appender将会添加到这个logger。
+    -->
     <root level="INFO">
         <appender-ref ref="StdoutAppender"/>
         <appender-ref ref="file_async"/>
+        <appender-ref ref="applog"/>
     </root>
 </configuration>
+<!--
+        logback配置文件中总共有2个概念，一个是logger,一个是appender, root是特殊的logger.
+        logger代码记录者，可以理解为会写字的人。appender是输出到哪，可以理解为黑板、本子等等。
+        结合起来就是会写字的人，可以将字写在黑板上，也可以将字写在本子上。
+-->

@@ -33,6 +33,11 @@ spring:
 fontana:
   tracelog:
     enable: true
+  apilog:
+    enable: true
+    showIP: true
+    showArgs: true
+    showHead: true
 
 
 

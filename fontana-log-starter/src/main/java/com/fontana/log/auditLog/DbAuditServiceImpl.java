@@ -29,9 +29,9 @@ import javax.sql.DataSource;
 @ConditionalOnProperty(prefix = CommonConstants.AUDITLOG_PREFIX, name = "type", havingValue = "db")
 @ConditionalOnClass({JdbcTemplate.class, HikariConfig.class})
 public class DbAuditServiceImpl implements IAuditService {
-    private static final String INSERT_SQL = " insert into sys_logger " +
-            " (application_name, class_name, method_name, user_id, user_name, tenant_id, operation, timestamp) " +
-            " values (?,?,?,?,?,?,?,?)";
+    private static final String INSERT_SQL = " insert into audit_log " +
+            " (application_name, class_name, method_name, user_id, user_name, tenant_id, operation, timestamp, time_consume) " +
+            " values (?,?,?,?,?,?,?,?,?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -45,7 +45,7 @@ public class DbAuditServiceImpl implements IAuditService {
 
     @PostConstruct
     public void init() {
-        String sql = "CREATE TABLE IF NOT EXISTS `sys_logger`  (\n" +
+        String sql = "CREATE TABLE IF NOT EXISTS `audit_log`  (\n" +
                 "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
                 "  `application_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '应用名',\n" +
                 "  `class_name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类名',\n" +
@@ -55,6 +55,7 @@ public class DbAuditServiceImpl implements IAuditService {
                 "  `tenant_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '租户id',\n" +
                 "  `operation` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作信息',\n" +
                 "  `timestamp` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建时间',\n" +
+                "  `time_consume` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '操作耗时',\n" +
                 "  PRIMARY KEY (`id`) USING BTREE\n" +
                 ") ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;";
         this.jdbcTemplate.execute(sql);
@@ -66,6 +67,6 @@ public class DbAuditServiceImpl implements IAuditService {
         this.jdbcTemplate.update(INSERT_SQL
                 , audit.getApplicationName(), audit.getClassName(), audit.getMethodName()
                 , audit.getUserId(), audit.getUserName(), audit.getTenantId()
-                , audit.getOperation(), audit.getTimestamp());
+                , audit.getOperation(), audit.getTimestamp(), audit.getTimeConsume());
     }
 }

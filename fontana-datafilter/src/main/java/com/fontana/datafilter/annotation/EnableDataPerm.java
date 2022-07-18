@@ -1,4 +1,4 @@
-package com.fontana.base.annotation;
+package com.fontana.datafilter.annotation;
 
 import java.lang.annotation.*;
 

@@ -142,7 +142,6 @@ public interface DataBaseConstant {
      * 业务流程状态
      */
 	String BPM_STATUS_TABLE = "bpm_status";
-    //*********系统建表标准字段****************************************
 
 
     /**
@@ -153,4 +152,6 @@ public interface DataBaseConstant {
      * 租户ID 数据库字段名
      */
     String TENANT_ID_TABLE = "tenant_id";
+
+	//*********系统建表标准字段****************************************
 }

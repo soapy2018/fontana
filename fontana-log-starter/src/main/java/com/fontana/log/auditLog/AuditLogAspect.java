@@ -5,8 +5,9 @@ import com.fontana.base.log.Audit;
 import com.fontana.base.log.IAuditService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -52,22 +53,32 @@ public class AuditLogAspect {
         this.auditService = auditService;
     }
 
-    @Before("@within(auditLog) || @annotation(auditLog)")
-    public void beforeMethod(JoinPoint joinPoint, AuditLog auditLog) {
+    /**
+     * 环绕
+     *
+     * @param proceedingJoinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around("@within(auditLog) || @annotation(auditLog)")
+    public Object doAround(ProceedingJoinPoint proceedingJoinPoint, AuditLog auditLog) throws Throwable {
+
         //判断功能是否开启
         if (auditLogProperties.getEnabled()) {
+            long startTime = System.currentTimeMillis();
             if (auditService == null) {
                 log.warn("AuditLogAspect - auditService is null");
-                return;
             }
             if (auditLog == null) {
-                // 获取类上的注解
-                auditLog = joinPoint.getTarget().getClass().getDeclaredAnnotation(AuditLog.class);
+                auditLog = proceedingJoinPoint.getTarget().getClass().getDeclaredAnnotation(AuditLog.class);
             }
-
-            Audit audit = getAudit(auditLog, joinPoint);
+            Audit audit = getAudit(auditLog, proceedingJoinPoint);
+            Object result = proceedingJoinPoint.proceed();
+            audit.setTimeConsume(Long.valueOf(System.currentTimeMillis() - startTime).toString()+"ms");
             auditService.save(audit);
+            return result;
         }
+        return proceedingJoinPoint.proceed();
     }
 
     /**

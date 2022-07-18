@@ -33,98 +33,14 @@
 
     <name>fontana</name>
 
-<!--    <parent>-->
-<!--        <groupId>org.springframework.boot</groupId>-->
-<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
-<!--        <version>2.3.12.RELEASE</version>-->
-<!--    </parent>-->
+    <parent>
+        <groupId>com.bluetron.app</groupId>
+        <artifactId>bluetron-app-parent</artifactId>
+        <version>1.1.2.RELEASE</version>
+    </parent>
 
     <properties>
-
-        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <!-- 三大版本 -->
-        <!-- 三大版本适配说明：https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E-->
-        <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
-        <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.7.RELEASE</spring.cloud.alibaba.version>
-
-        <!-- 1.0.26 -> 1.2.5 -->
-        <druid.version>1.2.5</druid.version>
-
-        <!-- 8.0.13 -> 8.0.23 -->
-        <mysql.version>8.0.23</mysql.version>
-
-        <commons-lang.version>2.6</commons-lang.version>
-        <!-- 3.9 -> 3.12.0 -->
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <!-- 2.6 -> 2.8.0 -->
-        <commons-io.version>2.8.0</commons-io.version>
-        <!-- add 1.15 -->
-        <commons-codec.version>1.15</commons-codec.version>
-
-        <!-- 1.9.0.RELEASE -> 1.9.1.RELEASE -->
-        <swagger.version>1.9.1.RELEASE</swagger.version>
-
-        <!-- 1.2.61 -> 1.2.75 -->
-        <fastjson.version>1.2.75</fastjson.version>
-
-        <!-- commons-collections 替换为 commons-collections4 -->
-        <commons-collections4.version>4.4</commons-collections4.version>
-        <!--		老的毕竟还有在用的，先放着吧-->
-        <commons-collections.version>3.2.2</commons-collections.version>
-
-        <!-- 3.3.0 -> 3.15.0 -->
-        <java-jwt.version>3.15.0</java-jwt.version>
-
-        <!-- 1.2.4 -> 1.3.0 -->
-        <pagehelper.version>1.3.0</pagehelper.version>
-
-        <mail.version>1.4.7</mail.version>
-
-        <!-- 6.4.3 -> 6.16.0 -->
-        <jasperreports.version>6.16.0</jasperreports.version>
-        <jasperreports-fonts.version>1.0.0</jasperreports-fonts.version>
-
-        <!-- 3.2.0 -> 3.4.1 -->
-        <mybatis-plus-boot-starter.version>3.4.1</mybatis-plus-boot-starter.version>
-
-        <!-- 1.12 -> 1.26 -->
-        <tika-core.version>1.26</tika-core.version>
-
-        <!-- 10.2.3 -> 10.12 -->
-        <feign-core.version>10.12</feign-core.version>
-        <feign-jackson.version>10.12</feign-jackson.version>
-
-        <!-- 1.18.8 -> 1.18.20 -->
-        <lombok.version>1.18.20</lombok.version>
-
-        <!-- 4.2.2 -> 4.9.1 -->
-        <!-- 防止冲突，写死对应 kotlin-stdlib 版本 -->
-        <okhttp.version>4.9.1</okhttp.version>
-        <kotlin-stdlib.version>1.4.10</kotlin-stdlib.version>
-
-        <feign-form-spring.version>3.8.0</feign-form-spring.version>
-        <feign-form.version>3.8.0</feign-form.version>
-
-        <!-- 7.4.2 -> 7.12.0 -->
-        <elasticsearch-rest-high-level-client.version>7.12.0</elasticsearch-rest-high-level-client.version>
-        <elasticsearch.version>7.12.0</elasticsearch.version>
-        <!-- 4.1.2 -> 5.1.4 -->
-        <aviator.version>5.1.4</aviator.version>
-        <!-- 2.1.6 -> 2.2.8 -->
-        <easyexcel.version>2.2.8</easyexcel.version>
-
-        <logstash-logback-encoder.version>5.3</logstash-logback-encoder.version>
-        <spring-cloud-starter-kubernetes-all.version>1.1.6.RELEASE</spring-cloud-starter-kubernetes-all.version>
-
-        <ali-transmittable-thread-local.version>2.12.1</ali-transmittable-thread-local.version>
-        <hutool.version>5.7.7</hutool.version>
-        <commons-httpclient.version>3.1</commons-httpclient.version>
-        <redisson-starter.version>3.16.0</redisson-starter.version>
-
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
@@ -138,17 +54,22 @@
         <fastdfs-client.version>1.27.2</fastdfs-client.version>
         <aws-java-sdk-s3.version>1.11.792</aws-java-sdk-s3.version>
 
-        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <jacoco.version>0.8.7</jacoco.version>
         <!-- docker image build props -->
         <docker.registry>docker.bluetron.com</docker.registry>
         <docker.image.prefix>${project.groupId}</docker.image.prefix>
         <docker.image.tag.suffix/>
         <!-- 默认不开启镜像构建 -->
         <dockerfile.skip>true</dockerfile.skip>
+        <docker.baseImage>docker.nb.bluetron.cn/library/openjdk:8-jdk-alpine-utc8-dr-ft</docker.baseImage>
+        <docker.volumes>/tmp</docker.volumes>
+        <docker.java.security.egd>-Djava.security.egd=file:/dev/./urandom</docker.java.security.egd>
+        <docker.java.opts>-Xms128m -Xmx128m</docker.java.opts>
+
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <jacoco.version>0.8.7</jacoco.version>
         <!-- 宁波sonar环境 -->
         <sonar.host.url>http://192.168.8.92:9000</sonar.host.url>
-<!--        sonar用户名和密码，默认是admin/admin，如果没改过，可以不配-->
+        <!--        sonar用户名和密码，默认是admin/admin，如果没改过，可以不配-->
         <sonar.login>admin</sonar.login>
         <sonar.password>admin</sonar.password>
 
@@ -171,7 +92,9 @@
     </dependencies>
 
     <dependencyManagement>
+
         <dependencies>
+
             <dependency>
                 <groupId>com.fontana</groupId>
                 <artifactId>fontana-base</artifactId>
@@ -227,213 +150,6 @@
                 <artifactId>fontana-flow-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons-lang.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons-collections4.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>${commons-collections.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.spring4all</groupId>
-                <artifactId>swagger-spring-boot-starter</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.auth0</groupId>-->
-<!--                <artifactId>java-jwt</artifactId>-->
-<!--                <version>${java-jwt.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>net.sf.jasperreports</groupId>-->
-<!--                <artifactId>jasperreports</artifactId>-->
-<!--                <version>${jasperreports.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>com.junf</groupId>-->
-<!--                <artifactId>jasperreports-fonts-SimSun</artifactId>-->
-<!--                <version>${jasperreports-fonts.version}</version>-->
-<!--            </dependency>-->
-            <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>mail</artifactId>
-                <version>${mail.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus-boot-starter.version}</version>
-            </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.apache.tika</groupId>-->
-<!--                <artifactId>tika-core</artifactId>-->
-<!--                <version>${tika-core.version}</version>-->
-<!--            </dependency>-->
-            <dependency>
-                <groupId>io.github.openfeign.form</groupId>
-                <artifactId>feign-form-spring</artifactId>
-                <version>${feign-form-spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.openfeign.form</groupId>
-                <artifactId>feign-form</artifactId>
-                <version>${feign-form.version}</version>
-            </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.netflix.feign</groupId>-->
-<!--                <artifactId>feign-core</artifactId>-->
-<!--                <version>${feign-core.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>com.netflix.feign</groupId>-->
-<!--                <artifactId>feign-jackson</artifactId>-->
-<!--                <version>${feign-jackson.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.security.oauth</groupId>-->
-<!--                <artifactId>spring-security-oauth2</artifactId>-->
-<!--                <version>${spring-security-oauth2.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.elasticsearch.client</groupId>-->
-<!--                <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
-<!--                <version>${elasticsearch-rest-high-level-client.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.elasticsearch</groupId>-->
-<!--                <artifactId>elasticsearch</artifactId>-->
-<!--                <version>${elasticsearch.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>com.googlecode.aviator</groupId>-->
-<!--                <artifactId>aviator</artifactId>-->
-<!--                <version>${aviator.version}</version>-->
-<!--            </dependency>-->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>${okhttp.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>logging-interceptor</artifactId>
-                <version>${okhttp.version}</version>
-            </dependency>
-            <!-- kotlin-stdlib.version -->
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin-stdlib.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>easyexcel</artifactId>
-                <version>${easyexcel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.logstash.logback</groupId>
-                <artifactId>logstash-logback-encoder</artifactId>
-                <version>${logstash-logback-encoder.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-kubernetes-all</artifactId>
-                <version>${spring-cloud-starter-kubernetes-all.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>transmittable-thread-local</artifactId>
-                <version>${ali-transmittable-thread-local.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>${commons-httpclient.version}</version>
-            </dependency>
-            <!-- 在Redis基础上的一个Java实用工具包 -->
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>${redisson-starter.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -459,47 +175,16 @@
             </resource>
         </resources>
 
-<!--        <plugins>-->
-
-<!--            <plugin>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <target>${maven.compiler.target}</target>-->
-<!--                    <source>${maven.compiler.source}</source>-->
-<!--                    <encoding>${project.build.sourceEncoding}</encoding>-->
-<!--                    <annotationProcessorPaths>-->
-<!--                        <path>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                            <version>${lombok.version}</version>-->
-<!--                        </path>-->
-<!--                        <path>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok-mapstruct-binding</artifactId>-->
-<!--                            <version>0.2.0</version>-->
-<!--                        </path>-->
-<!--                        <path>-->
-<!--                            <groupId>org.mapstruct</groupId>-->
-<!--                            <artifactId>mapstruct-processor</artifactId>-->
-<!--                            <version>${mapstruct.version}</version>-->
-<!--                        </path>-->
-<!--                    </annotationProcessorPaths>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-
         <pluginManagement>
 
-<!--    分为基础插件和补充插件，基础插件是maven默认的，-->
-<!--    两者区别是： 基础插件在在父pom的pluginManagement定义后，子插件不用再定义直接使用父pom配置；
-        而补充插件需要在子pom的plugins中进行定义才能生效，不过version不用定义-->
-
+            <!--    分为基础插件和补充插件，基础插件是maven默认的，-->
+            <!--    两者区别是： 基础插件在在父pom的pluginManagement定义后，子插件不用再定义直接使用父pom配置；
+                    而补充插件需要在子pom的plugins中进行定义才能生效，不过version不用定义-->
             <plugins>
-
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-<!--                最基本插件，maven是个项目管理工具，如果不告诉它我们的代码要使用什么样的jdk版本编译的话，-->
-<!--                它就会用maven-compiler-plugin默认的jdk版本来进行处理，这样就容易出现版本不匹配-->
-<!--                以至于可能导致编译不通过的问题。-->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                最基本插件，maven是个项目管理工具，如果不告诉它我们的代码要使用什么样的jdk版本编译的话，-->
+                <!--                它就会用maven-compiler-plugin默认的jdk版本来进行处理，这样就容易出现版本不匹配-->
+                <!--                以至于可能导致编译不通过的问题。-->
                 <!-- Compiler , jdk1.8 -->
                 <!-- 版本默认跟着 spring-boot-parent走 -->
                 <!--基础插件-->
@@ -536,13 +221,13 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-<!--                添加了spring-boot-maven-plugin插件后，当运行mvn package时，-->
-<!--                项目会被打包成一个可以直接运行的jar包，使用"java -jar"可以直接运行。-->
-<!--                如果是一个不需要执行的jar包，类似common这种，在本身的项目配置里-->
-<!--                下面两个只能二选一                -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                添加了spring-boot-maven-plugin插件后，当运行mvn package时，-->
+                <!--                项目会被打包成一个可以直接运行的jar包，使用"java -jar"可以直接运行。-->
+                <!--                如果是一个不需要执行的jar包，类似common这种，在本身的项目配置里-->
+                <!--                下面两个只能二选一                -->
                 <!-- 可执行jar 打包插件 -->
                 <!-- 版本默认跟着 spring-boot-parent走 -->
                 <!--基础插件-->
@@ -559,17 +244,17 @@
                 </plugin>
 
                 <!-- 打包不需要执行的jar-->
-<!--                <plugin>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                    <configuration>-->
-<!--                        &lt;!&ndash; 跳过 repackage &ndash;&gt;-->
-<!--                        <skip>true</skip>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                <plugin>-->
+                <!--                    <groupId>org.springframework.boot</groupId>-->
+                <!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
+                <!--                    <configuration>-->
+                <!--                        &lt;!&ndash; 跳过 repackage &ndash;&gt;-->
+                <!--                        <skip>true</skip>-->
+                <!--                    </configuration>-->
+                <!--                </plugin>-->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
                 <!-- Maven通过Maven Surefire Plugin插件执行单元测试，生成的测试报告默认在目录target/surefire-reports-->
                 <!-- 测试插件 -->
                 <!-- 版本默认跟着 spring-boot-parent走 -->
@@ -584,11 +269,11 @@
                         <skipTests>true</skipTests>
                     </configuration>
                 </plugin>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-<!--                使用该插件，可以打出包含源码的jar包-->
-<!--                部分jar包，需要内部开源调试时可用-->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                使用该插件，可以打出包含源码的jar包-->
+                <!--                部分jar包，需要内部开源调试时可用-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -605,12 +290,12 @@
                         </execution>
                     </executions>
                 </plugin>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-<!--                Jacoco是一个开源的Java代码覆盖率工具-->
-<!--                目前使用 0.8.7-->
-<!--                默认测试文档生成位置为 target/site/jacoco，需要给sonar的文件为target/jacoco.exec-->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                Jacoco是一个开源的Java代码覆盖率工具-->
+                <!--                目前使用 0.8.7-->
+                <!--                默认测试文档生成位置为 target/site/jacoco，需要给sonar的文件为target/jacoco.exec-->
                 <!--jacoco 配置 -->
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -620,7 +305,7 @@
                     最低限度是设置准备代理(prepare-agent)和报告目标(report)-->
                     <executions>
                         <!-- prepare-agent 目标准备 JaCoCo 运行时代理以记录执行数据。它记录了执行的行数、回溯的行数等。-->
-                        <!-- 默认情况下，将执行数据写入文件target/jacoco-ut.exec。-->
+                        <!-- 默认情况下，将执行数据写入文件target/jacoco.exec。-->
                         <execution>
                             <id>default-prepare-agent</id>
                             <goals>
@@ -628,36 +313,36 @@
                             </goals>
                         </execution>
                         <!-- 报告目标根据 JaCoCo 运行时代理记录的执行数据创建代码覆盖率报告。由于我们已经指定了阶段属性，报告将在测试阶段编译后创建-->
-                        <!-- 默认从文件中读取执行数据target/jacoco-ut.exec，将代码覆盖率报告写入目录target/site/jacoco/index.html。-->
+                        <!-- 默认从文件中读取执行数据target/jacoco.exec，将代码覆盖率报告写入目录target/site/jacoco/index.html。-->
                         <execution>
                             <id>jacoco-report</id>
                             <phase>test</phase>
                             <goals>
                                 <goal>report</goal>
                             </goals>
-<!--                            就用默认吧，下面的都注释了-->
-<!--                            <configuration>-->
-<!--                                &lt;!&ndash;定义输出的文件夹&ndash;&gt;-->
-<!--                                <outputDirectory>target/jacoco-report</outputDirectory>-->
-<!--                                &lt;!&ndash;执行数据的文件&ndash;&gt;-->
-<!--                                <dataFile>${project.build.directory}/jacoco.exec</dataFile>-->
-<!--                                &lt;!&ndash;要从报告中排除的类文件列表，支持通配符(*和?)。如果未指定则不会排除任何内容&ndash;&gt;-->
-<!--                                <excludes>**/test/*.class</excludes>-->
-<!--                                &lt;!&ndash;包含生成报告的文件列表，支持通配符(*和?)。如果未指定则包含所有内容&ndash;&gt;-->
-<!--                                <includes></includes>-->
-<!--                                &lt;!&ndash;HTML 报告页面中使用的页脚文本。&ndash;&gt;-->
-<!--                                <footer></footer>-->
-<!--                                &lt;!&ndash;生成报告的文件类型，HTML(默认)、XML、CSV&ndash;&gt;-->
-<!--                                <formats>HTML</formats>-->
-<!--                                &lt;!&ndash;生成报告的编码格式，默认UTF-8&ndash;&gt;-->
-<!--                                <outputEncoding>UTF-8</outputEncoding>-->
-<!--                                &lt;!&ndash;抑制执行的标签&ndash;&gt;-->
-<!--                                <skip></skip>-->
-<!--                                &lt;!&ndash;源文件编码&ndash;&gt;-->
-<!--                                <sourceEncoding>UTF-8</sourceEncoding>-->
-<!--                                &lt;!&ndash;HTML报告的标题&ndash;&gt;-->
-<!--                                <title>${project.name}</title>-->
-<!--                            </configuration>-->
+                            <!--                            就用默认吧，下面的都注释了-->
+                            <!--                            <configuration>-->
+                            <!--                                &lt;!&ndash;定义输出的文件夹&ndash;&gt;-->
+                            <!--                                <outputDirectory>target/jacoco-report</outputDirectory>-->
+                            <!--                                &lt;!&ndash;执行数据的文件&ndash;&gt;-->
+                            <!--                                <dataFile>${project.build.directory}/jacoco.exec</dataFile>-->
+                            <!--                                &lt;!&ndash;要从报告中排除的类文件列表，支持通配符(*和?)。如果未指定则不会排除任何内容&ndash;&gt;-->
+                            <!--                                <excludes>**/test/*.class</excludes>-->
+                            <!--                                &lt;!&ndash;包含生成报告的文件列表，支持通配符(*和?)。如果未指定则包含所有内容&ndash;&gt;-->
+                            <!--                                <includes></includes>-->
+                            <!--                                &lt;!&ndash;HTML 报告页面中使用的页脚文本。&ndash;&gt;-->
+                            <!--                                <footer></footer>-->
+                            <!--                                &lt;!&ndash;生成报告的文件类型，HTML(默认)、XML、CSV&ndash;&gt;-->
+                            <!--                                <formats>HTML</formats>-->
+                            <!--                                &lt;!&ndash;生成报告的编码格式，默认UTF-8&ndash;&gt;-->
+                            <!--                                <outputEncoding>UTF-8</outputEncoding>-->
+                            <!--                                &lt;!&ndash;抑制执行的标签&ndash;&gt;-->
+                            <!--                                <skip></skip>-->
+                            <!--                                &lt;!&ndash;源文件编码&ndash;&gt;-->
+                            <!--                                <sourceEncoding>UTF-8</sourceEncoding>-->
+                            <!--                                &lt;!&ndash;HTML报告的标题&ndash;&gt;-->
+                            <!--                                <title>${project.name}</title>-->
+                            <!--                            </configuration>-->
                         </execution>
                         <!-- check goal可以配置检查相关的设置，比如配置最低覆盖率为0.6(60%),如果覆盖率未达到最低限制，则mvn test会报错-->
                         <execution>
@@ -683,11 +368,43 @@
                         </execution>
                     </executions>
                 </plugin>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-<!--                dockerfile-maven-plugin是一个maven的插件，主要作用是在项目构建的时候生成基于项目的docker镜像文件-->
-                <!-- docker install 阶段打包-->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--        docker-maven-plugin是一个maven的插件，主要作用是在项目构建的时候生成基于项目的docker镜像文件-->
+                <!--        此插件可以没有dockerfile文件-->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <configuration>
+                        <imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+                        <imageTags>
+                            <imageTag>${project.version}</imageTag>
+                            <imageTag>latest</imageTag>
+                        </imageTags>
+                        <forceTags>true</forceTags>
+                        <baseImage>${docker.baseImage}</baseImage>
+                        <volumes>${docker.volumes}</volumes>
+                        <env>
+                            <JAVA_OPTS>${docker.java.opts}</JAVA_OPTS>
+                        </env>
+                        <entryPoint>["sh","-c","java $JAVA_OPTS ${docker.java.security.egd} -jar /${project.build.finalName}.jar"]</entryPoint>
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.jar</include>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </plugin>
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                dockerfile-maven-plugin是一个maven的插件，主要作用是在项目构建的时候生成基于项目的docker镜像文件-->
+                <!--                此插件是用于代替过时的docker-maven-plugin，此插件要求必须提供Dockerfile文件，而且要求放在项目根目录下，即与pom.xml同级目录。-->
+                <!--                然后不需要像docker-maven-plugin插件那样需要指定Dockerfile文件存放路径的dockerDirectory参数。-->
+                <!-- docker构建、tag、推送，在 mvn install 阶段-->
                 <plugin>
                     <groupId>com.spotify</groupId>
                     <artifactId>dockerfile-maven-plugin</artifactId>
@@ -718,20 +435,47 @@
                         </buildArgs>
                     </configuration>
                 </plugin>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--                maven dependency插件提供了操作构件(artifact)的能力，可以从本地或者远程仓库 复制或者解压特定构件到指定位置。-->
+                <!--                如下配置示\是在package阶段将构件解压到默认位置target/dependency-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>unpack</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>${project.groupId}</groupId>
+                                        <artifactId>${project.artifactId}</artifactId>
+                                        <version>${project.version}</version>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
                 <!--sonar扫描插件配置 -->
-<!--            若不配置，则执行 mvn sonar:sonar命令时会自动下载最新版本，可能会产生与SonarQube的兼容性问题-->
-<!--            使用命令 mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar 可以指定版本-->
+                <!--            若不配置，则执行 mvn sonar:sonar命令时会自动下载最新版本，可能会产生与SonarQube的兼容性问题-->
+                <!--            使用命令 mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar 可以指定版本-->
                 <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>3.9.0.2155</version>
                 </plugin>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
 
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
+                <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
                 <!--  FindBugs是对编译后的class进行扫描，藉以发现一些隐藏的bug-->
                 <!--  设定为package阶段触发-->
                 <!-- findbugs-maven-plugin 配置-->
@@ -758,21 +502,9 @@
                     </executions>
                 </plugin>
             </plugins>
-<!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
-
+            <!--   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    -->
         </pluginManagement>
 
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>bluetron-releases</id>
-            <url>http://nexus.nb.bluetron.cn/repository/bluetron-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>bluetron-snapshots</id>
-            <url>http://nexus.nb.bluetron.cn/repository/bluetron-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>

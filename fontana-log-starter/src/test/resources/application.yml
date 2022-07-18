@@ -2,10 +2,15 @@ spring:
   application:
     name: common-log
 fontana:
-  apilog:
+#  apilog:
+#    enable: true
+#    showip: true
+#    showargs: true
+  solarlog:
     enable: true
-    showip: true
-    showargs: true
-#    auditlog:
+#  auditlog:
+#    enabled: false
 #      type: db
 #      datasource:
+logging:
+  sysfile: ./logs/${spring.application.name}/applications/

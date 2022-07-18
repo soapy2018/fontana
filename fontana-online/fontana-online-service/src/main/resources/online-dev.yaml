@@ -7,7 +7,7 @@ server:
 logging:
   level:
     # 这里设置的日志级别优先于log4j2.xml文件Loggers中的日志级别。
-    com.fontana: info
+    com.fontana.onlineservice: info
 
 spring:
   datasource:

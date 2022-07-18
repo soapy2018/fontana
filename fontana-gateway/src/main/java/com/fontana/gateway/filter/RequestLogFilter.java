@@ -43,6 +43,9 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
                 response.getHeaders().set(HttpConstants.TRACE_ID_HEADER, traceId);
                 return Mono.empty();
             });
+            //gateway也有pre和post两种方式的filter,分别处理前置逻辑和后置逻辑。客户端的请求先经过pre类型的filter，
+            // 然后将请求转发到具体的业务服务，收到业务服务的响应之后，再经过post类型的 filter 处理，最后返回响应到客户端。
+            //.then就是post后置逻辑，是收到响应后处理，且order越小优先级越高，反而是越晚处理
             return chain.filter(mutableExchange).then(Mono.fromRunnable(() -> {
                 Long startTime = exchange.getAttribute(GatewayConstant.START_TIME_ATTRIBUTE);
                 long elapse = 0;

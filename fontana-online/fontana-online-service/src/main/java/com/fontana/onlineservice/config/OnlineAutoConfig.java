@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties({OnlineProperties.class})
-@ComponentScan("com.fontana.onlineservice.*")
+//若是被别人引入的，需要借助这个去扫描自己的包，若是自己启动的可以删掉
+@ComponentScan("com.fontana.onlineservice")
 @MapperScan("com.fontana.onlineservice.mapper")
 @Slf4j
 public class OnlineAutoConfig {

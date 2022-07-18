@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties({FlowProperties.class})
+//若是被别人引入的，需要借助这个去扫描自己的包，若是自己启动的可以删掉
 @ComponentScan("com.fontana.flowservice.*")
 @MapperScan("com.fontana.flowservice.mapper")
 @Slf4j

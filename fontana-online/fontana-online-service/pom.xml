@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-datafilter</artifactId>
-<!--            <optional>true</optional>-->
+            <optional>true</optional>
         </dependency>
 
         <dependency>

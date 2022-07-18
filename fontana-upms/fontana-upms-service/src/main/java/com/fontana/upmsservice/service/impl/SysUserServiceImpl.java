@@ -16,7 +16,6 @@ import com.fontana.upmsservice.entity.SysUserRole;
 import com.fontana.upmsservice.mapper.SysDataPermUserMapper;
 import com.fontana.upmsservice.mapper.SysUserMapper;
 import com.fontana.upmsservice.mapper.SysUserRoleMapper;
-import com.fontana.upmsservice.mapper.AestMapper;
 import com.fontana.upmsservice.service.SysDataPermService;
 import com.fontana.upmsservice.service.SysDeptService;
 import com.fontana.upmsservice.service.SysRoleService;
@@ -46,8 +45,6 @@ import java.util.stream.Collectors;
 @Service("sysUserService")
 public class SysUserServiceImpl extends ABaseService<SysUser, Long> implements SysUserService {
 
-    @Autowired
-    private AestMapper testMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired

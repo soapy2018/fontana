@@ -47,4 +47,8 @@ public class Audit {
      * 操作信息
      */
     private String operation;
+    /**
+     * 操作耗时
+     */
+    private String timeConsume;
 }

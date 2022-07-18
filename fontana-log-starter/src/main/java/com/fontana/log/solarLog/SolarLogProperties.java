@@ -1,4 +1,4 @@
-package com.fontana.log.apiLog;
+package com.fontana.log.solarLog;
 
 import com.fontana.base.constant.CommonConstants;
 import lombok.Data;
@@ -6,15 +6,15 @@ import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @program: titanboot
- * @description: apilog相关开放的参数
- * @author: wuwenli
- * @date: 2021-08-19 13:12
+ * @program: log
+ * @description: solarlog相关开放的参数
+ * @author: cqf
+ * @date: 2022-7-19 13:12
  **/
-@ConfigurationProperties(prefix = CommonConstants.APILOG_PREFIX)
+@ConfigurationProperties(prefix = CommonConstants.SOLARLOG_PREFIX)
 @Data
 @ToString
-public class ApiLogProperties {
+public class SolarLogProperties {
 
     /**
      * apilog是否开启

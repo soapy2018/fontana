@@ -26,8 +26,13 @@
 
         <dependency>
             <groupId>com.fontana</groupId>
+            <artifactId>fontana-datafilter</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fontana</groupId>
             <artifactId>fontana-online-service</artifactId>
-            <version>${project.version}</version>
             <optional>true</optional>
         </dependency>
 

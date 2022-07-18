@@ -17,6 +17,13 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.bluetron.common</groupId>
+            <artifactId>log-producer</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-base</artifactId>

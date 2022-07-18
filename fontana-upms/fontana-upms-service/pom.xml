@@ -64,6 +64,11 @@
             <artifactId>fontana-flow-service</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-datafilter</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

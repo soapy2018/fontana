@@ -21,7 +21,6 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @MapperScan("com.fontana.upmsservice.mapper")
-//@MapperScan(value = {"com.fontana.upmsservice.mapper", "com.fontana.onlineservice.mapper"})
 public class MultiDataSourceConfig {
 
     @Bean(initMethod = "init", destroyMethod = "close")

@@ -39,6 +39,11 @@ public interface HttpConstants {
     String TENANT_ID_HEADER = "x-tenantId";
 
     /**
+     * 工厂信息头
+     */
+    String FACTORY_ID_HEADER = "x-factoryId";
+
+    /**
      * 信息头Content-Language
      */
     String CONTENT_LANGUAGE_HEADER = "Content-Language";

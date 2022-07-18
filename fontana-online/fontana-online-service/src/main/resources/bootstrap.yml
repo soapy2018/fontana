@@ -17,11 +17,3 @@ spring:
           - data-id: online-dev.yaml
             group: DEFAULT_GROUP
             refresh: true
-
-mybatis-plus:
-  mapper-locations: classpath:com/fontana/onlineservice/mapper/xml/*.xml
-  type-aliases-package: com.fontana.onlineservice.entity
-  global-config:
-    db-config:
-      logic-delete-value: -1
-      logic-not-delete-value: 1

@@ -8,6 +8,7 @@ import com.fontana.base.annotation.*;
 import com.fontana.base.context.DataFilterThreadLocal;
 import com.fontana.base.exception.GeneralException;
 import com.fontana.base.object.TokenData;
+import com.fontana.datafilter.annotation.EnableDataPerm;
 import com.fontana.datafilter.config.DataFilterProperties;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.constant.DataPermRuleType;

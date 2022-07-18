@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
 
 /**
  * 获取Servlet HttpRequest和HttpResponse的工具类。
@@ -97,6 +98,46 @@ public class WebContextUtil extends WebUtils {
     public static String getCookieVal(HttpServletRequest request, String name) {
         Cookie cookie = getCookie(request, name);
         return cookie != null ? cookie.getValue() : null;
+    }
+
+    /**
+     * 获取所有的请求头
+     *
+     * @param request
+     * @return
+     */
+    public static String getHeaderString(HttpServletRequest request) {
+        StringBuilder headers = new StringBuilder();
+        Enumeration<String> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String headerValue = request.getHeader(name);
+            if (headers.length() > 0) {
+                headers.append("&");
+            }
+            headers.append(name + "=" + headerValue);
+        }
+        return headers.toString();
+    }
+
+    /**
+     * 获取 get的请求参数
+     *
+     * @param request
+     * @return
+     */
+    public static String getParameters(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder("");
+        Enumeration<String> names = request.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = request.getParameter(name);
+            sb.append(name + "=" + value + "&");
+        }
+        if (sb.length() > 0) {
+            sb.delete(sb.length() - 1, sb.length());
+        }
+        return sb.toString();
     }
 
     /**

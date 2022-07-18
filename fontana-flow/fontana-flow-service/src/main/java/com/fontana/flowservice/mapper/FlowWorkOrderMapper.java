@@ -1,6 +1,6 @@
 package com.fontana.flowservice.mapper;
 
-import com.fontana.base.annotation.EnableDataPerm;
+import com.fontana.datafilter.annotation.EnableDataPerm;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.flowservice.entity.FlowWorkOrder;
 import org.apache.ibatis.annotations.Param;

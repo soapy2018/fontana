@@ -14,6 +14,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class UpmsApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(UpmsApplication.class, args);
+
 	}
 }

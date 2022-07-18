@@ -70,6 +70,7 @@ public class AuthenticationPostFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
         DataBufferFactory bufferFactory = originalResponse.bufferFactory();
+        //使用ServerHttpResponseDecorator拿到响应并修改
         ServerHttpResponseDecorator decoratedResponse = new ServerHttpResponseDecorator(originalResponse) {
             @SuppressWarnings("unchecked")
             @Override
@@ -130,8 +131,8 @@ public class AuthenticationPostFilter implements GlobalFilter, Ordered {
      */
     @Override
     public int getOrder() {
-        // -1 is response write com.fontana.gateway.filter, must be called before that
-        return -2;
+        //注意order要小于-1
+        return  HIGHEST_PRECEDENCE + 10001;
     }
 
     private String readResponseBody(List<? extends DataBuffer> dataBuffers) {
