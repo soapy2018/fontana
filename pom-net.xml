@@ -21,7 +21,6 @@
         <module>fontana-seata</module>
         <module>fontana-rabbitmq-starter</module>
         <module>fontana-oss</module>
-
         <module>fontana-codegenerate</module>
         <module>fontana-gateway</module>
         <module>fontana-multitenancy</module>
@@ -30,6 +29,7 @@
         <module>fontana-flow</module>
         <module>fontana-upms</module>
         <module>fontana-demo</module>
+        <module>fontana-log-producer</module>
     </modules>
 
     <name>fontana</name>
@@ -210,6 +210,11 @@
             <dependency>
                 <groupId>com.fontana</groupId>
                 <artifactId>fontana-log-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-log-producer</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
