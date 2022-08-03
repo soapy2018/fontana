@@ -3,6 +3,7 @@ package com.fontana.sb.exception;
 import com.fontana.base.exception.GeneralException;
 import com.fontana.base.result.Result;
 import com.fontana.sb.i18n.I18nMessageResourceAccessor;
+import com.fontana.util.lang.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.SocketTimeoutException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * 异常通用处理
@@ -112,15 +114,11 @@ public class DefaultExceptionAdvice {
 
     private Result defHandler(GeneralException e) {
 
-        String message = messageResource.getMessage(e.getKey());
-        log.error(message, e);
-
+        String message =  messageResource.getMessage(e.getKey());
+        if(StringUtil.isEmpty(message)) {
+            message = e.getMessage();
+        }
+        log.error("Request error, code={}, message={}",e.getResultCode().getCode(), message , e);
         return Result.failed(e.getResultCode());
-
-//        if (StringUtils.isNotBlank(message)) {
-//            return Result.failed(e.getCode(), message);
-//        } else {
-//            return Result.failed(e.getResultCode());
-//        }
     }
 }

@@ -1,7 +1,7 @@
 package com.fontana.gateway.filter;
 
 import com.fontana.base.constant.HttpConstants;
-import com.fontana.log.traceLog.TraceProperties;
+import com.fontana.log.tracelog.TraceProperties;
 import com.fontana.gateway.constant.GatewayConstant;
 import com.fontana.util.tools.MDCTraceUtil;
 import lombok.extern.slf4j.Slf4j;

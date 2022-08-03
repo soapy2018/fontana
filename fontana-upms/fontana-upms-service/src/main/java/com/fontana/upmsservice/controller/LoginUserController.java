@@ -73,7 +73,7 @@ public class LoginUserController {
      * @return 应答结果对象。
      */
     @PostMapping("/delete")
-    public Result<Void> delete(@MyRequestBody String sessionId) {
+        public Result<Void> delete(@MyRequestBody String sessionId) {
         // 为了保证被剔除用户正在进行的操作不被干扰，这里只是删除sessionIdKey即可，这样可以使强制下线操作更加平滑。
         // 比如，如果删除操作权限或数据权限的redis session key，那么正在请求数据的操作就会报错。
         redissonClient.getBucket(RedisKeyUtil.makeSessionIdKey(sessionId)).delete();

@@ -139,11 +139,11 @@
         <appender-ref ref="api_log"/>
     </appender>
 
-    <appender name="applog" class="com.bluetron.common.log.producer.appender.AppLogAppender">
+    <appender name="applog" class="com.fontana.log.producer.appender.AppLogAppender">
         <appName>${APP_NAME}</appName>
         <logServ>http://192.168.8.133:8983</logServ>
     </appender>
-    <appender name="performanceLog" class="com.bluetron.common.log.producer.appender.PerformanceLogAppender">
+    <appender name="requestLog" class="com.fontana.log.producer.appender.RequestLogAppender">
         <appName>${APP_NAME}</appName>
         <logServ>http://192.168.8.133:8983</logServ>
     </appender>
@@ -175,14 +175,14 @@
     <logger name="com.fontana.log.monitor" level="debug" addtivity="false">
         <appender-ref ref="point_log_async" />
     </logger>
-    <logger name="com.fontana.log.auditLog.LoggerAuditServiceImpl" level="debug" addtivity="false">
+    <logger name="com.fontana.log.auditlog.LoggerAuditServiceImpl" level="debug" addtivity="false">
         <appender-ref ref="audit_log_async" />
     </logger>
-    <logger name="com.fontana.log.apiLog.ApiLogAspect" level="debug" addtivity="false">
+    <logger name="com.fontana.log.apilog.ApiLogAspect" level="debug" addtivity="false">
         <appender-ref ref="api_log_async" />
     </logger>
-    <logger name="performanceLog" level="info" additivity="false">
-        <appender-ref ref="performanceLog"/>
+    <logger name="requestLog" level="debug" additivity="false">
+        <appender-ref ref="requestLog"/>
     </logger>
 
     <!--

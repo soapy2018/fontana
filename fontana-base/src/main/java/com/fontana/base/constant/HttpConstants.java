@@ -48,6 +48,11 @@ public interface HttpConstants {
      */
     String CONTENT_LANGUAGE_HEADER = "Content-Language";
 
+    /**
+     * 信息头Content-Type
+     */
+    String CONTENT_TYPE_HEADER = "Content-Type";
+
 
     // 员工的登录信息，放在header里的key
     String PERSONNEL_AUTH = "PersonnelAuth";

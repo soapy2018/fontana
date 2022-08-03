@@ -1,6 +1,6 @@
 package com.fontana.log.controller;
 
-import com.fontana.log.auditLog.AuditLog;
+import com.fontana.log.auditlog.AuditLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,12 +11,12 @@ public class ServiceAPIB {
 
     public String methodB(String name) {
         log.info("Hello " + name);
-        return "hello" + name;
+        return "Hello " + name;
     }
 
     public String methodC(String tool) {
         log.info("Hello " + tool);
-        return "hello" + tool;
+        return "Hello " + tool;
     }
 
 }

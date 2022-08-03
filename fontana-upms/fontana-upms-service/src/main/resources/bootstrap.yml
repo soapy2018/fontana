@@ -31,13 +31,15 @@ spring:
       eager: true
 
 fontana:
-  tracelog:
+#  tracelog:
+#    enable: true
+#  apilog:
+#    enable: true
+#    showIP: true
+#    showArgs: true
+#    showHead: true
+  requestlog:
     enable: true
-  apilog:
-    enable: true
-    showIP: true
-    showArgs: true
-    showHead: true
 
 
 

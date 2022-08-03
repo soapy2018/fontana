@@ -55,9 +55,14 @@ public interface CommonConstants {
     String TRACELOG_PREFIX = "fontana.tracelog";
 
     /**
-     * API log日志
+     * SOLAR log日志
      */
     String SOLARLOG_PREFIX = "fontana.solarlog";
+
+    /**
+     * REQUEST log日志
+     */
+    String REQUESTLOG_PREFIX = "fontana.requestlog";
 
     /**
      * mybatis plus 配置

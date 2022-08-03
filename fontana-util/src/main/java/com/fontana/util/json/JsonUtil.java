@@ -2,7 +2,7 @@ package com.fontana.util.json;
 
 import com.fontana.base.constant.StringPool;
 import com.fontana.base.exception.GeneralException;
-import com.fontana.util.date.DateUtil;
+import com.fontana.util.date.DateTimeUtil;
 import com.fontana.util.lang.StringUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -289,7 +289,7 @@ public class JsonUtil {
 			//设置为中国上海时区
 			super.setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
 			//序列化时，日期的统一格式
-			super.setDateFormat(new SimpleDateFormat(DateUtil.DEFAULT_PATTERN_DAY_TIME, Locale.CHINA));
+			super.setDateFormat(new SimpleDateFormat(DateTimeUtil.DEFAULT_PATTERN_DAY_TIME, Locale.CHINA));
 			//序列化处理
 			super.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
 			super.configure(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature(), true);

@@ -272,6 +272,20 @@ public class SysUserController extends BaseController<SysUser, SysUserVo, Long> 
         return super.baseListByIds(userIds, withDict, SysUser.INSTANCE);
     }
 
+    @GetMapping("/listIds")
+    public Result<List<SysUserVo>> listIds(
+            @RequestParam Set<Long> userIds, @RequestParam Boolean withDict) {
+        //System.out.println(1/0);
+        return super.baseListByIds(userIds, withDict, SysUser.INSTANCE);
+    }
+
+    @PostMapping("/listUsers")
+    public Result<List<SysUserVo>> listUsers(
+            @RequestBody Set<Long> userIds) {
+        //System.out.println(1/0);
+        return super.baseListByIds(userIds, false, SysUser.INSTANCE);
+    }
+
     /**
      * 根据主键Id，获取数据对象。仅限于微服务间远程接口调用。
      *

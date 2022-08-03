@@ -89,7 +89,7 @@ public class I18nMessageResourceAccessor {
         String result = null;
         result = messageSourceAccessor.getMessage(key, null, defaultMsg, locale);
         if (StringUtils.isEmpty(result)) {
-            log.error("未获取到 key:{}----local:{} 国际化资源值", key, locale);
+            log.warn("未获取到 key:{}----local:{} 国际化资源值", key, locale);
         }
         return result;
     }

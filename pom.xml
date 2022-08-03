@@ -29,6 +29,7 @@
         <module>fontana-rabbitmq-starter</module>
         <module>fontana-oss</module>
         <module>fontana-demo</module>
+        <module>fontana-log-producer</module>
     </modules>
 
     <name>fontana</name>
@@ -58,6 +59,7 @@
         <docker.registry>docker.bluetron.com</docker.registry>
         <docker.image.prefix>${project.groupId}</docker.image.prefix>
         <docker.image.tag.suffix/>
+        <docker-maven-plugin.version>1.2.2</docker-maven-plugin.version>
         <!-- 默认不开启镜像构建 -->
         <dockerfile.skip>true</dockerfile.skip>
         <docker.baseImage>docker.nb.bluetron.cn/library/openjdk:8-jdk-alpine-utc8-dr-ft</docker.baseImage>
@@ -133,6 +135,11 @@
             <dependency>
                 <groupId>com.fontana</groupId>
                 <artifactId>fontana-log-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-log-producer</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -376,6 +383,7 @@
                 <plugin>
                     <groupId>com.spotify</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
                     <configuration>
                         <imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
                         <imageTags>

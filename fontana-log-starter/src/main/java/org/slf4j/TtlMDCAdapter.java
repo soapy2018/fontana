@@ -114,7 +114,6 @@ public class TtlMDCAdapter implements MDCAdapter {
 
     }
 
-
     /**
      * Clear all entries in the MDC.
      */

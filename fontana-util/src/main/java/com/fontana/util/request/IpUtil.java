@@ -25,6 +25,12 @@ public class IpUtil {
     private static final String UNKNOWN = "unknown";
 
     /**
+     * 私有构造函数，明确标识该常量类的作用。
+     */
+    private IpUtil() {
+    }
+
+    /**
      * 通过Servlet的HttpRequest对象获取Ip地址。
      *
      * @param request HttpRequest对象。
@@ -98,6 +104,11 @@ public class IpUtil {
         return ip;
     }
 
+    /**
+     * 获取本机ip
+     *
+     * @return
+     */
     public static String getFirstLocalIpAddress() {
         String ip;
         try {
@@ -116,24 +127,70 @@ public class IpUtil {
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
         while (interfaces.hasMoreElements()) {
             NetworkInterface ni = interfaces.nextElement();
+            if (ni.isLoopback() || ni.isVirtual() || !ni.isUp()) {
+                continue;
+            }
+            if (ni.getDisplayName().equals("docker0")) {
+                continue;
+            }
             Enumeration<InetAddress> allAddress = ni.getInetAddresses();
             while (allAddress.hasMoreElements()) {
                 InetAddress address = allAddress.nextElement();
-                // skip the IPv6 addr
                 // skip the IPv6 addr
                 if (address.isLoopbackAddress() || address instanceof Inet6Address) {
                     continue;
                 }
                 String hostAddress = address.getHostAddress();
-                ipList.add(hostAddress);
+                if(isIPAddr(hostAddress)) {
+                    ipList.add(hostAddress);
+                }
             }
         }
         return ipList;
     }
 
     /**
-     * 私有构造函数，明确标识该常量类的作用。
+     * Checks if the specified string is a valid IP address.
+     *
+     * @param ipAddress the string to check
+     * @return true if the string validates as an IP address
      */
-    private IpUtil() {
+    public static boolean isIPAddr(final String ipAddress) {
+        if (ipAddress == null || ipAddress.isEmpty()) {
+            return false;
+        }
+        try {
+            final String[] tokens = ipAddress.split("\\.");
+            if (tokens.length != 4) {
+                return false;
+            }
+            for (String token : tokens) {
+                int i = Integer.parseInt(token);
+                if (i < 0 || i > 255) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    /**
+     * 获取主机名称
+     *
+     * @return
+     */
+    public static String getHostname() {
+        String hostName = "";
+        if (hostName != null) {
+            return hostName;
+        }
+        try {
+            hostName = InetAddress.getLocalHost().getHostName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hostName;
     }
 }

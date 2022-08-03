@@ -28,6 +28,7 @@ public abstract class BaseFallbackFactory<D, V, K, T extends BaseClient<D, V, K>
         return Result.failed(ResultCode.RPC_DATA_ACCESS_FAILED);
     }
 
+
     @Override
     public Result<V> getById(K id, Boolean withDict) {
         return Result.failed(ResultCode.RPC_DATA_ACCESS_FAILED);

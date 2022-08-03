@@ -1,6 +1,7 @@
 package com.fontana.redis.config;
 
 import com.fontana.redis.properties.CacheManagerProperties;
+import com.fontana.redis.util.SessionCacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -45,7 +46,7 @@ public class CacheManagerConfig {
     }
 
     /**
-     * redission的catchManager
+     * spring redis的catchManager
      */
     @Bean(name = "cacheManager")
     @Primary
@@ -88,6 +89,11 @@ public class CacheManagerConfig {
                 .computePrefixWith(cacheName -> "cache".concat(":").concat(cacheName).concat(":"))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisKeySerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisValueSerializer));
+    }
+
+    @Bean
+    public SessionCacheHelper SessionCacheHelper() {
+        return new SessionCacheHelper();
     }
 }
 

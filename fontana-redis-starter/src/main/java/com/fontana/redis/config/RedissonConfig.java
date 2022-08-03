@@ -51,9 +51,6 @@ public class RedissonConfig {
     @Value("${redis.redisson.pool.minIdle}")
     private Integer minIdle;
 
-    @Autowired
-    private CacheManagerProperties cacheManagerProperties;
-
     @Bean
     public RedissonClient redissonClient() {
         if (StrUtil.isBlank(password)) {
@@ -106,10 +103,8 @@ public class RedissonConfig {
         return Redisson.create(config);
     }
 
-
-
-    @Bean
-    public SessionCacheHelper SessionCacheHelper() {
-        return new SessionCacheHelper();
-    }
+//    @Bean
+//    public SessionCacheHelper SessionCacheHelper() {
+//        return new SessionCacheHelper();
+//    }
 }

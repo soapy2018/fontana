@@ -8,7 +8,7 @@ import com.fontana.base.constant.CommonConstants;
 import com.fontana.base.object.TokenData;
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
-import com.fontana.log.auditLog.AuditLog;
+import com.fontana.log.auditlog.AuditLog;
 import com.fontana.onlineservice.config.OnlineProperties;
 import com.fontana.onlineservice.entity.OnlineDatasource;
 import com.fontana.onlineservice.service.OnlineDatasourceService;
@@ -89,7 +89,6 @@ public class LoginController {
 	@NoAuthInterface
 	@GetMapping(value = "/randomImage/{key}")
 	public Result<String> randomImage(HttpServletResponse response, @PathVariable String key){
-		Result<String> res = new Result<String>();
 		try {
 			String code = RandomUtil.randomString(CommonConstants.BASE_CHECK_CODES,4);
 			String lowerCaseCode = code.toLowerCase();

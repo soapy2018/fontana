@@ -6,7 +6,9 @@ fontana:
 #    enable: true
 #    showip: true
 #    showargs: true
-  solarlog:
+#  solarlog:
+#    enable: true
+  requestlog:
     enable: true
 #  auditlog:
 #    enabled: false

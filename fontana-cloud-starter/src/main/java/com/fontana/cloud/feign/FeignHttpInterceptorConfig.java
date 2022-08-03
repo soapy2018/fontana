@@ -3,6 +3,7 @@ package com.fontana.cloud.feign;
 import com.fontana.base.constant.HttpConstants;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.PostConstruct;
@@ -27,8 +28,11 @@ public class FeignHttpInterceptorConfig {
         requestHeaders.add(HttpConstants.USER_NAME_HEADER);
         requestHeaders.add(HttpConstants.ROLE_HEADER);
         requestHeaders.add(HttpConstants.TENANT_ID_HEADER);
+        requestHeaders.add(HttpConstants.FACTORY_ID_HEADER);
         requestHeaders.add(HttpConstants.AUTHORIZATION_HEADER);
-        requestHeaders.add(HttpConstants.TRACE_ID_HEADER);
+        requestHeaders.add(HttpConstants.CONTENT_TYPE_HEADER);
+        //tradeId放在 com.fontana.log.tracelog.FeignTraceInterceptorConfig装载
+        //requestHeaders.add(HttpConstants.TRACE_ID_HEADER);
     }
 
     /**

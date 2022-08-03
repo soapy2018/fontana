@@ -2,16 +2,18 @@ package com.fontana.log;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.fastjson.JSON;
-import com.bluetron.common.log.producer.producer.BaseLogContent;
-import com.bluetron.common.log.producer.producer.BaseLogItem;
-import com.bluetron.common.log.producer.producer.PerformanceLog;
-import com.bluetron.common.log.producer.util.LocalDateTimeUtil;
 import com.bluetron.log.controller.ServiceAPIA;
+import com.fontana.base.constant.HttpConstants;
 import com.fontana.log.controller.ServiceAPIB;
 import com.fontana.log.monitor.PointUtil;
+import com.fontana.log.producer.producer.BaseLogContent;
+import com.fontana.log.producer.producer.BaseLogItem;
+import com.fontana.log.producer.producer.RequestLog;
+import com.fontana.log.requestlog.filter.RequestLogFilter;
+import com.fontana.util.date.DateTimeUtil;
 import com.fontana.util.request.IpUtil;
-import com.fontana.util.request.WebContextUtil;
 import lombok.SneakyThrows;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,14 +24,24 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -38,6 +50,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
         DruidDataSourceAutoConfigure.class})
+//@EnableRequestLog
 public class logTest {
 
     @Autowired
@@ -45,10 +58,22 @@ public class logTest {
     @Autowired
     private ServiceAPIB apiB;
 
+    private MockMvc mockMvc;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .addFilter(new RequestLogFilter()) //mock请求总是进不来filter，这里强制加过滤器
+                .build();
+    }
+
+
 
     @Test
     public void testApiLog() {
-        assertThat(apiA.methodA("Jack")).isEqualTo("helloJack");
+        assertThat(apiA.methodA("Jack").getMsg()).isEqualTo("Hello Jack");
     }
 
     @Test
@@ -56,9 +81,9 @@ public class logTest {
 		/* console print log like:
 		14:29:30.337|COMMON|com.fontana.spring.noController.ServiceAPIB|methodB|null|null|null|传入参数为:jack
 		*/
-        assertThat(apiB.methodB("jack")).isEqualTo("hellojack");
+        assertThat(apiB.methodB("jack")).isEqualTo("Hello jack");
 
-        assertThat(apiB.methodC("car")).isEqualTo("hellocar");
+        assertThat(apiB.methodC("car")).isEqualTo("Hello car");
     }
 
     @Test
@@ -73,20 +98,76 @@ public class logTest {
     public void testSolarLog() {
 
         //性能日志专用logger
-        //PerformanceLog log
-        Logger performanceLogger = LoggerFactory.getLogger("performanceLog");
-        performanceLogger.info(JSON.toJSONString(buildPerformLog()));
+        //requestLog log
+        Logger requestLogger = LoggerFactory.getLogger("requestLog");
+        requestLogger.info(JSON.toJSONString(buildPerformLog()));
         //由于推送日志是异步执行，这里睡眠一下
         Thread.sleep(1000);
     }
 
     @Test
     @SneakyThrows
-    public void testPerformanceLog() {
-        assertThat(apiA.methodA("Lucy")).isEqualTo("helloLucy");
+    public void testBaseRequestLog() {
+        assertThat(apiA.methodA("Lucy").getMsg()).isEqualTo("Hello Lucy");
         //由于推送日志是异步执行，这里睡眠一下
-        Thread.sleep(1000);
+        Thread.sleep(10000);
     }
+
+    @Test
+    @SneakyThrows
+    public void testRequestLog(){
+
+        RequestBuilder request = null;
+
+        /*  post请求，content-type为application/json   */
+        //构造请求
+        request = post("/test/apiA")
+                .header(HttpConstants.TRACE_ID_HEADER, "tenant1")
+                .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("Xiaoli");//请求体
+
+        //执行请求
+        mockMvc.perform(request)
+                .andExpect(status().isOk())//返回HTTP状态为200
+                .andExpect(jsonPath("$.msg", is("Hello Xiaoli")))//使用jsonPath解析JSON返回值，判断具体的内容
+                .andDo(print()) //打印结果
+        .andReturn();////想要返回结果，使用此方法
+
+        /*  post请求，content-type为application/x-www-form-urlencoded   */
+        //构造请求
+        request = post("/test/apiA")
+                .header(HttpConstants.TRACE_ID_HEADER, "tenant1")
+                .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .content("Xiaoli");//请求体
+
+
+        //执行请求
+        mockMvc.perform(request)
+                .andExpect(status().isOk())//返回HTTP状态为200
+                .andExpect(jsonPath("$.msg", is("Hello Xiaoli")))//使用jsonPath解析JSON返回值，判断具体的内容
+                .andDo(print()) //打印结果
+                .andReturn();////想要返回结果，使用此方法
+
+        /*  GET请求，无content-type   */
+        //构造请求
+        request = get("/test/apiC?code=123")
+                .header(HttpConstants.TRACE_ID_HEADER, "tenant1")
+                .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
+                .param("name", "Xiaoli");
+        //执行请求
+        mockMvc.perform(request)
+                .andExpect(status().isOk())//返回HTTP状态为200
+                .andExpect(jsonPath("$.msg", is("Hello Xiaoli")))//使用jsonPath解析JSON返回值，判断具体的内容
+                .andDo(print()) //打印结果
+                .andReturn();////想要返回结果，使用此方法
+
+        //由于推送日志是异步执行，这里睡眠一下
+        Thread.sleep(10000);
+
+    }
+
 
 
 
@@ -95,9 +176,9 @@ public class logTest {
      *
      * @return
      */
-    private PerformanceLog buildPerformLog() {
+    private RequestLog buildPerformLog() {
 
-        PerformanceLog log = new PerformanceLog();
+        RequestLog log = new RequestLog();
         log.setHeader("test head");
         log.setPath("test path");
         log.setMethod("test");
@@ -126,7 +207,7 @@ public class logTest {
         for (int i = 0; i < number; i++) {
             BaseLogItem item = new BaseLogItem();
             item.pushBack(new BaseLogContent("level", "INFO"));
-            item.pushBack(new BaseLogContent("logTime", LocalDateTimeUtil.format(new Date())));
+            item.pushBack(new BaseLogContent("logTime", DateTimeUtil.formatDate(new Date())));
             item.pushBack(new BaseLogContent("thread", "main"));
             item.pushBack(new BaseLogContent("location",
                     "com.bluetron.app.middle.log.producer.LogbackTest.infoTest(LogbackTest.java:24)"));

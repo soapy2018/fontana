@@ -1,8 +1,10 @@
 package com.fontana.upmsservice;
 
+import com.fontana.cloud.feign.EnableFeignInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * Upms服务启动类。
@@ -11,6 +13,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @date 2020-08-08
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@EnableFeignInterceptor
 public class UpmsApplication {
 
 	public static void main(String[] args) {

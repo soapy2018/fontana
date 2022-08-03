@@ -1,13 +1,16 @@
 package com.fontana.upmsapi.client;
 
 import com.fontana.base.result.Result;
+import com.fontana.base.result.ResultCode;
 import com.fontana.cloud.feign.client.BaseClient;
 import com.fontana.cloud.feign.client.BaseFallbackFactory;
 import com.fontana.upmsapi.dto.SysUserDto;
 import com.fontana.upmsapi.vo.SysUserVo;
+import feign.Headers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +41,16 @@ public interface SysUserClient extends BaseClient<SysUserDto, SysUserVo, Long> {
     Result<List<SysUserVo>> listByIds(
             @RequestParam("userIds") Set<Long> userIds,
             @RequestParam("withDict") Boolean withDict);
+
+    @GetMapping("/sysUser/listIds")
+    Result<List<SysUserVo>> listIds(
+            @RequestParam("userIds") Set<Long> userIds,
+            @RequestParam("withDict") Boolean withDict);
+
+
+    @PostMapping("/sysUser/listUsers")
+    Result<List<SysUserVo>> listUsers(
+            @RequestBody Set<Long> userIds);
 
     /**
      * 基于主键Id，获取远程对象。
@@ -101,6 +114,16 @@ public interface SysUserClient extends BaseClient<SysUserDto, SysUserVo, Long> {
         public SysUserClient create(Throwable throwable) {
             log.error("Exception For Feign Remote Call.", throwable);
             return new SysUserClientFallbackFactory();
+        }
+
+        @Override
+        public Result<List<SysUserVo>> listIds(Set<Long> userIds, Boolean withDict) {
+            return Result.failed(ResultCode.RPC_DATA_ACCESS_FAILED);
+        }
+
+        @Override
+        public Result<List<SysUserVo>> listUsers(Set<Long> userIds) {
+            return Result.failed(ResultCode.RPC_DATA_ACCESS_FAILED);
         }
     }
 }

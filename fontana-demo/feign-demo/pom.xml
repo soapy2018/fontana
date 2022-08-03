@@ -30,6 +30,10 @@
             <groupId>com.fontana</groupId>
             <artifactId>fontana-sb-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-redis-starter</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
