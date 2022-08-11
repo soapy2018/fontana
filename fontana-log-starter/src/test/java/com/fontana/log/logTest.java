@@ -1,14 +1,15 @@
 package com.fontana.log;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.fastjson.JSON;
 import com.bluetron.log.controller.ServiceAPIA;
 import com.fontana.base.constant.HttpConstants;
 import com.fontana.log.controller.ServiceAPIB;
+import com.fontana.log.controller.User;
 import com.fontana.log.monitor.PointUtil;
 import com.fontana.log.producer.producer.BaseLogContent;
 import com.fontana.log.producer.producer.BaseLogItem;
 import com.fontana.log.producer.producer.RequestLog;
+import com.fontana.log.requestlog.config.RequestLogProperties;
 import com.fontana.log.requestlog.filter.RequestLogFilter;
 import com.fontana.util.date.DateTimeUtil;
 import com.fontana.util.request.IpUtil;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,9 +50,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootApplication(scanBasePackages = "com.*", exclude = {
         DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class,
-        DruidDataSourceAutoConfigure.class})
-//@EnableRequestLog
+        HibernateJpaAutoConfiguration.class})
+
 public class logTest {
 
     @Autowired
@@ -59,38 +60,89 @@ public class logTest {
     private ServiceAPIB apiB;
 
     private MockMvc mockMvc;
+    private MockMvc mockMvc2;
+
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Resource
+    private RequestLogProperties requestLogProperties;
 
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .addFilter(new RequestLogFilter()) //mock请求总是进不来filter，这里强制加过滤器
+                .addFilter(new RequestLogFilter(requestLogProperties)) //mock请求总是进不来filter，这里强制加过滤器
+                .build();
+        mockMvc2 = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
     }
 
 
 
     @Test
+    @SneakyThrows
     public void testApiLog() {
+        RequestBuilder request = null;
+
+        /*  post请求，content-type为application/json   */
+        //构造请求
+        request = post("/test/apiA")
+                .header(HttpConstants.TENANT_ID_HEADER, "tenant1")
+                .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("Xiaoli");//请求体
+
+        //执行请求
+        mockMvc2.perform(request)
+                .andExpect(status().isOk())//返回HTTP状态为200
+                .andExpect(jsonPath("$.msg", is("Hello Xiaoli")))//使用jsonPath解析JSON返回值，判断具体的内容
+                .andDo(print()) //打印结果
+                .andReturn();////想要返回结果，使用此方法
         assertThat(apiA.methodA("Jack").getMsg()).isEqualTo("Hello Jack");
     }
 
     @Test
+    @SneakyThrows
     public void testAuditLog() {
+
+        RequestBuilder request = null;
+
+        /*  post请求，content-type为application/json   */
+        //构造请求
+        request = post("/audit/apiB")
+                .header(HttpConstants.USER_ID_HEADER, "userId1")
+                .header(HttpConstants.USER_NAME_HEADER, "userName1")
+                .header(HttpConstants.TENANT_ID_HEADER, "tenant1")
+                .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("Xiaoli");//请求体
+
+        //执行请求
+        mockMvc2.perform(request)
+                .andExpect(status().isOk())//返回HTTP状态为200
+                .andExpect(jsonPath("$.msg", is("Hello Xiaoli")))//使用jsonPath解析JSON返回值，判断具体的内容
+                .andDo(print()) //打印结果
+                .andReturn();////想要返回结果，使用此方法
+
 		/* console print log like:
 		14:29:30.337|COMMON|com.fontana.spring.noController.ServiceAPIB|methodB|null|null|null|传入参数为:jack
 		*/
-        assertThat(apiB.methodB("jack")).isEqualTo("Hello jack");
+        assertThat(apiB.methodB("jack").getMsg()).isEqualTo("Hello jack");
 
-        assertThat(apiB.methodC("car")).isEqualTo("Hello car");
     }
 
     @Test
     public void testPointLog() {
+
         //埋点
         PointUtil.info("1", "request-statistics",
-                "ip=" + IpUtil.getFirstLocalIpAddress());
+                "ip=" + IpUtil.getFirstLocalIpAddress()
+                        + "&class=" + getClass().getSimpleName());
+        User user = new User();
+        user.setName("Anna");
+        user.setAge("22");
+        user.setSex("female");
+        PointUtil.builder().id("2").type("User").properties(user).build();
     }
 
     @Test
@@ -122,8 +174,8 @@ public class logTest {
         /*  post请求，content-type为application/json   */
         //构造请求
         request = post("/test/apiA")
-                .header(HttpConstants.TRACE_ID_HEADER, "tenant1")
-                .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
+                .header(HttpConstants.TENANT_ID_HEADER, "tenant1")
+                //.header(HttpConstants.FACTORY_ID_HEADER, "factory1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content("Xiaoli");//请求体
 
@@ -137,7 +189,7 @@ public class logTest {
         /*  post请求，content-type为application/x-www-form-urlencoded   */
         //构造请求
         request = post("/test/apiA")
-                .header(HttpConstants.TRACE_ID_HEADER, "tenant1")
+                .header(HttpConstants.TENANT_ID_HEADER, "tenant1")
                 .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .content("Xiaoli");//请求体
@@ -153,7 +205,7 @@ public class logTest {
         /*  GET请求，无content-type   */
         //构造请求
         request = get("/test/apiC?code=123")
-                .header(HttpConstants.TRACE_ID_HEADER, "tenant1")
+                .header(HttpConstants.TENANT_ID_HEADER, "tenant1")
                 .header(HttpConstants.FACTORY_ID_HEADER, "factory1")
                 .param("name", "Xiaoli");
         //执行请求

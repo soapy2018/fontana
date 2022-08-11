@@ -42,8 +42,12 @@ import java.io.IOException;
 public class RequestLogFilter extends OncePerRequestFilter {
     //性能日志专用logger
     private final Logger requestLogger = LoggerFactory.getLogger("requestLog");
-    @Resource
+    //@Resource
     private RequestLogProperties requestLogProperties;
+
+    public RequestLogFilter(RequestLogProperties requestLogProperties){
+        this.requestLogProperties = requestLogProperties;
+    }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -89,32 +93,39 @@ public class RequestLogFilter extends OncePerRequestFilter {
     private RequestLog createLogEntity(HttpServletRequest request, HttpServletResponse response) {
 
         RequestLog log = new RequestLog();
-        log.setHeader(WebContextUtil.getHeaderString(request));
+        if(requestLogProperties == null || requestLogProperties.getShowHead()) {
+            log.setHeader(WebContextUtil.getHeaderString(request));
+        }
         log.setPath(request.getRequestURI());
         log.setMethod(request.getMethod());
         log.setRequestTime(System.currentTimeMillis());
-        log.setRemoteIP(IpUtil.getRemoteIpAddress(request));
-        log.setTenantId(request.getHeader(HttpConstants.TENANT_ID_HEADER));
-        log.setFactoryId(request.getHeader(HttpConstants.FACTORY_ID_HEADER));
+
+        if(requestLogProperties == null || requestLogProperties.getShowIP()) {
+            log.setRemoteIP(IpUtil.getRemoteIpAddress(request));
+        }
+        log.setTenantId(WebContextUtil.getTenantId(request));
+        log.setFactoryId(WebContextUtil.getFactoryId(request));
 //        SimpleUser userInfo = HttpServletRequestUtil.getUserInfo(request);
 //        if (userInfo != null) {
 //            log.setUserId(userInfo.getId());
 //            log.setUserName(userInfo.getUserName());
 //        }
-        log.setUserId(request.getHeader(HttpConstants.USER_ID_HEADER));
-        log.setUserName(request.getHeader(HttpConstants.USER_NAME_HEADER));
+        log.setUserId(WebContextUtil.getUserId(request));
+        log.setUserName(WebContextUtil.getUserName(request));
 
         String method = request.getMethod();
-        if (method.equals(HttpMethod.GET.toString())) {
-            log.setParameter(WebContextUtil.getParameters(request));
-        } else {
-            String body = new RequestWrapper(request).getBody();
-            log.setParameter(body);
+        if(requestLogProperties == null || requestLogProperties.getShowArgs()) {
+            if (method.equals(HttpMethod.GET.toString())) {
+                log.setParameter(WebContextUtil.getParameters(request));
+            } else {
+                String body = new RequestWrapper(request).getBody();
+                log.setParameter(body);
+            }
         }
         log.setStatusCode(response.getStatus());
         //获取返回结果
         Object result = request.getAttribute("response");
-        if (result != null) {
+        if (result != null && (requestLogProperties == null || requestLogProperties.getShowRes())) {
             log.setResponse(result.toString());
         }
         return log;

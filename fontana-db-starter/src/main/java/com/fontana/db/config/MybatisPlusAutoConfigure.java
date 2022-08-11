@@ -28,7 +28,7 @@ public class MybatisPlusAutoConfigure {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = CommonConstants.MYBATISPLUS_PREFIX + ".auto-fill", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = CommonConstants.MYBATISPLUS_PREFIX + ".auto-fill", name = "enabled", havingValue = "true")
     public MetaObjectHandler metaObjectHandler() {
         return new DateMetaObjectHandler(autoFillProperties);
     }

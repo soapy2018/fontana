@@ -27,6 +27,7 @@ fontana:
 #    enable: true
   requestlog:
     enable: true
+  solarServ: http://192.168.8.133:8983
 
   application:
     # 缺省的文件上传根目录。

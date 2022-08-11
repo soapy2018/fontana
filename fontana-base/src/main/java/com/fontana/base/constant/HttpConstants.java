@@ -21,12 +21,22 @@ public interface HttpConstants {
     /**
      * 用户名信息头
      */
-    String USER_NAME_HEADER = "x-userName";
+    String X_USER_NAME_HEADER = "x-userName";
+
+    /**
+     * 用户名信息头
+     */
+    String USER_NAME_HEADER = "userName";
 
     /**
      * 用户id信息头
      */
-    String USER_ID_HEADER = "x-userId";
+    String X_USER_ID_HEADER = "x-userId";
+
+    /**
+     * 用户id信息头
+     */
+    String USER_ID_HEADER = "userId";
 
     /**
      * 角色信息头
@@ -36,12 +46,22 @@ public interface HttpConstants {
     /**
      * 租户信息头
      */
-    String TENANT_ID_HEADER = "x-tenantId";
+    String X_TENANT_ID_HEADER = "x-tenantId";
+
+    /**
+     * 租户信息头
+     */
+    String TENANT_ID_HEADER = "tenantId";
 
     /**
      * 工厂信息头
      */
-    String FACTORY_ID_HEADER = "x-factoryId";
+    String X_FACTORY_ID_HEADER = "x-factoryId";
+
+    /**
+     * 工厂信息头
+     */
+    String FACTORY_ID_HEADER = "factoryId";
 
     /**
      * 信息头Content-Language
@@ -60,7 +80,12 @@ public interface HttpConstants {
     /**
      * 请求头跟踪id名。
      */
-    String TRACE_ID_HEADER = "x-traceId";
+    String X_TRACE_ID_HEADER = "x-traceId";
+
+    /**
+     * 请求头跟踪id名。
+     */
+    String TRACE_ID_HEADER = "traceId";
 
     /**
      * 日志链路块id信息头

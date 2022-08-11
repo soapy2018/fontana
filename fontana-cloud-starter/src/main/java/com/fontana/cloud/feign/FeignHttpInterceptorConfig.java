@@ -25,10 +25,14 @@ public class FeignHttpInterceptorConfig {
     @PostConstruct
     public void initialize() {
         requestHeaders.add(HttpConstants.USER_ID_HEADER);
+        requestHeaders.add(HttpConstants.X_USER_ID_HEADER);
         requestHeaders.add(HttpConstants.USER_NAME_HEADER);
+        requestHeaders.add(HttpConstants.X_USER_NAME_HEADER);
         requestHeaders.add(HttpConstants.ROLE_HEADER);
         requestHeaders.add(HttpConstants.TENANT_ID_HEADER);
+        requestHeaders.add(HttpConstants.X_TENANT_ID_HEADER);
         requestHeaders.add(HttpConstants.FACTORY_ID_HEADER);
+        requestHeaders.add(HttpConstants.X_FACTORY_ID_HEADER);
         requestHeaders.add(HttpConstants.AUTHORIZATION_HEADER);
         requestHeaders.add(HttpConstants.CONTENT_TYPE_HEADER);
         //tradeId放在 com.fontana.log.tracelog.FeignTraceInterceptorConfig装载

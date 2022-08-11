@@ -1,8 +1,10 @@
 package com.fontana.util.request;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.constant.AppDeviceType;
+import com.fontana.base.constant.HttpConstants;
 import com.fontana.base.object.TokenData;
 import com.fontana.base.result.Result;
 import com.fontana.util.tools.ClassUtil;
@@ -25,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
+import java.util.Objects;
 
 /**
  * 获取Servlet HttpRequest和HttpResponse的工具类。
@@ -50,7 +53,7 @@ public class WebContextUtil extends WebUtils {
      * @return 请求上下文中的HttpRequest对象。
      */
     public static HttpServletRequest getHttpRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return ((ServletRequestAttributes)Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
 
     /**
@@ -59,7 +62,7 @@ public class WebContextUtil extends WebUtils {
      * @return 请求上下文中的HttpResponse对象。
      */
     public static HttpServletResponse getHttpResponse() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
     }
 
     /**
@@ -115,9 +118,170 @@ public class WebContextUtil extends WebUtils {
             if (headers.length() > 0) {
                 headers.append("&");
             }
-            headers.append(name + "=" + headerValue);
+            headers.append(name).append("=").append(headerValue);
         }
         return headers.toString();
+    }
+
+    /**
+     * 获取用户id
+     *
+     * @param request
+     * @return
+     */
+    public static String getUserId(HttpServletRequest request) {
+
+        String userId = request.getHeader(HttpConstants.X_USER_ID_HEADER);
+
+        if(CharSequenceUtil.isEmpty(userId)){
+            userId = request.getHeader(HttpConstants.USER_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userId)){
+            TokenData tokenData = takeTokenFromRequest();
+            if(null != tokenData) {
+                return tokenData.getUserId().toString();
+            }
+        }
+        return  userId;
+    }
+
+    /**
+     * 获取用户id
+     * @return
+     */
+    public static String getUserId() {
+        HttpServletRequest request = WebContextUtil.getHttpRequest();
+        return getUserId(request);
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @param request
+     * @return
+     */
+    public static String getUserName(HttpServletRequest request) {
+
+        String userName = request.getHeader(HttpConstants.X_USER_NAME_HEADER);
+
+        if(CharSequenceUtil.isEmpty(userName)){
+            userName = request.getHeader(HttpConstants.USER_NAME_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userName)){
+            TokenData tokenData = takeTokenFromRequest();
+            if(null != tokenData) {
+                return tokenData.getUserId().toString();
+            }
+        }
+        return  userName;
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @return
+     */
+    public static String getUserName() {
+        HttpServletRequest request = WebContextUtil.getHttpRequest();
+        return getUserName(request);
+    }
+
+    /**
+     * 获取租户id
+     *
+     * @param request
+     * @return
+     */
+    public static String getTenantId(HttpServletRequest request) {
+
+        String tenantId = request.getParameter(HttpConstants.X_TENANT_ID_HEADER);
+
+        if(CharSequenceUtil.isEmpty(tenantId)){
+            tenantId = request.getParameter(HttpConstants.TENANT_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(tenantId)){
+            tenantId = request.getHeader(HttpConstants.X_TENANT_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(tenantId)){
+            tenantId = request.getHeader(HttpConstants.TENANT_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(tenantId)){
+            TokenData tokenData = takeTokenFromRequest();
+            if(null != tokenData) {
+                return tokenData.getUserId().toString();
+            }
+        }
+        return  tenantId;
+    }
+
+    /**
+     * 获取租户id
+     * @return
+     */
+    public static String getTenantId() {
+        HttpServletRequest request = WebContextUtil.getHttpRequest();
+        return getTenantId(request);
+    }
+
+    /**
+     * 获取工厂id
+     *
+     * @param request
+     * @return
+     */
+    public static String getFactoryId(HttpServletRequest request) {
+
+        String factoryId = request.getHeader(HttpConstants.X_FACTORY_ID_HEADER);
+
+        if(CharSequenceUtil.isEmpty(factoryId)){
+            factoryId = request.getHeader(HttpConstants.FACTORY_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(factoryId)){
+            TokenData tokenData = takeTokenFromRequest();
+            if(null != tokenData) {
+                return tokenData.getUserId().toString();
+            }
+        }
+        return  factoryId;
+    }
+
+    /**
+     * 获取工厂id
+     * @return
+     */
+    public static String getFactoryId() {
+        HttpServletRequest request = getHttpRequest();
+        return getFactoryId(request);
+    }
+
+    /**
+     * 获取trace id
+     *
+     * @param request
+     * @return
+     */
+    public static String getTraceId(HttpServletRequest request) {
+
+        String traceId = request.getHeader(HttpConstants.X_TRACE_ID_HEADER);
+        if(CharSequenceUtil.isEmpty(traceId)){
+            traceId = request.getHeader(HttpConstants.TRACE_ID_HEADER);
+        }
+        return  traceId;
+    }
+
+    /**
+     * 获取trace id
+     * @return
+     */
+    public static String getTraceId() {
+        HttpServletRequest request = getHttpRequest();
+        return getTraceId(request);
     }
 
     /**
@@ -132,7 +296,7 @@ public class WebContextUtil extends WebUtils {
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             String value = request.getParameter(name);
-            sb.append(name + "=" + value + "&");
+            sb.append(name).append("=").append(value).append("&");
         }
         if (sb.length() > 0) {
             sb.delete(sb.length() - 1, sb.length());
@@ -176,7 +340,7 @@ public class WebContextUtil extends WebUtils {
         // 缺省都按照Web登录方式设置，如果前端header中的值为不合法值，这里也不会报错，而是使用Web缺省方式。
         int deviceType = AppDeviceType.WEB;
         String deviceTypeString = getHttpRequest().getHeader("deviceType");
-        if (StrUtil.isNotBlank(deviceTypeString)) {
+        if (CharSequenceUtil.isNotBlank(deviceTypeString)) {
             Integer type = Integer.valueOf(deviceTypeString);
             if (AppDeviceType.isValid(type)) {
                 deviceType = type;
@@ -202,6 +366,10 @@ public class WebContextUtil extends WebUtils {
      */
     public static TokenData takeTokenFromRequest() {
 
+        if(!WebContextUtil.hasRequestContext()){
+            log.warn("不在HttpServletRequest上下文环境，无法取TokenData");
+            return null;
+        }
         HttpServletRequest request = WebContextUtil.getHttpRequest();
         TokenData tokenData = (TokenData) request.getAttribute(TokenData.REQUEST_ATTRIBUTE_NAME);
         if (tokenData != null) {
@@ -241,14 +409,20 @@ public class WebContextUtil extends WebUtils {
         } else {
             log.info(JSON.toJSONString(responseResult));
         }
-        HttpServletResponse response = getHttpResponse();
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=utf-8");
-        response.setStatus(httpStatus);
-        if (responseResult != null) {
-            out.print(JSON.toJSONString(responseResult));
+        if(!WebContextUtil.hasRequestContext()){
+            log.warn("不在HttpServletRequest上下文环境，无法取HttpResponse");
+            return;
         }
-        out.flush();
+        HttpServletResponse response = getHttpResponse();
+        if(null != response) {
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json; charset=utf-8");
+            response.setStatus(httpStatus);
+            if (responseResult != null) {
+                out.print(JSON.toJSONString(responseResult));
+            }
+            out.flush();
+        }
     }
 
     /**

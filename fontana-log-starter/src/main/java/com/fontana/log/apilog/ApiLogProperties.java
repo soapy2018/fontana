@@ -4,6 +4,7 @@ import com.fontana.base.constant.CommonConstants;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * @program: titanboot
@@ -14,6 +15,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = CommonConstants.APILOG_PREFIX)
 @Data
 @ToString
+@RefreshScope
 public class ApiLogProperties {
 
     /**

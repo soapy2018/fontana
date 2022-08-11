@@ -22,6 +22,11 @@ public class TokenData {
      * 用户Id。
      */
     private Long userId;
+
+    /**
+     * 用户名。
+     */
+    private String userName;
     /**
      * 用户所在部门Id。
      * 仅当系统支持uaa时可用，否则可以直接忽略该字段。保留该字段是为了保持单体和微服务通用代码部分的兼容性。
@@ -36,6 +41,12 @@ public class TokenData {
      * 仅当系统支持uaa时可用，否则可以直接忽略该字段。保留该字段是为了保持单体和微服务通用代码部分的兼容性。
      */
     private Long tenantId;
+
+    /**
+     * 工厂Id。
+     * 仅当系统支持uaa时可用，否则可以直接忽略该字段。保留该字段是为了保持单体和微服务通用代码部分的兼容性。
+     */
+    private Long factoryId;
     /**
      * 是否为超级管理员。
      */

@@ -75,6 +75,7 @@ public class SysUserController extends BaseController<SysUser, SysUserVo, Long> 
             return Result.failed(ResultCode.DATA_VALIDATED_FAILED, errorMessage);
         }
 
+        SysUser S = new SysUser();
         SysUser sysUser = MyModelUtil.copyTo(sysUserDto, SysUser.class);
         CallResult result = sysUserService.verifyRelatedData(
                 sysUser, null, roleIdListString, dataPermIdListString);

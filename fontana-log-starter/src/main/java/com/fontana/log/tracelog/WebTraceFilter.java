@@ -1,6 +1,7 @@
 package com.fontana.log.tracelog;
 
 import com.fontana.base.constant.HttpConstants;
+import com.fontana.util.request.WebContextUtil;
 import com.fontana.util.tools.MDCTraceUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.annotation.Order;
@@ -39,7 +40,7 @@ public class WebTraceFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
         try {
-            String traceId = request.getHeader(HttpConstants.TRACE_ID_HEADER);
+            String traceId = WebContextUtil.getTraceId(request);
             if (StringUtils.isEmpty(traceId)) {
                 MDCTraceUtil.addTrace();
             } else {

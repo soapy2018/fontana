@@ -3,14 +3,16 @@
 <configuration>
     <contextName>${APP_NAME}</contextName>
     <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
-    <springProperty name="LOG_FILE" scope="context" source="logging.appfile" defaultValue="./logs/${APP_NAME}/application/"/>
-    <springProperty name="LOG_API_FILE" scope="context" source="logging.apifile" defaultValue="./logs/${APP_NAME}/api"/>
-    <springProperty name="LOG_POINT_FILE" scope="context" source="logging.pointfile" defaultValue="./logs/${APP_NAME}/point"/>
-    <springProperty name="LOG_AUDIT_FILE" scope="context" source="logging.auditfile" defaultValue="./logs/${APP_NAME}/audit"/>
+    <springProperty name="LOG_FILE" scope="context" source="fontana.logging.sysfile" defaultValue="./logs/${APP_NAME}/application/"/>
+    <springProperty name="LOG_API_FILE" scope="context" source="fontana.logging.apifile" defaultValue="./logs/${APP_NAME}/api"/>
+    <springProperty name="LOG_POINT_FILE" scope="context" source="fontana.logging.pointfile" defaultValue="./logs/${APP_NAME}/point"/>
+    <springProperty name="LOG_AUDIT_FILE" scope="context" source="fontana.logging.auditfile" defaultValue="./logs/${APP_NAME}/audit"/>
     <springProperty name="LOG_MAXFILESIZE" scope="context" source="logback.filesize" defaultValue="50MB"/>
     <springProperty name="LOG_FILEMAXDAY" scope="context" source="logback.filemaxday" defaultValue="7"/>
     <springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="127.0.0.1"/>
     <springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
+    <!--solar服务器地址-->
+    <springProperty name="logServ" scope="context"  source="fontana.solarServ" defaultValue="127.0.0.1"/>
 
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -18,6 +20,8 @@
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
 
+    <!--为了防止进程退出时，内存中的数据丢失，请加上此选项-->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
     <!-- 彩色日志格式 -->
     <property name="CONSOLE_LOG_PATTERN"
               value="[${APP_NAME}:${ServerIP}:${ServerPort}] %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%level){blue} %clr(${PID}){magenta} %clr([%X{traceId}]){yellow} %clr([%thread]){orange} %clr(%-40.40logger{39}){cyan} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
@@ -141,11 +145,11 @@
 
     <appender name="applog" class="com.fontana.log.producer.appender.AppLogAppender">
         <appName>${APP_NAME}</appName>
-        <logServ>http://192.168.8.133:8983</logServ>
+        <logServ>${logServ}</logServ>
     </appender>
     <appender name="requestLog" class="com.fontana.log.producer.appender.RequestLogAppender">
         <appName>${APP_NAME}</appName>
-        <logServ>http://192.168.8.133:8983</logServ>
+        <logServ>${logServ}</logServ>
     </appender>
 
     <!--

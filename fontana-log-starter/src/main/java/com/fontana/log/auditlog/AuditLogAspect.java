@@ -1,8 +1,8 @@
 package com.fontana.log.auditlog;
 
-import com.fontana.base.constant.HttpConstants;
 import com.fontana.base.log.Audit;
 import com.fontana.base.log.IAuditService;
+import com.fontana.util.request.WebContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -114,9 +114,9 @@ public class AuditLogAspect {
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        String userId = request.getHeader(HttpConstants.USER_ID_HEADER);
-        String userName = request.getHeader(HttpConstants.USER_NAME_HEADER);
-        String tenantId = request.getHeader(HttpConstants.TENANT_ID_HEADER);
+        String userId = WebContextUtil.getUserId(request);
+        String userName = WebContextUtil.getUserName(request);
+        String tenantId = WebContextUtil.getTenantId(request);;
         audit.setUserId(userId);
         audit.setUserName(userName);
         audit.setTenantId(tenantId);

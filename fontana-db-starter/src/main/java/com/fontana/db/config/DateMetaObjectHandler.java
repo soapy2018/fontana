@@ -55,11 +55,13 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
         if (updateTime == null) {
             setFieldValByName(autoFillProperties.getUpdateTimeField(), date, metaObject);
         }
-        if (createUserId == null) {
-            setFieldValByName(autoFillProperties.getCreateUserIdField(), WebContextUtil.takeTokenFromRequest().getUserId(), metaObject);
+        if (createUserId == null && WebContextUtil.hasRequestContext()) {
+            //todo userId统一从哪里拿？
+            setFieldValByName(autoFillProperties.getCreateUserIdField(), WebContextUtil.getUserId(), metaObject);
         }
-        if (updateUserId == null) {
-            setFieldValByName(autoFillProperties.getUpdateUserIdField(), WebContextUtil.takeTokenFromRequest().getUserId(), metaObject);
+        if (updateUserId == null && WebContextUtil.hasRequestContext()) {
+            //todo userId统一从哪里拿？
+            setFieldValByName(autoFillProperties.getUpdateUserIdField(), WebContextUtil.getUserId(), metaObject);
         }
 
     }
@@ -70,6 +72,9 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         setFieldValByName(autoFillProperties.getUpdateTimeField(), new Date(), metaObject);
-        setFieldValByName(autoFillProperties.getUpdateUserIdField(), WebContextUtil.takeTokenFromRequest().getUserId(), metaObject);
+        //todo userId统一从哪里拿？
+        if (WebContextUtil.hasRequestContext()) {
+            setFieldValByName(autoFillProperties.getUpdateUserIdField(), WebContextUtil.getUserId(), metaObject);
+        }
     }
 }

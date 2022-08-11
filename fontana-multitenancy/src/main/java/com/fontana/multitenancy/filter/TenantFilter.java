@@ -3,6 +3,7 @@ package com.fontana.multitenancy.filter;
 import com.fontana.base.constant.CommonConstants;
 import com.fontana.base.constant.HttpConstants;
 import com.fontana.base.context.TenantContextHolder;
+import com.fontana.util.request.WebContextUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -27,11 +28,7 @@ public class TenantFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
         try {
-            //优先获取请求参数中的tenantId值
-            String tenantId = request.getParameter(HttpConstants.TENANT_ID);
-            if (StringUtils.isEmpty(tenantId)) {
-                tenantId = request.getHeader(HttpConstants.TENANT_ID_HEADER);
-            }
+            String tenantId = WebContextUtil.getTenantId(request);
             //保存租户id
             if (StringUtils.isNotEmpty(tenantId)) {
                 TenantContextHolder.setTenant(tenantId);
