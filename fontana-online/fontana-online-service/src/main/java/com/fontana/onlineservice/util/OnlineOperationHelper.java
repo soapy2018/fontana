@@ -276,7 +276,7 @@ public class OnlineOperationHelper {
         try {
             // 如果请求参数中没有包含主键Id，就判断该文件是否为当前session上传的。
             if (ObjectUtil.isEmpty(dataId)) {
-                if (!cacheHelper.existSessionUploadFile(filename)) {
+                if (!cacheHelper.existSessionUploadFile(filename, WebContextUtil.getSessionId())) {
                     WebContextUtil.output(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -375,7 +375,7 @@ public class OnlineOperationHelper {
         }
         // 动态表单的下载url和普通表单有所不同，由前端负责动态拼接。
         responseInfo.setDownloadUri(null);
-        cacheHelper.putSessionUploadFile(responseInfo.getFilename());
+        cacheHelper.putSessionUploadFile(responseInfo.getFilename(), WebContextUtil.getSessionId());
         WebContextUtil.output(Result.succeed(responseInfo));
     }
 

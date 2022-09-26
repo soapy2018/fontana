@@ -2,6 +2,7 @@ package com.fontana.redis.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import com.fontana.base.constant.CommonConstants;
 import com.fontana.base.exception.GeneralException;
 import com.fontana.redis.properties.CacheManagerProperties;
 import com.fontana.redis.util.SessionCacheHelper;
@@ -21,34 +22,34 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021-06-06
  */
 @Configuration
-@ConditionalOnProperty(name = "redis.redisson.enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = CommonConstants.REDISSON_PREFIX, name = "enabled", havingValue = "true")
 public class RedissonConfig {
 
-    @Value("${redis.redisson.lockWatchdogTimeout}")
+    @Value("${fontana.redisson.lockWatchdogTimeout}")
     private Integer lockWatchdogTimeout;
 
-    @Value("${redis.redisson.mode}")
+    @Value("${fontana.redisson.mode}")
     private String mode;
 
     /**
      * 仅仅用于sentinel模式。
      */
-    @Value("${redis.redisson.masterName:}")
+    @Value("${fontana.redisson.masterName:}")
     private String masterName;
 
-    @Value("${redis.redisson.address}")
+    @Value("${fontana.redisson.address}")
     private String address;
 
-    @Value("${redis.redisson.timeout}")
+    @Value("${fontana.redisson.timeout}")
     private Integer timeout;
 
-    @Value("${redis.redisson.password:}")
+    @Value("${fontana.redisson.password:}")
     private String password;
 
-    @Value("${redis.redisson.pool.poolSize}")
+    @Value("${fontana.redisson.pool.poolSize}")
     private Integer poolSize;
 
-    @Value("${redis.redisson.pool.minIdle}")
+    @Value("${fontana.redisson.pool.minIdle}")
     private Integer minIdle;
 
     @Bean
@@ -102,9 +103,4 @@ public class RedissonConfig {
         }
         return Redisson.create(config);
     }
-
-//    @Bean
-//    public SessionCacheHelper SessionCacheHelper() {
-//        return new SessionCacheHelper();
-//    }
 }

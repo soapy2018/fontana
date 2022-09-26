@@ -21,4 +21,4 @@ spring:
     allow-bean-definition-overriding: true
 fontana:
   tracelog:
-    enable: true
+    enabled: true

@@ -3,17 +3,17 @@ spring:
     name: common-log
 fontana:
 #  apilog:
-#    enable: true
+#    enabled: true
 #    showip: true
 #    showargs: true
 #    showHead: true
   requestlog:
-    enable: true
+    enabled: true
     showip: true
     showargs: true
     showHead: true
     showRes: true
-  solarServ: http://192.168.8.133:8983
+  solrServ: http://192.168.8.133:8983
   logging:
     sysfile: ./logs/${spring.application.name}/test/
 #  auditlog:

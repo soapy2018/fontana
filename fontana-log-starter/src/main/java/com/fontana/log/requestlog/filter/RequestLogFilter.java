@@ -36,11 +36,11 @@ import java.io.IOException;
  */
 @Component
 @ConditionalOnClass(value = {HttpServletRequest.class, OncePerRequestFilter.class})
-@ConditionalOnProperty(prefix = CommonConstants.REQUESTLOG_PREFIX, name = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix = CommonConstants.REQUESTLOG_PREFIX, name = "enabled", havingValue = "true")
 @Order(value = MDCTraceUtil.FILTER_ORDER + 1)
 @Slf4j
 public class RequestLogFilter extends OncePerRequestFilter {
-    //性能日志专用logger
+    //请求日志专用logger
     private final Logger requestLogger = LoggerFactory.getLogger("requestLog");
     //@Resource
     private RequestLogProperties requestLogProperties;
@@ -51,7 +51,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !(requestLogProperties == null || requestLogProperties.getEnable());
+        return !(requestLogProperties == null || requestLogProperties.getEnabled());
     }
 
     @Override

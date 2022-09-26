@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author yegenchang
- * @description 接口性能日志
+ * @description 接口请求日志
  * @date 2022/6/17 18:42
  */
 public class RequestLog implements Serializable {

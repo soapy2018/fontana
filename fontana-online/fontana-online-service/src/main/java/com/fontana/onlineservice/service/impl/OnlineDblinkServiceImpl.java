@@ -3,7 +3,7 @@ package com.fontana.onlineservice.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.onlineservice.entity.OnlineDblink;
 import com.fontana.onlineservice.mapper.OnlineDblinkMapper;
 import com.fontana.onlineservice.object.SqlTable;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("onlineDblinkService")
-public class OnlineDblinkServiceImpl extends ABaseService<OnlineDblink, Long> implements OnlineDblinkService {
+public class OnlineDblinkServiceImpl extends AbsBaseService<OnlineDblink, Long> implements OnlineDblinkService {
 
     @Autowired
     private OnlineDblinkMapper onlineDblinkMapper;

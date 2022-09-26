@@ -147,9 +147,9 @@ public class logTest {
 
     @Test
     @SneakyThrows
-    public void testSolarLog() {
+    public void testSolrLog() {
 
-        //性能日志专用logger
+        //请求日志专用logger
         //requestLog log
         Logger requestLogger = LoggerFactory.getLogger("requestLog");
         requestLogger.info(JSON.toJSONString(buildPerformLog()));
@@ -224,7 +224,7 @@ public class logTest {
 
 
     /**
-     * 构建性能日志日志
+     * 构建请求日志日志
      *
      * @return
      */

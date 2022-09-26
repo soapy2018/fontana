@@ -1,6 +1,6 @@
 fontana:
   tenant:
-    enable: true
+    enabled: true
     type: db
 spring:
   datasource:

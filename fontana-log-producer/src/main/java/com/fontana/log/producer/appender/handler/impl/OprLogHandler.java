@@ -7,7 +7,7 @@ import com.fontana.log.producer.producer.BaseLogItem;
 /**
  * @author yegenchang
  * @Title: requestHandler
- * @Description: 性能日志处理类
+ * @Description: 请求日志处理类
  * @date 2021/3/5 22:54
  */
 public class OprLogHandler implements ILogHandler {

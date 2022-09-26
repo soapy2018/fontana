@@ -21,7 +21,7 @@ public class RequestLogProperties {
     /**
      * requestlog是否开启
      */
-    private Boolean enable = false;
+    private Boolean enabled = false;
 
     /**
      * 记录中是否显示来源IP

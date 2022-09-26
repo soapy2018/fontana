@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.flowservice.entity.FlowEntryVariable;
 import com.fontana.flowservice.mapper.FlowEntryVariableMapper;
 import com.fontana.flowservice.service.FlowEntryVariableService;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("flowEntryVariableService")
-public class FlowEntryVariableServiceImpl extends ABaseService<FlowEntryVariable, Long> implements FlowEntryVariableService {
+public class FlowEntryVariableServiceImpl extends AbsBaseService<FlowEntryVariable, Long> implements FlowEntryVariableService {
 
     @Autowired
     private FlowEntryVariableMapper flowEntryVariableMapper;

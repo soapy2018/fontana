@@ -46,9 +46,32 @@ spring:
         urlPattern: /druid/*
         resetEnable: true
 
-# 存储session数据的Redis，所有服务均需要，因此放到公共配置中。
-# 根据实际情况，该Redis也可以用于存储其他数据。
-redis:
+mybatis-plus:
+  # mapper-locations: classpath:com/fontana/upmsservice/mapper/xml/*Mapper.xml,com/fontana/onlineservice/mapper/xml/*Mapper.xml,com/fontana/flowservice/mapper/xml/*Mapper.xml
+  mapper-locations: classpath*:com/fontana/*/mapper/xml/*Mapper.xml
+  # type-aliases-package:  com.fontana.upmsservice.entity,com.fontana.onlineservice.entity,com.fontana.flowservice.entity
+  type-aliases-package:  com.fontana.*.entity
+  global-config:
+    db-config:
+      logic-delete-value: -1
+      logic-not-delete-value: 1
+
+fontana:
+  application:
+    # 缺省的文件上传根目录。
+    uploadFileBaseDir: ./bn-resource/upload-files/upms
+    # 初始化密码。
+    defaultUserPassword: 123456
+    # 每个微服务的url目录上下文，如(/admin/upms)，通常和网关的路由path一致。
+    serviceContextPath: /admin/upms
+    # 是否忽略远程调用中出现的任何错误，包括逻辑异常和系统异常。
+    # 通常在调试和测试阶段设置为false，以便及时发现问题。
+    ignoreRpcError: false
+    # Session的数据权限信息在Redis中的过期时间(秒)。
+    dataPermExpiredSeconds: 86460
+
+  # 存储session数据的Redis，所有服务均需要，因此放到公共配置中。
+  # 根据实际情况，该Redis也可以用于存储其他数据。
   # redisson的配置。每个服务可以自己的配置文件中覆盖此选项。
   redisson:
     # 如果该值为false，系统将不会创建RedissionClient的bean。
@@ -80,31 +103,44 @@ redis:
       # 连接池中最小空闲数量。
       minIdle: 5
 
-mybatis-plus:
-  #  多模块的情况下需要扫描全部的导入模块,则mapper的扫描路径需要加一个*号，
-  #  如下只能扫描当前模块：
-  #  mapper-locations: classpath:com/fontana/*/mapper/xml/*Mapper.xml
-  #  修改成：
-  mapper-locations: classpath*:com/fontana/*/mapper/xml/*Mapper.xml
-  #  或者全部列出：
-  # mapper-locations: classpath:com/fontana/upmsservice/mapper/xml/*Mapper.xml,com/fontana/onlineservice/mapper/xml/*Mapper.xml,com/fontana/flowservice/mapper/xml/*Mapper.xml
-  # type-aliases-package:  com.fontana.upmsservice.entity,com.fontana.onlineservice.entity,com.fontana.flowservice.entity
-  type-aliases-package:  com.fontana.*.entity
-  global-config:
-    db-config:
-      logic-delete-value: -1
-      logic-not-delete-value: 1
+  common-online:
+    # 注意不要以反斜杠(/)结尾。
+    urlPrefix: /online
+    # 在线表单业务数据上传资源路径
+    uploadFileBaseDir: ./bn-resource/upload-files/online
 
-fontana:
-    application:
-      # 缺省的文件上传根目录。
-      uploadFileBaseDir: ./bn-resource/upload-files/upms
-      # 初始化密码。
-      defaultUserPassword: 123456
-      # 每个微服务的url目录上下文，如(/admin/upms)，通常和网关的路由path一致。
-      serviceContextPath: /admin/upms
-      # 是否忽略远程调用中出现的任何错误，包括逻辑异常和系统异常。
-      # 通常在调试和测试阶段设置为false，以便及时发现问题。
-      ignoreRpcError: false
-      # Session的数据权限信息在Redis中的过期时间(秒)。
-      dataPermExpiredSeconds: 86460
+    # 如果为false，OnlineOperationController中的接口将不能使用。
+    operationEnabled: true
+    # 注意不要以反斜杠(/)结尾。
+    operationUrlPrefix: /online
+    # 下面的url列表，请保持反斜杠(/)结尾。
+    viewUrlList:
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/viewByDatasourceId/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/viewByOneToManyRelationId/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/listByDatasourceId/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/listByOneToManyRelationId/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/downloadDatasource/
+      - ${bluetron-nb-common.common-online.operationUrlPrefix}/onlineOperation/downloadOneToManyRelation/
+    editUrlList:
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/addDatasource/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/addOneToManyRelation/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/updateDatasource/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/updateOneToManyRelation/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/deleteDatasource/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/deleteOneToManyRelation/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/uploadDatasource/
+      - ${fontana.common-online.operationUrlPrefix}/onlineOperation/uploadOneToManyRelation/
+
+  common-flow:
+    # 请慎重修改urlPrefix的缺省配置，注意不要以反斜杠(/)结尾。如必须修改其他路径，请同步修改数据库脚本。
+    urlPrefix: /flow
+
+  datafilter:
+    tenant:
+      # 对于单体服务，该值始终为false。
+      enabled: false
+    dataperm:
+      enabled: true
+      # 在拼接数据权限过滤的SQL时，我们会用到sys_dept_relation表，该表的前缀由此配置项指定。
+      # 如果没有前缀，请使用 "" 。
+      deptRelationTablePrefix: bn_

@@ -1,10 +1,9 @@
 package com.fontana.gateway.filter;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.fontana.log.monitor.PointUtil;
 import com.fontana.util.request.IpUtil;
+import com.fontana.util.tools.PointUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;

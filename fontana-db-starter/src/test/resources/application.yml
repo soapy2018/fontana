@@ -1,11 +1,11 @@
 fontana:
   tenant:
-    enable: true
+    enabled: true
     type: db
 
   mybatis-plus:
     auto-fill:
-      enable: true #自动填充总开关默认是true
+      enabled: true #自动填充总开关默认是true
       enableInsertFill: true #新增开关，默认是true
       enableUpdateFill: true #修改开关，默认是true
       createTimeField: createTime #创建时间Java字段，默认是createTime，可以自定义

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.entity.SysDeptPost;
 import com.fontana.upmsservice.entity.SysPost;
@@ -33,7 +33,7 @@ import java.util.Set;
  */
 @Slf4j
 @Service("sysPostService")
-public class SysPostServiceImpl extends ABaseService<SysPost, Long> implements SysPostService {
+public class SysPostServiceImpl extends AbsBaseService<SysPost, Long> implements SysPostService {
 
     @Autowired
     private SysPostMapper sysPostMapper;

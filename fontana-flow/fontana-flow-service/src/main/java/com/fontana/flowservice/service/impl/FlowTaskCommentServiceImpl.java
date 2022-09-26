@@ -3,7 +3,7 @@ package com.fontana.flowservice.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fontana.base.object.TokenData;
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.flowservice.entity.FlowTaskComment;
 import com.fontana.flowservice.mapper.FlowTaskCommentMapper;
 import com.fontana.util.request.WebContextUtil;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("flowTaskCommentService")
-public class FlowTaskCommentServiceImpl extends ABaseService<FlowTaskComment, Long> implements com.fontana.flowservice.service.FlowTaskCommentService {
+public class FlowTaskCommentServiceImpl extends AbsBaseService<FlowTaskComment, Long> implements com.fontana.flowservice.service.FlowTaskCommentService {
 
     @Autowired
     private FlowTaskCommentMapper flowTaskCommentMapper;

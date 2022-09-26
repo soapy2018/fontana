@@ -24,9 +24,9 @@ spring:
 
 fontana:
 #  tracelog:
-#    enable: true
+#    enabled: true
   requestlog:
-    enable: true
+    enabled: true
   solarServ: http://192.168.8.133:8983
 
   application:

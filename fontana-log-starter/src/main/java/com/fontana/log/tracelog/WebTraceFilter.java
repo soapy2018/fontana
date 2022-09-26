@@ -33,7 +33,7 @@ public class WebTraceFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !traceProperties.getEnable();
+        return !traceProperties.getEnabled();
     }
 
     @Override

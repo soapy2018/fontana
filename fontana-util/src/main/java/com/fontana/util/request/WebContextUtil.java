@@ -1,7 +1,6 @@
 package com.fontana.util.request;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.constant.AppDeviceType;
 import com.fontana.base.constant.HttpConstants;
@@ -121,6 +120,19 @@ public class WebContextUtil extends WebUtils {
             headers.append(name).append("=").append(headerValue);
         }
         return headers.toString();
+    }
+
+    /**
+     * 获取用户id
+     *
+     * @return
+     */
+    public static String getSessionId() {
+        TokenData tokenData = takeTokenFromRequest();
+        if(null != tokenData) {
+            return tokenData.getSessionId();
+        }
+        return "";
     }
 
     /**

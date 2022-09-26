@@ -3,7 +3,7 @@ package com.fontana.onlineservice.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.base.result.CallResult;
 import com.fontana.db.object.MyRelationParam;
 import com.fontana.onlineservice.mapper.OnlineVirtualColumnMapper;
@@ -33,7 +33,7 @@ import java.util.Set;
 @Slf4j
 @Service("onlineVirtualColumnService")
 public class OnlineVirtualColumnServiceImpl
-        extends ABaseService<OnlineVirtualColumn, Long> implements OnlineVirtualColumnService {
+        extends AbsBaseService<OnlineVirtualColumn, Long> implements OnlineVirtualColumnService {
 
     @Autowired
     private OnlineVirtualColumnMapper onlineVirtualColumnMapper;

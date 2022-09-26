@@ -60,7 +60,7 @@ mybatis-plus:
 
 fontana:
   tracelog:
-    enable: true
+    enabled: true
 
   common-online:
     # 注意不要以反斜杠(/)结尾。

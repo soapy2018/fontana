@@ -22,7 +22,7 @@ import java.util.Arrays;
  */
 @Slf4j
 @Aspect
-@ConditionalOnProperty(prefix = CommonConstants.APILOG_PREFIX, name = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix = CommonConstants.APILOG_PREFIX, name = "enabled", havingValue = "true")
 @Component
 public class ApiLogAspect {
 

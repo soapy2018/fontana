@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.onlineapi.dict.FieldKind;
 import com.fontana.onlineservice.entity.OnlineColumn;
 import com.fontana.onlineservice.entity.OnlineTable;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("onlineTableService")
-public class OnlineTableServiceImpl extends ABaseService<OnlineTable, Long> implements OnlineTableService {
+public class OnlineTableServiceImpl extends AbsBaseService<OnlineTable, Long> implements OnlineTableService {
 
     @Autowired
     private OnlineTableMapper onlineTableMapper;

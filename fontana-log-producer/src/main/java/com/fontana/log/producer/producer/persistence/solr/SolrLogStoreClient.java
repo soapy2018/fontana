@@ -40,8 +40,8 @@ public class SolrLogStoreClient implements LogStoreClient, Closeable {
     if((host==null || host.isEmpty()) || (logStore==null || logStore.isEmpty())){
       throw new RuntimeException("host,logStore不能为空");
     }
-    String url= MessageFormat.format("{0}/solr/{1}",host,logStore);
-    solrClient=new Http2SolrClient.Builder(url).connectionTimeout(10000).build();
+    String url = MessageFormat.format("{0}/solr/{1}",host,logStore);
+    solrClient = new Http2SolrClient.Builder(url).connectionTimeout(10000).build();
   }
 
   @Override

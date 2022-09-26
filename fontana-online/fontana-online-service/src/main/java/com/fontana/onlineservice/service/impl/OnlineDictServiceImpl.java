@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.base.result.CallResult;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.onlineservice.entity.OnlineDict;
 import com.fontana.onlineservice.mapper.OnlineDictMapper;
 import com.fontana.onlineservice.service.OnlineDblinkService;
@@ -28,7 +28,7 @@ import java.util.Set;
  */
 @Slf4j
 @Service("onlineDictService")
-public class OnlineDictServiceImpl extends ABaseService<OnlineDict, Long> implements OnlineDictService {
+public class OnlineDictServiceImpl extends AbsBaseService<OnlineDict, Long> implements OnlineDictService {
 
     @Autowired
     private OnlineDictMapper onlineDictMapper;

@@ -1,6 +1,5 @@
 package com.fontana.redis.util;
 
-import com.fontana.util.request.WebContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -56,11 +55,11 @@ public class SessionCacheHelper {
      *
      * @param filename 通常是本地存储的文件名，而不是上传时的原始文件名。
      */
-    public void putSessionUploadFile(String filename) {
+    public void putSessionUploadFile(String filename, String sessionId) {
         if (filename != null) {
             Set<String> sessionUploadFileSet = null;
             Cache cache = cacheManager.getCache(CacheEnum.UPLOAD_FILENAME_CACHE.name());
-            Cache.ValueWrapper valueWrapper = cache.get(WebContextUtil.takeTokenFromRequest().getSessionId());
+            Cache.ValueWrapper valueWrapper = cache.get(sessionId);
             if (valueWrapper != null) {
                 sessionUploadFileSet = (Set<String>) valueWrapper.get();
             }
@@ -68,7 +67,7 @@ public class SessionCacheHelper {
                 sessionUploadFileSet = new HashSet<>();
             }
             sessionUploadFileSet.add(filename);
-            cache.put(WebContextUtil.takeTokenFromRequest().getSessionId(), sessionUploadFileSet);
+            cache.put(sessionId, sessionUploadFileSet);
         }
     }
 
@@ -78,12 +77,12 @@ public class SessionCacheHelper {
      * @param filename 通常是本地存储的文件名，而不是上传时的原始文件名。
      * @return true表示该文件是由当前session上传并存储在本地的，否则false。
      */
-    public boolean existSessionUploadFile(String filename) {
+    public boolean existSessionUploadFile(String filename, String sessionId) {
         if (filename == null) {
             return false;
         }
         Cache cache = cacheManager.getCache(CacheEnum.UPLOAD_FILENAME_CACHE.name());
-        Cache.ValueWrapper valueWrapper = cache.get(WebContextUtil.takeTokenFromRequest().getSessionId());
+        Cache.ValueWrapper valueWrapper = cache.get(sessionId);
         if (valueWrapper == null) {
             return false;
         }

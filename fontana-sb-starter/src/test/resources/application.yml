@@ -1,15 +1,7 @@
 fontana:
-  apilog:
-    enable: true
-    showip: true
-    showargs: false
-#    auditlog:
-#      type: db
-#      datasource:
-
   mybatis-plus:
     auto-fill:
-      enable: true
+      enabled: true
       createTimeField:
       updateTimeField:
 

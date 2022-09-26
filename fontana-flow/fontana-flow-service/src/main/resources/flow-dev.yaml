@@ -66,7 +66,7 @@ flowable:
 
 fontana:
   tracelog:
-    enable: true
+    enabled: true
   common-flow:
     # 请慎重修改urlPrefix的缺省配置，注意不要以反斜杠(/)结尾。如必须修改其他路径，请同步修改数据库脚本。
     urlPrefix: /flow

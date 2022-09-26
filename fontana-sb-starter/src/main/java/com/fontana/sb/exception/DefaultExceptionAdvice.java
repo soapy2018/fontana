@@ -77,7 +77,7 @@ public class DefaultExceptionAdvice {
     }
 
     /**
-     * SocketTimeoutException 超時异常处理
+     * ArithmeticException 算数计算异常
      * 返回状态码:500
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

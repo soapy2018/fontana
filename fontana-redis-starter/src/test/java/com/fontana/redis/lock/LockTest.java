@@ -42,7 +42,6 @@ public class LockTest {
                         ) {
 
                             if (lock != null) {
-
                                 // 此处是业务代码
                                 log.info("进入业务代码" + num);
                                 Thread.sleep(5000);

@@ -11,8 +11,8 @@
     <springProperty name="LOG_FILEMAXDAY" scope="context" source="logback.filemaxday" defaultValue="7"/>
     <springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="127.0.0.1"/>
     <springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
-    <!--solar服务器地址-->
-    <springProperty name="logServ" scope="context"  source="fontana.solarServ" defaultValue="127.0.0.1"/>
+    <!--solr服务器地址-->
+    <springProperty name="logServ" scope="context"  source="fontana.solrServ" defaultValue="127.0.0.1"/>
 
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->

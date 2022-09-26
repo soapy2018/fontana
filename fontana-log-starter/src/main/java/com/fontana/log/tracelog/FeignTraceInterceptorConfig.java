@@ -26,7 +26,7 @@ public class FeignTraceInterceptorConfig {
     @Bean
     public RequestInterceptor feignTraceInterceptor() {
         return template -> {
-            if (traceProperties.getEnable()) {
+            if (traceProperties.getEnabled()) {
                 //传递日志traceId
                 String traceId = MDCTraceUtil.getTraceId();
                 if (!StringUtils.isEmpty(traceId)) {

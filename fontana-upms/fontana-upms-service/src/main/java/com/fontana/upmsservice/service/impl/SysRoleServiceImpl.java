@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.result.CallResult;
-import com.fontana.db.service.impl.ABaseService;
+import com.fontana.db.service.impl.AbsBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.entity.SysRole;
 import com.fontana.upmsservice.entity.SysRoleMenu;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysRoleService")
-public class SysRoleServiceImpl extends ABaseService<SysRole, Long> implements SysRoleService {
+public class SysRoleServiceImpl extends AbsBaseService<SysRole, Long> implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;

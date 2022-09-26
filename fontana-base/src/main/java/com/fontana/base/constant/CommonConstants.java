@@ -55,11 +55,6 @@ public interface CommonConstants {
     String TRACELOG_PREFIX = "fontana.tracelog";
 
     /**
-     * SOLAR log日志
-     */
-    String SOLARLOG_PREFIX = "fontana.solarlog";
-
-    /**
      * REQUEST log日志
      */
     String REQUESTLOG_PREFIX = "fontana.requestlog";
@@ -75,12 +70,12 @@ public interface CommonConstants {
     String CACHEMANAGER_PREFIX = "fontana.cache-manager";
 
     /**
-     * mybatis plus 配置
+     * tenant 配置
      */
     String TENANT_PREFIX = "fontana.tenant";
 
     /**
-     * mybatis plus 配置
+     * 动态数据源 配置
      */
     String DYNAMIC_DATASOURCE_PREFIX = "fontana.dynamic-datasource";
 
@@ -123,6 +118,11 @@ public interface CommonConstants {
      * flow配置
      */
     String COMMON_FLOW_PREFIX = "fontana.common-flow";
+
+    /**
+     * redisson配置
+     */
+    String REDISSON_PREFIX = "fontana.redisson";
 
     /**
      * 数据表中的tenant_id字段

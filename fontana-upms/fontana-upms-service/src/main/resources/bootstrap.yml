@@ -32,14 +32,20 @@ spring:
 
 fontana:
 #  tracelog:
-#    enable: true
+#    enabled: true
 #  apilog:
-#    enable: true
+#    enabled: true
 #    showIP: true
 #    showArgs: true
 #    showHead: true
-  requestlog:
-    enable: true
+#  requestlog:
+#    enabled: true
+  swagger:
+    enabled: true
+    title: 用户中心
+    description: 用户中心接口文档
+    version: 1.0
+    base-package: com.fontana  #扫描路径，这个* ..貌似都没用
 
 
 

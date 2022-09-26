@@ -26,12 +26,6 @@
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-redis-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -39,16 +33,10 @@
             <artifactId>fontana-util</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.fontana</groupId>
-            <artifactId>fontana-log-starter</artifactId>
-        </dependency>
-
         <!-- 网关服务 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-<!--            <version>2.2.8.RELEASE</version>-->
         </dependency>
 <!--        若想跟 Sentinel Starter 配合使用，需要加上 spring-cloud-alibaba-sentinel-gateway 依赖，同时需要添加 spring-cloud-starter-gateway 依赖来让 spring-cloud-alibaba-sentinel-gateway 模块里的 Spring Cloud Gateway 自动化配置类生效：-->
 <!--        参考 https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel#spring-cloud-gateway-%E6%94%AF%E6%8C%81-->
@@ -73,7 +61,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-<!--            <version>2.2.8.RELEASE</version>-->
         </dependency>
 
         <!--nacos 注册中心客户端-->

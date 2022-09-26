@@ -32,7 +32,7 @@
 //  private static final String TRACE_ID = "traceId";
 //  private Logger log = LoggerFactory.getLogger(RequestLogInterceptor.class);
 //  /**
-//   * 性能日志的域对象key
+//   * 请求日志的域对象key
 //   */
 //  private static final String REQUEST_ATTRIBUTE = "requestLog";
 //
@@ -41,7 +41,7 @@
 //   */
 //  private static final String REQUEST_BEGIN_TIME = "beginRequestTime";
 //
-//  //性能日志专用logger
+//  //请求日志专用logger
 //  private Logger requestLogger = LoggerFactory.getLogger("requestLog");
 //
 //  @Override
