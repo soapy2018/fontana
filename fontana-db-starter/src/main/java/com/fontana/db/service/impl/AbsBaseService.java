@@ -1339,6 +1339,8 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
             if (tableField == null || tableField.exist()) {
                 int modifiers = field.getModifiers();
                 // transient类型的字段不能作为查询条件，静态字段和逻辑删除都不考虑。
+                // TRANSIENT修饰符 int类型128
+                // 128&128  按位与 得到1
                 int transientMask = 128;
                 if ((modifiers & transientMask) == 1
                         || Modifier.isStatic(modifiers)

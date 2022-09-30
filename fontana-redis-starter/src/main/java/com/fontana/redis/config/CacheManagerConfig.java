@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * @className: CatcheManageConfig
- * @Description: TODO
+ * @Description: redis缓存配置类
  * @version: v1.0.0
  * @author: cqf
  * @date: 2021/12/30 16:14

@@ -89,6 +89,16 @@ public class ObjectUtil extends ObjectUtils{
         return obj == null || (obj instanceof CharSequence && StrUtil.isBlank((CharSequence) obj));
     }
 
+    /**
+     * 验证参数是否为非空。
+     *
+     * @param obj 待判断的参数。
+     * @return 空或者null返回false，否则true。
+     */
+    public static boolean isNotBlankOrNull(Object obj) {
+        return !isBlankOrNull(obj);
+    }
+
     public static Integer getInt(Object object) {
         if (isEmpty(object)) {
             return null;

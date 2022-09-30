@@ -11,11 +11,11 @@ public final class GlobalDeletedFlag {
     /**
      * 表示数据表记录已经删除
      */
-    public static final int DELETED = -1;
+    public static final int DELETED = 1;
     /**
      * 数据记录正常
      */
-    public static final int NORMAL = 1;
+    public static final int NORMAL = 0;
 
     /**
      * 私有构造函数，明确标识该常量类的作用。

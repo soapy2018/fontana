@@ -16,7 +16,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
  */
 @Setter
 @Getter
-@ConfigurationProperties(prefix = CommonConstants.MYBATISPLUS_PREFIX + ".auto-fill")
+@ConfigurationProperties(prefix = CommonConstants.MYBATISPLUS_AUTOFILL_PREFIX)
 @RefreshScope
 public class MybatisPlusAutoFillProperties {
     /**

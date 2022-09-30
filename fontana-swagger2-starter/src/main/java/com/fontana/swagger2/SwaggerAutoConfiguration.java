@@ -1,5 +1,6 @@
 package com.fontana.swagger2;
 
+import com.fontana.base.annotation.MyRequestBody;
 import com.fontana.base.constant.CommonConstants;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.google.common.base.Predicate;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -39,6 +41,8 @@ import java.util.stream.Collectors;
 @EnableKnife4j
 @Import(BeanValidatorPluginsConfiguration.class)
 @Slf4j
+@ConditionalOnProperty(prefix = CommonConstants.SWAGGER2_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+@ComponentScan
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
     private static final String AUTH_KEY = "Authorization";
 
@@ -52,7 +56,6 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = CommonConstants.SWAGGER2_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public List<Docket> createRestApi(SwaggerProperties swaggerProperties) {
         log.info("swagger初始化：{}", swaggerProperties);
         ConfigurableBeanFactory configurableBeanFactory = (ConfigurableBeanFactory) beanFactory;
@@ -103,6 +106,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
             }
 
             Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                    .ignoredParameterTypes(MyRequestBody.class) //自定义注解
                     .host(swaggerProperties.getHost())
                     .apiInfo(apiInfo)
                     .globalOperationParameters(assemblyGlobalOperationParameters(swaggerProperties.getGlobalOperationParameters(),
@@ -162,6 +166,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
         }
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .ignoredParameterTypes(MyRequestBody.class) //自定义注解
                 .host(swaggerProperties.getHost())
                 .apiInfo(apiInfo)
                 .globalOperationParameters(buildGlobalOperationParametersFromSwaggerProperties(

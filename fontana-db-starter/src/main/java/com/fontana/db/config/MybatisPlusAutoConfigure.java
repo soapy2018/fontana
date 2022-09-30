@@ -5,6 +5,7 @@ import com.fontana.base.constant.CommonConstants;
 import com.fontana.db.property.MybatisPlusAutoFillProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,9 +29,9 @@ public class MybatisPlusAutoConfigure {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = CommonConstants.MYBATISPLUS_PREFIX + ".auto-fill", name = "enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = CommonConstants.MYBATISPLUS_AUTOFILL_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public MetaObjectHandler metaObjectHandler() {
-        return new DateMetaObjectHandler(autoFillProperties);
+            return new DateMetaObjectHandler(autoFillProperties);
     }
 
 }

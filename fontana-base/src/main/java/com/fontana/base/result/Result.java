@@ -18,7 +18,7 @@ public class Result<T> implements Serializable {
     private T data;
     private Integer code;
     private String msg;
-    //private boolean success = true;
+    private boolean success = true;
 
     /*
      成功的返回值统一设为1
@@ -68,7 +68,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> of(T data, Integer code, String msg) {
-        return new Result<>(data, code, msg);
+        return code.equals(ResultCode.SUCCESS.getCode())? new Result<>(data, code, msg, true) : new Result<>(data, code, msg, false);
     }
 
     /**
@@ -81,9 +81,9 @@ public class Result<T> implements Serializable {
         return of(null, errorCause.code, errorCause.msg);
     }
 
-    public boolean isSuccess(){
-        return code == 1;
-    }
+//    public boolean isSuccess(){
+//        return code == 1;
+//    }
 
     public static <T> Result<T> status(boolean flag) {
         return flag ? succeed("操作成功") : failed("操作失败");

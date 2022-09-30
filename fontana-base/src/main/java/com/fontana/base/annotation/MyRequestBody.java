@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 public @interface MyRequestBody {
 
     /**
-     * 是否必须出现的参数。
+     * 是否必须出现的参数，参数值为null也算缺失。
      */
     boolean required() default false;
     /**

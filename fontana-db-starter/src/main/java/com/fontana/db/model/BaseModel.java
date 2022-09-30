@@ -3,6 +3,8 @@ package com.fontana.db.model;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 /**
@@ -12,7 +14,8 @@ import java.util.Date;
  * @date 2020-08-08
  */
 @Data
-public class BaseModel {
+@EqualsAndHashCode(callSuper = true)
+public abstract class BaseModel extends BaseJsonModel {
 
     /**
      * 创建者Id。
@@ -37,4 +40,9 @@ public class BaseModel {
      */
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

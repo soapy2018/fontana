@@ -234,7 +234,7 @@ public class MybatisDataFilterInterceptor implements Interceptor {
         filterBuilder.append(info.tableName).append(".")
                 .append(info.columnName)
                 .append("=")
-                .append(WebContextUtil.takeTokenFromRequest().getTenantId());
+                .append(Long.valueOf(WebContextUtil.getTenantId()));
         String dataFilter = filterBuilder.toString();
         if (commandType == SqlCommandType.UPDATE) {
             Update update = (Update) statement;

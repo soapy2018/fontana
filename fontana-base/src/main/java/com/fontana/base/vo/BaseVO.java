@@ -1,15 +1,18 @@
 package com.fontana.base.vo;
 
+import lombok.Data;
+
 import java.util.Date;
 
 /**
  * @className: BaseVO
- * @Description: TODO
+ * @Description: 基础VO
  * @version: v1.0.0
  * @author: cqf
  * @date: 2022/3/16 16:24
  */
-public class BaseVO {
+@Data
+public abstract class BaseVO {
 
     /**
      * 创建者Id。

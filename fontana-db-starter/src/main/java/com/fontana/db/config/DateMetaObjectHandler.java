@@ -8,11 +8,17 @@ import org.apache.ibatis.reflection.MetaObject;
 import java.util.Date;
 
 /**
- * 自定义填充公共字段
+ * 自动填充公共字段
+ * 实现步骤：
+ * 1.实现MetaObjectHandler接口：
+ * 2. 实体类上添加注解（FieldFill）
+ * 不生效场景：
+ * 1. 使用mapper.xml的sql不生效
+ * 必须使用mybatis的api进行插入和更新操作。
+ * 2. boolean update(Wrapper updateWrapper) 不生效
  *
  * @author cqf
  * @date 2021/11/11
- * <p>
  */
 public class DateMetaObjectHandler implements MetaObjectHandler {
 
@@ -57,11 +63,11 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
         }
         if (createUserId == null && WebContextUtil.hasRequestContext()) {
             //todo userId统一从哪里拿？
-            setFieldValByName(autoFillProperties.getCreateUserIdField(), WebContextUtil.getUserId(), metaObject);
+            setFieldValByName(autoFillProperties.getCreateUserIdField(), Long.valueOf(WebContextUtil.getUserId()), metaObject);
         }
         if (updateUserId == null && WebContextUtil.hasRequestContext()) {
             //todo userId统一从哪里拿？
-            setFieldValByName(autoFillProperties.getUpdateUserIdField(), WebContextUtil.getUserId(), metaObject);
+            setFieldValByName(autoFillProperties.getUpdateUserIdField(), Long.valueOf(WebContextUtil.getUserId()), metaObject);
         }
 
     }
@@ -74,7 +80,7 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
         setFieldValByName(autoFillProperties.getUpdateTimeField(), new Date(), metaObject);
         //todo userId统一从哪里拿？
         if (WebContextUtil.hasRequestContext()) {
-            setFieldValByName(autoFillProperties.getUpdateUserIdField(), WebContextUtil.getUserId(), metaObject);
+            setFieldValByName(autoFillProperties.getUpdateUserIdField(), Long.valueOf(WebContextUtil.getUserId()), metaObject);
         }
     }
 }

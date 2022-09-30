@@ -626,7 +626,7 @@ public class MyModelUtil {
             Field createdByField = ReflectUtil.getField(data.getClass(),  DataBaseConstant.CREATE_USER);
             if (createdByField != null) {
                 ReflectUtil.setAccessible(createdByField);
-                createdByField.set(data, WebContextUtil.takeTokenFromRequest().getUserId());
+                createdByField.set(data, Long.valueOf(WebContextUtil.getUserId()));
             }
             Field createTimeField = ReflectUtil.getField(data.getClass(), DataBaseConstant.CREATE_TIME);
             if (createTimeField != null) {
@@ -636,7 +636,7 @@ public class MyModelUtil {
             Field updatedByField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_USER);
             if (updatedByField != null) {
                 ReflectUtil.setAccessible(updatedByField);
-                updatedByField.set(data, WebContextUtil.takeTokenFromRequest().getUserId());
+                updatedByField.set(data, Long.valueOf(WebContextUtil.getUserId()));
             }
             Field updateTimeField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_TIME);
             if (updateTimeField != null) {
@@ -669,7 +669,7 @@ public class MyModelUtil {
             Field updatedByField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_USER);
             if (updatedByField != null) {
                 ReflectUtil.setAccessible(updatedByField);
-                updatedByField.set(data, WebContextUtil.takeTokenFromRequest().getUserId());
+                updatedByField.set(data, Long.valueOf(WebContextUtil.getUserId()));
             }
             Field updateTimeField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_TIME);
             if (updateTimeField != null) {

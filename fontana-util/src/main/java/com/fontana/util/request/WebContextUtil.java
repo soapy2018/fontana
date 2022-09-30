@@ -1,6 +1,7 @@
 package com.fontana.util.request;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.constant.AppDeviceType;
 import com.fontana.base.constant.HttpConstants;
@@ -27,6 +28,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 获取Servlet HttpRequest和HttpResponse的工具类。
@@ -155,7 +157,7 @@ public class WebContextUtil extends WebUtils {
                 return tokenData.getUserId().toString();
             }
         }
-        return  userId;
+        return ObjectUtil.defaultIfNull(userId, "99999");
     }
 
     /**
@@ -187,7 +189,7 @@ public class WebContextUtil extends WebUtils {
                 return tokenData.getUserId().toString();
             }
         }
-        return  userName;
+        return  ObjectUtil.defaultIfNull(userName, "未知用户");
     }
 
     /**
@@ -225,10 +227,10 @@ public class WebContextUtil extends WebUtils {
         if(CharSequenceUtil.isEmpty(tenantId)){
             TokenData tokenData = takeTokenFromRequest();
             if(null != tokenData) {
-                return tokenData.getUserId().toString();
+                return tokenData.getTenantId().toString();
             }
         }
-        return  tenantId;
+        return  ObjectUtil.defaultIfNull(tenantId, "77777");
     }
 
     /**

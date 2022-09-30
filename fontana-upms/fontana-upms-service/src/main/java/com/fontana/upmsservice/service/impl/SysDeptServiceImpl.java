@@ -92,7 +92,7 @@ public class SysDeptServiceImpl extends AbsBaseService<SysDept, Long> implements
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean update(SysDept sysDept, SysDept originalSysDept) {
-        MyModelUtil.fillCommonsForUpdate(sysDept, originalSysDept);
+        //MyModelUtil.fillCommonsForUpdate(sysDept, originalSysDept);
         UpdateWrapper<SysDept> uw = this.createUpdateQueryForNullValue(sysDept, sysDept.getDeptId());
         if (sysDeptMapper.update(sysDept, uw) == 0) {
             return false;

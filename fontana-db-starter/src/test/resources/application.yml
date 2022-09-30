@@ -1,17 +1,18 @@
+
+mybatis-plus:
+  auto-fill:
+    enabled: true #自动填充总开关默认是true
+    enableInsertFill: true #新增开关，默认是true
+    enableUpdateFill: true #修改开关，默认是true
+    createTimeField: createTime #创建时间Java字段，默认是createTime，可以自定义
+    updateTimeField: updateTime #修改时间Java字段，默认是updateTime，可以自定义
+    createUserIdField: createUserId #创建用户Java字段，默认是createUserId，可以自定义
+    updateUserIdField: updateUserId #修改用户Java字段，默认是updateUserId，可以自定义
+
 fontana:
   tenant:
     enabled: true
     type: db
-
-  mybatis-plus:
-    auto-fill:
-      enabled: true #自动填充总开关默认是true
-      enableInsertFill: true #新增开关，默认是true
-      enableUpdateFill: true #修改开关，默认是true
-      createTimeField: createTime #创建时间Java字段，默认是createTime，可以自定义
-      updateTimeField: updateTime #修改时间Java字段，默认是updateTime，可以自定义
-      createUserIdField: createUserId #创建用户Java字段，默认是createUserId，可以自定义
-      updateUserIdField: updateUserId #修改用户Java字段，默认是updateUserId，可以自定义
 
 spring:
   datasource:

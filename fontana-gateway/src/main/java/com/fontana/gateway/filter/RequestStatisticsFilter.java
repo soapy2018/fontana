@@ -17,11 +17,8 @@ import java.util.Map;
 /**
  * 请求统计分析埋点过滤器
  *
- * @author zlt
- * @date 2019/10/7
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * @author cqf
+ * @date 2022/10/7
  */
 @Component
 public class RequestStatisticsFilter implements GlobalFilter, Ordered {

@@ -31,6 +31,7 @@
         <!--            <artifactId>knife4j-micro-spring-boot-starter</artifactId>-->
         <!--        </dependency>-->
         <!-- swagger -->
+        <!--参见：https://gitee.com/xiaoym/knife4j-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>

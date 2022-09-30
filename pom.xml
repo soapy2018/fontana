@@ -78,19 +78,12 @@
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <dependencyManagement>
@@ -210,20 +203,23 @@
                         <!-- on the configuration of annotationProcessors.                                           -->
                         <!-- 因为MapStruct需要在编译器生成转换代码，所以需要在maven-compiler-plugin插件中配置上对mapstruct-processor的引用-->
                         <annotationProcessorPaths>
+                            <!-- MapStruct 注解处理器 -->
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                            <!-- Lombok 注解处理器 -->
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
                             </path>
+                            <!-- MapStruct 和 Lombok 注解绑定处理器 -->
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok-mapstruct-binding</artifactId>
                                 <version>0.2.0</version>
-                            </path>
-                            <path>
-                                <groupId>org.mapstruct</groupId>
-                                <artifactId>mapstruct-processor</artifactId>
-                                <version>${mapstruct.version}</version>
                             </path>
                         </annotationProcessorPaths>
                     </configuration>

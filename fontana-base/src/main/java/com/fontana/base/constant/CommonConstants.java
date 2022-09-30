@@ -62,7 +62,7 @@ public interface CommonConstants {
     /**
      * mybatis plus 配置
      */
-    String MYBATISPLUS_PREFIX = "fontana.mybatis-plus";
+    String MYBATISPLUS_AUTOFILL_PREFIX = "mybatis-plus.auto-fill";
 
     /**
      * redis配置
@@ -108,6 +108,11 @@ public interface CommonConstants {
      * application配置
      */
     String APPLICATION_PREFIX = "fontana.application";
+
+    /**
+     * application配置
+     */
+    String SWAGGER_AGG_PREFIX = "fontana.swagger-agg";
 
     /**
      * online配置
