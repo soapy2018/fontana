@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.object.MyRelationParam;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.entity.*;
 import com.fontana.upmsservice.mapper.SysDataPermDeptMapper;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysDeptService")
-public class SysDeptServiceImpl extends AbsBaseService<SysDept, Long> implements SysDeptService {
+public class SysDeptServiceImpl extends AbstractBaseService<SysDept, Long> implements SysDeptService {
 
     @Autowired
     private SysDeptMapper sysDeptMapper;
@@ -314,7 +314,7 @@ public class SysDeptServiceImpl extends AbsBaseService<SysDept, Long> implements
         filter.setDeptId(sysDeptPost.getDeptId());
         filter.setPostId(sysDeptPost.getPostId());
         UpdateWrapper<SysDeptPost> uw =
-                AbsBaseService.createUpdateQueryForNullValue(sysDeptPost, SysDeptPost.class);
+                AbstractBaseService.createUpdateQueryForNullValue(sysDeptPost, SysDeptPost.class);
         uw.setEntity(filter);
         return sysDeptPostMapper.update(sysDeptPost, uw) > 0;
     }

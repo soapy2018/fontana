@@ -29,15 +29,15 @@ import java.util.*;
 /**
  * 代码生成器配置类
  *
- * @author Chill
+ * @author cqf
  */
 @Data
 @Slf4j
-public class BladeCodeGenerator {
+public class MyCodeGenerator {
 	/**
 	 * 代码所在系统
 	 */
-	private String systemName = CodeGenConstant.REACT_NAME;
+	private String systemName;
 	/**
 	 * 代码模块名称
 	 */
@@ -45,27 +45,27 @@ public class BladeCodeGenerator {
 	/**
 	 * 代码所在服务名
 	 */
-	private String serviceName = "blade-service";
+	private String serviceName;
 	/**
 	 * 代码生成的包名
 	 */
-	private String packageName = "org.springblade.test";
+	private String packageName;
 	/**
-	 * 代码后端生成的地址
+	 * 输出目录
 	 */
-	private String packageDir;
+	private String outputDir;
 	/**
-	 * 代码前端生成的地址
+	 * 作者
 	 */
-	private String packageWebDir;
+	private String author;
 	/**
 	 * 需要去掉的表前缀
 	 */
-	private String[] tablePrefix = {"blade_"};
+	private String[] tablePrefix = {"auto_"};
 	/**
 	 * 需要生成的表名(两者只能取其一)
 	 */
-	private String[] includeTables = {"blade_dept"};
+	private String[] includeTables;
 	/**
 	 * 需要排除的表名(两者只能取其一)
 	 */
@@ -75,17 +75,9 @@ public class BladeCodeGenerator {
 	 */
 	private Boolean hasSuperEntity = Boolean.FALSE;
 	/**
-	 * 是否包含包装器
-	 */
-	private Boolean hasWrapper = Boolean.FALSE;
-	/**
 	 * 基础业务字段
 	 */
-	private String[] superEntityColumns = {"create_time", "create_user", "create_dept", "update_time", "update_user", "status", "is_deleted"};
-	/**
-	 * 租户字段
-	 */
-	private String tenantColumn = "tenant_id";
+	private String[] superEntityColumns = {""};//{"create_user_id", "create_time", "update_user_id", "update_time", "deleted_flag"};
 	/**
 	 * 是否启用swagger
 	 */
@@ -107,12 +99,22 @@ public class BladeCodeGenerator {
 	 */
 	private String password;
 
+	public MyCodeGenerator(){
+		Properties props = getProperties();
+		packageName = props.getProperty("packageName");
+		author = StringUtil.defaultIfEmpty(props.getProperty("author"), "AI");
+		includeTables = StringUtil.split(props.getProperty("includeTables"),',');
+		serviceName = props.getProperty("serviceName");
+		outputDir = props.getProperty("outputDir");
+		systemName = StringUtil.defaultIfEmpty(props.getProperty("systemName"), CodeGenConstant.REACT_NAME);
+	}
+
 	public void run() {
 		Properties props = getProperties();
 		AutoGenerator mpg = new AutoGenerator();
 		GlobalConfig gc = new GlobalConfig();
+		//生成目录
 		String outputDir = getOutputDir();
-		String author = props.getProperty("author");
 		gc.setOutputDir(outputDir);
 		gc.setAuthor(author);
 		gc.setFileOverride(true);
@@ -123,7 +125,7 @@ public class BladeCodeGenerator {
 		gc.setBaseColumnList(true);
 		gc.setMapperName("%sMapper");
 		gc.setXmlName("%sMapper");
-		gc.setServiceName("I%sService");
+		gc.setServiceName("%sService");
 		gc.setServiceImplName("%sServiceImpl");
 		gc.setControllerName("%sController");
 		gc.setSwagger2(isSwagger2);
@@ -162,17 +164,18 @@ public class BladeCodeGenerator {
 			strategy.setExclude(excludeTables);
 		}
 		if (hasSuperEntity) {
-			strategy.setSuperEntityClass("org.springblade.core.mp.base.BaseEntity");
-			strategy.setSuperEntityColumns(superEntityColumns);
-			strategy.setSuperServiceClass("org.springblade.core.mp.base.BaseService");
-			strategy.setSuperServiceImplClass("org.springblade.core.mp.base.BaseServiceImpl");
+			strategy.setSuperEntityClass("com.fontana.db.model.BaseLogicDelModel");
+			//strategy.setSuperEntityColumns(superEntityColumns);
+			strategy.setSuperMapperClass("com.fontana.db.mapper.BaseDaoMapper");
+			strategy.setSuperServiceClass("com.fontana.db.service.IBaseService");
+			strategy.setSuperServiceImplClass("com.fontana.db.service.impl.AbstractBaseService");
 		} else {
 			strategy.setSuperServiceClass("com.baomidou.mybatisplus.extension.service.IService");
 			strategy.setSuperServiceImplClass("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl");
 		}
 		// 自定义 controller 父类
-		strategy.setSuperControllerClass("org.springblade.core.boot.ctrl.BladeController");
-		strategy.setEntityBuilderModel(false);
+		strategy.setSuperControllerClass("com.fontana.db.controller.BaseController");
+		//strategy.setEntityBuilderModel(false);
 		strategy.setEntityLombokModel(true);
 		strategy.setControllerMappingHyphenStyle(true);
 		mpg.setStrategy(strategy);
@@ -183,7 +186,7 @@ public class BladeCodeGenerator {
 		pc.setParent(packageName);
 		pc.setController("controller");
 		pc.setEntity("entity");
-		pc.setXml("mapper");
+		pc.setXml("mapper/xml");
 		mpg.setPackageInfo(pc);
 		mpg.setCfg(getInjectionConfig());
 		mpg.execute();
@@ -200,8 +203,6 @@ public class BladeCodeGenerator {
 				map.put("serviceName", serviceName);
 				map.put("servicePackage", servicePackage);
 				map.put("servicePackageLowerCase", servicePackage.toLowerCase());
-				map.put("tenantColumn", tenantColumn);
-				map.put("hasWrapper", hasWrapper);
 				this.setMap(map);
 			}
 		};
@@ -221,23 +222,15 @@ public class BladeCodeGenerator {
 		focList.add(new FileOutConfig("/templates/entityVO.java.vm") {
 			@Override
 			public String outputFile(TableInfo tableInfo) {
-				return getOutputDir() + "/" + packageName.replace(".", "/") + "/" + "vo" + "/" + tableInfo.getEntityName() + "VO" + StringPool.DOT_JAVA;
+				return getOutputDir() + "/" + packageName.replace("service", "api").replace(".", "/") + "/" + "vo" + "/" + tableInfo.getEntityName() + "VO" + StringPool.DOT_JAVA;
 			}
 		});
 		focList.add(new FileOutConfig("/templates/entityDTO.java.vm") {
 			@Override
 			public String outputFile(TableInfo tableInfo) {
-				return getOutputDir() + "/" + packageName.replace(".", "/") + "/" + "dto" + "/" + tableInfo.getEntityName() + "DTO" + StringPool.DOT_JAVA;
+				return getOutputDir() + "/" + packageName.replace("service", "api").replace(".", "/") + "/" + "dto" + "/" + tableInfo.getEntityName() + "DTO" + StringPool.DOT_JAVA;
 			}
 		});
-		if (hasWrapper) {
-			focList.add(new FileOutConfig("/templates/wrapper.java.vm") {
-				@Override
-				public String outputFile(TableInfo tableInfo) {
-					return getOutputDir() + "/" + packageName.replace(".", "/") + "/" + "wrapper" + "/" + tableInfo.getEntityName() + "Wrapper" + StringPool.DOT_JAVA;
-				}
-			});
-		}
 
 		//***前端代码
 		if (SupUtil.equals(systemName, CodeGenConstant.REACT_NAME)) {
@@ -325,9 +318,9 @@ public class BladeCodeGenerator {
 	 * @return outputDir
 	 */
 	public String getOutputDir() {
-		String outputDir = (SupUtil.isBlank(packageDir) ? System.getProperty("user.dir") + "/output/back" : packageDir) + "/src/main/java";
-		System.out.println("outPutDir: " + outputDir);
-		return outputDir;
+		String outputBackDir = (SupUtil.isBlank(outputDir) ? System.getProperty("user.dir") + "/output/back" : outputDir) + "/" + serviceName + "/back/src/main/java";
+		System.out.println("outputBackDir: " + outputBackDir);
+		return outputBackDir;
 	}
 
 	/**
@@ -336,7 +329,7 @@ public class BladeCodeGenerator {
 	 * @return outputDir
 	 */
 	public String getOutputWebDir() {
-		String outputWebDir = (SupUtil.isBlank(packageWebDir) ? System.getProperty("user.dir") + "/output/front" : packageWebDir) + "/src";
+		String outputWebDir = (SupUtil.isBlank(outputDir) ? System.getProperty("user.dir") + "/output/front" : outputDir) + "/" + serviceName + "/front/src";
 		System.out.println("outPutWebDir: " + outputWebDir);
 		return outputWebDir;
 	}

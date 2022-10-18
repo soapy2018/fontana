@@ -48,7 +48,7 @@ import static java.util.stream.Collectors.toSet;
  * @date 2021-06-06
  */
 @Slf4j
-public abstract class AbsBaseService<M, K extends Serializable> extends ServiceImpl<BaseDaoMapper<M>, M> implements IBaseService<M, K> {
+public abstract class AbstractBaseService<M, K extends Serializable> extends ServiceImpl<BaseDaoMapper<M>, M> implements IBaseService<M, K> {
     /**
      * 当前Service关联的主Model实体对象的Class。
      */
@@ -151,7 +151,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
      * 构造函数，在实例化的时候，一次性完成所有有关主Model对象信息的加载。
      */
     @SuppressWarnings("unchecked")
-    public AbsBaseService() {
+    public AbstractBaseService() {
         modelClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         idFieldClass = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.tableName = modelClass.getAnnotation(TableName.class).value();
@@ -865,7 +865,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                     .collect(toSet());
             // 从主表集合中，抽取主表关联字段的集合，再以in list形式去从表中查询。
             if (CollectionUtils.isNotEmpty(masterIdSet)) {
-                AbsBaseService<Object, Serializable> relationService = relationStruct.service;
+                AbstractBaseService<Object, Serializable> relationService = relationStruct.service;
                 List<Object> relationList =
                         relationService.getInList(relationStruct.relationOneToOne.slaveIdField(), masterIdSet);
                 MyModelUtil.makeOneToOneRelation(
@@ -874,8 +874,8 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                 if (withDict && relationStruct.relationOneToOne.loadSlaveDict()
                         && CollectionUtils.isNotEmpty(relationList)) {
                     @SuppressWarnings("unchecked")
-                    AbsBaseService<Object, Serializable> proxyTarget =
-                            (AbsBaseService<Object, Serializable>) AopTargetUtil.getTarget(relationService);
+                    AbstractBaseService<Object, Serializable> proxyTarget =
+                            (AbstractBaseService<Object, Serializable>) AopTargetUtil.getTarget(relationService);
                     // 关联本地字典。
                     proxyTarget.buildDictForDataList(relationList, false, ignoreFields);
                     // 关联常量字典
@@ -902,14 +902,14 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
             }
             Object id = ReflectUtil.getFieldValue(dataObject, relationStruct.masterIdField);
             if (id != null) {
-                AbsBaseService<Object, Serializable> relationService = relationStruct.service;
+                AbstractBaseService<Object, Serializable> relationService = relationStruct.service;
                 Object relationObject = relationService.getOne(relationStruct.relationOneToOne.slaveIdField(), id);
                 ReflectUtil.setFieldValue(dataObject, relationStruct.relationField, relationObject);
                 // 仅仅当需要加载从表字典关联时，才去加载。
                 if (withDict && relationStruct.relationOneToOne.loadSlaveDict() && relationObject != null) {
                     @SuppressWarnings("unchecked")
-                    AbsBaseService<Object, Serializable> proxyTarget =
-                            (AbsBaseService<Object, Serializable>) AopTargetUtil.getTarget(relationService);
+                    AbstractBaseService<Object, Serializable> proxyTarget =
+                            (AbstractBaseService<Object, Serializable>) AopTargetUtil.getTarget(relationService);
                     // 关联本地字典
                     proxyTarget.buildDictForData(relationObject, false, ignoreFields);
                     // 关联常量字典
@@ -939,7 +939,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                     .collect(toSet());
             // 从主表集合中，抽取主表关联字段的集合，再以in list形式去从表中查询。
             if (CollectionUtils.isNotEmpty(masterIdSet)) {
-                AbsBaseService<Object, Serializable> relationService = relationStruct.service;
+                AbstractBaseService<Object, Serializable> relationService = relationStruct.service;
                 List<Object> relationList =
                         relationService.getInList(relationStruct.relationOneToMany.slaveIdField(), masterIdSet);
                 MyModelUtil.makeOneToManyRelation(
@@ -964,7 +964,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
             }
             Object id = ReflectUtil.getFieldValue(dataObject, relationStruct.masterIdField);
             if (id != null) {
-                AbsBaseService<Object, Serializable> relationService = relationStruct.service;
+                AbstractBaseService<Object, Serializable> relationService = relationStruct.service;
                 Set<Object> masterIdSet = new HashSet<>(1);
                 masterIdSet.add(id);
                 List<Object> relationObject = relationService.getInList(
@@ -1374,7 +1374,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                 relationStruct.service = SpringContextHolder.getBean(
                         StringUtils.uncapitalize(relationOneToOne.slaveServiceName()));
             } else {
-                relationStruct.service = (AbsBaseService<Object, Serializable>)
+                relationStruct.service = (AbstractBaseService<Object, Serializable>)
                         SpringContextHolder.getBean(relationOneToOne.slaveServiceClass());
             }
             relationOneToOneStructList.add(relationStruct);
@@ -1390,7 +1390,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                 relationStruct.service = SpringContextHolder.getBean(
                         StringUtils.uncapitalize(relationOneToMany.slaveServiceName()));
             } else {
-                relationStruct.service = (AbsBaseService<Object, Serializable>)
+                relationStruct.service = (AbstractBaseService<Object, Serializable>)
                         SpringContextHolder.getBean(relationOneToMany.slaveServiceClass());
             }
             relationOneToManyStructList.add(relationStruct);
@@ -1420,7 +1420,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                 relationStruct.service = SpringContextHolder.getBean(
                         StringUtils.uncapitalize(relationOneToManyAggregation.slaveServiceName()));
             } else {
-                relationStruct.service = (AbsBaseService<Object, Serializable>)
+                relationStruct.service = (AbstractBaseService<Object, Serializable>)
                         SpringContextHolder.getBean(relationOneToManyAggregation.slaveServiceClass());
             }
             relationOneToManyAggrStructList.add(relationStruct);
@@ -1436,7 +1436,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                 relationStruct.service = SpringContextHolder.getBean(
                         StringUtils.uncapitalize(relationManyToManyAggregation.slaveServiceName()));
             } else {
-                relationStruct.service = (AbsBaseService<Object, Serializable>)
+                relationStruct.service = (AbstractBaseService<Object, Serializable>)
                         SpringContextHolder.getBean(relationManyToManyAggregation.slaveServiceClass());
             }
             relationManyToManyAggrStructList.add(relationStruct);
@@ -1469,7 +1469,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
                 relationStruct.service = SpringContextHolder.getBean(
                         StringUtils.uncapitalize(relationDict.slaveServiceName()));
             } else {
-                relationStruct.service = (AbsBaseService<Object, Serializable>)
+                relationStruct.service = (AbstractBaseService<Object, Serializable>)
                         SpringContextHolder.getBean(relationDict.slaveServiceClass());
             }
             relationDictStructList.add(relationStruct);
@@ -1666,7 +1666,7 @@ public abstract class AbsBaseService<M, K extends Serializable> extends ServiceI
         private Field relationField;
         private Field masterIdField;
         private Field equalOneToOneRelationField;
-        private AbsBaseService<Object, Serializable> service;
+        private AbstractBaseService<Object, Serializable> service;
         private BaseDaoMapper<Object> manyToManyMapper;
         private Map<Object, String> dictMap;
         private RelationDict relationDict;

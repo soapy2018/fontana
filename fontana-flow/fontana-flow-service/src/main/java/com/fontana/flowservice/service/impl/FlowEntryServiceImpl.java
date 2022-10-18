@@ -8,7 +8,7 @@ import com.fontana.base.object.TokenData;
 import com.fontana.base.result.CallResult;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.flowapi.constant.FlowConstant;
 import com.fontana.flowapi.dict.FlowEntryStatus;
@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("flowEntryService")
-public class FlowEntryServiceImpl extends AbsBaseService<FlowEntry, Long> implements com.fontana.flowservice.service.FlowEntryService {
+public class FlowEntryServiceImpl extends AbstractBaseService<FlowEntry, Long> implements com.fontana.flowservice.service.FlowEntryService {
 
     @Autowired
     private FlowEntryMapper flowEntryMapper;

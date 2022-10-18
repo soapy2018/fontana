@@ -3,7 +3,7 @@ package com.fontana.onlineservice.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.util.tools.IdUtil;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.object.MyRelationParam;
@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @Slf4j
 @Service("onlineRuleService")
-public class OnlineRuleServiceImpl extends AbsBaseService<OnlineRule, Long> implements OnlineRuleService {
+public class OnlineRuleServiceImpl extends AbstractBaseService<OnlineRule, Long> implements OnlineRuleService {
 
     @Autowired
     private OnlineRuleMapper onlineRuleMapper;

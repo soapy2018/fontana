@@ -3,7 +3,7 @@ package com.fontana.flowservice.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.flowservice.entity.FlowTaskExt;
 import com.fontana.flowservice.mapper.FlowTaskExtMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("flowTaskExtService")
-public class FlowTaskExtServiceImpl extends AbsBaseService<FlowTaskExt, String> implements com.fontana.flowservice.service.FlowTaskExtService {
+public class FlowTaskExtServiceImpl extends AbstractBaseService<FlowTaskExt, String> implements com.fontana.flowservice.service.FlowTaskExtService {
 
     @Autowired
     private FlowTaskExtMapper flowTaskExtMapper;

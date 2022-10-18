@@ -1,49 +1,39 @@
 /**
- * Copyright (c) 2018-2028, Chill Zhuang 庄骞 (smallchill@163.com).
- * <p>
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE 3.0;
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/lgpl.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+  * Copyright (c) 2020-${YEAR} 宁波哥爱帮科技有限公司
+  */
 package $!{package.Controller};
 
+import com.fontana.base.annotation.MyRequestBody;
+import com.fontana.base.result.Pagination;
+import com.fontana.base.result.Result;
+import com.fontana.base.result.ResultCode;
+import com.fontana.db.object.MyOrderParam;
+import com.fontana.db.object.MyPageParam;
+import com.fontana.db.util.MyModelUtil;
+import com.fontana.db.util.MyPageUtil;
+import com.fontana.util.lang.ObjectUtil;
+import com.fontana.util.validate.ValidateUtil;
+import com.github.pagehelper.page.PageMethod;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import lombok.AllArgsConstructor;
-import javax.validation.Valid;
-
-import org.springblade.core.mp.support.Condition;
-import org.springblade.core.mp.support.Query;
-import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.Func;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
-#if($!{superEntityClass})
 import org.springframework.web.bind.annotation.RequestParam;
-#end
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import $!{package.Entity}.$!{entity};
-#set($voPackage=$package.Entity.replace("entity","vo"))
+#set($dtoPackage=$package.Entity.replace("service","api").replace("entity","dto"))
+import $!{dtoPackage}.$!{entity}DTO;
+#set($voPackage=$package.Entity.replace("service","api").replace("entity","vo"))
 import $!{voPackage}.$!{entity}VO;
-#set($wrapperPackage=$package.Entity.replace("entity","wrapper"))
-#if($!{cfg.hasWrapper})
-import $!{wrapperPackage}.$!{entity}Wrapper;
-#end
 import $!{package.Service}.$!{table.serviceName};
+import $!{superServiceClassPackage};
 #if($!{superControllerClassPackage})
 import $!{superControllerClassPackage};
 #end
-#if(!$!{superEntityClass})
-#end
+
+import java.util.List;
+
 
 /**
  * $!{table.comment} 控制器
@@ -51,130 +41,141 @@ import $!{superControllerClassPackage};
  * @author $!{author}
  * @since $!{date}
  */
-@RestController
-@AllArgsConstructor
-@RequestMapping("#if($!{package.ModuleName})/$!{package.ModuleName}#end/$!{cfg.entityKey}")
 @Api(value = "$!{table.comment}", tags = "$!{table.comment}接口")
+@RestController
+@RequestMapping("#if($!{package.ModuleName})/$!{package.ModuleName}#end/$!{cfg.entityKey}")
 #if($!{superControllerClass})
-public class $!{table.controllerName} extends $!{superControllerClass} {
+#foreach($field in $!{table.fields})
+#if($!{field.keyFlag})##主键
+public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity}, $!{entity}VO, $!{field.propertyType}> {
+    @Autowired
+	private $!{table.serviceName} $!{table.entityPath}Service;
+
+    @Override
+    protected IBaseService<$!{entity}, $!{field.propertyType}> service() {
+        return $!{table.entityPath}Service;
+    }
+
+    /**
+     * 新增数据。
+     *
+     * @param $!{table.entityPath}DTO 新增对象。
+     * @return 应答结果对象，包含新增对象主键Id。
+     */
+    @ApiOperationSupport(ignoreParameters = {"$!{table.entityPath}DTO.$!{field.propertyName}"})
+    @PostMapping("/add")
+    public Result<$!{field.propertyType}> add(@MyRequestBody $!{entity}DTO $!{table.entityPath}DTO) {
+        String errorMessage = ValidateUtil.getModelValidationError($!{table.entityPath}DTO, false);
+        if (errorMessage != null) {
+            return Result.failed(ResultCode.DATA_VALIDATED_FAILED, errorMessage);
+        }
+        $!{entity} $!{table.entityPath} = MyModelUtil.copyTo($!{table.entityPath}DTO, $!{entity}.class);
+        $!{table.entityPath} = $!{table.entityPath}Service.saveNew($!{table.entityPath});
+        return Result.succeed($!{table.entityPath}.get$!{field.capitalName}());
+    }
+
+    /**
+     * 更新部门数据。
+     *
+     * @param $!{table.entityPath}DTO 更新对象。
+     * @return 应答结果对象。
+     */
+    @PostMapping("/update")
+    //标记每次都删除缓存
+    @CacheEvict(value = "$!{table.entityPath}", key = "#$!{table.entityPath}DTO.$!{field.propertyName}")
+    public Result<Void> update(@MyRequestBody $!{entity}DTO $!{table.entityPath}DTO) {
+        String errorMessage = ValidateUtil.getModelValidationError($!{table.entityPath}DTO, true);
+        if (errorMessage != null) {
+            return Result.failed(ResultCode.DATA_VALIDATED_FAILED, errorMessage);
+        }
+        $!{entity} $!{table.entityPath} = MyModelUtil.copyTo($!{table.entityPath}DTO, $!{entity}.class);
+        $!{entity} original$!{entity} = $!{table.entityPath}Service.getById($!{table.entityPath}.get$!{field.capitalName}());
+        if (original$!{entity} == null) {
+            // NOTE: 修改下面方括号中的话述
+            errorMessage = "数据验证失败，当前 [数据] 并不存在，请刷新后重试！";
+            return Result.failed(ResultCode.DATA_NOT_EXIST, errorMessage);
+        }
+        if (!$!{table.entityPath}Service.update($!{table.entityPath})) {
+            return Result.failed(ResultCode.DATA_NOT_EXIST);
+        }
+        return Result.succeed();
+    }
+
+    /**
+     * 列出符合过滤条件的部门列表。
+     *
+     * @param $!{table.entityPath}DTOFilter 过滤对象。
+     * @param orderParam 排序参数。
+     * @param pageParam 分页参数。
+     * @return 应答结果对象，包含查询结果集。
+     */
+    @PostMapping("/list")
+    public Result<Pagination<$!{entity}VO>> list(
+            @MyRequestBody $!{entity}DTO $!{table.entityPath}DTOFilter,
+            @MyRequestBody MyOrderParam orderParam,
+            @MyRequestBody MyPageParam pageParam) {
+        if (pageParam != null) {
+            PageMethod.startPage(pageParam.getPageNum(), pageParam.getPageSize());
+        }
+        $!{entity} $!{table.entityPath}Filter = MyModelUtil.copyTo($!{table.entityPath}DTOFilter, $!{entity}.class);
+        String orderBy = MyOrderParam.buildOrderBy(orderParam, $!{entity}.class);
+        List<$!{entity}> $!{table.entityPath}List = $!{table.entityPath}Service.get$!{entity}List($!{table.entityPath}Filter, orderBy);
+        return Result.succeed(MyPageUtil.makeResponseData($!{table.entityPath}List, $!{entity}.INSTANCE));
+    }
+
+    /**
+     * 查看指定部门详情。
+     *
+     * @param $!{field.propertyName} 指定对象主键Id。
+     * @return 应答结果对象，包含对象详情。
+     */
+    @GetMapping("/view")
+    //判断缓存没有就执行方法更新缓存，缓存有就直接返回缓存的值
+    @Cacheable(value = "$!{table.entityPath}", key = "#$!{field.propertyName}")
+    public Result<$!{entity}VO> view(@RequestParam $!{field.propertyType} $!{field.propertyName}) {
+        if (ObjectUtil.isAnyBlankOrNull($!{field.propertyName})) {
+            return Result.failed(ResultCode.PARAM_IS_BLANK);
+        }
+        $!{entity} $!{table.entityPath} = $!{table.entityPath}Service.getById($!{field.propertyName});
+        if ($!{table.entityPath} == null) {
+            return Result.failed(ResultCode.DATA_NOT_EXIST);
+        }
+        $!{entity}VO $!{table.entityPath}Vo = $!{entity}.INSTANCE.fromModel($!{table.entityPath});
+        return Result.succeed($!{table.entityPath}Vo);
+    }
+
+    /**
+     * 删除部门数据。
+     *
+     * @param $!{field.propertyName} 删除对象主键Id。
+     * @return 应答结果对象。
+     */
+    @PostMapping("/delete")
+    //标记删除缓存
+    @CacheEvict(value = "$!{table.entityPath}", key = "#$!{field.propertyName}")
+    public Result<Void> delete(@MyRequestBody $!{field.propertyType} $!{field.propertyName}) {
+        String errorMessage;
+        if (ObjectUtil.isBlankOrNull($!{field.propertyName})) {
+            return Result.failed(ResultCode.PARAM_IS_BLANK);
+        }
+        // 验证关联Id的数据合法性
+        $!{entity} original$!{entity} = $!{table.entityPath}Service.getById($!{field.propertyName});
+        if (original$!{entity} == null) {
+            // NOTE: 修改下面方括号中的话述
+            errorMessage = "数据验证失败，当前 [对象] 并不存在，请刷新后重试！";
+            return Result.failed(ResultCode.DATA_NOT_EXIST, errorMessage);
+        }
+        if (!$!{table.entityPath}Service.remove($!{field.propertyName})) {
+            errorMessage = "数据操作失败，删除的对象不存在，请刷新后重试！";
+            return Result.failed(ResultCode.DATA_NOT_EXIST, errorMessage);
+        }
+        return Result.succeed();
+    }
+    
+#end
+#end
 #else
 public class $!{table.controllerName} {
 #end
-
-	private $!{table.serviceName} $!{table.entityPath}Service;
-
-#if($!{cfg.hasWrapper})
-	/**
-	 * 详情
-	 */
-	@GetMapping("/detail")
-	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "详情", notes = "传入$!{table.entityPath}")
-	public R<$!{entity}VO> detail($!{entity} $!{table.entityPath}) {
-		$!{entity} detail = $!{table.entityPath}Service.getOne(Condition.getQueryWrapper($!{table.entityPath}));
-		return R.data($!{entity}Wrapper.build().entityVO(detail));
-	}
-
-	/**
-	 * 分页 $!{table.comment}
-	 */
-	@GetMapping("/list")
-	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "分页", notes = "传入$!{table.entityPath}")
-	public R<IPage<$!{entity}VO>> list($!{entity} $!{table.entityPath}, Query query) {
-		IPage<$!{entity}> pages = $!{table.entityPath}Service.page(Condition.getPage(query), Condition.getQueryWrapper($!{table.entityPath}));
-		return R.data($!{entity}Wrapper.build().pageVO(pages));
-	}
-
-#else
-	/**
-	 * 详情
-	 */
-	@GetMapping("/detail")
-	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "详情", notes = "传入$!{table.entityPath}")
-	public R<$!{entity}> detail($!{entity} $!{table.entityPath}) {
-		$!{entity} detail = $!{table.entityPath}Service.getOne(Condition.getQueryWrapper($!{table.entityPath}));
-		return R.data(detail);
-	}
-
-	/**
-	 * 分页 $!{table.comment}
-	 */
-	@GetMapping("/list")
-	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "分页", notes = "传入$!{table.entityPath}")
-	public R<IPage<$!{entity}>> list($!{entity} $!{table.entityPath}, Query query) {
-		IPage<$!{entity}> pages = $!{table.entityPath}Service.page(Condition.getPage(query), Condition.getQueryWrapper($!{table.entityPath}));
-		return R.data(pages);
-	}
-#end
-
-	/**
-	 * 自定义分页 $!{table.comment}
-	 */
-	@GetMapping("/page")
-	@ApiOperationSupport(order = 3)
-	@ApiOperation(value = "分页", notes = "传入$!{table.entityPath}")
-	public R<IPage<$!{entity}VO>> page($!{entity}VO $!{table.entityPath}, Query query) {
-		IPage<$!{entity}VO> pages = $!{table.entityPath}Service.select$!{entity}Page(Condition.getPage(query), $!{table.entityPath});
-		return R.data(pages);
-	}
-
-	/**
-	 * 新增 $!{table.comment}
-	 */
-	@PostMapping("/save")
-	@ApiOperationSupport(order = 4)
-	@ApiOperation(value = "新增", notes = "传入$!{table.entityPath}")
-	public R save(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
-		return R.status($!{table.entityPath}Service.save($!{table.entityPath}));
-	}
-
-	/**
-	 * 修改 $!{table.comment}
-	 */
-	@PostMapping("/update")
-	@ApiOperationSupport(order = 5)
-	@ApiOperation(value = "修改", notes = "传入$!{table.entityPath}")
-	public R update(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
-		return R.status($!{table.entityPath}Service.updateById($!{table.entityPath}));
-	}
-
-	/**
-	 * 新增或修改 $!{table.comment}
-	 */
-	@PostMapping("/submit")
-	@ApiOperationSupport(order = 6)
-	@ApiOperation(value = "新增或修改", notes = "传入$!{table.entityPath}")
-	public R submit(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
-		return R.status($!{table.entityPath}Service.saveOrUpdate($!{table.entityPath}));
-	}
-
-	#if($!{superEntityClass})
-
-	/**
-	 * 删除 $!{table.comment}
-	 */
-	@PostMapping("/remove")
-	@ApiOperationSupport(order = 7)
-	@ApiOperation(value = "逻辑删除", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status($!{table.entityPath}Service.deleteLogic(Func.toLongList(ids)));
-	}
-
-	#else
-
-	/**
-	 * 删除 $!{table.comment}
-	 */
-	@PostMapping("/remove")
-	@ApiOperationSupport(order = 8)
-	@ApiOperation(value = "删除", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status($!{table.entityPath}Service.removeByIds(Func.toLongList(ids)));
-	}
-
-	#end
 
 }

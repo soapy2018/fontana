@@ -3,4 +3,5 @@
 *.log
 target
 output
+logs
 bn-resource

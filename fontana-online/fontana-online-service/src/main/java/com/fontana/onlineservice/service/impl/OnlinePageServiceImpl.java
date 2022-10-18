@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.onlineapi.dict.PageStatus;
 import com.fontana.onlineservice.entity.OnlinePage;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("onlinePageService")
-public class OnlinePageServiceImpl extends AbsBaseService<OnlinePage, Long> implements OnlinePageService {
+public class OnlinePageServiceImpl extends AbstractBaseService<OnlinePage, Long> implements OnlinePageService {
 
     @Autowired
     private OnlinePageMapper onlinePageMapper;

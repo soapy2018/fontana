@@ -48,7 +48,6 @@ public class SysPermModuleController {
      * @return 应答结果对象，包含新增权限资源模块的主键Id。
      */
     @ApiOperationSupport(ignoreParameters = {"sysPermModuleDto.moduleId"})
-    //@OperationLog(type = SysOperationLogType.ADD)
     @PostMapping("/add")
     public Result<Long> add(@MyRequestBody SysPermModuleDto sysPermModuleDto) {
         String errorMessage = ValidateUtil.getModelValidationError(sysPermModuleDto);
@@ -71,7 +70,6 @@ public class SysPermModuleController {
      * @param sysPermModuleDto 更新权限资源模块对象。
      * @return 应答结果对象，包含新增权限资源模块的主键Id。
      */
-    //@OperationLog(type = SysOperationLogType.UPDATE)
     @PostMapping("/update")
     public Result<Void> update(@MyRequestBody SysPermModuleDto sysPermModuleDto) {
         String errorMessage = ValidateUtil.getModelValidationError(sysPermModuleDto, Default.class, UpdateGroup.class);
@@ -103,7 +101,6 @@ public class SysPermModuleController {
      * @param moduleId 指定的权限资源模块主键Id。
      * @return 应答结果对象。
      */
-    //@OperationLog(type = SysOperationLogType.DELETE)
     @PostMapping("/delete")
     public Result<Void> delete(@MyRequestBody Long moduleId) {
         if (ObjectUtil.isAnyBlankOrNull(moduleId)) {

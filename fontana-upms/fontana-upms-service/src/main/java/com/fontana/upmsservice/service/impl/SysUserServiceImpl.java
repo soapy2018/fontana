@@ -7,7 +7,7 @@ import com.fontana.db.object.MyRelationParam;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.result.CallResult;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsapi.dict.SysUserStatus;
 import com.fontana.upmsservice.entity.SysDataPermUser;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysUserService")
-public class SysUserServiceImpl extends AbsBaseService<SysUser, Long> implements SysUserService {
+public class SysUserServiceImpl extends AbstractBaseService<SysUser, Long> implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.result.CallResult;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsapi.dict.SysMenuType;
 import com.fontana.upmsapi.dict.SysOnlineMenuPermType;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysMenuService")
-public class SysMenuServiceImpl extends AbsBaseService<SysMenu, Long> implements SysMenuService {
+public class SysMenuServiceImpl extends AbstractBaseService<SysMenu, Long> implements SysMenuService {
 
     @Autowired
     private SysMenuMapper sysMenuMapper;

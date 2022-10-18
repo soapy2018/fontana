@@ -6,7 +6,7 @@ import com.fontana.base.object.TokenData;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.flowapi.dict.FlowTaskStatus;
 import com.fontana.flowservice.entity.FlowWorkOrder;
 import com.fontana.flowservice.mapper.FlowWorkOrderMapper;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("flowWorkOrderService")
-public class FlowWorkOrderServiceImpl extends AbsBaseService<FlowWorkOrder, Long> implements FlowWorkOrderService {
+public class FlowWorkOrderServiceImpl extends AbstractBaseService<FlowWorkOrder, Long> implements FlowWorkOrderService {
 
     @Autowired
     private FlowWorkOrderMapper flowWorkOrderMapper;

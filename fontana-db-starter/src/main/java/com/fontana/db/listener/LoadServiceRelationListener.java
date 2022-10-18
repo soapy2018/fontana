@@ -1,6 +1,6 @@
 package com.fontana.db.listener;
 
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -19,9 +19,9 @@ public class LoadServiceRelationListener implements ApplicationListener<Applicat
     @SuppressWarnings("all")
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        Map<String, AbsBaseService> serviceMap =
-                applicationReadyEvent.getApplicationContext().getBeansOfType(AbsBaseService.class);
-        for (Map.Entry<String, AbsBaseService> e : serviceMap.entrySet()) {
+        Map<String, AbstractBaseService> serviceMap =
+                applicationReadyEvent.getApplicationContext().getBeansOfType(AbstractBaseService.class);
+        for (Map.Entry<String, AbstractBaseService> e : serviceMap.entrySet()) {
             e.getValue().loadRelationStruct();
         }
     }

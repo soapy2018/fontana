@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.result.CallResult;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.entity.SysMenuPermCode;
 import com.fontana.upmsservice.entity.SysPermCode;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysPermCodeService")
-public class SysPermCodeServiceImpl extends AbsBaseService<SysPermCode, Long> implements SysPermCodeService {
+public class SysPermCodeServiceImpl extends AbstractBaseService<SysPermCode, Long> implements SysPermCodeService {
 
     @Autowired
     private SysPermCodeMapper sysPermCodeMapper;

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.base.result.CallResult;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.onlineservice.entity.OnlineForm;
 import com.fontana.onlineservice.entity.OnlineFormDatasource;
 import com.fontana.onlineservice.mapper.OnlineFormDatasourceMapper;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("onlineFormService")
-public class OnlineFormServiceImpl extends AbsBaseService<OnlineForm, Long> implements OnlineFormService {
+public class OnlineFormServiceImpl extends AbstractBaseService<OnlineForm, Long> implements OnlineFormService {
 
     @Autowired
     private OnlineFormMapper onlineFormMapper;

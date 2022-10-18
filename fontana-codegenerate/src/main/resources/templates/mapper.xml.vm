@@ -9,26 +9,68 @@
 #end
 #if($!{baseResultMap})
     <!-- 通用查询映射结果 -->
-    <resultMap id="$!{table.entityPath}ResultMap" type="$!{package.Entity}.$!{entity}">
+    <resultMap id="BaseResultMap" type="$!{package.Entity}.$!{entity}">
 #foreach($field in $!{table.fields})
 #if($!{field.keyFlag})##生成主键排在第一位
         <id column="$!{field.name}" property="$!{field.propertyName}"/>
-#end
-#end
-#foreach($field in $!{table.commonFields})##生成公共字段
-        <result column="$!{field.name}" property="$!{field.propertyName}"/>
-#end
-#foreach($field in $!{table.fields})
-#if(!$!{field.keyFlag} && $!{field.name} != $!{cfg.tenantColumn})##生成普通字段
+#else
         <result column="$!{field.name}" property="$!{field.propertyName}"/>
 #end
 #end
     </resultMap>
-
 #end
 
-    <select id="select$!{entity}Page" resultMap="$!{table.entityPath}ResultMap">
-        select * from $!{table.name} where is_deleted = 0
+
+
+    <!-- 如果有逻辑删除字段过滤，请写到这里 -->
+    <sql id="filterRef">
+        <!-- 这里必须加上全包名，否则当filterRef被其他Mapper.xml包含引用的时候，就会调用Mapper.xml中的该SQL片段 -->
+        <include refid="$!{package.Mapper}.$!{table.mapperName}.inputFilterRef"/>
+        AND $!{table.name}.deleted_flag = ${@com.fontana.db.constant.GlobalDeletedFlag@NORMAL}
+    </sql>
+
+    <!-- 这里仅包含调用接口输入的主表过滤条件 -->
+    <sql id="inputFilterRef">
+        <if test="$!{table.entityPath}Filter != null">
+        </if>
+    </sql>
+
+    <!-- 循环插入集合接口 -->
+    <insert id="insertList">
+        INSERT INTO $!{table.name}
+        (
+#foreach($field in $!{table.fields})
+        $!{field.name}#if($foreach.hasNext),
+#end
+#end
+
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+#foreach($field in $!{table.fields})
+            #{item.$!{field.propertyName}}#if($foreach.hasNext),
+#end
+#end
+            )
+        </foreach>
+    </insert>
+
+    <select id="get$!{entity}List" resultMap="BaseResultMap"
+            parameterType="$!{package.Entity}.$!{entity}">
+        SELECT * FROM $!{table.name}
+        <where>
+            <if test="inFilterColumn != null and inFilterColumn != '' and inFilterValues != null and inFilterValues.size &gt; 0">
+                AND ${inFilterColumn} IN
+                <foreach collection="inFilterValues" item="item" open="(" separator="," close=")">
+                    '${item}'
+                </foreach>
+            </if>
+            <include refid="filterRef"/>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
     </select>
 
 </mapper>

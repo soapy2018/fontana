@@ -1,31 +1,21 @@
 /**
- * Copyright (c) 2018-2028, Chill Zhuang 庄骞 (smallchill@163.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (c) 2020-2022 宁波哥爱帮科技有限公司
  */
 package $!{package.Entity};
 
-#foreach($pkg in $!{table.importPackages})
-import $!{pkg};
-#end
+#set($voPackage=$package.Entity.replace("service","api").replace("entity","vo"))
+import $!{voPackage}.$!{entity}VO;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.db.model.BaseLogicDelModel;
 #if($!{entityLombokModel})
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 #end
-#if($!{swagger2})
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-#end
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 /**
  * $!{table.comment}实体类
@@ -36,15 +26,10 @@ import io.swagger.annotations.ApiModelProperty;
 #if($!{entityLombokModel})
 @Data
 #end
-#if($!{table.convert})
-@TableName("$!{table.name}")
-#end
 #if($!{superEntityClass})
 @EqualsAndHashCode(callSuper = true)
 #end
-#if($!{swagger2})
-@ApiModel(value = "$!{entity}对象", description = #if ("$!{table.comment}"=="")"$!{entity}对象"#else"$!{table.comment}"#end)
-#end
+@TableName("$!{table.name}")
 #if($!{superEntityClass})
 public class $!{entity} extends $!{superEntityClass}#if($!{activeRecord})<$!{entity}>#end {
 #elseif($!{activeRecord})
@@ -58,105 +43,34 @@ public class $!{entity} implements Serializable {
 
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in $!{table.fields})
-#if($!{field.name}!=$!{cfg.tenantColumn})
-#if($!{field.keyFlag})
-#set($keyPropertyName=$!{field.propertyName})
-#end
+#if("$!field.name" != "create_user_id" && "$!field.name" != "update_user_id" && "$!field.name" != "create_time" && "$!field.name" != "update_time" && "$!field.name" != "deleted_flag")
 #if("$!field.comment" != "")
     /**
      * $!{field.comment}
      */
-  #if($!{swagger2})
-  @ApiModelProperty(value = "$!{field.comment}")
-  #end
 #end
-#if($!{field.keyFlag})
 ## 主键
+#if($!{field.keyFlag})
 #if($!{field.keyIdentityFlag})
-  @TableId(value = "$!{field.name}", type = IdType.AUTO)
+    @TableId(value = "$!{field.name}", type = IdType.AUTO)
 #elseif(!$null.isNull($!{idType}) && "$!idType" != "")
-  @TableId(value = "$!{field.name}", type = IdType.$!{idType})
-#elseif($!{field.convert})
-  @TableId("$!{field.name}")
+    @TableId(value = "$!{field.name}", type = IdType.$!{idType})
+#else
+    @TableId(value = "$!{field.name}")
 #end
 ## 普通字段
-#elseif($!{field.fill})
-## -----   存在字段填充设置   -----
-#if($!{field.convert})
-  @TableField(value = "$!{field.name}", fill = FieldFill.$!{field.fill})
 #else
-  @TableField(fill = FieldFill.$!{field.fill})
+    @TableField(value = "$!{field.name}")
 #end
-#elseif($!{field.convert})
-  @TableField("$!{field.name}")
-#end
-## 乐观锁注解
-#if($!{versionFieldName}==$!{field.name})
-  @Version
-#end
-## 逻辑删除注解
-#if($!{logicDeleteFieldName}==$!{field.name})
-  @TableLogic
-#end
-  private $!{field.propertyType} $!{field.propertyName};
+    private $!{field.propertyType} $!{field.propertyName};
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
 
-#if(!$!{entityLombokModel})
-#foreach($field in $!{table.fields})
-#if($!{field.propertyType.equals("boolean")})
-#set($getprefix="is")
-#else
-#set($getprefix="get")
-#end
-
-    public $!{field.propertyType} $!{getprefix}$!{field.capitalName}() {
-        return $!{field.propertyName};
+    @Mapper
+    public interface $!{entity}ModelMapper extends BaseModelMapper<$!{entity}VO, $!{entity}> {
     }
 
-#if($!{entityBuilderModel})
-    public $!{entity} set$!{field.capitalName}($!{field.propertyType} $!{field.propertyName}) {
-#else
-    public void set$!{field.capitalName}($!{field.propertyType} $!{field.propertyName}) {
-#end
-        this.$!{field.propertyName} = $!{field.propertyName};
-#if($!{entityBuilderModel})
-        return this;
-#end
-    }
-#end
-#end
+    public static final $!{entity}ModelMapper INSTANCE = Mappers.getMapper($!{entity}ModelMapper.class);
 
-#if($!{entityColumnConstant})
-#foreach($field in $!{table.fields})
-    public static final String $!{field.name.toUpperCase()} = "$!{field.name}";
-
-#end
-#end
-#if($!{activeRecord})
-    @Override
-    protected Serializable pkVal() {
-#if($!{keyPropertyName})
-        return this.$!{keyPropertyName};
-#else
-        return this.id;
-#end
-    }
-
-#end
-#if(!$!{entityLombokModel})
-    @Override
-    public String toString() {
-        return "$!{entity}{" +
-#foreach($field in $!{table.fields})
-#if($!{velocityCount}==1)
-        "$!{field.propertyName}=" + $!{field.propertyName} +
-#else
-        ", $!{field.propertyName}=" + $!{field.propertyName} +
-#end
-#end
-        "}";
-    }
-#end
 }

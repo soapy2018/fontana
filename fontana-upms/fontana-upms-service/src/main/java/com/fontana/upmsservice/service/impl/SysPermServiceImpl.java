@@ -6,7 +6,7 @@ import com.fontana.db.object.MyRelationParam;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.result.CallResult;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.entity.SysPerm;
 import com.fontana.upmsservice.entity.SysPermCodePerm;
@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service("sysPermService")
-public class SysPermServiceImpl extends AbsBaseService<SysPerm, Long> implements SysPermService {
+public class SysPermServiceImpl extends AbstractBaseService<SysPerm, Long> implements SysPermService {
 
     @Autowired
     private SysPermMapper sysPermMapper;

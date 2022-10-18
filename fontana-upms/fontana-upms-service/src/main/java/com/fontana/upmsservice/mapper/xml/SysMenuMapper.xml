@@ -29,7 +29,7 @@
             AND ur.user_id = #{userId}
             AND ur.role_id = rm.role_id
             AND rm.menu_id = m.menu_id
-            AND m.menu_type &lt;= ${@com.fontana.upmsapi.dict.SysMenuType.SysMenuType@TYPE_MENU}
+            AND m.menu_type &lt;= ${@com.fontana.upmsapi.dict.SysMenuType@TYPE_MENU}
         </where>
         ORDER BY m.show_order
     </select>

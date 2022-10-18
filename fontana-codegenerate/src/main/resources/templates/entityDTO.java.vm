@@ -1,25 +1,18 @@
 /**
- * Copyright (c) 2018-2028, Chill Zhuang 庄骞 (smallchill@163.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (c) 2020-2022 宁波哥爱帮科技有限公司
  */
-#set($dtoPackage=$package.Entity.replace("entity","dto"))
+#set($dtoPackage=$package.Entity.replace("service","api").replace("entity","dto"))
 package $!{dtoPackage};
 
-import $!{package.Entity}.$!{entity};
+import com.fontana.base.validate.UpdateGroup;
+#if($!{swagger2})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
 #if($!{entityLombokModel})
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
 #end
 
 /**
@@ -30,9 +23,32 @@ import lombok.EqualsAndHashCode;
  */
 #if($!{entityLombokModel})
 @Data
-@EqualsAndHashCode(callSuper = true)
 #end
-public class $!{entity}DTO extends $!{entity} {
-	private static final long serialVersionUID = 1L;
+#if($!{swagger2})
+@ApiModel(value = "$!{entity}对象", description = #if ("$!{table.comment}"=="")"$!{entity}对象"#else"$!{table.comment}"#end)
+#end
+public class $!{entity}DTO {
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.fields})
 
+#if("$!field.name" != "create_user_id" && "$!field.name" != "update_user_id" && "$!field.name" != "create_time" && "$!field.name" != "update_time" && "$!field.name" != "deleted_flag")
+#if("$!field.comment" != "")
+    /**
+     * $!{field.comment}
+     */
+#end
+#if($!{swagger2})
+    @ApiModelProperty(value = "$!{field.comment}")
+#end
+## 主键
+#if($!{field.keyFlag})
+    @NotNull(message = "数据验证失败，$!{field.comment}不能为空！", groups = {UpdateGroup.class})
+## 普通字段
+#else
+    @NotNull(message = "数据验证失败，$!{field.comment}不能为空！")
+#end
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
 }

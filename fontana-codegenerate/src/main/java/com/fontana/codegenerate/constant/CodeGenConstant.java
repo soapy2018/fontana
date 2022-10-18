@@ -18,7 +18,7 @@ package com.fontana.codegenerate.constant;
 /**
  * 系统常量.
  *
- * @author zhuangqian
+ * @author cqf
  */
 public interface CodeGenConstant {
 	/**

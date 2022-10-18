@@ -2,7 +2,7 @@ package com.fontana.upmsservice.service.impl;
 
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.entity.SysPerm;
 import com.fontana.upmsservice.entity.SysPermModule;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("sysPermModuleService")
-public class SysPermModuleServiceImpl extends AbsBaseService<SysPermModule, Long> implements SysPermModuleService {
+public class SysPermModuleServiceImpl extends AbstractBaseService<SysPermModule, Long> implements SysPermModuleService {
 
     @Autowired
     private SysPermModuleMapper sysPermModuleMapper;

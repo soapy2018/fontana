@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.base.object.TokenData;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.flowservice.entity.FlowCategory;
 import com.fontana.flowservice.mapper.FlowCategoryMapper;
 import com.fontana.util.request.WebContextUtil;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @Service("flowCategoryService")
-public class FlowCategoryServiceImpl extends AbsBaseService<FlowCategory, Long> implements com.fontana.flowservice.service.FlowCategoryService {
+public class FlowCategoryServiceImpl extends AbstractBaseService<FlowCategory, Long> implements com.fontana.flowservice.service.FlowCategoryService {
 
     @Autowired
     private FlowCategoryMapper flowCategoryMapper;

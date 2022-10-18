@@ -8,7 +8,7 @@ import com.fontana.base.constant.DataPermRuleType;
 import com.fontana.db.constant.GlobalDeletedFlag;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.base.result.CallResult;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.upmsservice.config.ApplicationConfig;
 import com.fontana.upmsservice.entity.SysDataPerm;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysDataPermService")
-public class SysDataPermServiceImpl extends AbsBaseService<SysDataPerm, Long> implements SysDataPermService {
+public class SysDataPermServiceImpl extends AbstractBaseService<SysDataPerm, Long> implements SysDataPermService {
 
     @Autowired
     private SysDataPermMapper sysDataPermMapper;

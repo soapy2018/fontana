@@ -75,7 +75,6 @@ class $!{entity}Edit extends PureComponent {
         <Form hideRequiredMark style={{ marginTop: 8 }}>
           <Card className={styles.card} bordered={false}>
 #foreach($field in $!{table.fields})
-#if($!{field.name}!=$!{cfg.tenantColumn})
             <FormItem {...formItemLayout} label="$!{field.comment}">
               {getFieldDecorator('$!{field.propertyName}', {
                 rules: [
@@ -87,7 +86,6 @@ class $!{entity}Edit extends PureComponent {
                 initialValue: detail.$!{field.propertyName},
               })(<Input placeholder="请输入$!{field.comment}" />)}
             </FormItem>
-#end
 #end
           </Card>
         </Form>

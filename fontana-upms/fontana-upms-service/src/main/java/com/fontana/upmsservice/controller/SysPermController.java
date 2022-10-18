@@ -70,7 +70,6 @@ public class SysPermController {
      * @param sysPermDto 更新权限资源对象。
      * @return 应答结果对象，包含更新权限资源的主键Id。
      */
-    //@OperationLog(type = SysOperationLogType.UPDATE)
     @PostMapping("/update")
     public Result<Void> update(@MyRequestBody SysPermDto sysPermDto) {
         String errorMessage = ValidateUtil.getModelValidationError(sysPermDto, Default.class, UpdateGroup.class);
@@ -97,7 +96,6 @@ public class SysPermController {
      * @param permId 指定的权限资源主键Id。
      * @return 应答结果对象。
      */
-    //@OperationLog(type = SysOperationLogType.DELETE)
     @PostMapping("/delete")
     public Result<Void> delete(@MyRequestBody Long permId) {
         if (ObjectUtil.isAnyBlankOrNull(permId)) {

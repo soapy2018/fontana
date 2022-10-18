@@ -1,28 +1,14 @@
 /**
- * Copyright (c) 2018-2028, Chill Zhuang 庄骞 (smallchill@163.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (c) 2020-2022 宁波哥爱帮科技有限公司
  */
-#set($voPackage=$package.Entity.replace("entity","vo"))
+#set($voPackage=$package.Entity.replace("service","api").replace("entity","vo"))
 package $!{voPackage};
 
-import $!{package.Entity}.$!{entity};
+import com.fontana.base.vo.BaseVO;
 #if($!{entityLombokModel})
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-#end
-#if($!{swagger2})
-import io.swagger.annotations.ApiModel;
+import lombok.ToString;
 #end
 
 /**
@@ -34,11 +20,19 @@ import io.swagger.annotations.ApiModel;
 #if($!{entityLombokModel})
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 #end
-#if($!{swagger2})
-@ApiModel(value = "$!{entity}VO对象", description = #if ("$!{table.comment}"=="")"$!{entity}VO对象"#else"$!{table.comment}"#end)
+public class $!{entity}VO extends BaseVO {
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in $!{table.fields})
+#if("$!field.name" != "create_user_id" && "$!field.name" != "update_user_id" && "$!field.name" != "create_time" && "$!field.name" != "update_time" && "$!field.name" != "deleted_flag")
+#if("$!field.comment" != "")
+    /**
+     * $!{field.comment}
+     */
 #end
-public class $!{entity}VO extends $!{entity} {
-	private static final long serialVersionUID = 1L;
-
+    private $!{field.propertyType} $!{field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
 }

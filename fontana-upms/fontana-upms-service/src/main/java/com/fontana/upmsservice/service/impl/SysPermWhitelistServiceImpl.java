@@ -1,7 +1,7 @@
 package com.fontana.upmsservice.service.impl;
 
 import com.fontana.db.mapper.BaseDaoMapper;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.upmsservice.entity.SysPermWhitelist;
 import com.fontana.upmsservice.mapper.SysPermWhitelistMapper;
 import com.fontana.upmsservice.service.SysPermWhitelistService;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("sysPermWhitelistService")
-public class SysPermWhitelistServiceImpl extends AbsBaseService<SysPermWhitelist, String> implements SysPermWhitelistService {
+public class SysPermWhitelistServiceImpl extends AbstractBaseService<SysPermWhitelist, String> implements SysPermWhitelistService {
 
     @Autowired
     private SysPermWhitelistMapper sysPermWhitelistMapper;

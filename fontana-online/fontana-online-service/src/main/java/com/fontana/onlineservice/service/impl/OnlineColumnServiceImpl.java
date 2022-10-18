@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fontana.base.result.CallResult;
 import com.fontana.db.mapper.BaseDaoMapper;
 import com.fontana.db.object.MyRelationParam;
-import com.fontana.db.service.impl.AbsBaseService;
+import com.fontana.db.service.impl.AbstractBaseService;
 import com.fontana.onlineapi.dict.FieldFilterType;
 import com.fontana.onlineservice.entity.OnlineColumn;
 import com.fontana.onlineservice.entity.OnlineColumnRule;
@@ -39,7 +39,7 @@ import java.util.Set;
  */
 @Slf4j
 @Service("onlineColumnService")
-public class OnlineColumnServiceImpl extends AbsBaseService<OnlineColumn, Long> implements OnlineColumnService {
+public class OnlineColumnServiceImpl extends AbstractBaseService<OnlineColumn, Long> implements OnlineColumnService {
 
     @Autowired
     private OnlineColumnMapper onlineColumnMapper;
@@ -248,7 +248,7 @@ public class OnlineColumnServiceImpl extends AbsBaseService<OnlineColumn, Long> 
         filter.setColumnId(onlineColumnRule.getColumnId());
         filter.setRuleId(onlineColumnRule.getRuleId());
         UpdateWrapper<OnlineColumnRule> uw =
-                AbsBaseService.createUpdateQueryForNullValue(onlineColumnRule, OnlineColumnRule.class);
+                AbstractBaseService.createUpdateQueryForNullValue(onlineColumnRule, OnlineColumnRule.class);
         uw.setEntity(filter);
         return onlineColumnRuleMapper.update(onlineColumnRule, uw) > 0;
     }

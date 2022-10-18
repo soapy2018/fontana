@@ -58,7 +58,6 @@
           selection: true,
           column: [
 #foreach($field in $!{table.fields})
-#if($!{field.name}!=$!{cfg.tenantColumn})
             {
               label: "$!{field.comment}",
               prop: "$!{field.propertyName}",
@@ -68,7 +67,6 @@
                 trigger: "blur"
               }]
             },
-#end
 #end
           ]
         },
