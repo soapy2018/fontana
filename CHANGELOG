@@ -1,5 +1,6 @@
 1.2.0.SNAPSHOT
     首个对外发行版本
 1.2.1.SNAPSHOT
-    1、配置文件变量enable统一修改为enabled，影响的模块主要时日志模块
+    1、配置文件变量enable统一修改为enabled，影响的模块主要是日志模块
     2、网关优化，与log模块解耦
+    3、去除fontana-job-starter，改造成fontana-xxljob-starter，支持自动注册执行器和job到xxljob-admin

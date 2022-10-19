@@ -20,9 +20,9 @@ public class DataFilterThreadLocal {
      * @param enable 打开为true，否则false。
      * @return 返回之前的状态，便于恢复。
      */
-    public static boolean setDataFilter(boolean enable) {
+    public static boolean setDataFilter(boolean enabled) {
         boolean oldValue = DATA_FILTER_ENABLE.get();
-        DATA_FILTER_ENABLE.set(enable);
+        DATA_FILTER_ENABLE.set(enabled);
         return oldValue;
     }
 

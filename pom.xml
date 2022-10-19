@@ -14,7 +14,6 @@
         <module>fontana-sb-starter</module>
         <module>fontana-db-starter</module>
         <module>fontana-redis-starter</module>
-        <module>fontana-job-starter</module>
         <module>fontana-swagger2-starter</module>
         <module>fontana-upms</module>
         <module>fontana-gateway</module>
@@ -30,6 +29,7 @@
         <module>fontana-oss</module>
         <module>fontana-demo</module>
         <module>fontana-log-producer</module>
+        <module>fontana-xxljob-starter</module>
     </modules>
 
     <name>fontana</name>
@@ -133,6 +133,11 @@
             <dependency>
                 <groupId>com.fontana</groupId>
                 <artifactId>fontana-log-producer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fontana</groupId>
+                <artifactId>fontana-xxljob-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
