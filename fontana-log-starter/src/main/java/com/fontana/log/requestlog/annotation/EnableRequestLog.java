@@ -14,6 +14,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Import({RequestLogRegistrar.class})
+@Deprecated
 public @interface EnableRequestLog {
 
 }

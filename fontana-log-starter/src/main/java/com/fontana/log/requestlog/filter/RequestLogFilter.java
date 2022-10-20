@@ -42,7 +42,7 @@ import java.io.IOException;
 public class RequestLogFilter extends OncePerRequestFilter {
     //请求日志专用logger
     private final Logger requestLogger = LoggerFactory.getLogger("requestLog");
-    //@Resource
+
     private RequestLogProperties requestLogProperties;
 
     public RequestLogFilter(RequestLogProperties requestLogProperties){
@@ -105,11 +105,6 @@ public class RequestLogFilter extends OncePerRequestFilter {
         }
         log.setTenantId(WebContextUtil.getTenantId(request));
         log.setFactoryId(WebContextUtil.getFactoryId(request));
-//        SimpleUser userInfo = HttpServletRequestUtil.getUserInfo(request);
-//        if (userInfo != null) {
-//            log.setUserId(userInfo.getId());
-//            log.setUserName(userInfo.getUserName());
-//        }
         log.setUserId(WebContextUtil.getUserId(request));
         log.setUserName(WebContextUtil.getUserName(request));
 

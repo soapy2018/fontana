@@ -4,3 +4,5 @@
     1、配置文件变量enable统一修改为enabled，影响的模块主要是日志模块
     2、网关优化，与log模块解耦
     3、去除fontana-job-starter，改造成fontana-xxljob-starter，支持自动注册执行器和job到xxljob-admin
+    4、logback-spring.xml优化，根据requestLogEnabled标志决定是否初始化自定义的log-producer，
+       避免引入log-starter时没有配置solr地址导致上送异常

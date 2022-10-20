@@ -13,6 +13,9 @@
     <springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
     <!--solr服务器地址-->
     <springProperty name="logServ" scope="context"  source="fontana.solrServ" defaultValue="127.0.0.1"/>
+    <!--是否启用自定义的producer-->
+    <springProperty name="requestLogEnabled" scope="context" source="fontana.requestlog.enabled" defaultValue="false"/>
+
 
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -142,15 +145,20 @@
         <discardingThreshold>0</discardingThreshold>
         <appender-ref ref="api_log"/>
     </appender>
+    <!-- 判断是否启用自定义log-producer-->
+    <if condition = 'property("requestLogEnabled").contains("true")'>
+        <then>
+            <appender name="applog" class="com.fontana.log.producer.appender.AppLogAppender">
+                <appName>${APP_NAME}</appName>
+                <logServ>${logServ}</logServ>
+            </appender>
+            <appender name="requestLog" class="com.fontana.log.producer.appender.RequestLogAppender">
+                <appName>${APP_NAME}</appName>
+                <logServ>${logServ}</logServ>
+            </appender>
+        </then>
+    </if>
 
-    <appender name="applog" class="com.fontana.log.producer.appender.AppLogAppender">
-        <appName>${APP_NAME}</appName>
-        <logServ>${logServ}</logServ>
-    </appender>
-    <appender name="requestLog" class="com.fontana.log.producer.appender.RequestLogAppender">
-        <appName>${APP_NAME}</appName>
-        <logServ>${logServ}</logServ>
-    </appender>
 
     <!--
         <logger>用来设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender>。
@@ -185,9 +193,15 @@
     <logger name="com.fontana.log.apilog.ApiLogAspect" level="debug" addtivity="false">
         <appender-ref ref="api_log_async" />
     </logger>
-    <logger name="requestLog" level="debug" additivity="false">
-        <appender-ref ref="requestLog"/>
-    </logger>
+    <!-- 判断是否启用自定义log-producer-->
+    <if condition = 'property("requestLogEnabled").contains("true")'>
+        <then>
+            <logger name="requestLog" level="debug" additivity="false">
+                <appender-ref ref="requestLog"/>
+            </logger>
+        </then>
+    </if>
+
 
     <!--
         root节点: 必选节点，用来指定最基础的日志输出级别，只有一个level属性
@@ -198,7 +212,13 @@
     <root level="INFO">
         <appender-ref ref="StdoutAppender"/>
         <appender-ref ref="file_async"/>
-        <appender-ref ref="applog"/>
+        <!-- 判断是否启用自定义log-producer-->
+        <if condition = 'property("requestLogEnabled").contains("true")'>
+            <then>
+                <appender-ref ref="applog"/>
+            </then>
+        </if>
+
     </root>
 </configuration>
 <!--
