@@ -112,14 +112,14 @@ public class AuditLogAspect {
         audit.setClassName(methodSignature.getDeclaringTypeName());
         audit.setMethodName(methodSignature.getName());
 
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        String userId = WebContextUtil.getUserId(request);
-        String userName = WebContextUtil.getUserName(request);
-        String tenantId = WebContextUtil.getTenantId(request);;
-        audit.setUserId(userId);
-        audit.setUserName(userName);
-        audit.setTenantId(tenantId);
+        if(WebContextUtil.hasRequestContext()){
+            String userId = WebContextUtil.getUserId();
+            String userName = WebContextUtil.getUserName();
+            String tenantId = WebContextUtil.getTenantId();;
+            audit.setUserId(userId);
+            audit.setUserName(userName);
+            audit.setTenantId(tenantId);
+        }
 
         String operation = auditLog.operation();
         if (operation.contains("#")) {

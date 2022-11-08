@@ -93,5 +93,6 @@ public interface OnlineDatasourceRelationService extends IBaseService<OnlineData
      * @param originalRelation 原有数据对象。
      * @return 数据全部正确返回true，否则false。
      */
+    @Override
     CallResult verifyRelatedData(OnlineDatasourceRelation relation, OnlineDatasourceRelation originalRelation);
 }

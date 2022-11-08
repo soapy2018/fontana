@@ -55,23 +55,39 @@ public class ApiLogAspect {
         long startTime = System.currentTimeMillis();
         StringBuilder logMessage = new StringBuilder();
         // 开始打印请求日志
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        HttpServletRequest request = null;
+        if(WebContextUtil.hasRequestContext()){
+            request = WebContextUtil.getHttpRequest();
+        }else{
+            logMessage.append("**");
+        }
         // 打印请求 url
-        logMessage.append(request.getRequestURL().toString());
+        if(null != request) {
+            logMessage.append(request.getRequestURL().toString());
+        }
         // 打印调用 controller 的全路径以及执行方法
         logMessage.append("|").append(proceedingJoinPoint.getSignature().getDeclaringTypeName()).append(".").append(proceedingJoinPoint.getSignature().getName());
         // 打印请求入参
-        if (apiLogProperties.getShowArgs()) {
+        if (Boolean.TRUE.equals(apiLogProperties.getShowArgs())) {
             logMessage.append("|").append(Arrays.toString(proceedingJoinPoint.getArgs()));
+        }else{
+            logMessage.append("|**");
         }
-        // 打印请求的 IP
-        if (apiLogProperties.getShowIP()) {
-            logMessage.append("|").append(request.getRemoteAddr()).append(":").append(request.getRemotePort());
-        }
-        // 打印请求头
-        if(apiLogProperties.getShowHead()) {
-            logMessage.append("|").append(WebContextUtil.getHeaderString(request));
+        if(null != request) {
+            // 打印请求的 IP
+            if (Boolean.TRUE.equals(apiLogProperties.getShowIP())) {
+                logMessage.append("|").append(request.getRemoteAddr()).append(":").append(request.getRemotePort());
+            }else{
+                logMessage.append("|**");
+            }
+            // 打印请求头
+            if (Boolean.TRUE.equals(apiLogProperties.getShowHead())) {
+                logMessage.append("|").append(WebContextUtil.getHeaderString(request));
+            }else{
+                logMessage.append("|**");
+            }
+        }else{
+            logMessage.append("|**");
         }
         Object result = proceedingJoinPoint.proceed();
         // 打印请求耗时

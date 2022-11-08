@@ -5,11 +5,11 @@ import com.fontana.base.annotation.MyRequestBody;
 import com.fontana.base.result.Pagination;
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
+import com.fontana.db.controller.AbstractBaseController;
 import com.fontana.db.object.*;
 import com.fontana.db.service.IBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.db.util.MyPageUtil;
-import com.fontana.db.controller.BaseController;
 import com.fontana.upmsapi.dto.SysDeptDto;
 import com.fontana.upmsapi.dto.SysDeptPostDto;
 import com.fontana.upmsapi.dto.SysPostDto;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/sysDept")
-public class SysDeptController extends BaseController<SysDept, SysDeptVo, Long> {
+public class SysDeptController extends AbstractBaseController<SysDept, SysDeptVo, Long> {
 
     @Autowired
     private SysDeptService sysDeptService;

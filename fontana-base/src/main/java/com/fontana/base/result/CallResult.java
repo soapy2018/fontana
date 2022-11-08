@@ -84,4 +84,21 @@ public class CallResult {
         result.errorMessage = errorMessage;
         return result;
     }
+
+    /**
+     * 创建表示验证失败的对象实例。
+     *
+     * @param errorMessage 错误描述。
+     * @param data         附带的数据对象。
+     * @return 验证失败对象实例。
+     */
+    public static <T> CallResult error(String errorMessage, T data) {
+        CallResult result = new CallResult();
+        result.success = false;
+        result.errorMessage = errorMessage;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("errorData", data);
+        result.data = jsonObject;
+        return result;
+    }
 }

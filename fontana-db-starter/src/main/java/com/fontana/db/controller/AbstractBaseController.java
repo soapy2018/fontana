@@ -1,11 +1,14 @@
 package com.fontana.db.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fontana.base.constant.AggregationKind;
 import com.fontana.base.constant.AggregationType;
 import com.fontana.base.context.DataFilterThreadLocal;
+import com.fontana.base.result.CallResult;
 import com.fontana.base.result.Pagination;
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
@@ -24,10 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
  * @date 2020-08-08
  */
 @Slf4j
-public abstract class BaseController<M, V, K extends Serializable> {
+public abstract class AbstractBaseController<M, V, K extends Serializable> {
 
     /**
      * 当前Service关联的主Model实体对象的Class。
@@ -66,7 +67,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * 构造函数。
      */
     @SuppressWarnings("unchecked")
-    public BaseController() {
+    public AbstractBaseController() {
         modelClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         domainVoClass = (Class<V>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         Field[] fields = ReflectUtil.getFields(modelClass);
@@ -92,14 +93,13 @@ public abstract class BaseController<M, V, K extends Serializable> {
             return Result.failed(ResultCode.PARAM_IS_BLANK);
         }
         List<M> resultList = service().getInList(idFieldName, filterIds);
-        List<V> resultVoList = null;
         if (CollectionUtils.isEmpty(resultList)) {
-            return Result.succeed(resultVoList);
+            return Result.succeed();
         }
         if (Boolean.TRUE.equals(withDict)) {
             service().buildRelationForDataList(resultList, MyRelationParam.dictOnly());
         }
-        resultVoList = convertToVoList(resultList, modelMapper);
+        List<V> resultVoList = convertToVoList(resultList, modelMapper);
         return Result.succeed(resultVoList);
     }
 
@@ -110,20 +110,20 @@ public abstract class BaseController<M, V, K extends Serializable> {
      * @param withDict    是否包含字典关联。
      * @param modelMapper 对象映射函数对象。如果为空，则使用MyModelUtil中的缺省转换函数。
      * @return 应答结果对象，包含主对象数据。
+     * @throws com.fontana.base.exception.GeneralException buildRelationForData会抛出此异常。
      */
     public Result<V> baseGetById(K id, Boolean withDict, BaseModelMapper<V, M> modelMapper) {
         if (ObjectUtil.isAnyBlankOrNull(id, withDict)) {
             return Result.failed(ResultCode.PARAM_IS_BLANK);
         }
         M resultObject = service().getById(id);
-        V resultVoObject = null;
         if (resultObject == null) {
-            return Result.succeed(resultVoObject);
+            return Result.succeed();
         }
         if (Boolean.TRUE.equals(withDict)) {
             service().buildRelationForData(resultObject, MyRelationParam.dictOnly());
         }
-        resultVoObject = this.convertToVo(resultObject, modelMapper);
+        V resultVoObject = this.convertToVo(resultObject, modelMapper);
         return Result.succeed(resultVoObject);
     }
 
@@ -147,6 +147,68 @@ public abstract class BaseController<M, V, K extends Serializable> {
     public Result<Boolean> baseExistId(K id) {
         return Result.succeed(
                 !ObjectUtil.isAnyBlankOrNull(id) && service().getById(id) != null);
+    }
+
+    /**
+     * 根据最新对象列表和原有对象的数据对比，判断关联的字典数据和多对一主表数据是否都是合法数据。仅限于微服务间远程接口调用。
+     *
+     * @param data     数据对象。
+     *                 主键有值是视为更新操作的数据比对，因此仅当关联Id变化时才会验证。
+     *                 主键为空视为新增操作的数据比对，所有关联Id都会被验证。
+     * @param idGetter 获取主键值的函数对象。
+     * @return 应答结果对象。
+     */
+    public Result<Void> baseVerifyRelatedData(M data, Function<M, K> idGetter) {
+        CallResult result;
+        K id = idGetter.apply(data);
+        if (id == null) {
+            result = service().verifyRelatedData(data, null);
+        } else {
+            M originalData = service().getById(id);
+            if (originalData == null) {
+                return Result.failed(ResultCode.DATA_NOT_EXIST);
+            }
+            result = service().verifyRelatedData(data, originalData);
+        }
+        return !result.isSuccess() ? Result.faild(result) : Result.succeed();
+    }
+
+    /**
+     * 根据最新对象列表和原有对象列表的数据对比，判断关联的字典数据和多对一主表数据是否都是合法数据。
+     *
+     * @param dataList 数据对象列表。
+     * @param idGetter 获取主键值的函数对象。
+     * @return 应答结果对象。
+     */
+    public Result<Void> baseVerifyRelatedDataList(List<M> dataList, Function<M, K> idGetter) {
+        if (CollUtil.isEmpty(dataList)) {
+            return Result.succeed();
+        }
+        // 1. 先过滤出数据列表中的主键Id集合。
+        Set<K> idList = dataList.stream()
+                .filter(c -> idGetter.apply(c) != null).map(idGetter).collect(Collectors.toSet());
+        // 2. 列表中，我们目前仅支持全部是更新数据，或全部新增数据，不能混着。如果有主键值，说明当前全是更新数据。
+        if (CollUtil.isNotEmpty(idList)) {
+            // 3. 这里是批量读取的优化，用一个主键值得in list查询，一步获取全部原有数据。然后再在内存中基于Map排序。
+            List<M> originalList = service().getInList(idList);
+            Map<K, M> originalMap = originalList.stream().collect(Collectors.toMap(idGetter, c2 -> c2));
+            // 迭代列表，传入当前最新数据和更新前数据进行比对，如果关联数据变化了，就对新数据进行合法性验证。
+            for (M data : dataList) {
+                CallResult result = service().verifyRelatedData(data, originalMap.get(idGetter.apply(data)));
+                if (!result.isSuccess()) {
+                    return Result.faild(result);
+                }
+            }
+        } else {
+            // 4. 迭代列表，传入当前最新数据，对关联数据进行合法性验证。
+            for (M model : dataList) {
+                CallResult result = service().verifyRelatedData(model, null);
+                if (!result.isSuccess()) {
+                    return Result.faild(result);
+                }
+            }
+        }
+        return Result.succeed();
     }
 
     /**
@@ -181,7 +243,42 @@ public abstract class BaseController<M, V, K extends Serializable> {
             }
         }
         M filter = queryParam.getFilterDto(modelClass);
+        if (StrUtil.isNotBlank(queryParam.getInFilterField())
+                && CollUtil.isNotEmpty(queryParam.getInFilterValues())) {
+            if (queryParam.getCriteriaList() == null) {
+                queryParam.setCriteriaList(new LinkedList<>());
+            }
+            MyWhereCriteria whereCriteria = new MyWhereCriteria();
+            whereCriteria.setFieldName(queryParam.getInFilterField());
+            whereCriteria.setOperatorType(MyWhereCriteria.OPERATOR_IN);
+            whereCriteria.setValue(queryParam.getInFilterValues());
+            queryParam.getCriteriaList().add(whereCriteria);
+        }
         String whereClause = MyWhereCriteria.makeCriteriaString(queryParam.getCriteriaList(), modelClass);
+        if (CollUtil.isNotEmpty(queryParam.getSearchStringFieldList())
+                && StrUtil.isNotBlank(queryParam.getSearchStringValue())) {
+            String tableName = MyModelUtil.mapToTableName(modelClass);
+            StringBuilder sb = new StringBuilder(128);
+            if (StrUtil.isNotBlank(whereClause)) {
+                sb.append(" AND ");
+            }
+            sb.append(" CONCAT(");
+            for (int i = 0; i < queryParam.getSearchStringFieldList().size(); i++) {
+                String fieldName = queryParam.getSearchStringFieldList().get(i);
+                String columnName = Objects.requireNonNull(MyModelUtil.mapToColumnInfo(fieldName, modelClass)).getFirst();
+               // if (coreProperties.isMySql()) {
+                    sb.append("IFNULL(");
+//                } else if (coreProperties.isPostgresql()) {
+//                    sb.append("COALESCE(");
+//                }
+                sb.append(tableName).append(".").append(columnName).append(", '')");
+                if (i != queryParam.getSearchStringFieldList().size() - 1) {
+                    sb.append(", ");
+                }
+            }
+            sb.append(") LIKE ").append("'").append(queryParam.getSearchStringValue()).append("'");
+            whereClause = whereClause + sb.toString();
+        }
         String orderBy = MyOrderParam.buildOrderBy(queryParam.getOrderParam(), modelClass);
         MyPageParam pageParam = queryParam.getPageParam();
         if (pageParam != null) {
@@ -198,7 +295,7 @@ public abstract class BaseController<M, V, K extends Serializable> {
         } else {
             totalCount = resultList.size();
         }
-        if (queryParam.getWithDict()) {
+        if (Boolean.TRUE.equals(queryParam.getWithDict())) {
             service().buildRelationForDataList(resultList, MyRelationParam.dictOnly());
         }
         List<V> resultVoList = convertToVoList(resultList, modelMapper);
@@ -300,9 +397,9 @@ public abstract class BaseController<M, V, K extends Serializable> {
             for (Map.Entry<Object, Set<Object>> entry : param.getGroupedInFilterValues().entrySet()) {
                 StringBuilder groupedSelectList = new StringBuilder(64);
                 if (stringKey) {
-                    groupedSelectList.append("'").append(entry.getKey()).append("' ");
+                    groupedSelectList.append("'").append(entry.getKey()).append("' as ");
                 } else {
-                    groupedSelectList.append(entry.getKey()).append(" ");
+                    groupedSelectList.append(entry.getKey()).append(" as ");
                 }
                 groupedSelectList.append(MyAggregationParam.KEY_NAME).append(", ").append(selectList);
                 MyWhereCriteria criteria = new MyWhereCriteria();

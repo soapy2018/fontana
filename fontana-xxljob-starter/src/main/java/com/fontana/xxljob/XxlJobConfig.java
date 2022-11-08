@@ -32,6 +32,7 @@ public class XxlJobConfig {
 
     @Bean(destroyMethod = "destroy")
     public XxlJobSpringExecutor xxlJobExecutor() {
+        //这里主要是机器地址注册到执行器上，并不会在xxljob-admin上创建执行器
         log.info(">>>>>>>>>>> xxl-job config init.");
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(adminAddresses);

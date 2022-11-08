@@ -141,5 +141,6 @@ public interface FlowEntryService extends IBaseService<FlowEntry, Long> {
      * @param originalFlowEntry 原有数据对象。
      * @return 数据全部正确返回true，否则false。
      */
+    @Override
     CallResult verifyRelatedData(FlowEntry flowEntry, FlowEntry originalFlowEntry);
 }

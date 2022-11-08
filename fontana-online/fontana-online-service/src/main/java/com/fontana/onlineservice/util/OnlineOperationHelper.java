@@ -22,7 +22,7 @@ import com.fontana.redis.util.SessionCacheHelper;
 import com.fontana.base.result.Result;
 import com.fontana.sb.updownload.BaseUpDownloader;
 import com.fontana.sb.updownload.UpDownloaderFactory;
-import com.fontana.sb.updownload.UploadResponseInfo;
+import com.fontana.base.upload.UploadResponseInfo;
 import com.fontana.util.request.WebContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

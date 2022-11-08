@@ -76,5 +76,6 @@ public interface OnlineDictService extends IBaseService<OnlineDict, Long> {
      * @param originalOnlineDict 原有数据对象。
      * @return 数据全部正确返回true，否则false。
      */
+    @Override
     CallResult verifyRelatedData(OnlineDict onlineDict, OnlineDict originalOnlineDict);
 }

@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-base</artifactId>
             <optional>true</optional>
@@ -26,10 +31,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.xiaoymin</groupId>-->
-        <!--            <artifactId>knife4j-micro-spring-boot-starter</artifactId>-->
-        <!--        </dependency>-->
         <!-- swagger -->
         <!--参见：https://gitee.com/xiaoym/knife4j-->
         <dependency>

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * MyRequestBody解析器
+ *  * MyRequestBody解析器
  * 解决的问题：
  * 1、单个字符串等包装类型都要写一个对象才可以用@RequestBody接收；
  * 2、多个对象需要封装到一个对象里才可以用@RequestBody接收。

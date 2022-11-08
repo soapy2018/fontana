@@ -10,7 +10,7 @@ import com.fontana.db.object.*;
 import com.fontana.db.service.IBaseService;
 import com.fontana.db.util.MyModelUtil;
 import com.fontana.db.util.MyPageUtil;
-import com.fontana.db.controller.BaseController;
+import com.fontana.db.controller.AbstractBaseController;
 import com.fontana.upmsapi.dto.SysUserDto;
 import com.fontana.upmsapi.vo.SysUserVo;
 import com.fontana.upmsservice.config.ApplicationConfig;
@@ -40,7 +40,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @RequestMapping("/sysUser")
-public class SysUserController extends BaseController<SysUser, SysUserVo, Long> {
+public class SysUserController extends AbstractBaseController<SysUser, SysUserVo, Long> {
 
     @Autowired
     private SysUserService sysUserService;

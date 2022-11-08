@@ -36,6 +36,13 @@ public @interface RelationOneToOne {
     String slaveIdField();
 
     /**
+     * 被关联远程调用对象的Class对象。
+     *
+     * @return 被关联远程调用对象的Class对象。
+     */
+    Class<?> slaveClientClass() default DummyClass.class;
+
+    /**
      * 被关联的本地Service对象名称。
      * 该参数的优先级高于 slaveService()，如果定义了该值，会优先使用加载service的bean对象。
      *

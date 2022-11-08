@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-base</artifactId>
             <optional>true</optional>

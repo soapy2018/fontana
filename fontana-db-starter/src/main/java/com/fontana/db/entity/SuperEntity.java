@@ -23,9 +23,29 @@ public class SuperEntity<T extends Model<?>> extends Model<T> {
      */
     @TableId
     private Long id;
-    @TableField(fill = FieldFill.INSERT)
+
+    /**
+     * 创建者Id。
+     */
+    @TableField(value = "create_user_id", fill = FieldFill.INSERT)
+    private Long createUserId;
+
+    /**
+     * 创建时间。
+     */
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+
+    /**
+     * 更新者Id。
+     */
+    @TableField(value = "update_user_id", fill = FieldFill.INSERT_UPDATE)
+    private Long updateUserId;
+
+    /**
+     * 更新时间。
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     @Override

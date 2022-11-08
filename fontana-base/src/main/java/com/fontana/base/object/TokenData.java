@@ -5,7 +5,7 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * 基于Jwt，用于前后端传递的令牌对象。
+ * 用户基础数据，存放redis中
  *
  * @author cqf
  * @date 2021-06-06

@@ -1,13 +1,17 @@
 package com.fontana.db.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fontana.base.result.CallResult;
 import com.fontana.db.object.MyRelationParam;
+import com.fontana.db.object.TableModelInfo;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * 所有Service的接口。
@@ -20,12 +24,53 @@ import java.util.function.Supplier;
 public interface IBaseService<M, K extends Serializable> extends IService<M>{
 
     /**
+     * 如果主键存在则更新，否则新增保存实体对象。
+     *
+     * @param data    实体对象数据。
+     * @param saveNew 新增实体对象方法。
+     * @param update  更新实体对象方法。
+     */
+    void saveNewOrUpdate(M data, Consumer<M> saveNew, BiConsumer<M, M> update);
+
+    /**
+     * 如果主键存在的则更新，否则批量新增保存实体对象。
+     *
+     * @param dataList     实体对象数据列表。
+     * @param saveNewBatch 批量新增实体对象方法。
+     * @param update       更新实体对象方法。
+     */
+    void saveNewOrUpdateBatch(List<M> dataList, Consumer<List<M>> saveNewBatch, BiConsumer<M, M> update);
+
+    /**
      * 根据过滤条件删除数据。
      *
      * @param filter 过滤对象。
      * @return 删除数量。
      */
     Integer removeBy(M filter);
+
+    /**
+     * 基于主从表之间的关联字段，批量改更新一对多从表数据。
+     * 该操作会覆盖增、删、改三个操作，具体如下：
+     * 1. 先删除。从表中relationFieldName字段的值为relationFieldValue, 同时主键Id不在dataList中的。
+     * 2. 再批量插入。遍历dataList中没有主键Id的对象，视为新对象批量插入。
+     * 3. 最后逐条更新，遍历dataList中有主键Id的对象，视为已存在对象并逐条更新。
+     * 4. 如果更新时间和更新用户Id为空，我们将视当前记录为变化数据，因此使用当前时间和用户分别填充这两个字段。
+     *
+     * @param relationFieldName     主从表关联中，从表的Java字段名。
+     * @param relationFieldValue    主从表关联中，与从表关联的主表字段值。该值会被赋值给从表关联字段。
+     * @param updateUserIdFieldName 一对多从表的更新用户Id字段名。
+     * @param updateTimeFieldName   一对多从表的更新时间字段名
+     * @param dataList              批量更新的从表数据列表。
+     * @param batchInserter         从表批量插入方法。
+     */
+    void updateBatchOneToManyRelation(
+            String relationFieldName,
+            Object relationFieldValue,
+            String updateUserIdFieldName,
+            String updateTimeFieldName,
+            List<M> dataList,
+            Consumer<List<M>> batchInserter);
 
     /**
      * 判断指定字段的数据是否存在，且仅仅存在一条记录。
@@ -94,6 +139,17 @@ public interface IBaseService<M, K extends Serializable> extends IService<M>{
      * @return 全部存在返回true，否则false。
      */
     <T> boolean existUniqueKeyList(String inFilterField, Set<T> inFilterValues);
+
+    /**
+     * 根据过滤字段和过滤集合，返回不存在的数据。
+     *
+     * @param filterField 过滤的Java字段。
+     * @param filterSet   过滤字段数据集合。
+     * @param findFirst   是否找到第一个就返回。
+     * @param <R> 过滤字段类型。
+     * @return filterSet中，在从表中不存在的数据集合。
+     */
+    <R> List<R> notExist(String filterField, Set<R> filterSet, boolean findFirst);
 
     /**
      * 返回符合主键 in (idValues) 条件的所有数据。
@@ -218,6 +274,126 @@ public interface IBaseService<M, K extends Serializable> extends IService<M>{
     Integer getCountByCondition(String whereClause);
 
     /**
+     * 根据最新对象和原有对象的数据对比，判断关联的字典数据和多对一主表数据是否都是合法数据。
+     * NOTE: BaseService中会给出返回CallResult.ok()的缺省实现。每个业务服务实现类在需要的时候可以重载该方法。
+     *
+     * @param data         数据对象。
+     * @param originalData 原有数据对象，null表示data为新增对象。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyRelatedData(M data, M originalData);
+
+    /**
+     * 根据最新对象和原有对象的数据对比，判断关联的字典数据和多对一主表数据是否都是合法数据。
+     * 如果data对象中包含主键值，方法内部会获取原有对象值，并进行更新方式的关联数据比对，否则视为新增数据关联对象比对。
+     *
+     * @param data 数据对象。
+     * @return 应答结果对象。
+     */
+    CallResult verifyRelatedData(M data);
+
+    /**
+     * 根据最新对象列表和原有对象列表的数据对比，判断关联的字典数据和多对一主表数据是否都是合法数据。
+     * 如果dataList列表中的对象包含主键值，方法内部会获取原有对象值，并进行更新方式的关联数据比对，否则视为新增数据关联对象比对。
+     *
+     * @param dataList 数据对象列表。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyRelatedData(List<M> dataList);
+
+    /**
+     * 根据最新对象和原有对象的数据对比，判断关联的远程字典数据和多对一主表数据是否都是合法数据。
+     * NOTE: BaseService中会给出返回CallResult.ok()的缺省实现。每个业务服务实现类在需要的时候可以重载该方法。
+     *
+     * @param data         数据对象。
+     * @param originalData 原有数据对象，null表示data为新增对象。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyRemoteRelatedData(M data, M originalData);
+
+    /**
+     * 根据最新对象列表和原有对象列表的数据对比，判断关联的远程字典数据和多对一主表数据是否都是合法数据。
+     * NOTE: BaseService中会给出返回CallResult.ok()的缺省实现。每个业务服务实现类在需要的时候可以重载该方法。
+     *
+     * @param dataList 数据对象列表。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyRemoteRelatedData(List<M> dataList);
+
+    /**
+     * 根据最新对象和原有对象的数据对比，判断关联的本地和远程字典数据和多对一主表数据是否都是合法数据。
+     * NOTE: BaseService中给出了缺省实现。
+     *
+     * @param data         数据对象。
+     * @param originalData 原有数据对象，null表示data为新增对象。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyAllRelatedData(M data, M originalData);
+
+    /**
+     * 根据最新对象和原有对象的数据对比，判断关联的本地和远程字典数据和多对一主表数据是否都是合法数据。
+     * NOTE: BaseService中给出了缺省实现。
+     * 如果data对象中包含主键值，方法内部会获取原有对象值，并进行更新方式的关联数据比对，否则视为新增数据关联对象比对。
+     *
+     * @param data 数据对象。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyAllRelatedData(M data);
+
+    /**
+     * 根据最新对象列表和原有对象列表的数据对比，判断关联的本地和远程字典数据和多对一主表数据是否都是合法数据。
+     * NOTE: BaseService中给出了缺省实现。
+     *
+     * @param dataList 数据对象列表。
+     * @return 数据全部正确返回true，否则false，同时返回具体的错误信息。
+     */
+    CallResult verifyAllRelatedData(List<M> dataList);
+
+    /**
+     * 批量导入数据列表，对依赖常量字典的数据进行验证。
+     *
+     * @param dataList  批量导入数据列表。
+     * @param fieldName 业务主表中依赖常量字典的字段名。
+     * @param idGetter  获取业务主表中依赖常量字典字段值的Function对象。
+     * @param <R>       业务主表中依赖常量字典的字段类型。
+     * @return 验证结果，如果失败，在data中包含具体的错误对象。
+     */
+    <R> CallResult verifyImportForConstDict(List<M> dataList, String fieldName, Function<M, R> idGetter);
+
+    /**
+     * 批量导入数据列表，对依赖字典表字典的数据进行验证。
+     *
+     * @param dataList  批量导入数据列表。
+     * @param fieldName 业务主表中依赖字典表字典的字段名。
+     * @param idGetter  获取业务主表中依赖字典表字典字段值的Function对象。
+     * @param <R>       业务主表中依赖字典表字典的字段类型。
+     * @return 验证结果，如果失败，在data中包含具体的错误对象。
+     */
+    <R> CallResult verifyImportForDict(List<M> dataList, String fieldName, Function<M, R> idGetter);
+
+    /**
+     * 批量导入数据列表，对依赖数据源字典的数据进行验证。
+     *
+     * @param dataList  批量导入数据列表。
+     * @param fieldName 业务主表中依赖数据源字典的字段名。
+     * @param idGetter  获取业务主表中依赖数据源字典字段值的Function对象。
+     * @param <R>       业务主表中依赖数据源字典的字段类型。
+     * @return 验证结果，如果失败，在data中包含具体的错误对象。
+     */
+    <R> CallResult verifyImportForDatasourceDict(List<M> dataList, String fieldName, Function<M, R> idGetter);
+
+    /**
+     * 批量导入数据列表，对存在一对一关联的数据进行验证。
+     *
+     * @param dataList  批量导入数据列表。
+     * @param fieldName 业务主表中存在一对一关联的字段名。
+     * @param idGetter  获取业务主表中一对一关联字段值的Function对象。
+     * @param <R>       业务主表中存在一对一关联的字段类型。
+     * @return 验证结果，如果失败，在data中包含具体的错误对象。
+     */
+    <R> CallResult verifyImportForOneToOneRelation(List<M> dataList, String fieldName, Function<M, R> idGetter);
+
+    /**
      * 集成所有与主表实体对象相关的关联数据列表。包括一对一、字典、一对多和多对多聚合运算等。
      * 也可以根据实际需求，单独调用该函数所包含的各个数据集成函数。
      * NOTE: 该方法内执行的SQL将禁用数据权限过滤。
@@ -300,19 +476,19 @@ public interface IBaseService<M, K extends Serializable> extends IService<M>{
     <T extends M> void buildRelationForData(T dataObject, MyRelationParam relationParam, Set<String> ignoreFields);
 
     /**
-     * 仅仅在spring boot 启动后的监听器事件中调用，缓存所有service的关联关系，加速后续的数据绑定效率。
+     * 仅仅在spring boot 启动后的监听器事件中调用，缓存所有远程调用Client的关联关系，加速后续的数据绑定效率。
      */
-    void loadRelationStruct();
+    void loadRemoteRelationStruct();
 
     /**
-     * 内部使用的批量保存方法。在使用前要确保清楚该方法的实现功能。
-     * 该方法通常用于从表数据的批量更新，为了保证已有数据的主键不变，我们通常会在执行该方法前，根据主表的关联数据，
-     * 删除从表中的数据。之后在迭代参数dataList，并将没有主键值的对象视为新对象，该方法将为这些新对象生成主键值。
-     * 其他包含主键值的对象，为已有对象，不做任何修改。填充主键后，将dataList集合中的数据批量插入到数据表。
-     *
-     * @param dataList      待操作的数据列表。
-     * @param idGenerator   主键值生成器方法。
-     * @param batchInserter 批量插入方法。
+     * 仅仅在spring boot 启动后的监听器事件中调用，缓存所有service的关联关系，加速后续的数据绑定效率。
      */
-    void saveInternal(List<M> dataList, Supplier<K> idGenerator, Consumer<List<M>> batchInserter);
+    void loadLocalRelationStruct();
+
+    /**
+     * 获取当前服务引用的实体对象及表信息。
+     *
+     * @return 实体对象及表信息。
+     */
+    TableModelInfo getTableModelInfo();
 }

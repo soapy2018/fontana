@@ -1,8 +1,8 @@
 package com.fontana.upmsapi.client;
 
 import com.fontana.base.result.Result;
-import com.fontana.cloud.feign.client.BaseClient;
 import com.fontana.cloud.feign.client.BaseFallbackFactory;
+import com.fontana.db.client.BaseClient;
 import com.fontana.upmsapi.dto.SysDeptDto;
 import com.fontana.upmsapi.vo.SysDeptVo;
 import lombok.extern.slf4j.Slf4j;

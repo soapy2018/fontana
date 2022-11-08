@@ -1,8 +1,10 @@
 package com.fontana.demo.feign;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.fontana.cloud.feign.EnableFeignInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -14,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 
 @EnableFeignClients(basePackages = "com.fontana.upmsapi")
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @EnableFeignInterceptor
 //要将fallbackFactory实现类初始化成bean
 @ComponentScan({"com.fontana.demo.feign", "com.fontana.upmsapi"})

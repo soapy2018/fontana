@@ -41,7 +41,7 @@ import java.util.List;
  * @author $!{author}
  * @since $!{date}
  */
-@Api(value = "$!{table.comment}", tags = "$!{table.comment}接口")
+@Api(tags = "$!{table.comment}接口")
 @RestController
 @RequestMapping("#if($!{package.ModuleName})/$!{package.ModuleName}#end/$!{cfg.entityKey}")
 #if($!{superControllerClass})
@@ -75,7 +75,7 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
     }
 
     /**
-     * 更新部门数据。
+     * 更新$!{entity}数据。
      *
      * @param $!{table.entityPath}DTO 更新对象。
      * @return 应答结果对象。
@@ -102,7 +102,7 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
     }
 
     /**
-     * 列出符合过滤条件的部门列表。
+     * 列出符合过滤条件的$!{entity}列表。
      *
      * @param $!{table.entityPath}DTOFilter 过滤对象。
      * @param orderParam 排序参数。
@@ -124,7 +124,7 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
     }
 
     /**
-     * 查看指定部门详情。
+     * 查看指定$!{entity}详情。
      *
      * @param $!{field.propertyName} 指定对象主键Id。
      * @return 应答结果对象，包含对象详情。
@@ -145,7 +145,7 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
     }
 
     /**
-     * 删除部门数据。
+     * 删除$!{entity}数据。
      *
      * @param $!{field.propertyName} 删除对象主键Id。
      * @return 应答结果对象。

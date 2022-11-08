@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @Data
 #end
 #if($!{swagger2})
-@ApiModel(value = "$!{entity}对象", description = #if ("$!{table.comment}"=="")"$!{entity}对象"#else"$!{table.comment}"#end)
+@ApiModel(value = "$!{entity}DTO对象", description = #if ("$!{table.comment}"=="")"$!{entity}DTO对象"#else"$!{table.comment}"#end)
 #end
 public class $!{entity}DTO {
 ## ----------  BEGIN 字段循环遍历  ----------

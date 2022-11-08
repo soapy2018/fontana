@@ -51,6 +51,13 @@ public @interface RelationOneToManyAggregation {
     String slaveIdField();
 
     /**
+     * 被关联远程调用对象的Class对象。如果为DummyClass.class，通常表示是本地关联。
+     *
+     * @return 被关联远程调用对象的Class对象。
+     */
+    Class<?> slaveClientClass() default DummyClass.class;
+
+    /**
      * 被关联Model对象中参与计算的聚合类型。具体数值参考AggregationType对象。
      *
      * @return 被关联Model对象中参与计算的聚合类型。

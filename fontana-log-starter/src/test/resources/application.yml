@@ -2,11 +2,11 @@ spring:
   application:
     name: common-log
 fontana:
-#  apilog:
-#    enabled: true
-#    showip: true
-#    showargs: true
-#    showHead: true
+  apilog:
+    enabled: true
+    showip: true
+    showargs: true
+    showHead: true
   requestlog:
     enabled: true
     showip: true

@@ -21,16 +21,22 @@ public class MyRelationParam {
     private boolean buildDict;
 
     /**
+     * 是否组装远程字典关联的标记。
+     * 组装RelationDict和RelationConstDict注解标记的字段。
+     */
+    private boolean buildRemoteDict;
+
+    /**
      * 是否组装一对一关联的标记。
      * 组装RelationOneToOne注解标记的字段。
      */
     private boolean buildOneToOne;
 
     /**
-     * 是否组装一对多关联的标记。
-     * 组装RelationOneToMany注解标记的字段。
+     * 是否组装远程一对一关联的标记。
+     * 组装RelationOneToOne注解标记的字段。
      */
-    private boolean buildOneToMany;
+    private boolean buildRemoteOneToOne;
 
     /**
      * 在组装一对一关联的同时，是否继续关联从表中的字典。
@@ -38,6 +44,19 @@ public class MyRelationParam {
      * 该字段为true时，无需设置buildOneToOne了。
      */
     private boolean buildOneToOneWithDict;
+
+    /**
+     * 在组装远程一对一关联的同时，是否继续关联从表中的字典。
+     * 从表中RelationDict和RelationConstDict注解标记的字段。
+     * 该字段为true时，无需设置buildOneToOne了。
+     */
+    private boolean buildRemoteOneToOneWithDict;
+
+    /**
+     * 是否组装本地一对多关联的标记。
+     * 组装RelationOneToMany注解标记的字段。
+     */
+    private boolean buildOneToMany;
 
     /**
      * 是否组装主表对多对多中间表关联的标记。
@@ -49,7 +68,13 @@ public class MyRelationParam {
      * 是否组装聚合计算关联的标记。
      * 组装RelationOneToManyAggregation和RelationManyToManyAggregation注解标记的字段。
      */
-    private boolean buildRelationAggregation;
+    private boolean buildAggregation;
+
+    /**
+     * 是否组装远程聚合计算关联的标记。
+     * 组装RelationOneToManyAggregation和RelationManyToManyAggregation注解标记的字段。
+     */
+    private boolean buildRemoteAggregation;
 
     /**
      * 便捷方法，返回仅做字典关联的参数对象。
@@ -57,7 +82,7 @@ public class MyRelationParam {
      * @return 返回仅做字典关联的参数对象。
      */
     public static MyRelationParam dictOnly() {
-        return MyRelationParam.builder().buildDict(true).build();
+        return MyRelationParam.builder().buildDict(true).buildRemoteDict(true).build();
     }
 
     /**
@@ -69,8 +94,11 @@ public class MyRelationParam {
     public static MyRelationParam normal() {
         return MyRelationParam.builder()
                 .buildDict(true)
+                .buildRemoteDict(true)
                 .buildOneToOneWithDict(true)
-                .buildRelationAggregation(true)
+                .buildRemoteOneToOneWithDict(true)
+                .buildAggregation(true)
+                .buildRemoteAggregation(true)
                 .build();
     }
 
@@ -82,8 +110,11 @@ public class MyRelationParam {
     public static MyRelationParam full() {
         return MyRelationParam.builder()
                 .buildDict(true)
+                .buildRemoteDict(true)
                 .buildOneToOneWithDict(true)
-                .buildRelationAggregation(true)
+                .buildRemoteOneToOneWithDict(true)
+                .buildAggregation(true)
+                .buildRemoteAggregation(true)
                 .buildRelationManyToMany(true)
                 .buildOneToMany(true)
                 .build();

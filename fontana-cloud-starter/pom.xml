@@ -17,10 +17,17 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.fontana</groupId>
             <artifactId>fontana-base</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- 依赖BaseClient-->
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-db-starter</artifactId>
         </dependency>
 
         <dependency>

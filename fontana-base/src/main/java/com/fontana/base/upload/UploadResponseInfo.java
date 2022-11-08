@@ -1,4 +1,4 @@
-package com.fontana.sb.updownload;
+package com.fontana.base.upload;
 
 import lombok.Data;
 

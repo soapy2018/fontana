@@ -73,7 +73,7 @@ public class MyCodeGenerator {
 	/**
 	 * 是否包含基础业务字段
 	 */
-	private Boolean hasSuperEntity = Boolean.FALSE;
+	private Boolean hasSuperEntity = Boolean.TRUE;
 	/**
 	 * 基础业务字段
 	 */
@@ -174,7 +174,7 @@ public class MyCodeGenerator {
 			strategy.setSuperServiceImplClass("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl");
 		}
 		// 自定义 controller 父类
-		strategy.setSuperControllerClass("com.fontana.db.controller.BaseController");
+		strategy.setSuperControllerClass("com.fontana.db.controller.AbstractBaseController");
 		//strategy.setEntityBuilderModel(false);
 		strategy.setEntityLombokModel(true);
 		strategy.setControllerMappingHyphenStyle(true);

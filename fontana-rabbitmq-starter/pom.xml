@@ -29,6 +29,7 @@
             <artifactId>fontana-util</artifactId>
             <optional>true</optional>
         </dependency>
+
         <!-- 消息总线 rabbitmq -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

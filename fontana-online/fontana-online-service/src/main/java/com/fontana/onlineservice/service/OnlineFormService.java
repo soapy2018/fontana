@@ -111,5 +111,6 @@ public interface OnlineFormService extends IBaseService<OnlineForm, Long> {
      * @param originalOnlineForm 原有数据对象。
      * @return 数据全部正确返回true，否则false。
      */
+    @Override
     CallResult verifyRelatedData(OnlineForm onlineForm, OnlineForm originalOnlineForm);
 }

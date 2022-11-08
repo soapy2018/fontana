@@ -64,6 +64,16 @@ public class MyQueryParam {
     private Boolean withDict = false;
 
     /**
+     * 参与模糊搜索的Java字段列表。
+     */
+    private List<String> searchStringFieldList;
+
+    /**
+     * 模糊搜索的字符串值，该值要包含百分号，这样可以精确控制搜索参数中百分号的配置。
+     */
+    private String searchStringValue;
+
+    /**
      * 缺省构造函数。
      */
     public MyQueryParam() {

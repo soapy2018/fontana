@@ -75,5 +75,6 @@ public interface OnlineVirtualColumnService extends IBaseService<OnlineVirtualCo
      * @param originalVirtualColumn 原有数据对象。
      * @return 数据全部正确返回true，否则false。
      */
+    @Override
     CallResult verifyRelatedData(OnlineVirtualColumn virtualColumn, OnlineVirtualColumn originalVirtualColumn);
 }

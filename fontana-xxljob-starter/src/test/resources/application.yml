@@ -7,7 +7,7 @@ fontana:
     ### 执行器通讯TOKEN [选填]：非空时启用
     accessToken: 123456
     ### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册
-    appname: xxl-job-executor-test
+    appname: xxl-job-executor-test3
     ### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题
     ## 默认取服务ip，我这里是配置路由器ip，因为xxl-job-admin所在的服务器（192.168.8.133）无法连到我的局域网ip
     ## 所以我在路由器上配置端口映射，将192.168.9.14:9999转到我的局域网ip:9999
@@ -21,8 +21,8 @@ fontana:
     ### 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能
     logretentiondays: 30
     ### 执行器名称
-    title: Exe-Titl
-    ### 调用中心用户
+    title: 执行器3
+    ### 调度中心用户
     username: admin
-    ### 调用中心密码
+    ### 调度中心密码
     password: 123456

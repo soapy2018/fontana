@@ -63,6 +63,7 @@ public interface SysPermService extends IBaseService<SysPerm, Long> {
      * @param originalSysPerm 原有对象。
      * @return 验证结果。
      */
+    @Override
     CallResult verifyRelatedData(SysPerm sysPerm, SysPerm originalSysPerm);
     
     /**

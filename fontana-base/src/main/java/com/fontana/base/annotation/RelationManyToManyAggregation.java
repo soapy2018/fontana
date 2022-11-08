@@ -51,6 +51,13 @@ public @interface RelationManyToManyAggregation {
     String slaveIdField();
 
     /**
+     * 被关联远程调用对象的Class对象。如果为DummyClass.class，通常表示是本地关联。
+     *
+     * @return 被关联远程调用对象的Class对象。
+     */
+    Class<?> slaveClientClass() default DummyClass.class;
+
+    /**
      * 多对多关联表Model对象的Class对象。
      *
      * @return 被关联Model对象的Class对象。

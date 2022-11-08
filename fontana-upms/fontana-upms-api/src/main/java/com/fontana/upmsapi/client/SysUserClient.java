@@ -2,11 +2,10 @@ package com.fontana.upmsapi.client;
 
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
-import com.fontana.cloud.feign.client.BaseClient;
 import com.fontana.cloud.feign.client.BaseFallbackFactory;
+import com.fontana.db.client.BaseClient;
 import com.fontana.upmsapi.dto.SysUserDto;
 import com.fontana.upmsapi.vo.SysUserVo;
-import feign.Headers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;

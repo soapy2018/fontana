@@ -19,7 +19,8 @@ import org.springframework.context.annotation.Configuration;
         TraceProperties.class,
         ApiLogProperties.class,
         RequestLogProperties.class})
-@ComponentScan //总入口，模块里其他bean靠它拉起
+//总入口，模块里其他bean靠它拉起
+@ComponentScan
 @Configuration
 public class LogAutoConfigure {
 

@@ -21,6 +21,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -28,7 +29,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * 获取Servlet HttpRequest和HttpResponse的工具类。
@@ -38,6 +38,8 @@ import java.util.Optional;
  */
 @Slf4j
 public class WebContextUtil extends WebUtils {
+
+    private static final String DEFAULT_VALUE = "00000000";
 
     /**
      * 判断当前是否处于HttpServletRequest上下文环境。
@@ -145,7 +147,15 @@ public class WebContextUtil extends WebUtils {
      */
     public static String getUserId(HttpServletRequest request) {
 
-        String userId = request.getHeader(HttpConstants.X_USER_ID_HEADER);
+        String userId = request.getParameter(HttpConstants.X_USER_ID_HEADER);
+
+        if(CharSequenceUtil.isEmpty(userId)){
+            userId = request.getParameter(HttpConstants.USER_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userId)) {
+            userId = request.getHeader(HttpConstants.X_USER_ID_HEADER);
+        }
 
         if(CharSequenceUtil.isEmpty(userId)){
             userId = request.getHeader(HttpConstants.USER_ID_HEADER);
@@ -154,10 +164,10 @@ public class WebContextUtil extends WebUtils {
         if(CharSequenceUtil.isEmpty(userId)){
             TokenData tokenData = takeTokenFromRequest();
             if(null != tokenData) {
-                return tokenData.getUserId().toString();
+                return ObjectUtil.defaultIfNull(tokenData.getUserId(), DEFAULT_VALUE).toString();
             }
         }
-        return ObjectUtil.defaultIfNull(userId, "99999");
+        return ObjectUtil.defaultIfNull(userId, DEFAULT_VALUE);
     }
 
     /**
@@ -177,7 +187,15 @@ public class WebContextUtil extends WebUtils {
      */
     public static String getUserName(HttpServletRequest request) {
 
-        String userName = request.getHeader(HttpConstants.X_USER_NAME_HEADER);
+        String userName = request.getParameter(HttpConstants.X_USER_NAME_HEADER);
+
+        if(CharSequenceUtil.isEmpty(userName)){
+            userName = request.getParameter(HttpConstants.USER_NAME_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userName)) {
+            userName = request.getHeader(HttpConstants.X_USER_NAME_HEADER);
+        }
 
         if(CharSequenceUtil.isEmpty(userName)){
             userName = request.getHeader(HttpConstants.USER_NAME_HEADER);
@@ -186,10 +204,10 @@ public class WebContextUtil extends WebUtils {
         if(CharSequenceUtil.isEmpty(userName)){
             TokenData tokenData = takeTokenFromRequest();
             if(null != tokenData) {
-                return tokenData.getUserId().toString();
+                return  ObjectUtil.defaultIfNull(tokenData.getUserName(), DEFAULT_VALUE);
             }
         }
-        return  ObjectUtil.defaultIfNull(userName, "未知用户");
+        return  ObjectUtil.defaultIfNull(userName, DEFAULT_VALUE);
     }
 
     /**
@@ -227,10 +245,10 @@ public class WebContextUtil extends WebUtils {
         if(CharSequenceUtil.isEmpty(tenantId)){
             TokenData tokenData = takeTokenFromRequest();
             if(null != tokenData) {
-                return tokenData.getTenantId().toString();
+                return ObjectUtil.defaultIfNull(tokenData.getTenantId(), DEFAULT_VALUE).toString();
             }
         }
-        return  ObjectUtil.defaultIfNull(tenantId, "77777");
+        return  ObjectUtil.defaultIfNull(tenantId, DEFAULT_VALUE);
     }
 
     /**
@@ -248,9 +266,17 @@ public class WebContextUtil extends WebUtils {
      * @param request
      * @return
      */
-    public static String getFactoryId(HttpServletRequest request) {
+    public static String getFactoryId(@NotNull HttpServletRequest  request) {
 
-        String factoryId = request.getHeader(HttpConstants.X_FACTORY_ID_HEADER);
+        String factoryId = request.getParameter(HttpConstants.X_FACTORY_ID_HEADER);
+
+        if(CharSequenceUtil.isEmpty(factoryId)){
+            factoryId = request.getParameter(HttpConstants.FACTORY_ID_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(factoryId)) {
+            factoryId = request.getHeader(HttpConstants.X_FACTORY_ID_HEADER);
+        }
 
         if(CharSequenceUtil.isEmpty(factoryId)){
             factoryId = request.getHeader(HttpConstants.FACTORY_ID_HEADER);
@@ -259,10 +285,10 @@ public class WebContextUtil extends WebUtils {
         if(CharSequenceUtil.isEmpty(factoryId)){
             TokenData tokenData = takeTokenFromRequest();
             if(null != tokenData) {
-                return tokenData.getUserId().toString();
+                return ObjectUtil.defaultIfNull(tokenData.getUserId(), DEFAULT_VALUE).toString();
             }
         }
-        return  factoryId;
+        return  ObjectUtil.defaultIfNull(factoryId, DEFAULT_VALUE);
     }
 
     /**
@@ -378,6 +404,7 @@ public class WebContextUtil extends WebUtils {
      *
      * @return 令牌对象。
      */
+    @Nullable
     public static TokenData takeTokenFromRequest() {
 
         if(!WebContextUtil.hasRequestContext()){

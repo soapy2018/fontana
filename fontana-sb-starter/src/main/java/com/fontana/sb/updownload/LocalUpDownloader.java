@@ -2,6 +2,7 @@ package com.fontana.sb.updownload;
 
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.result.ResultCode;
+import com.fontana.base.upload.UploadResponseInfo;
 import com.fontana.base.upload.UploadStoreTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

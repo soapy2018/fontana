@@ -2,6 +2,7 @@ package com.fontana.db.util;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ReflectUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -9,6 +10,7 @@ import com.fontana.base.annotation.*;
 import com.fontana.base.constant.DataBaseConstant;
 import com.fontana.base.exception.GeneralException;
 import com.fontana.base.object.Tuple2;
+import com.fontana.base.upload.UploadResponseInfo;
 import com.fontana.base.upload.UploadStoreInfo;
 import com.fontana.util.request.WebContextUtil;
 import com.google.common.base.CaseFormat;
@@ -50,20 +52,34 @@ public class MyModelUtil {
     private static final Map<String, Tuple2<String, Integer>> CACHED_COLUMNINFO_MAP = new ConcurrentHashMap<>();
 
     /**
-     * 将bean的数据列表转换为Map列表。
+     * 将Bean的数据列表转换为Map列表。
      *
-     * @param dataList bean数据列表。
-     * @param <T>      bean对象类型。
+     * @param dataList Bean数据列表。
+     * @param <T>      Bean对象类型。
      * @return 转换后的Map列表。
      */
     public static <T> List<Map<String, Object>> beanToMapList(List<T> dataList) {
         if (CollectionUtils.isEmpty(dataList)) {
-            return null;
+            return new LinkedList<>();
         }
         List<Map<String, Object>> resultList = new LinkedList<>();
-        for (T data : dataList) {
-            resultList.add(BeanUtil.beanToMap(data));
+        dataList.forEach(data -> resultList.add(BeanUtil.beanToMap(data)));
+        return resultList;
+    }
+
+    /**
+     * 将Map的数据列表转换为Bean列表。
+     *
+     * @param dataList Map数据列表。
+     * @param <T>      Bean对象类型。
+     * @return 转换后的Bean对象列表。
+     */
+    public static <T> List<T> mapToBeanList(List<Map<String, Object>> dataList, Class<T> clazz) {
+        if (CollectionUtils.isEmpty(dataList)) {
+            return new LinkedList<>();
         }
+        List<T> resultList = new LinkedList<>();
+        dataList.forEach(data -> resultList.add(BeanUtil.toBeanIgnoreError(data, clazz)));
         return resultList;
     }
 
@@ -235,6 +251,19 @@ public class MyModelUtil {
     }
 
     /**
+     * 根据参数中的数据列表和字段提取函数，封装stream api的方式返回指定字段的数据。
+     *
+     * @param dataList        数据对象列表。
+     * @param fieldGetterFunc 字段获取函数。
+     * @param <T>             数据对象类型。
+     * @param <K>             返回字段类型。
+     * @return 指定字段Set集合。
+     */
+    public static <T, K> Set<K> retrieveFieldSet(Collection<T> dataList, Function<T, K> fieldGetterFunc) {
+        return dataList.stream().map(fieldGetterFunc).collect(Collectors.toSet());
+    }
+
+    /**
      * 主Model类型中，遍历所有包含RelationConstDict注解的字段，并将关联的静态字典中的数据，
      * 填充到thisModel对象的被注解字段中。
      *
@@ -311,6 +340,70 @@ public class MyModelUtil {
                 }
             }
         }
+    }
+
+    /**
+     * 在主Model类型中，根据thisRelationField字段的RelationDict注解参数，将被关联对象thatModel中的数据，
+     * 关联到thisModel对象的thisRelationField字段中。
+     *
+     * @param thisClazz         主对象的Class对象。
+     * @param thisModel         主对象。
+     * @param thatModel         字典关联对象，其实就是字典项对象。
+     * @param thisRelationField 主表对象中保存被关联对象的字段名称。
+     * @param <T>               主表对象类型。
+     * @param <R>               从表对象类型。
+     */
+    public static <T, R> void makeSysDictRelation(
+            Class<T> thisClazz, T thisModel, R thatModel, String thisRelationField) {
+        if (thatModel == null || thisModel == null) {
+            return;
+        }
+        // 这里不做任何空值判断，从而让配置错误在调试期间即可抛出
+        Field thisTargetField = ReflectUtil.getField(thisClazz, thisRelationField);
+        RelationSysDict r = thisTargetField.getAnnotation(RelationSysDict.class);
+        Map<String, Object> m = new HashMap<>(2);
+        m.put("id", ReflectUtil.getFieldValue(thatModel, r.itemValueName()));
+        m.put("name", ReflectUtil.getFieldValue(thatModel, r.itemTextName()));
+        ReflectUtil.setFieldValue(thisModel, thisTargetField, m);
+    }
+
+    /**
+     * 在主Model类型中，根据thisRelationField字段的RelationDict注解参数，将被关联对象集合thatModelList中的数据，
+     * 逐个关联到thisModelList每一个元素的thisRelationField字段中。
+     *
+     * @param thisClazz         主对象的Class对象。
+     * @param thisModelList     主对象列表。
+     * @param thatModelList     字典关联对象列表集合。
+     * @param thisRelationField 主表对象中保存被关联对象的字段名称。
+     * @param <T>               主表对象类型。
+     * @param <R>               从表对象类型。
+     */
+    public static <T, R> void makeSysDictRelation(
+            Class<T> thisClazz, List<T> thisModelList, List<R> thatModelList, String thisRelationField) {
+        if (CollectionUtils.isEmpty(thatModelList)
+                || CollectionUtils.isEmpty(thisModelList)) {
+            return;
+        }
+        // 这里不做任何空值判断，从而让配置错误在调试期间即可抛出
+        Field thisTargetField = ReflectUtil.getField(thisClazz, thisRelationField);
+        RelationSysDict r = thisTargetField.getAnnotation(RelationSysDict.class);
+        Map<Object, R> thatMap = new HashMap<>(20);
+        thatModelList.forEach(thatModel -> {
+            Object id = ReflectUtil.getFieldValue(thatModel, r.itemValueName());
+            thatMap.put(id, thatModel);
+        });
+        thisModelList.forEach(thisModel -> {
+            if (thisModel != null) {
+                Object id = ReflectUtil.getFieldValue(thisModel, r.masterIdField());
+                R thatModel = thatMap.get(id.toString());
+                if (thatModel != null) {
+                    Map<String, Object> m = new HashMap<>(4);
+                    m.put("id", id);
+                    m.put("name", ReflectUtil.getFieldValue(thatModel, r.itemTextName()));
+                    ReflectUtil.setFieldValue(thisModel, thisTargetField, m);
+                }
+            }
+        });
     }
 
     /**
@@ -695,6 +788,46 @@ public class MyModelUtil {
         if (v == null) {
             ReflectUtil.setFieldValue(data, fieldName, defaultValue);
         }
+    }
+
+    /**
+     * 获取当前数据对象中，所有上传文件字段的数据，并将上传后的文件名存到集合中并返回。
+     *
+     * @param data  数据对象。
+     * @param clazz 数据对象的Class类型。
+     * @param <M>   数据对象类型。
+     * @return 当前数据对象中，所有上传文件字段中，文件名属性的集合。
+     */
+    public static <M> Set<String> extractDownloadFileName(M data, Class<M> clazz) {
+        Set<String> resultSet = new HashSet<>();
+        Field[] fields = ReflectUtil.getFields(clazz);
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(UploadFlagColumn.class)) {
+                String v = (String) ReflectUtil.getFieldValue(data, field);
+                List<UploadResponseInfo> fileInfoList = JSON.parseArray(v, UploadResponseInfo.class);
+                if (CollectionUtils.isNotEmpty(fileInfoList)) {
+                    fileInfoList.forEach(fileInfo -> resultSet.add(fileInfo.getFilename()));
+                }
+            }
+        }
+        return resultSet;
+    }
+
+    /**
+     * 获取当前数据对象列表中，所有上传文件字段的数据，并将上传后的文件名存到集合中并返回。
+     *
+     * @param dataList 数据对象。
+     * @param clazz    数据对象的Class类型。
+     * @param <M>      数据对象类型。
+     * @return 当前数据对象中，所有上传文件字段中，文件名属性的集合。
+     */
+    public static <M> Set<String> extractDownloadFileName(List<M> dataList, Class<M> clazz) {
+        Set<String> resultSet = new HashSet<>();
+        if (CollectionUtils.isEmpty(dataList)) {
+            return resultSet;
+        }
+        dataList.forEach(data -> resultSet.addAll(extractDownloadFileName(data, clazz)));
+        return resultSet;
     }
 
     /**

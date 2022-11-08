@@ -81,6 +81,16 @@ public class Result<T> implements Serializable {
         return of(null, errorCause.code, errorCause.msg);
     }
 
+    /**
+     * 根据参数中出错的CallResult，创建新的错误应答对象。
+     *
+     * @param errorCause 导致错误原因的应答对象。
+     * @return 返回创建的Result实例对象。
+     */
+    public static <T> Result<T> faild(CallResult errorCause) {
+        return failed(ResultCode.DATA_VALIDATED_FAILED, errorCause.getErrorMessage());
+    }
+
 //    public boolean isSuccess(){
 //        return code == 1;
 //    }

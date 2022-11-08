@@ -23,7 +23,6 @@ import java.util.List;
 @Tenant
 @Service
 @ConditionalOnProperty(prefix = CommonConstants.TENANT_PREFIX, name = "type", havingValue = "db")
-//@ConditionalOnProperty(prefix = CommonConstants.DYNAMIC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true")
 public class TenantInfoServiceImpl extends SuperServiceImpl<TenantInfoMapper, TenantInfo> implements ITenantInfoService {
     @Override
     public List<TenantInfo> getActiveTenantsList() {

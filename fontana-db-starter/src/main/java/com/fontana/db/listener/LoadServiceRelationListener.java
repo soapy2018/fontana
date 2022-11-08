@@ -22,7 +22,8 @@ public class LoadServiceRelationListener implements ApplicationListener<Applicat
         Map<String, AbstractBaseService> serviceMap =
                 applicationReadyEvent.getApplicationContext().getBeansOfType(AbstractBaseService.class);
         for (Map.Entry<String, AbstractBaseService> e : serviceMap.entrySet()) {
-            e.getValue().loadRelationStruct();
+            e.getValue().loadLocalRelationStruct();
+            e.getValue().loadRemoteRelationStruct();
         }
     }
 }
