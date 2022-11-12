@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.constant.AppDeviceType;
 import com.fontana.base.constant.HttpConstants;
+import com.fontana.base.constant.StringPool;
 import com.fontana.base.object.TokenData;
 import com.fontana.base.result.Result;
 import com.fontana.util.tools.ClassUtil;
@@ -364,7 +365,7 @@ public class WebContextUtil extends WebUtils {
      */
     public static void setCookie(HttpServletResponse response, String name, @Nullable String value, int maxAgeInSeconds) {
         Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
+        cookie.setPath(StringPool.SLASH);
         cookie.setMaxAge(maxAgeInSeconds);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);

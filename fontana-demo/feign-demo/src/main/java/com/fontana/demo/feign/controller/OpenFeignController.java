@@ -2,13 +2,9 @@ package com.fontana.demo.feign.controller;
 
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
-import com.fontana.base.upload.UploadStoreInfo;
-import com.fontana.base.upload.UploadStoreTypeEnum;
+import com.fontana.util.updownload.*;
 import com.fontana.demo.feign.config.ApplicationConfig;
 import com.fontana.redis.util.SessionCacheHelper;
-import com.fontana.sb.updownload.BaseUpDownloader;
-import com.fontana.sb.updownload.UpDownloaderFactory;
-import com.fontana.base.upload.UploadResponseInfo;
 import com.fontana.upmsapi.client.SysUserClient;
 import com.fontana.upmsapi.vo.SysUserVo;
 import com.fontana.util.request.WebContextUtil;

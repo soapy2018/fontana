@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.fontana.util.tools.SpringContextHolder
+com.fontana.util.tools.SpringContextHolder,\
+com.fontana.util.updownload.UpDownloaderFactory

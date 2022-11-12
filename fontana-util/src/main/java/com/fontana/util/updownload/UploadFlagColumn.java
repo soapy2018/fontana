@@ -1,6 +1,5 @@
-package com.fontana.base.annotation;
+package com.fontana.util.updownload;
 
-import com.fontana.base.upload.UploadStoreTypeEnum;
 import java.lang.annotation.*;
 
 /**

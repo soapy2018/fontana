@@ -216,19 +216,19 @@ public class MyCodeGenerator {
 				map.put("editMenuId", IdWorker.getId());
 				map.put("removeMenuId", IdWorker.getId());
 				map.put("viewMenuId", IdWorker.getId());
-				return getOutputDir() + "/" + "/sql/" + tableInfo.getEntityName().toLowerCase() + ".menu.mysql";
+				return getOutputDir() + StringPool.SLASH + "/sql/" + tableInfo.getEntityName().toLowerCase() + ".menu.mysql";
 			}
 		});
 		focList.add(new FileOutConfig("/templates/entityVO.java.vm") {
 			@Override
 			public String outputFile(TableInfo tableInfo) {
-				return getOutputDir() + "/" + packageName.replace("service", "api").replace(".", "/") + "/" + "vo" + "/" + tableInfo.getEntityName() + "VO" + StringPool.DOT_JAVA;
+				return getOutputDir() + StringPool.SLASH + packageName.replace("service", "api").replace(".", StringPool.SLASH) + StringPool.SLASH + "vo" + StringPool.SLASH + tableInfo.getEntityName() + "VO" + StringPool.DOT_JAVA;
 			}
 		});
 		focList.add(new FileOutConfig("/templates/entityDTO.java.vm") {
 			@Override
 			public String outputFile(TableInfo tableInfo) {
-				return getOutputDir() + "/" + packageName.replace("service", "api").replace(".", "/") + "/" + "dto" + "/" + tableInfo.getEntityName() + "DTO" + StringPool.DOT_JAVA;
+				return getOutputDir() + StringPool.SLASH + packageName.replace("service", "api").replace(".", StringPool.SLASH) + StringPool.SLASH + "dto" + StringPool.SLASH + tableInfo.getEntityName() + "DTO" + StringPool.DOT_JAVA;
 			}
 		});
 
@@ -237,56 +237,56 @@ public class MyCodeGenerator {
 			focList.add(new FileOutConfig("/templates/react/action.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/actions" + "/" + tableInfo.getEntityName().toLowerCase() + ".js";
+					return getOutputWebDir() + "/actions" + StringPool.SLASH + tableInfo.getEntityName().toLowerCase() + ".js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/react/model.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/models" + "/" + tableInfo.getEntityName().toLowerCase() + ".js";
+					return getOutputWebDir() + "/models" + StringPool.SLASH + tableInfo.getEntityName().toLowerCase() + ".js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/react/service.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/services" + "/" + tableInfo.getEntityName().toLowerCase() + ".js";
+					return getOutputWebDir() + "/services" + StringPool.SLASH + tableInfo.getEntityName().toLowerCase() + ".js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/react/list.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/pages" + "/" + StringUtil.upperFirst(servicePackage) + "/" + tableInfo.getEntityName() + "/" + tableInfo.getEntityName() + ".js";
+					return getOutputWebDir() + "/pages" + StringPool.SLASH + StringUtil.upperFirst(servicePackage) + StringPool.SLASH + tableInfo.getEntityName() + StringPool.SLASH + tableInfo.getEntityName() + ".js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/react/add.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/pages" + "/" + StringUtil.upperFirst(servicePackage) + "/" + tableInfo.getEntityName() + "/" + tableInfo.getEntityName() + "Add.js";
+					return getOutputWebDir() + "/pages" + StringPool.SLASH + StringUtil.upperFirst(servicePackage) + StringPool.SLASH + tableInfo.getEntityName() + StringPool.SLASH + tableInfo.getEntityName() + "Add.js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/react/edit.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/pages" + "/" + StringUtil.upperFirst(servicePackage) + "/" + tableInfo.getEntityName() + "/" + tableInfo.getEntityName() + "Edit.js";
+					return getOutputWebDir() + "/pages" + StringPool.SLASH + StringUtil.upperFirst(servicePackage) + StringPool.SLASH + tableInfo.getEntityName() + StringPool.SLASH + tableInfo.getEntityName() + "Edit.js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/react/view.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/pages" + "/" + StringUtil.upperFirst(servicePackage) + "/" + tableInfo.getEntityName() + "/" + tableInfo.getEntityName() + "View.js";
+					return getOutputWebDir() + "/pages" + StringPool.SLASH + StringUtil.upperFirst(servicePackage) + StringPool.SLASH + tableInfo.getEntityName() + StringPool.SLASH + tableInfo.getEntityName() + "View.js";
 				}
 			});
 		} else if (SupUtil.equals(systemName, CodeGenConstant.VUE_NAME)) {
 			focList.add(new FileOutConfig("/templates/vue/api.js.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/api" + "/" + servicePackage.toLowerCase() + "/" + tableInfo.getEntityName().toLowerCase() + ".js";
+					return getOutputWebDir() + "/api" + StringPool.SLASH + servicePackage.toLowerCase() + StringPool.SLASH + tableInfo.getEntityName().toLowerCase() + ".js";
 				}
 			});
 			focList.add(new FileOutConfig("/templates/vue/crud.vue.vm") {
 				@Override
 				public String outputFile(TableInfo tableInfo) {
-					return getOutputWebDir() + "/views" + "/" + servicePackage.toLowerCase() + "/" + tableInfo.getEntityName().toLowerCase() + ".vue";
+					return getOutputWebDir() + "/views" + StringPool.SLASH + servicePackage.toLowerCase() + StringPool.SLASH + tableInfo.getEntityName().toLowerCase() + ".vue";
 				}
 			});
 		}
@@ -318,7 +318,7 @@ public class MyCodeGenerator {
 	 * @return outputDir
 	 */
 	public String getOutputDir() {
-		String outputBackDir = (SupUtil.isBlank(outputDir) ? System.getProperty("user.dir") + "/output/back" : outputDir) + "/" + serviceName + "/back/src/main/java";
+		String outputBackDir = (SupUtil.isBlank(outputDir) ? System.getProperty("user.dir") + "/output/back" : outputDir) + StringPool.SLASH + serviceName + "/back/src/main/java";
 		System.out.println("outputBackDir: " + outputBackDir);
 		return outputBackDir;
 	}
@@ -329,7 +329,7 @@ public class MyCodeGenerator {
 	 * @return outputDir
 	 */
 	public String getOutputWebDir() {
-		String outputWebDir = (SupUtil.isBlank(outputDir) ? System.getProperty("user.dir") + "/output/front" : outputDir) + "/" + serviceName + "/front/src";
+		String outputWebDir = (SupUtil.isBlank(outputDir) ? System.getProperty("user.dir") + "/output/front" : outputDir) + StringPool.SLASH + serviceName + "/front/src";
 		System.out.println("outPutWebDir: " + outputWebDir);
 		return outputWebDir;
 	}
@@ -339,7 +339,7 @@ public class MyCodeGenerator {
 	 */
 	private String getGeneratorViewPath(String viewOutputDir, TableInfo tableInfo, String suffixPath) {
 		String name = StringUtils.firstToLowerCase(tableInfo.getEntityName());
-		String path = viewOutputDir + "/" + name + "/" + name + suffixPath;
+		String path = viewOutputDir + StringPool.SLASH + name + StringPool.SLASH + name + suffixPath;
 		File viewDir = new File(path).getParentFile();
 		if (!viewDir.exists()) {
 			viewDir.mkdirs();

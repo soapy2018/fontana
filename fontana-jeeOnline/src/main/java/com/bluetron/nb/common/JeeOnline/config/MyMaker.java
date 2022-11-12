@@ -22,7 +22,7 @@ public class MyMaker {
     static {
         configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setNumberFormat("0.#####################");
-        configuration.setClassForTemplateLoading(MyMaker.class, "/");
+        configuration.setClassForTemplateLoading(MyMaker.class, StringPool.SLASH);
     }
 
     public static String maker(String name, String encoding, Map<String, Object> dataModel) {

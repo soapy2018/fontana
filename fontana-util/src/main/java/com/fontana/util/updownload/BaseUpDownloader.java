@@ -1,8 +1,8 @@
-package com.fontana.sb.updownload;
+package com.fontana.util.updownload;
 
 import com.alibaba.fastjson.JSON;
 import com.fontana.base.constant.CommonConstants;
-import com.fontana.base.upload.UploadResponseInfo;
+import com.fontana.base.constant.StringPool;
 import com.fontana.util.request.WebContextUtil;
 import com.fontana.util.tools.IdUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,14 +38,14 @@ public abstract class BaseUpDownloader {
             String rootBaseDir, String modelName, String fieldName, Boolean asImage) {
         StringBuilder uploadPathBuilder = new StringBuilder(128);
         if (StringUtils.isNotBlank(rootBaseDir)) {
-            uploadPathBuilder.append(rootBaseDir).append("/");
+            uploadPathBuilder.append(rootBaseDir).append(StringPool.SLASH);
         }
         if (Boolean.TRUE.equals(asImage)) {
             uploadPathBuilder.append(CommonConstants.UPLOAD_IMAGE_PARENT_PATH);
         } else {
             uploadPathBuilder.append(CommonConstants.UPLOAD_ATTACHMENT_PARENT_PATH);
         }
-        uploadPathBuilder.append("/").append(modelName).append("/").append(fieldName).append("/");
+        uploadPathBuilder.append(StringPool.SLASH).append(modelName).append(StringPool.SLASH).append(fieldName).append(StringPool.SLASH);
         return uploadPathBuilder.toString();
     }
 
@@ -60,7 +60,7 @@ public abstract class BaseUpDownloader {
         // 根据请求上传的uri构建下载uri，只是将末尾的/upload改为/download即可。
         HttpServletRequest request = WebContextUtil.getHttpRequest();
         String uri = request.getRequestURI();
-        uri = StringUtils.removeEnd(uri, "/");
+        uri = StringUtils.removeEnd(uri, StringPool.SLASH);
         uri = StringUtils.removeEnd(uri, "/upload");
         String downloadUri;
         if (StringUtils.isBlank(serviceContextPath)) {

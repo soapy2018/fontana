@@ -1,5 +1,6 @@
 package com.fontana.util.tools;
 
+import com.fontana.base.constant.StringPool;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class YamlUtil {
   private static void loadYml(String fileName){
     nowFileName.set(fileName);
     if (!ymls.containsKey(fileName)){
-      ymls.put(fileName , new Yaml().loadAs(YamlUtil.class.getResourceAsStream("/" + fileName),
+      ymls.put(fileName , new Yaml().loadAs(YamlUtil.class.getResourceAsStream(StringPool.SLASH + fileName),
           LinkedHashMap.class));
     }
   }

@@ -2,6 +2,7 @@ package com.fontana.oss.tests3;
 
 import com.fontana.oss.model.ObjectInfo;
 import com.fontana.oss.template.S3Template;
+import com.fontana.util.tools.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.entity.ContentType;
 import org.junit.Test;
@@ -35,7 +36,8 @@ public class S3Test {
 
     @Test
     public void testS3() throws IOException {
-
+        SpringContextHolder.getBean("S3Template");
+        SpringContextHolder.getBean("OssUpDownloader");
 
         ObjectInfo objectInfo;
         s3Template.delete("美女1.jpeg");
@@ -53,6 +55,12 @@ public class S3Test {
         );
         objectInfo = s3Template.upload(mulFile2);
         log.info("ObjectInfo: {}--{}", objectInfo.getObjectPath(), objectInfo.getObjectUrl());
+
+        s3Template.createBucket("test2");
+        objectInfo = s3Template.upload("test2", "/dd/美女kk.jpeg", new FileInputStream("src/test/resources/美女.jpeg"));
+        log.info("ObjectInfo: {}--{}", objectInfo.getObjectPath(), objectInfo.getObjectUrl());
+
+        s3Template.download("test2","/dd/美女kk.jpeg", "src/test/resources/美女kk2.jpeg");
 
 
         s3Template.download("美女1.jpeg", "src/test/resources/美女1.jpeg");

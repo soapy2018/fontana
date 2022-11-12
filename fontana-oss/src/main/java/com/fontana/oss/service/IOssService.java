@@ -1,8 +1,13 @@
 package com.fontana.oss.service;
 
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.fontana.oss.model.ObjectInfo;
+import lombok.SneakyThrows;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -32,9 +37,24 @@ public interface IOssService {
     void delete(String objectKey);
 
     /**
-     * 查看文件
-     * @param objectPath 对象路径
+     * 输出对象
+     * @param objectName 对象名
      * @param os 输出流
      */
-    void view(String objectPath, OutputStream os);
+    void download(String objectName, OutputStream os);
+
+    /**
+     * 输出对象
+     * @param objectName 对象名
+     * @param response 响应
+     */
+
+    void download(String objectName, HttpServletResponse response);
+
+//    /**
+//     * 查看文件
+//     * @param objectPath 对象路径
+//     * @param os 输出流
+//     */
+//    void view(String objectPath, OutputStream os);
 }

@@ -1,4 +1,4 @@
-package com.fontana.base.upload;
+package com.fontana.util.updownload;
 
 /**
  * 上传数据存储介质类型枚举。
@@ -15,5 +15,5 @@ public enum UploadStoreTypeEnum {
     /**
      * minio分布式存储。
      */
-    MINIO_SYSTEM
+    OSS_SYSTEM
 }

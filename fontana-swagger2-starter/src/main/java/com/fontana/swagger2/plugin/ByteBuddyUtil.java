@@ -56,7 +56,7 @@ public class ByteBuddyUtil {
     }
 
     private static CtField createField(ResolvedMethodParameter parameter, String parameterName, CtClass ctClass)
-            throws NotFoundException, CannotCompileException {
+            throws CannotCompileException {
         CtField field = new CtField(getFieldType(parameter.getParameterType().getErasedType()), parameterName, ctClass);
         field.setModifiers(Modifier.PUBLIC);
         return field;

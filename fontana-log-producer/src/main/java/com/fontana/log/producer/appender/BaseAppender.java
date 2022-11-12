@@ -3,6 +3,7 @@ package com.fontana.log.producer.appender;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.encoder.Encoder;
+import com.fontana.base.constant.StringPool;
 import com.fontana.log.producer.appender.builder.LogItemBuilder;
 import com.fontana.log.producer.appender.handler.ILogHandler;
 import com.fontana.log.producer.producer.BaseLogItem;
@@ -145,9 +146,9 @@ public abstract class BaseAppender<E> extends UnsynchronizedAppenderBase<E> {
     if (logServ == null || logServ.isEmpty() || serv.equals("logServ_IS_UNDEFINED")) {
        throw new RuntimeException("初始化appender失败 没有配置 app.log.logServ");
     }
-    if (serv.endsWith("/")) {
+    if (serv.endsWith(StringPool.SLASH)) {
       //防止最后以/结尾，在拼接完整路径的时候会有问题，所以要移除
-      serv = serv.substring(0, serv.lastIndexOf("/"));
+      serv = serv.substring(0, serv.lastIndexOf(StringPool.SLASH));
     }
     map.put(Constants.LOG_STORE_CONFIG_KEY_SOLR_HOST, serv);
     map.put(Constants.LOG_STORE_NAME, getLogStore());

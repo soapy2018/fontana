@@ -14,16 +14,23 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.fontana.base.constant.CommonConstants;
+import com.fontana.base.constant.StringPool;
 import com.fontana.oss.model.ObjectInfo;
 import com.fontana.oss.properties.FileServerProperties;
+import com.fontana.oss.service.IOssService;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.Calendar;
 
@@ -34,11 +41,11 @@ import java.util.Calendar;
  * @date 2021/2/11
 
  */
+@Slf4j
 @ConditionalOnClass(AmazonS3.class)
 @ConditionalOnProperty(prefix = CommonConstants.OSS_PREFIX, name = "type", havingValue = FileServerProperties.TYPE_S3)
-public class S3Template implements InitializingBean {
+public class S3Template implements InitializingBean, IOssService {
     private static final String DEF_CONTEXT_TYPE = "application/octet-stream";
-    private static final String PATH_SPLIT = "/";
 
     @Autowired
     private FileServerProperties fileProperties;
@@ -58,13 +65,27 @@ public class S3Template implements InitializingBean {
                 .withPathStyleAccessEnabled(fileProperties.getS3().getPathStyleAccessEnabled())
                 .disableChunkedEncoding()
                 .build();
+        log.info("amazonS3 init success");
     }
 
+    /**
+     * 桶不存在，则创建桶
+     * @param bucketName bucket名称
+     */
+    public void createBucket(String bucketName) {
+        if (amazonS3.doesBucketExistV2(bucketName)) {
+            return;
+        }
+        amazonS3.createBucket(bucketName);
+    }
+
+    @Override
     @SneakyThrows
     public ObjectInfo upload(String fileName, InputStream is) {
         return upload(fileProperties.getS3().getBucketName(), fileName, is, is.available(), DEF_CONTEXT_TYPE);
     }
 
+    @Override
     @SneakyThrows
     public ObjectInfo upload(MultipartFile file) {
         return upload(fileProperties.getS3().getBucketName(), file.getOriginalFilename(), file.getInputStream()
@@ -92,13 +113,13 @@ public class S3Template implements InitializingBean {
                 bucketName, objectName, is, objectMetadata);
         putObjectRequest.getRequestClientOptions().setReadLimit(size + 1);
         amazonS3.putObject(putObjectRequest);
-
         ObjectInfo obj = new ObjectInfo();
-        obj.setObjectPath(bucketName + PATH_SPLIT + objectName);
-        obj.setObjectUrl(fileProperties.getS3().getEndpoint() + PATH_SPLIT + obj.getObjectPath());
+        obj.setObjectPath(bucketName + StringPool.SLASH + objectName);
+        obj.setObjectUrl(fileProperties.getS3().getEndpoint() + StringPool.SLASH + obj.getObjectPath());
         return obj;
     }
 
+    @Override
     public void delete(String objectName) {
         delete(fileProperties.getS3().getBucketName(), objectName);
     }
@@ -121,8 +142,19 @@ public class S3Template implements InitializingBean {
         return url.toString();
     }
 
+    @Override
     public void download(String objectName, OutputStream os) {
         download(fileProperties.getS3().getBucketName(), objectName, os);
+    }
+
+    @Override
+    @SneakyThrows
+    public void download(String objectName, HttpServletResponse response) {
+        String fileName = StringUtils.substringAfterLast(objectName, StringPool.SLASH);
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        download(fileProperties.getS3().getBucketName(), objectName, response.getOutputStream());
     }
 
     /**

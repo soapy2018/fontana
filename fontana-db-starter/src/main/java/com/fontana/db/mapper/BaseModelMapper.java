@@ -2,52 +2,51 @@ package com.fontana.db.mapper;
 
 import cn.hutool.core.bean.BeanUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Model对象到Vo对象的相互转换。实现类通常声明在Model实体类中，利用mapstruct转换。
+ * Model对象到Domain类型对象的相互转换。实现类通常声明在Model实体类中。
  *
- * @param <V> Vo对象。
+ * @param <D> Domain域对象类型。
  * @param <M> Model实体对象类型。
  * @author cqf
  * @date 2020-08-08
  */
-public interface BaseModelMapper<V, M> {
+public interface BaseModelMapper<D, M> {
 
     /**
-     * 转换Model实体对象到Vo对象。
+     * 转换Model实体对象到Domain域对象。
      *
      * @param model Model实体对象。
-     * @return Vo对象。
+     * @return Domain域对象。
      */
-    V fromModel(M model);
+    D fromModel(M model);
 
     /**
-     * 转换Model实体对象列表到Vo对象列表。
+     * 转换Model实体对象列表到Domain域对象列表。
      *
      * @param modelList Model实体对象列表。
-     * @return Vo对象列表。
+     * @return Domain域对象列表。
      */
-    List<V> fromModelList(List<M> modelList);
+    List<D> fromModelList(List<M> modelList);
 
     /**
-     * 转换Vo对象到Model实体对象。
+     * 转换Domain域对象到Model实体对象。
      *
-     * @param vo Vo对象。
+     * @param domain Domain域对象。
      * @return Model实体对象。
      */
-    M toModel(V vo);
+    M toModel(D domain);
 
     /**
-     * 转换Vo对象列表到Model实体对象列表。
+     * 转换Domain域对象列表到Model实体对象列表。
      *
-     * @param voList Vo对象列表。
+     * @param domainList Domain域对象列表。
      * @return Model实体对象列表。
      */
-    List<M> toModelList(List<V> voList);
+    List<M> toModelList(List<D> domainList);
 
     /**
      * 转换bean到map

@@ -1,6 +1,5 @@
-package com.fontana.sb.updownload;
+package com.fontana.util.updownload;
 
-import com.fontana.base.upload.UploadStoreTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

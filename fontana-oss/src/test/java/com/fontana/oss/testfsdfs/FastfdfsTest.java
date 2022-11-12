@@ -68,8 +68,8 @@ public class FastfdfsTest {
         IoUtil.copy(bytes, response.getOutputStream());
         log.info("第一个方法： {}", response.getContentAsString());
 
-        OutputStream os = fdfsTemplate.download(objectInfo.getObjectPath(), response.getOutputStream());
-        log.info("第二个方法： {}", os.toString());
+        fdfsTemplate.download(objectInfo.getObjectPath(), response.getOutputStream());
+        log.info("第二个方法： {}", response.getOutputStream());
 
     }
 }

@@ -28,10 +28,18 @@ public class TokenData {
      */
     private String userName;
     /**
+     * 用户所属角色。多个角色之间逗号分隔。
+     */
+    private String roleIds;
+    /**
      * 用户所在部门Id。
      * 仅当系统支持uaa时可用，否则可以直接忽略该字段。保留该字段是为了保持单体和微服务通用代码部分的兼容性。
      */
     private Long deptId;
+    /**
+     * 用户所属岗位Id。多个岗位之间逗号分隔。仅当系统支持岗位时有值。
+     */
+    private String postIds;
     /**
      * 用户的部门岗位Id。多个岗位之间逗号分隔。仅当系统支持岗位时有值。
      */
@@ -84,5 +92,9 @@ public class TokenData {
      * 登录时间。
      */
     private Date loginTime;
+    /**
+     * 登录头像地址。
+     */
+    private String headImageUrl;
 
 }
