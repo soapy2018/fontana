@@ -20,10 +20,10 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * 存储本地文件的上传下载实现类。
+ * oss存储的上传下载实现类。
  *
  * @author cqf
- * @date 2021-06-06
+ * @date 2022-11-11
  */
 @Slf4j
 @ConditionalOnProperty(prefix = CommonConstants.OSS_PREFIX, name = "enabled", havingValue = "true")
@@ -94,7 +94,7 @@ public class OssUpDownloader extends BaseUpDownloader {
         String uploadPath = makeFullPath(null, modelName, fieldName, asImage);
         fillUploadResponseInfo(responseInfo, serviceContextPath, uploadFile.getOriginalFilename());
         // 调用ossService方法，把当前要上传的文件，按照计算后的目录存储到oss中。
-        ossService.upload(uploadPath + StringPool.SLASH + responseInfo.getFilename(), uploadFile.getInputStream());
+        ossService.upload(uploadPath + responseInfo.getFilename(), uploadFile.getInputStream());
 
         return responseInfo;
     }

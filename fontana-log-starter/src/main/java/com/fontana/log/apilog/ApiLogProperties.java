@@ -38,4 +38,14 @@ public class ApiLogProperties {
      */
     private Boolean showHead = false;
 
+    /**
+     * 自定义切面表达式
+     */
+    private String pointcut = "execution(public * com.bluetron..*.interfaces..*.*(..)) ||"
+            + "execution(public * com.bluetron..*.controller..*.*(..)) ||"
+            + "execution(public * cn.bluetron..*.interfaces..*.*(..)) ||"
+            + "execution(public * cn.bluetron..*.controller..*.*(..)) ||"
+            + "execution(public * com.fontana..*.controller..*.*(..))"
+            + "execution(public * cn.grab..*.controller..*.*(..))";
+
 }
