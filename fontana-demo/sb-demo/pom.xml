@@ -3,23 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>fontana</artifactId>
+        <artifactId>fontana-demo</artifactId>
         <groupId>com.fontana</groupId>
         <version>1.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>fontana-demo</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>feign-demo</module>
-        <module>xxljob-demo</module>
-        <module>sb-demo</module>
-    </modules>
+    <artifactId>sb-demo</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-sb-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fontana</groupId>
+            <artifactId>fontana-redis-starter</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

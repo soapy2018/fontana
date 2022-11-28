@@ -59,15 +59,17 @@ public class SessionCacheHelper {
         if (filename != null) {
             Set<String> sessionUploadFileSet = null;
             Cache cache = cacheManager.getCache(CacheEnum.UPLOAD_FILENAME_CACHE.name());
-            Cache.ValueWrapper valueWrapper = cache.get(sessionId);
-            if (valueWrapper != null) {
-                sessionUploadFileSet = (Set<String>) valueWrapper.get();
+            if(null != cache) {
+                Cache.ValueWrapper valueWrapper = cache.get(sessionId);
+                if (valueWrapper != null) {
+                    sessionUploadFileSet = (Set<String>) valueWrapper.get();
+                }
+                if (sessionUploadFileSet == null) {
+                    sessionUploadFileSet = new HashSet<>();
+                }
+                sessionUploadFileSet.add(filename);
+                cache.put(sessionId, sessionUploadFileSet);
             }
-            if (sessionUploadFileSet == null) {
-                sessionUploadFileSet = new HashSet<>();
-            }
-            sessionUploadFileSet.add(filename);
-            cache.put(sessionId, sessionUploadFileSet);
         }
     }
 

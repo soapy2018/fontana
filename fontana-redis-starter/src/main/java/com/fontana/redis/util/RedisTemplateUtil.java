@@ -222,7 +222,7 @@ public class RedisTemplateUtil {
      * @param hashKey the hash key
      * @return the hash values
      */
-    public Object getHashValues(String key, String hashKey) {
+    public Object getHashValue(String key, String hashKey) {
         return opsForHash().get(key, hashKey);
     }
 
@@ -242,7 +242,7 @@ public class RedisTemplateUtil {
      * @param key the key
      * @return the hash value
      */
-    public Map<String, Object> getHashValue(String key) {
+    public Map<String, Object> getHashValues(String key) {
         return opsForHash().entries(key);
     }
 
@@ -252,7 +252,7 @@ public class RedisTemplateUtil {
      * @param key the key
      * @param map the map
      */
-    public void putHashValues(String key, Map<String, Object> map) {
+    public void putHashValues(String key, Map map) {
         opsForHash().putAll(key, map);
     }
 

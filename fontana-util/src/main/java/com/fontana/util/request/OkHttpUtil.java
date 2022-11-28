@@ -146,7 +146,7 @@ public class OkHttpUtil {
 		RequestBody requestBody = RequestBody.create(mediaType, content);
 		Request.Builder builder = new Request.Builder();
 
-		if (header != null && header.keySet().size() > 0) {
+		if (header != null && !header.keySet().isEmpty()) {
 			header.forEach(builder::addHeader);
 		}
 		Request request = builder.url(url).post(requestBody).build();

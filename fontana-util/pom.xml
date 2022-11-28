@@ -88,10 +88,16 @@
         </dependency>
 
         <!--   easypoi   -->
+<!--        <dependency>-->
+<!--            <groupId>cn.afterturn</groupId>-->
+<!--            <artifactId>easypoi-base</artifactId>-->
+<!--            <version>4.1.2</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-base</artifactId>
-            <version>4.1.2</version>
+            <artifactId>easypoi-spring-boot-starter</artifactId>
+            <version>4.3.0</version>
         </dependency>
 
         <dependency>

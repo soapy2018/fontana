@@ -1,5 +1,6 @@
 package com.fontana.redis.config;
 
+import com.fontana.redis.util.DictCacheHelper;
 import com.fontana.redis.util.RedisTemplateUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,12 @@ public class RedisTemplateConfig {
     @ConditionalOnBean({RedisTemplate.class})
     public RedisTemplateUtil redisTemplateUtil(RedisTemplate<String, Object> redisTemplate) {
         return new RedisTemplateUtil(redisTemplate);
+    }
+
+    @Bean(name = "DictCacheHelper")
+    @ConditionalOnBean({RedisTemplateUtil.class})
+    public DictCacheHelper dictCacheHelper() {
+        return new DictCacheHelper();
     }
 
 }

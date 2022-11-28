@@ -5,6 +5,7 @@ import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.fontana.util.lang.StringUtil;
@@ -30,39 +31,57 @@ public class ExcelUtil {
         throw new IllegalStateException("Utility class");
     }
 
+    /******************************利用hutool工具封装的excel操作，偏向于代码方式***********************************************************/
+
+    /**
+     * 读取输入流的第一个表格
+     * @param bookStream 输入流
+     * @return 对象list
+     */
     public static List<List<Object>> readExcel(InputStream bookStream) {
         return readExcel(bookStream, 0);
     }
 
     /**
-     * description 读取指定excel文件流的sheet页到集合；对于合并单元格，都会读到List中
-     *
-     * @param bookStream
-     * @param sheetName
+     * 读取指定excel文件流的sheet页到集合；对于合并单元格，都会读到List中
+     * @param bookStream 输入流
+     * @param sheetName 表格名
      * @return
      */
     public static List<List<Object>> readExcel(InputStream bookStream, String sheetName) {
         return cn.hutool.poi.excel.ExcelUtil.getReader(bookStream, sheetName).read();
     }
 
+    /**
+     *
+     * @param bookStream 输入流
+     * @param sheetIndex 表格序号
+     * @return
+     */
+
     public static List<List<Object>> readExcel(InputStream bookStream, int sheetIndex) {
         return cn.hutool.poi.excel.ExcelUtil.getReader(bookStream, sheetIndex).read();
     }
 
+    /**
+     * 读取文件到对象list
+     * @param bookFile 文件
+     * @return 对象list
+     */
     public static List<List<Object>> readExcel(File bookFile) {
         return cn.hutool.poi.excel.ExcelUtil.getReader(bookFile).read();
     }
 
 
     /**
-     * description 将List<List<String>>写入到excel，同时可以设置表头，sheet名
+     * 将List<List<String>>写入到excel，同时可以设置表头，sheet名
      *
-     * @param dataList
-     * @param bookFile
-     * @param sheetName
-     * @param title
+     * @param dataList 数据对象list
+     * @param bookFile 输出文件
+     * @param sheetName 表格名
+     * @param title 大标题
      */
-    public static void writeListToExcel(List<List<String>> dataList, File bookFile, String sheetName, String title) {
+    public static void writeListToExcel(List<List<Object>> dataList, File bookFile, String sheetName, String title) {
 
         ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(bookFile, sheetName);
         //ExcelWriter writer = new ExcelWriter(bookFile, sheetName);
@@ -80,23 +99,36 @@ public class ExcelUtil {
         writer.close();
     }
 
-    public static void writeListToExcel(List<List<String>> dataList, File bookFile) {
+    /**
+     * 将List<List<String>>写入到excel，同时可以设置表头，sheet名
+     *
+     * @param dataList 数据对象list
+     * @param bookFile 输出文件
+     */
+    public static void writeListToExcel(List<List<Object>> dataList, File bookFile) {
         writeListToExcel(dataList, bookFile, null, null);
     }
 
-    public static void writeListToExcel(List<List<String>> dataList, File bookFile, String title) {
+    /**
+     * 将List<List<String>>写入到excel，同时可以设置表头，sheet名
+     *
+     * @param dataList 数据对象list
+     * @param bookFile 输出文件
+     * @param title 大标题
+     */
+    public static void writeListToExcel(List<List<Object>> dataList, File bookFile, String title) {
         writeListToExcel(dataList, bookFile, null, title);
     }
 
     /**
-     * description 将List<Map<String, Object>写到excel，注意这里不同行对应map的key必须相同，也就是列标题要相同
+     * 将List<Map<Object, Object>写到excel，注意这里不同行对应map的key必须相同，也就是列标题要相同
      *
-     * @param dataList
-     * @param bookFile
-     * @param sheetName
-     * @param title
+     * @param dataList 数据对象list
+     * @param bookFile 输出文件
+     * @param sheetName 表格名
+     * @param title 大标题
      */
-    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile, String sheetName, String title) {
+    public static void writeMapToExcel(List<Map<Object, Object>> dataList, File bookFile, String sheetName, String title) {
 
         ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(bookFile, sheetName);
         //ExcelWriter writer = new ExcelWriter(bookFile, sheetName);
@@ -114,13 +146,66 @@ public class ExcelUtil {
         writer.close();
     }
 
-    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile) {
+    /**
+     * 将List<Map<Object, Object>写到excel，注意这里不同行对应map的key必须相同，也就是列标题要相同
+     * @param dataList 数据对象list
+     * @param bookFile 输出文件
+     */
+    public static void writeMapToExcel(List<Map<Object, Object>> dataList, File bookFile) {
         writeMapToExcel(dataList, bookFile, null, null);
     }
 
-    public static void writeMapToExcel(List<Map<String, Object>> dataList, File bookFile, String title) {
+    /**
+     * 将List<Map<Object, Object>写到excel，注意这里不同行对应map的key必须相同，也就是列标题要相同
+     * @param dataList 数据对象list
+     * @param bookFile 输出文件
+     * @param title 大标题
+     */
+    public static void writeMapToExcel(List<Map<Object, Object>> dataList, File bookFile, String title) {
         writeMapToExcel(dataList, bookFile, null, title);
     }
+
+    /**
+     * @param dataList  map数据
+     * @param fileName  文件名
+     * @param response 响应
+     * @param sheetName 表格名
+     * @param title 大标题
+     * @throws IOException
+     */
+    public static void exportExcel(List<Map<String, Object>> dataList, String fileName, HttpServletResponse response, String sheetName, String title) throws IOException {
+
+        //是否为xlsx
+        ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(true);
+
+        if (!StringUtil.isBlank(sheetName)) {
+            writer.setSheet(sheetName);
+        }
+
+        //合并单元格后的标题行，使用默认标题样式
+        if (!StringUtil.isBlank(title)) {
+            writer.merge(dataList.get(0).size() - 1, title);
+        }
+
+        writer.write(dataList, true);
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        writer.flush(response.getOutputStream(), true);
+        writer.close();
+        IoUtil.close(response.getOutputStream());
+    }
+
+    public static void exportExcel(List<Map<String, Object>> dataList, String fileName, HttpServletResponse response) throws IOException {
+        exportExcel(dataList, fileName, response, null, null);
+    }
+
+    public static void exportExcel(List<Map<String, Object>> dataList, String fileName, HttpServletResponse response, String title) throws IOException {
+        exportExcel(dataList, fileName, response, null, title);
+    }
+
+    /******************************利用easyPoi封装的excel操作，偏向于注解方式***********************************************************/
 
     /**
      * 导出
@@ -135,8 +220,10 @@ public class ExcelUtil {
      * @throws IOException
      */
     public static void exportExcel(List<?> list, String title, String sheetName, Class<?> pojoClass, String fileName
-            , boolean isCreateHeader, HttpServletResponse response) throws IOException {
+            , boolean isCreateHeader, HttpServletResponse response, IExcelDictHandler excelDictHandler) throws IOException {
         ExportParams exportParams = new ExportParams(title, sheetName, ExcelType.XSSF);
+        // 自定义字典查询规则
+        exportParams.setDictHandler(excelDictHandler);
         exportParams.setCreateHeadRows(isCreateHeader);
         defaultExport(list, pojoClass, fileName, response, exportParams);
     }
@@ -173,7 +260,16 @@ public class ExcelUtil {
         workbook.write(response.getOutputStream());
     }
 
-    public static <T> List<T> importExcel(String filePath, Integer titleRows, Integer headerRows, Class<T> pojoClass) {
+    /**
+     *
+     * @param filePath 导入文件
+     * @param titleRows 标题行数，默认为0
+     * @param headerRows 表头行数，默认为1
+     * @param pojoClass 数据对象class
+     * @return 数据对象list
+     */
+
+    public static <T> List<T> importExcel(String filePath, Class<T> pojoClass, Integer titleRows, Integer headerRows) {
         if (StringUtils.isBlank(filePath)) {
             return Collections.emptyList();
         }
@@ -183,7 +279,31 @@ public class ExcelUtil {
         return ExcelImportUtil.importExcel(new File(filePath), pojoClass, params);
     }
 
-    public static <T> List<T> importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass) throws Exception {
+    /**
+     *
+     * @param filePath 导入文件
+     * @param pojoClass 数据对象class
+     * @return 数据对象list
+     */
+
+    public static <T> List<T> importExcel(String filePath, Class<T> pojoClass) {
+        if (StringUtils.isBlank(filePath)) {
+            return Collections.emptyList();
+        }
+        ImportParams params = new ImportParams();
+        return ExcelImportUtil.importExcel(new File(filePath), pojoClass, params);
+    }
+
+    /**
+     *
+     * @param file MultipartFile对象，spring框架下的上传文件对象
+     * @param titleRows 标题行数，默认为0
+     * @param headerRows 表头行数，默认为1
+     * @param pojoClass 数据对象class
+     * @return 数据对象list
+     */
+
+    public static <T> List<T> importExcel(MultipartFile file, Class<T> pojoClass, Integer titleRows, Integer headerRows) throws Exception {
         if (file == null) {
             return Collections.emptyList();
         }
@@ -193,45 +313,19 @@ public class ExcelUtil {
         return ExcelImportUtil.importExcel(file.getInputStream(), pojoClass, params);
     }
 
-
     /**
-     * @param dataList  map数据
-     * @param fileName  文件名
-     * @param response
-     * @param sheetName
-     * @param title
-     * @throws IOException
+     *
+     * @param file MultipartFile对象，spring框架下的上传文件对象
+     * @param pojoClass 数据对象class
+     * @return 数据对象list
      */
-    public static void exportExcel(List<Map<String, Object>> dataList, String fileName, HttpServletResponse response, String sheetName, String title) throws IOException {
 
-        //是否为xlsx
-        ExcelWriter writer = cn.hutool.poi.excel.ExcelUtil.getWriter(true);
-
-        if (!StringUtil.isBlank(sheetName)) {
-            writer.setSheet(sheetName);
+    public static <T> List<T> importExcel(MultipartFile file, Class<T> pojoClass) throws Exception {
+        if (file == null) {
+            return Collections.emptyList();
         }
-
-        //合并单元格后的标题行，使用默认标题样式
-        if (!StringUtil.isBlank(title)) {
-            writer.merge(dataList.get(0).size() - 1, title);
-        }
-
-        writer.write(dataList, true);
-
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-        writer.flush(response.getOutputStream(), true);
-        writer.close();
-        IoUtil.close(response.getOutputStream());
-    }
-
-    public static void exportExcel(List<Map<String, Object>> dataList, String fileName, HttpServletResponse response) throws IOException {
-        exportExcel(dataList, fileName, response, null, null);
-    }
-
-    public static void exportExcel(List<Map<String, Object>> dataList, String fileName, HttpServletResponse response, String title) throws IOException {
-        exportExcel(dataList, fileName, response, null, title);
+        ImportParams params = new ImportParams();
+        return ExcelImportUtil.importExcel(file.getInputStream(), pojoClass, params);
     }
 
 }

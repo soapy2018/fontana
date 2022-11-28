@@ -4,6 +4,7 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fontana.base.constant.CommonConstants;
 import com.fontana.base.exception.GeneralException;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnProperty(prefix = CommonConstants.REDISSON_PREFIX, name = "enabled", havingValue = "true")
+@Slf4j
 public class RedissonConfig {
 
     @Value("${fontana.redisson.lockWatchdogTimeout}")
@@ -98,6 +100,7 @@ public class RedissonConfig {
         } else {
             throw new GeneralException("无效redis模式：" + mode);
         }
+        log.info("redisson init success");
         return Redisson.create(config);
     }
 }

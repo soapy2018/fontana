@@ -1,11 +1,13 @@
 package com.fontana.util.excel;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelCollection;
 import com.fontana.base.constant.CommonConstants;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户导出测试实例
@@ -31,9 +33,12 @@ public class SysUserExcel implements Serializable {
     @Excel(name = "所属租户", width = 32, isImportField = "true_st")
     private String tenantId;
 
-    @Excel(name = "创建时间", format = CommonConstants.DATETIME_FORMAT, isImportField = "true_st", width = 20)
+    @ExcelCollection(name = "地址", orderNum = "4")
+    private List<SysUserAddress> addresses;
+
+    @Excel(name = "创建时间", format = CommonConstants.DATETIME_FORMAT,  width = 20)
     private Date createTime;
 
-    @Excel(name = "修改时间", format = CommonConstants.DATETIME_FORMAT, isImportField = "true_st", width = 20)
+    @Excel(name = "修改时间", format = CommonConstants.DATETIME_FORMAT,  width = 20)
     private Date updateTime;
 }

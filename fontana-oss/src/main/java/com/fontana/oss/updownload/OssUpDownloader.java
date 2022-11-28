@@ -42,7 +42,7 @@ public class OssUpDownloader extends BaseUpDownloader {
     }
 
     /**
-     * 执行下载操作，从本地文件系统读取数据，并将读取的数据直接写入到HttpServletResponse应答对象。
+     * 执行下载操作，从oss存储系统读取数据，并将读取的数据直接写入到HttpServletResponse应答对象。
      *
      * @param rootBaseDir 文件下载的根目录。
      * @param modelName   所在数据表的实体对象名。
@@ -66,7 +66,7 @@ public class OssUpDownloader extends BaseUpDownloader {
     }
 
     /**
-     * 执行文件上传操作，并存入本地文件系统，再将与该文件下载对应的Url直接写入到HttpServletResponse应答对象，返回给前端。
+     * 执行文件上传操作，并存入oss存储系统，再将与该文件下载对应的Url直接写入到HttpServletResponse应答对象，返回给前端。
      *
      * @param serviceContextPath 微服务的上下文路径，如: /admin/upms。
      * @param rootBaseDir        存放上传文件的根目录。

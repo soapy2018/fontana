@@ -7,13 +7,22 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import com.fontana.util.bean.BeanUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,6 +36,9 @@ import java.util.Map;
  * @author: cqf
  * @date: 2021/10/20 15:22
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootApplication()
 @Slf4j
 public class ExcelUtilTest {
 
@@ -79,80 +91,88 @@ public class ExcelUtilTest {
 
     }
 
+    /**
+     * 测试简单的list输出到表格
+     */
+
     @Test
-    public void testWriteXlsx() {
+    public void testWriteList() {
 
-        List<String> s1 = Lists.newArrayList("aa", "bb", "cc", "dd");
-        List<String> s2 = Lists.newArrayList("aa1", "bb1", "cc1", "dd1");
-        List<String> s3 = Lists.newArrayList("aa2", "bb2", "cc2", "dd2");
-        List<String> s4 = Lists.newArrayList("aa3", "bb3", "cc3", "dd3");
-        List<String> s5 = Lists.newArrayList("aa4", "bb4", "cc4", "dd4");
+        List<Object> s1 = Lists.newArrayList("aa", "bb", "cc", "dd");
+        List<Object> s2 = Lists.newArrayList("aa1", "bb1", "cc1", "dd1");
+        List<Object> s3 = Lists.newArrayList("aa2", "bb2", "cc2", "dd2");
+        List<Object> s4 = Lists.newArrayList("aa3", "bb3", "cc3", "dd3");
+        List<Object> s5 = Lists.newArrayList("aa4", "bb4", "cc4", "dd4");
 
-        List<List<String>> ss = Lists.newArrayList(s1, s2, s3, s4, s5);
+        List<List<Object>> ss = Lists.newArrayList(s1, s2, s3, s4, s5);
 
-        File file = FileUtil.newFile("d:/writeTest1.xlsx");
-        ExcelUtil.writeListToExcel(ss, file, "test", "测试标题");
+        //自定义表格名、大标题
+        FileUtil.del("d:/testData/excel/writeTest1.xlsx");
+        FileUtil.del("d:/testData/excel/writeTest1.xls");
+        File file1 = FileUtil.newFile("d:/testData/excel/writeTest1.xlsx");
+        File file2 = FileUtil.newFile("d:/testData/excel/writeTest1.xls");
+        ExcelUtil.writeListToExcel(ss, file1, "test", "测试标题");
+        ExcelUtil.writeListToExcel(ss, file2, "test", "测试标题");
 
-        file = FileUtil.newFile("d:/writeTest2.xlsx");
-        ExcelUtil.writeListToExcel(ss, file);
+        //只有数据，没有大标题，也不自定义表格名
+        FileUtil.del("d:/testData/excel/writeTest2.xlsx");
+        FileUtil.del("d:/testData/excel/writeTest2.xls");
+        file1 = FileUtil.newFile("d:/testData/excel/writeTest2.xlsx");
+        file2 = FileUtil.newFile("d:/testData/excel/writeTest2.xls");
+        ExcelUtil.writeListToExcel(ss, file1);
+        ExcelUtil.writeListToExcel(ss, file2);
 
-        file = FileUtil.newFile("d:/writeTest3.xlsx");
-        ExcelUtil.writeListToExcel(ss, file, "测试标题");
+        //自定义大标题
+        FileUtil.del("d:/testData/excel/writeTest3.xlsx");
+        FileUtil.del("d:/testData/excel/writeTest3.xls");
+        file1 = FileUtil.newFile("d:/testData/excel/writeTest3.xlsx");
+        file2 = FileUtil.newFile("d:/testData/excel/writeTest3.xls");
+        ExcelUtil.writeListToExcel(ss, file1, "测试标题");
+        ExcelUtil.writeListToExcel(ss, file2, "测试标题");
 
     }
 
-    @Test
-    public void testWriteXls() {
-
-        List<String> s1 = Lists.newArrayList("aa", "bb", "cc", "dd");
-        List<String> s2 = Lists.newArrayList("aa1", "bb1", "cc1", "dd1");
-        List<String> s3 = Lists.newArrayList("aa2", "bb2", "cc2", "dd2");
-        List<String> s4 = Lists.newArrayList("aa3", "bb3", "cc3", "dd3");
-        List<String> s5 = Lists.newArrayList("aa4", "bb4", "cc4", "dd4");
-
-        List<List<String>> ss = Lists.newArrayList(s1, s2, s3, s4, s5);
-
-        File file = FileUtil.newFile("d:/writeTest1.xls");
-        ExcelUtil.writeListToExcel(ss, file, "test", "测试标题");
-
-        file = FileUtil.newFile("d:/writeTest2.xls");
-        ExcelUtil.writeListToExcel(ss, file);
-
-        file = FileUtil.newFile("d:/writeTest3.xls");
-        ExcelUtil.writeListToExcel(ss, file, "测试标题");
-
-    }
+    /**
+     * 测试简单的map输出到Excel
+     */
 
     @Test
-    public void testWriteXlsMap() {
+    public void testWriteMap() {
 
-        Map<String, Object> row1 = new LinkedHashMap<>();
+        Map<Object, Object> row1 = new LinkedHashMap<>();
         row1.put("姓名", "张三");
         row1.put("年龄", 23);
         row1.put("成绩", 88.32);
         row1.put("是否合格", true);
         row1.put("考试日期", DateUtil.date());
 
-        Map<String, Object> row2 = new LinkedHashMap<>();
+        Map<Object, Object> row2 = new LinkedHashMap<>();
         row2.put("姓名", "李四");
         row2.put("年龄", 33);
         row2.put("成绩", 59.50);
         row2.put("是否合格", false);
         row2.put("考试日期", DateUtil.date());
 
-        ArrayList<Map<String, Object>> ss = CollUtil.newArrayList(row1, row2);
+        ArrayList<Map<Object, Object>> ss = CollUtil.newArrayList(row1, row2);
 
-        File file = FileUtil.newFile("d:/writeTest4.xls");
+        FileUtil.del("d:/testData/excel/writeTest4.xls");
+        File file = FileUtil.newFile("d:/testData/excel/writeTest4.xls");
         ExcelUtil.writeMapToExcel(ss, file, "test", "测试标题");
 
-        file = FileUtil.newFile("d:/writeTest5.xls");
+        FileUtil.del("d:/testData/excel/writeTest5.xls");
+        file = FileUtil.newFile("d:/testData/excel/writeTest5.xls");
         ExcelUtil.writeMapToExcel(ss, file);
 
-        file = FileUtil.newFile("d:/writeTest6.xls");
+        FileUtil.del("d:/testData/excel/writeTest6.xls");
+        file = FileUtil.newFile("d:/testData/excel/writeTest6.xls");
         ExcelUtil.writeMapToExcel(ss, file, "测试标题");
 
     }
 
+    /**
+     * EasyPoi导出excel方法
+     * @throws IOException
+     */
     @Test
     public void testExportExcel1() throws IOException {
 
@@ -187,6 +207,10 @@ public class ExcelUtilTest {
         // workbook.close();
     }
 
+    /**
+     * hutool导出excel方法
+     * @throws IOException
+     */
     @Test
     public void testExportExcel2() throws IOException {
 
@@ -208,6 +232,42 @@ public class ExcelUtilTest {
 
         ExcelUtil.exportExcel(ss, "测试成绩", response, "测试sheet", "测试标题");
         log.info(response.getContentAsString());
+
+    }
+
+    /**
+     * easyPoi导入
+     * @throws Exception
+     */
+    @Test
+    public void testImport1() throws Exception {
+        File file = new File("src/test/resources/SysUserExcel.xls");
+        MultipartFile mulFile = new MockMultipartFile(
+                "SysUserExcel.xls", //文件名
+                "SysUserExcel.xls", //originalName 相当于上传文件在客户机上的文件名
+                ContentType.APPLICATION_OCTET_STREAM.toString(), //文件类型
+                new FileInputStream(file) //文件流
+        );
+        List<SysUserExcel> list = ExcelUtil.importExcel(mulFile, SysUserExcel.class);
+        list.forEach(System.out::println);
+
+    }
+
+    /**
+     * easyPoi导入
+     * @throws Exception
+     */
+    @Test
+    public void testImport2() throws Exception {
+        File file = new File("src/test/resources/SysUserExcel.xls");
+        MultipartFile mulFile = new MockMultipartFile(
+                "SysUserExcel.xls", //文件名
+                "SysUserExcel.xls", //originalName 相当于上传文件在客户机上的文件名
+                ContentType.APPLICATION_OCTET_STREAM.toString(), //文件类型
+                new FileInputStream(file) //文件流
+        );
+        List<List<Object>> list = ExcelUtil.readExcel(mulFile.getInputStream());
+        list.forEach(System.out::println);
 
     }
 }

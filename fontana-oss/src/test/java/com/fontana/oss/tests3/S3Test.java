@@ -36,8 +36,6 @@ public class S3Test {
 
     @Test
     public void testS3() throws IOException {
-        SpringContextHolder.getBean("S3Template");
-        SpringContextHolder.getBean("OssUpDownloader");
 
         ObjectInfo objectInfo;
         s3Template.delete("美女1.jpeg");
