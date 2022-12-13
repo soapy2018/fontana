@@ -124,6 +124,7 @@ public class S3Template implements InitializingBean, IOssService {
         delete(fileProperties.getS3().getBucketName(), objectName);
     }
 
+
     public void delete(String bucketName, String objectName) {
         amazonS3.deleteObject(bucketName, objectName);
     }

@@ -53,6 +53,8 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
         Object updateTime = getFieldValByName(autoFillProperties.getUpdateTimeField(), metaObject);
         Object createUserId = getFieldValByName(autoFillProperties.getCreateUserIdField(), metaObject);
         Object updateUserId = getFieldValByName(autoFillProperties.getUpdateUserIdField(), metaObject);
+        Object createUserName = getFieldValByName(autoFillProperties.getCreateUserNameField(), metaObject);
+        Object updateUserName = getFieldValByName(autoFillProperties.getUpdateUserNameField(), metaObject);
 
         Date date = new Date();
         if (createTime == null) {
@@ -65,9 +67,17 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
             //todo userId统一从哪里拿？
             setFieldValByName(autoFillProperties.getCreateUserIdField(), Long.valueOf(WebContextUtil.getUserId()), metaObject);
         }
+        if (createUserName == null && WebContextUtil.hasRequestContext()) {
+            //todo userName统一从哪里拿？
+            setFieldValByName(autoFillProperties.getCreateUserNameField(), WebContextUtil.getUserShowName(), metaObject);
+        }
         if (updateUserId == null && WebContextUtil.hasRequestContext()) {
             //todo userId统一从哪里拿？
             setFieldValByName(autoFillProperties.getUpdateUserIdField(), Long.valueOf(WebContextUtil.getUserId()), metaObject);
+        }
+        if (updateUserName == null && WebContextUtil.hasRequestContext()) {
+            //todo userName统一从哪里拿？
+            setFieldValByName(autoFillProperties.getUpdateUserNameField(), WebContextUtil.getUserShowName(), metaObject);
         }
 
     }
@@ -81,6 +91,10 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
         //todo userId统一从哪里拿？
         if (WebContextUtil.hasRequestContext()) {
             setFieldValByName(autoFillProperties.getUpdateUserIdField(), Long.valueOf(WebContextUtil.getUserId()), metaObject);
+        }
+        //todo userName统一从哪里拿？
+        if (WebContextUtil.hasRequestContext()) {
+            setFieldValByName(autoFillProperties.getUpdateUserNameField(), WebContextUtil.getUserShowName(), metaObject);
         }
     }
 }

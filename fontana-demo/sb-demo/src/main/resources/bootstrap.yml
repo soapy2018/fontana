@@ -5,12 +5,11 @@ spring:
     name: sb-demo
   profiles:
     active: dev
-  #redis 配置
+  #redis配置，不配置就是localhost:6379
   redis:
     host: localhost
     database: 0
-    port: 6379
-    password:
+    port: 6388
 
 fontana:
   apilog:
@@ -28,9 +27,9 @@ fontana:
     # Session的数据权限信息在Redis中的过期时间(秒)。
     dataPermExpiredSeconds: 86460
 
-  # redisson的配置。每个服务可以自己的配置文件中覆盖此选项。
+  # redisson的配置，生效后这里的连接信息将覆盖spring.redis的配置
   redisson:
-    # 如果该值为false，系统将不会创建RedissionClient的bean。
+    # 如果该值为false，将使用spring.redis的配置
     enabled: true
     # mode的可用值为，single/cluster/sentinel/master-slave
     mode: single

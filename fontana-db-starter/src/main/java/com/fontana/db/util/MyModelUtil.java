@@ -717,7 +717,7 @@ public class MyModelUtil {
      */
     public static <M> void fillCommonsForInsert(M data) {
         try {
-            Field createdByField = ReflectUtil.getField(data.getClass(),  DataBaseConstant.CREATE_USER);
+            Field createdByField = ReflectUtil.getField(data.getClass(),  DataBaseConstant.CREATE_USER_ID);
             if (createdByField != null) {
                 ReflectUtil.setAccessible(createdByField);
                 createdByField.set(data, Long.valueOf(WebContextUtil.getUserId()));
@@ -727,7 +727,7 @@ public class MyModelUtil {
                 ReflectUtil.setAccessible(createTimeField);
                 createTimeField.set(data, new Date());
             }
-            Field updatedByField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_USER);
+            Field updatedByField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_USER_ID);
             if (updatedByField != null) {
                 ReflectUtil.setAccessible(updatedByField);
                 updatedByField.set(data, Long.valueOf(WebContextUtil.getUserId()));
@@ -752,15 +752,15 @@ public class MyModelUtil {
      */
     public static <M> void fillCommonsForUpdate(M data, M originalData) {
         try {
-            Object createdByValue = ReflectUtil.getFieldValue(originalData, DataBaseConstant.CREATE_USER);
+            Object createdByValue = ReflectUtil.getFieldValue(originalData, DataBaseConstant.CREATE_USER_ID);
             if (createdByValue != null) {
-                ReflectUtil.setFieldValue(data, DataBaseConstant.CREATE_USER, createdByValue);
+                ReflectUtil.setFieldValue(data, DataBaseConstant.CREATE_USER_ID, createdByValue);
             }
             Object createTimeValue = ReflectUtil.getFieldValue(originalData, DataBaseConstant.CREATE_TIME);
             if (createTimeValue != null) {
                 ReflectUtil.setFieldValue(data, DataBaseConstant.CREATE_TIME, createTimeValue);
             }
-            Field updatedByField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_USER);
+            Field updatedByField = ReflectUtil.getField(data.getClass(), DataBaseConstant.UPDATE_USER_ID);
             if (updatedByField != null) {
                 ReflectUtil.setAccessible(updatedByField);
                 updatedByField.set(data, Long.valueOf(WebContextUtil.getUserId()));

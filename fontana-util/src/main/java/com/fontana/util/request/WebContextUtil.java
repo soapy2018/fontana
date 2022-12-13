@@ -181,7 +181,48 @@ public class WebContextUtil extends WebUtils {
     }
 
     /**
-     * 获取用户名
+     * 获取用户显示名
+     *
+     * @param request
+     * @return
+     */
+    public static String getUserShowName(HttpServletRequest request) {
+
+        String userName = request.getParameter(HttpConstants.X_USER_SHOW_NAME_HEADER);
+
+        if(CharSequenceUtil.isEmpty(userName)){
+            userName = request.getParameter(HttpConstants.USER_SHOW_NAME_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userName)) {
+            userName = request.getHeader(HttpConstants.X_USER_SHOW_NAME_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userName)){
+            userName = request.getHeader(HttpConstants.USER_SHOW_NAME_HEADER);
+        }
+
+        if(CharSequenceUtil.isEmpty(userName)){
+            TokenData tokenData = takeTokenFromRequest();
+            if(null != tokenData) {
+                return  ObjectUtil.defaultIfNull(tokenData.getShowName(), DEFAULT_VALUE);
+            }
+        }
+        return  ObjectUtil.defaultIfNull(userName, DEFAULT_VALUE);
+    }
+
+    /**
+     * 获取用户显示名
+     *
+     * @return
+     */
+    public static String getUserShowName() {
+        HttpServletRequest request = WebContextUtil.getHttpRequest();
+        return getUserShowName(request);
+    }
+
+    /**
+     * 获取用户登录名
      *
      * @param request
      * @return
@@ -212,7 +253,7 @@ public class WebContextUtil extends WebUtils {
     }
 
     /**
-     * 获取用户名
+     * 获取用户登录名
      *
      * @return
      */
@@ -220,6 +261,7 @@ public class WebContextUtil extends WebUtils {
         HttpServletRequest request = WebContextUtil.getHttpRequest();
         return getUserName(request);
     }
+
 
     /**
      * 获取租户id

@@ -3,8 +3,10 @@ package com.fontana.demo.sb;
 import com.fontana.util.lang.StringUtil;
 import com.fontana.util.request.IpUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.spring.starter.RedissonAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -15,6 +17,8 @@ import org.springframework.core.env.Environment;
  * @date 2020-08-08
  */
 
+//@SpringBootApplication(exclude = {RedissonAutoConfiguration.class, RedisAutoConfiguration.class})
+//@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
 @SpringBootApplication
 @Slf4j
 public class SbApplication {
