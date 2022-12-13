@@ -20,6 +20,11 @@ public abstract class BaseVO {
     private Long createUserId;
 
     /**
+     * 创建者显示名称。
+     */
+    private String createUserName;
+
+    /**
      * 创建时间。
      */
     private Date createTime;
@@ -28,6 +33,11 @@ public abstract class BaseVO {
      * 更新者Id。
      */
     private Long updateUserId;
+
+    /**
+     * 更新者显示名称。
+     */
+    private String updateUserName;
 
     /**
      * 更新时间。

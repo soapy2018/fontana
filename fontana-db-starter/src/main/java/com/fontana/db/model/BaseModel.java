@@ -24,6 +24,12 @@ public abstract class BaseModel extends BaseJsonModel {
     private Long createUserId;
 
     /**
+     * 创建者名称，是显示名，不是登录名。
+     */
+    @TableField(value = "create_user_name", fill = FieldFill.INSERT)
+    private String createUserName;
+
+    /**
      * 创建时间。
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
@@ -34,6 +40,12 @@ public abstract class BaseModel extends BaseJsonModel {
      */
     @TableField(value = "update_user_id", fill = FieldFill.INSERT_UPDATE)
     private Long updateUserId;
+
+    /**
+     * 更新者名称，是显示名，不是登录名。
+     */
+    @TableField(value = "update_user_name", fill = FieldFill.INSERT_UPDATE)
+    private String updateUserName;
 
     /**
      * 更新时间。

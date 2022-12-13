@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages =  "com.fontana.redis")
 @Slf4j
 public class LockTest {
     @Autowired

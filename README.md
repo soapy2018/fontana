@@ -65,17 +65,13 @@ Fontana是一款基于Java生态的“开箱即用”的开发技术框架，通
 
 - 持久层框架：MybatisPlus 3.4.1
 
-- 报表工具： JimuReport 1.5.2
-
-- 安全框架： 自研
-
 - 微服务技术栈：Spring Cloud、Spring Cloud Alibaba、Nacos、Gateway、Sentinel、Skywalking
 
 - 数据库连接池：阿里巴巴Druid 1.2.5
 
 - 日志打印：logback
 
-- 其他：autopoi, fastjson，poi，Swagger-ui，quartz, lombok（简化代码）等。
+- 其他：easypoi,fastjson,Swagger-ui, lombok（简化代码）等。
 
 
 

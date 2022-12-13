@@ -19,14 +19,24 @@ public interface HttpConstants {
     String AUTHORIZATION_HEADER = "Authorization";
 
     /**
-     * 用户名信息头
+     * 用户登录名信息头
      */
     String X_USER_NAME_HEADER = "x-userName";
 
     /**
-     * 用户名信息头
+     * 用户登录名信息头
      */
     String USER_NAME_HEADER = "userName";
+
+    /**
+     * 用户显示名信息头
+     */
+    String X_USER_SHOW_NAME_HEADER = "x-userShowName";
+
+    /**
+     * 用户显示名信息头
+     */
+    String USER_SHOW_NAME_HEADER = "userShowName";
 
     /**
      * 用户id信息头

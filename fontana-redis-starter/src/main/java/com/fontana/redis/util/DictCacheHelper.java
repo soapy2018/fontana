@@ -8,49 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Session数据缓存辅助类。
+ * 字典数据缓存辅助类。
  *
  * @author cqf
- * @date 2020-08-08
+ * @date 2022-08-08
  */
 @SuppressWarnings("unchecked")
 public class DictCacheHelper {
 
-    private static final int DEFAULT_TTL = 3600000;
     private static final String DICT_KEY = "sys:dict";
 
     @Autowired
     private RedisTemplateUtil redisTemplateUtil;
-
-    /**
-     * 定义cache名称、超时时长(毫秒)。
-     */
-    public enum CacheEnum {
-        /**
-         * session下上传文件名的缓存(时间是24小时)。
-         */
-        UPLOAD_FILENAME_CACHE(86400000),
-        /**
-         * 缺省全局缓存(时间是24小时)。
-         */
-        GLOBAL_CACHE(86400000);
-
-        /**
-         * 缓存的时长(单位：毫秒)
-         */
-        private int ttl = DEFAULT_TTL;
-
-        CacheEnum() {
-        }
-
-        CacheEnum(int ttl) {
-            this.ttl = ttl;
-        }
-
-        public int getTtl() {
-            return ttl;
-        }
-    }
 
     /**
      * 更新缓存的所有字典

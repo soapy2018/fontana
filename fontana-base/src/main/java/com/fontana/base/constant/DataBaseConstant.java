@@ -116,23 +116,37 @@ public interface DataBaseConstant {
 	String UPDATE_TIME_TABLE = "update_time";
 
 	/**
-	 * 创建用户
+	 * 创建用户ID
 	 */
-	String CREATE_USER = "createUserId";
+	String CREATE_USER_ID = "createUserId";
 	/**
-	 * 创建用户
+	 * 创建用户ID
 	 */
-	String CREATE_USER_TABLE = "create_user_id";
-
-
+	String CREATE_USER_ID_TABLE = "create_user_id";
 	/**
-	 * 更新用户
+	 * 创建用户ID
 	 */
-	String UPDATE_USER = "updateUserId";
+	String CREATE_USER_NAME = "createUserName";
 	/**
-	 * 更新用户
+	 * 创建用户显示名
 	 */
-	String UPDATE_USER_TABLE = "update_user_id";
+	String CREATE_USER_NAME_TABLE = "create_user_name";
+	/**
+	 * 更新用户ID
+	 */
+	String UPDATE_USER_ID = "updateUserId";
+	/**
+	 * 更新用户显示名
+	 */
+	String UPDATE_USER_NAME = "updateUserName";
+	/**
+	 * 更新用户ID
+	 */
+	String UPDATE_USER_ID_TABLE = "update_user_id";
+	/**
+	 * 更新用户显示名
+	 */
+	String UPDATE_USER_NAME_TABLE = "update_user_name";
 
     /**
      * 业务流程状态

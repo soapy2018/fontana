@@ -31,7 +31,7 @@ public class $!{entity}DTO {
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in $!{table.fields})
 
-#if("$!field.name" != "create_user_id" && "$!field.name" != "update_user_id" && "$!field.name" != "create_time" && "$!field.name" != "update_time" && "$!field.name" != "deleted_flag")
+#if("$!field.name" != "create_user_id" && "$!field.name" != "update_user_id" && "$!field.name" != "create_user_name" && "$!field.name" != "update_user_name" && "$!field.name" != "create_time" && "$!field.name" != "update_time" && "$!field.name" != "deleted_flag")
 #if("$!field.comment" != "")
     /**
      * $!{field.comment}

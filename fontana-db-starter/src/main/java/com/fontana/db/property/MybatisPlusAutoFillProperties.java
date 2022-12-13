@@ -40,11 +40,19 @@ public class MybatisPlusAutoFillProperties {
      */
     private String updateTimeField = DataBaseConstant.UPDATE_TIME;
     /**
-     * 创建时间字段名
+     * 创建人ID字段名
      */
-    private String createUserIdField = DataBaseConstant.CREATE_USER;
+    private String createUserIdField = DataBaseConstant.CREATE_USER_ID;
     /**
-     * 更新时间字段名
+     * 更新人ID字段名
      */
-    private String updateUserIdField = DataBaseConstant.UPDATE_USER;
+    private String updateUserIdField = DataBaseConstant.UPDATE_USER_ID;
+    /**
+     * 创建人显示名字段名
+     */
+    private String createUserNameField = DataBaseConstant.CREATE_USER_NAME;
+    /**
+     * 更新人显示名字段名
+     */
+    private String updateUserNameField = DataBaseConstant.UPDATE_USER_NAME;
 }
