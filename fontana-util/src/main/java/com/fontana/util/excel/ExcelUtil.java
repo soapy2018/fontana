@@ -8,8 +8,17 @@ import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelWriter;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.metadata.style.WriteFont;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.fontana.util.lang.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -327,5 +336,74 @@ public class ExcelUtil {
         ImportParams params = new ImportParams();
         return ExcelImportUtil.importExcel(file.getInputStream(), pojoClass, params);
     }
+
+
+    /******************************easyexcel***********************************************************/
+
+
+
+
+
+    /**
+     *@Param: data 需要导出的数据 ,fileName 文件名称 ,response
+     *@return:
+     *@Author: xxxx
+     *@date: 2023/1/7
+     */
+    public static void ExportDataToExcel (List<?> data, String fileName, HttpServletResponse response) {
+        //设置标题样式
+        WriteCellStyle headStyle = new WriteCellStyle();
+        //设置字体居中显示
+        headStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        headStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        //构造字体对象
+        WriteFont writeFont = new WriteFont();
+        writeFont.setFontHeightInPoints((short)15);
+        // headStyle.setWriteFont(writeFont);
+        headStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE1.getIndex());
+        //设置content样式
+        WriteCellStyle contentStyle = new WriteCellStyle();
+        //设置字体垂直居中和水平居中
+        contentStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        contentStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        writeFont.setFontHeightInPoints((short)12);  //设置字体大小
+        contentStyle.setWriteFont(writeFont);
+        contentStyle.setWrapped(true);  //自动换行
+
+        //设置边框样式
+        contentStyle.setBorderLeft(BorderStyle.DOTTED);
+        contentStyle.setBorderTop(BorderStyle.DOTTED);
+        contentStyle.setBorderRight(BorderStyle.DOTTED);
+        contentStyle.setBorderBottom(BorderStyle.DOTTED);
+
+        //水平单元格样式策略, 头是头的样式 内容是内容的样式
+        HorizontalCellStyleStrategy cellStyleStrategy = new HorizontalCellStyleStrategy(headStyle, contentStyle);
+
+        com.alibaba.excel.ExcelWriter excelWriter = null;
+        try {
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码
+            fileName = URLEncoder.encode(fileName + "-" + System.currentTimeMillis() , "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;fileName=" + fileName + ".xlsx");
+            // 这里 需要指定写用哪个class去写
+            excelWriter = EasyExcel.write(response.getOutputStream(), data.get(0).getClass()).build();
+            // 这里注意 如果同一个sheet只要创建一次
+            WriteSheet writeSheet = EasyExcel.writerSheet("sheet1").registerWriteHandler(cellStyleStrategy).build();
+            excelWriter.write(data, writeSheet);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+    }
+
+
+
+
+
+
 
 }
