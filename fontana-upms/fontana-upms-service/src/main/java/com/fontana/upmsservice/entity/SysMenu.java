@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationManyToMany;
 import com.fontana.db.model.BaseModel;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.upmsapi.dto.SysMenuDto;
 import com.fontana.upmsapi.vo.SysMenuVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -101,16 +102,15 @@ public class SysMenu extends BaseModel {
     private List<SysMenuPermCode> sysMenuPermCodeList;
 
     @Mapper
-    public interface SysMenuModelMapper extends BaseModelMapper<SysMenuVo, SysMenu> {
+    public interface SysMenuModelMapper extends BaseModelMapper<SysMenuDto, SysMenu, SysMenuVo> {
         /**
-         * 转换VO对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param sysMenuVo 域对象。
+         * @param sysMenuDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "sysMenuPermCodeList", expression = "java(mapToBean(sysMenuVo.getSysMenuPermCodeList(), com.fontana.upmsservice.entity.SysMenuPermCode.class))")
         @Override
-        SysMenu toModel(SysMenuVo sysMenuVo);
+        SysMenu toModel(SysMenuDto sysMenuDto);
         /**
          * 转换实体对象到VO对象。
          *

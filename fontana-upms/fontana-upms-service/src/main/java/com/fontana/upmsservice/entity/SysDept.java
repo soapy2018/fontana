@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.model.BaseModel;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.upmsapi.dto.SysDeptDto;
 import com.fontana.upmsapi.vo.SysDeptVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,7 +56,7 @@ public class SysDept extends BaseModel {
     private Integer deletedFlag;
 
     @Mapper
-    public interface SysDeptModelMapper extends BaseModelMapper<SysDeptVo, SysDept> {
+    public interface SysDeptModelMapper extends BaseModelMapper<SysDeptDto, SysDept, SysDeptVo> {
     }
     public static final SysDeptModelMapper INSTANCE = Mappers.getMapper(SysDeptModelMapper.class);
 }

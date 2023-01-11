@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationManyToMany;
 import com.fontana.db.model.BaseModel;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.upmsapi.dto.SysDataPermDto;
 import com.fontana.upmsapi.vo.SysDataPermVo;
 import com.fontana.util.lang.StringUtil;
 import lombok.Data;
@@ -71,16 +72,15 @@ public class SysDataPerm extends BaseModel {
     }
 
     @Mapper
-    public interface SysDataPermModelMapper extends BaseModelMapper<SysDataPermVo, SysDataPerm> {
+    public interface SysDataPermModelMapper extends BaseModelMapper<SysDataPermDto, SysDataPerm, SysDataPermVo> {
         /**
-         * 转换VO对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param sysDataPermVo 域对象。
+         * @param sysDataPermDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "dataPermDeptList", expression = "java(mapToBean(sysDataPermVo.getDataPermDeptList(), com.fontana.upmsservice.entity.SysDataPermDept.class))")
         @Override
-        SysDataPerm toModel(SysDataPermVo sysDataPermVo);
+        SysDataPerm toModel(SysDataPermDto sysDataPermDto);
         /**
          * 转换实体对象到VO对象。
          *

@@ -185,7 +185,7 @@ public class MyCodeGenerator {
 		pc.setModuleName(null);
 		pc.setParent(packageName);
 		pc.setController("controller");
-		pc.setEntity("entity");
+		pc.setEntity("model");
 		pc.setXml("mapper/xml");
 		mpg.setPackageInfo(pc);
 		mpg.setCfg(getInjectionConfig());

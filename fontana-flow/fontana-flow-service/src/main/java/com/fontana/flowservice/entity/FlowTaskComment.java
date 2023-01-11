@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.flowapi.dto.FlowTaskCommentDto;
 import com.fontana.flowapi.vo.FlowTaskCommentVo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -102,7 +103,7 @@ public class FlowTaskComment {
     }
 
     @Mapper
-    public interface FlowTaskCommentModelMapper extends BaseModelMapper<FlowTaskCommentVo, FlowTaskComment> {
+    public interface FlowTaskCommentModelMapper extends BaseModelMapper<FlowTaskCommentDto, FlowTaskComment, FlowTaskCommentVo> {
     }
     public static final FlowTaskCommentModelMapper INSTANCE = Mappers.getMapper(FlowTaskCommentModelMapper.class);
 }

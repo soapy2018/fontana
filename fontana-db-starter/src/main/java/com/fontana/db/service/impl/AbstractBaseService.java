@@ -14,11 +14,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fontana.base.annotation.*;
 import com.fontana.base.constant.AggregationKind;
+import com.fontana.base.constant.AggregationType;
 import com.fontana.base.context.DataFilterThreadLocal;
 import com.fontana.base.exception.GeneralException;
 import com.fontana.base.object.DummyClass;
 import com.fontana.base.object.Tuple2;
-import com.fontana.base.constant.AggregationType;
 import com.fontana.base.result.CallResult;
 import com.fontana.base.result.Pagination;
 import com.fontana.base.result.Result;
@@ -37,6 +37,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -46,7 +47,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.*;
 

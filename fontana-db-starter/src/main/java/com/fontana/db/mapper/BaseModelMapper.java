@@ -9,44 +9,45 @@ import java.util.stream.Collectors;
 /**
  * Model对象到Domain类型对象的相互转换。实现类通常声明在Model实体类中。
  *
- * @param <D> Domain域对象类型。
+ * @param <D> DTO对象类型。
  * @param <M> Model实体对象类型。
+ * @param <V> VO对象类型。
  * @author cqf
  * @date 2020-08-08
  */
-public interface BaseModelMapper<D, M> {
+public interface BaseModelMapper<D, M, V> {
 
     /**
-     * 转换Model实体对象到Domain域对象。
+     * 转换Model到VO。
      *
      * @param model Model实体对象。
-     * @return Domain域对象。
+     * @return VO对象。
      */
-    D fromModel(M model);
+    V fromModel(M model);
 
     /**
-     * 转换Model实体对象列表到Domain域对象列表。
+     * 转换Model实体对象列表到VO域对象列表。
      *
      * @param modelList Model实体对象列表。
-     * @return Domain域对象列表。
+     * @return VO对象列表。
      */
-    List<D> fromModelList(List<M> modelList);
+    List<V> fromModelList(List<M> modelList);
 
     /**
-     * 转换Domain域对象到Model实体对象。
+     * 转换DTO对象到Model实体对象。
      *
-     * @param domain Domain域对象。
+     * @param dto DTO对象。
      * @return Model实体对象。
      */
-    M toModel(D domain);
+    M toModel(D dto);
 
     /**
-     * 转换Domain域对象列表到Model实体对象列表。
+     * 转换DTO对象列表到Model实体对象列表。
      *
-     * @param domainList Domain域对象列表。
+     * @param dtoList DTO对象列表。
      * @return Model实体对象列表。
      */
-    List<M> toModelList(List<D> domainList);
+    List<M> toModelList(List<D> dtoList);
 
     /**
      * 转换bean到map

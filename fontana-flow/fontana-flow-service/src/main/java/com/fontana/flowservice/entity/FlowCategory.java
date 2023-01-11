@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.flowapi.dto.FlowCategoryDto;
 import com.fontana.flowapi.vo.FlowCategoryVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -70,7 +71,7 @@ public class FlowCategory {
     private Long createUserId;
 
     @Mapper
-    public interface FlowCategoryModelMapper extends BaseModelMapper<FlowCategoryVo, FlowCategory> {
+    public interface FlowCategoryModelMapper extends BaseModelMapper<FlowCategoryDto, FlowCategory, FlowCategoryVo> {
     }
     public static final FlowCategoryModelMapper INSTANCE = Mappers.getMapper(FlowCategoryModelMapper.class);
 }

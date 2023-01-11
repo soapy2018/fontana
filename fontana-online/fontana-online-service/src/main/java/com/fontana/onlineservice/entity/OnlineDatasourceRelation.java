@@ -8,6 +8,7 @@ import com.fontana.base.annotation.RelationDict;
 import com.fontana.base.annotation.RelationOneToOne;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.onlineapi.dict.RelationType;
+import com.fontana.onlineapi.dto.OnlineDatasourceRelationDto;
 import com.fontana.onlineapi.vo.OnlineDatasourceRelationVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -161,18 +162,15 @@ public class OnlineDatasourceRelation {
 
     @Mapper
     public interface OnlineDatasourceRelationModelMapper
-            extends BaseModelMapper<OnlineDatasourceRelationVo, OnlineDatasourceRelation> {
+            extends BaseModelMapper<OnlineDatasourceRelationDto, OnlineDatasourceRelation, OnlineDatasourceRelationVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param onlineDatasourceRelationVo 域对象。
+         * @param onlineDatasourceRelationDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "masterColumn", expression = "java(mapToBean(onlineDatasourceRelationVo.getMasterColumn(), com.fontana.onlineservice.entity.OnlineColumn.class))")
-        @Mapping(target = "slaveTable", expression = "java(mapToBean(onlineDatasourceRelationVo.getSlaveTable(), com.fontana.onlineservice.entity.OnlineTable.class))")
-        @Mapping(target = "slaveColumn", expression = "java(mapToBean(onlineDatasourceRelationVo.getSlaveColumn(), com.fontana.onlineservice.entity.OnlineColumn.class))")
         @Override
-        OnlineDatasourceRelation toModel(OnlineDatasourceRelationVo onlineDatasourceRelationVo);
+        OnlineDatasourceRelation toModel(OnlineDatasourceRelationDto onlineDatasourceRelationDto);
         /**
          * 转换实体对象到VO对象。
          *

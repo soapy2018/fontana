@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.upmsapi.dto.SysPostDto;
 import com.fontana.upmsapi.vo.SysPostVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -84,16 +85,15 @@ public class SysPost {
     private SysDeptPost sysDeptPost;
 
     @Mapper
-    public interface SysPostModelMapper extends BaseModelMapper<SysPostVo, SysPost> {
+    public interface SysPostModelMapper extends BaseModelMapper<SysPostDto, SysPost, SysPostVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param sysPostVo 域对象。
+         * @param sysPostDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "sysDeptPost", expression = "java(mapToBean(sysPostVo.getSysDeptPost(), com.fontana.upmsservice.entity.SysDeptPost.class))")
         @Override
-        SysPost toModel(SysPostVo sysPostVo);
+        SysPost toModel(SysPostDto sysPostDto);
         /**
          * 转换实体对象到VO对象。
          *

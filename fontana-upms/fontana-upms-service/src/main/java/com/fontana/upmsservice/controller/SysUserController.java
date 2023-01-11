@@ -40,7 +40,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @RequestMapping("/sysUser")
-public class SysUserController extends AbstractBaseController<SysUser, SysUserVo, Long> {
+public class SysUserController extends AbstractBaseController<SysUserDto, SysUser, SysUserVo, Long> {
 
     @Autowired
     private SysUserService sysUserService;

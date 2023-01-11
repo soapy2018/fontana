@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.onlineapi.dto.OnlineDblinkDto;
 import com.fontana.onlineapi.vo.OnlineDblinkVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -58,7 +59,7 @@ public class OnlineDblink {
     private Date createTime;
 
     @Mapper
-    public interface OnlineDblinkModelMapper extends BaseModelMapper<OnlineDblinkVo, OnlineDblink> {
+    public interface OnlineDblinkModelMapper extends BaseModelMapper<OnlineDblinkDto, OnlineDblink, OnlineDblinkVo> {
     }
     public static final OnlineDblinkModelMapper INSTANCE = Mappers.getMapper(OnlineDblinkModelMapper.class);
 }
