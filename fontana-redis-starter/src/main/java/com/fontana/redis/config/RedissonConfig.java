@@ -72,7 +72,8 @@ public class RedissonConfig {
                     .setPassword(password)
                     .addNodeAddress(clusterAddresses)
                     .setConnectTimeout(timeout)
-                    .setMasterConnectionPoolSize(poolSize);
+                    .setMasterConnectionPoolSize(poolSize)
+                    .setMasterConnectionMinimumIdleSize(minIdle);
         } else if ("sentinel".equals(mode)) {
             String[] sentinelAddresses = StrUtil.splitToArray(address, ',');
             config.setLockWatchdogTimeout(lockWatchdogTimeout)
@@ -81,12 +82,13 @@ public class RedissonConfig {
                     .setMasterName(masterName)
                     .addSentinelAddress(sentinelAddresses)
                     .setConnectTimeout(timeout)
-                    .setMasterConnectionPoolSize(poolSize);
+                    .setMasterConnectionPoolSize(poolSize)
+                    .setMasterConnectionMinimumIdleSize(minIdle);;
         } else if ("master-slave".equals(mode)) {
             String[] masterSlaveAddresses = StrUtil.splitToArray(address, ',');
             if (masterSlaveAddresses.length == 1) {
                 throw new IllegalArgumentException(
-                        "redis.redisson.address MUST have multiple redis addresses for master-slave mode.");
+                        "fontana.redisson.address MUST have multiple redis addresses for master-slave mode.");
             }
             String[] slaveAddresses = new String[masterSlaveAddresses.length - 1];
             ArrayUtil.copy(masterSlaveAddresses, 1, slaveAddresses, 0, slaveAddresses.length);
@@ -96,7 +98,8 @@ public class RedissonConfig {
                     .setMasterAddress(masterSlaveAddresses[0])
                     .addSlaveAddress(slaveAddresses)
                     .setConnectTimeout(timeout)
-                    .setMasterConnectionPoolSize(poolSize);
+                    .setMasterConnectionPoolSize(poolSize)
+                    .setMasterConnectionMinimumIdleSize(minIdle);
         } else {
             throw new GeneralException("无效redis模式：" + mode);
         }

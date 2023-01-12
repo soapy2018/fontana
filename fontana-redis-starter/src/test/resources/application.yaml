@@ -1,13 +1,9 @@
 spring:
   #redis配置，不配置就是localhost:6379
-  redis:
-    host: localhost
-    database: 0
-    port: 6388
-logging:
-  level:
-    # 这里设置的日志级别优先于log4j2.xml文件Loggers中的日志级别。
-    com.blutron.nb.common: info
+#  redis:
+#    host: localhost
+#    database: 0
+#    port: 6388
 
 fontana:
   # redisson的配置，生效后这里的连接信息将覆盖spring.redis的配置
@@ -15,7 +11,7 @@ fontana:
     # 如果该值为false，将使用spring.redis的配置
     enabled: true
     # mode的可用值为，single/cluster/sentinel/master-slave
-    mode: single
+    mode: cluster
     # single: 单机模式
     #   address: redis://localhost:6379
     # cluster: 集群模式
@@ -27,14 +23,14 @@ fontana:
     # master-slave:
     #   每个节点逗号分隔，第一个为主节点，其余为从节点。同时每个节点前必须以redis://开头。
     #   address: redis://localhost:6379,redis://localhost:6378,...
-    address: redis://localhost:6379
+    address: redis://192.168.8.133:8001,redis://192.168.8.133:8002,redis://192.168.8.133:8003,redis://192.168.8.133:8004,redis://192.168.8.133:8005,redis://192.168.8.133:8006
     # 链接超时，单位毫秒。
     timeout: 60000
     # 单位毫秒。分布式锁的超时检测时长。
     # 如果一次锁内操作超该毫秒数，或在释放锁之前异常退出，Redis会在该时长之后主动删除该锁使用的key。
     lockWatchdogTimeout: 60000
     # redis 密码，空可以不填。
-    password:
+    password: 123456
     pool:
       # 连接池数量。
       poolSize: 20
