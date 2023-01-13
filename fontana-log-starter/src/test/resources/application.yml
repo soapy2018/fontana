@@ -3,10 +3,12 @@ spring:
     name: common-log
 fontana:
   apilog:
-    enabled: false
+    enabled: true
     showip: true
     showargs: true
     showHead: true
+    #配置切点表达式
+    pointcut: "execution(public * com.bluetron..*.controller..*.*(..))"
 #  requestlog:
 #    enabled: true
 #    showip: true

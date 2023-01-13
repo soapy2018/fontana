@@ -1,12 +1,9 @@
 package com.fontana.log.apilog;
 
-import com.fontana.base.constant.CommonConstants;
 import com.fontana.util.request.WebContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
