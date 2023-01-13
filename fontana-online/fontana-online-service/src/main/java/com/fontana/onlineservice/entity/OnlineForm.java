@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.*;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.onlineapi.dict.FormType;
+import com.fontana.onlineapi.dto.OnlineFormDto;
 import com.fontana.onlineapi.vo.OnlineFormVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -116,16 +117,15 @@ public class OnlineForm {
     private Map<String, Object> formTypeDictMap;
 
     @Mapper
-    public interface OnlineFormModelMapper extends BaseModelMapper<OnlineFormVo, OnlineForm> {
+    public interface OnlineFormModelMapper extends BaseModelMapper<OnlineFormDto, OnlineForm, OnlineFormVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换Dto对象到实体对象。
          *
-         * @param onlineFormVo 域对象。
+         * @param onlineFormDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "onlineTable", expression = "java(mapToBean(onlineFormVo.getOnlineTable(), com.fontana.onlineservice.entity.OnlineTable.class))")
         @Override
-        OnlineForm toModel(OnlineFormVo onlineFormVo);
+        OnlineForm toModel(OnlineFormDto onlineFormDto);
         /**
          * 转换实体对象到VO对象。
          *

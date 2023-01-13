@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationConstDict;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.onlineapi.dict.RuleType;
+import com.fontana.onlineapi.dto.OnlineRuleDto;
 import com.fontana.onlineapi.vo.OnlineRuleVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -88,16 +89,15 @@ public class OnlineRule {
     private Map<String, Object> ruleTypeDictMap;
 
     @Mapper
-    public interface OnlineRuleModelMapper extends BaseModelMapper<OnlineRuleVo, OnlineRule> {
+    public interface OnlineRuleModelMapper extends BaseModelMapper<OnlineRuleDto, OnlineRule, OnlineRuleVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param onlineRuleVo 域对象。
+         * @param onlineRuleDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "onlineColumnRule", expression = "java(mapToBean(onlineRuleVo.getOnlineColumnRule(), com.fontana.onlineservice.entity.OnlineColumnRule.class))")
         @Override
-        OnlineRule toModel(OnlineRuleVo onlineRuleVo);
+        OnlineRule toModel(OnlineRuleDto onlineRuleDto);
         /**
          * 转换实体对象到VO对象。
          *

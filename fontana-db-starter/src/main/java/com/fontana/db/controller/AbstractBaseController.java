@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 /**
  * 控制器Controller的基类。
  *
+ * @param <D> 主Model的DTO对象类型。
  * @param <M> 主Model实体对象类型。
  * @param <V> 主Model的DomainVO域对象类型。
  * @param <K> 主键类型。
@@ -41,8 +42,12 @@ import java.util.stream.Collectors;
  * @date 2020-08-08
  */
 @Slf4j
-public abstract class AbstractBaseController<M, V, K extends Serializable> {
+public abstract class AbstractBaseController<D, M, V, K extends Serializable> {
 
+    /**
+     * 当前Service关联的主model的DTO对象的Class。
+     */
+    protected final Class<D> domainDtoClass;
     /**
      * 当前Service关联的主Model实体对象的Class。
      */
@@ -68,8 +73,9 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      */
     @SuppressWarnings("unchecked")
     public AbstractBaseController() {
-        modelClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        domainVoClass = (Class<V>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        domainDtoClass = (Class<D>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        modelClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        domainVoClass = (Class<V>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[2];
         Field[] fields = ReflectUtil.getFields(modelClass);
         for (Field field : fields) {
             if (null != field.getAnnotation(TableId.class)) {
@@ -88,7 +94,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @return 应答结果对象，包含主对象集合。
      */
     public Result<List<V>> baseListByIds(
-            Set<K> filterIds, Boolean withDict, BaseModelMapper<V, M> modelMapper) {
+            Set<K> filterIds, Boolean withDict, BaseModelMapper<D, M, V> modelMapper) {
         if (ObjectUtil.isAnyBlankOrNull(filterIds, withDict)) {
             return Result.failed(ResultCode.PARAM_IS_BLANK);
         }
@@ -112,7 +118,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @return 应答结果对象，包含主对象数据。
      * @throws com.fontana.base.exception.GeneralException buildRelationForData会抛出此异常。
      */
-    public Result<V> baseGetById(K id, Boolean withDict, BaseModelMapper<V, M> modelMapper) {
+    public Result<V> baseGetById(K id, Boolean withDict, BaseModelMapper<D, M, V> modelMapper) {
         if (ObjectUtil.isAnyBlankOrNull(id, withDict)) {
             return Result.failed(ResultCode.PARAM_IS_BLANK);
         }
@@ -230,7 +236,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @return 分页数据集合对象。如MyQueryParam参数的分页属性为空，则不会执行分页操作，只是基于Pagination对象返回数据结果。
      * @throw  buildRelationForDataList会抛出此异常。
      */
-    public Result<Pagination<V>> baseListBy(MyQueryParam queryParam, BaseModelMapper<V, M> modelMapper) {
+    public Result<Pagination<V>> baseListBy(MyQueryParam queryParam, BaseModelMapper<D, M, V> modelMapper) {
         boolean dataFilterEnabled = DataFilterThreadLocal.setDataFilter(queryParam.getUseDataFilter());
         if (CollectionUtils.isNotEmpty(queryParam.getSelectFieldList())) {
             for (String fieldName : queryParam.getSelectFieldList()) {
@@ -312,7 +318,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @return 分页数据集合对象。如MyQueryParam参数的分页属性为空，则不会执行分页操作，只是基于Pagination对象返回数据结果。
      */
     public Result<Pagination<Map<String, Object>>> baseListMapBy(
-            MyQueryParam queryParam, BaseModelMapper<V, M> modelMapper) {
+            MyQueryParam queryParam, BaseModelMapper<D, M, V> modelMapper) {
         Result<Pagination<V>> result = this.baseListBy(queryParam, modelMapper);
         if (!result.isSuccess()) {
             return Result.failed(result);
@@ -329,7 +335,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @param modelMapper 对象映射函数对象。如果为空，则使用MyModelUtil中的缺省转换函数。
      * @return 应答结果对象，包含符合查询过滤条件的单条实体对象。
      */
-    public Result<V> baseGetBy(MyQueryParam queryParam, BaseModelMapper<V, M> modelMapper) {
+    public Result<V> baseGetBy(MyQueryParam queryParam, BaseModelMapper<D, M, V> modelMapper) {
         Result<Pagination<V>> result = baseListBy(queryParam, modelMapper);
         if (!result.isSuccess()) {
             return Result.failed(result);
@@ -427,7 +433,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @param modelMapper 从实体对象到VO对象的映射对象。
      * @return 转换后的VO域对象列表。
      */
-    protected List<V> convertToVoList(List<M> modelList, BaseModelMapper<V, M> modelMapper) {
+    protected List<V> convertToVoList(List<M> modelList, BaseModelMapper<D, M, V> modelMapper) {
         List<V> resultVoList;
         if (modelMapper != null) {
             resultVoList = modelMapper.fromModelList(modelList);
@@ -445,7 +451,7 @@ public abstract class AbstractBaseController<M, V, K extends Serializable> {
      * @param modelMapper 从实体对象到VO对象的映射对象。
      * @return 转换后的VO域对象。
      */
-    protected V convertToVo(M model, BaseModelMapper<V, M> modelMapper) {
+    protected V convertToVo(M model, BaseModelMapper<D, M, V> modelMapper) {
         V resultVo;
         if (modelMapper != null) {
             resultVo = modelMapper.fromModel(model);

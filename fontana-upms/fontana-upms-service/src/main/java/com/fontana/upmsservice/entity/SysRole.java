@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationManyToMany;
 import com.fontana.db.model.BaseModel;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.upmsapi.dto.SysRoleDto;
 import com.fontana.upmsapi.vo.SysRoleVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,16 +54,15 @@ public class SysRole extends BaseModel {
     private List<SysRoleMenu> sysRoleMenuList;
 
     @Mapper
-    public interface SysRoleModelMapper extends BaseModelMapper<SysRoleVo, SysRole> {
+    public interface SysRoleModelMapper extends BaseModelMapper<SysRoleDto, SysRole, SysRoleVo> {
         /**
-         * 转换VO对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param sysRoleVo 域对象。
+         * @param sysRoleDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "sysRoleMenuList", expression = "java(mapToBean(sysRoleVo.getSysRoleMenuList(), com.fontana.upmsservice.entity.SysRoleMenu.class))")
         @Override
-        SysRole toModel(SysRoleVo sysRoleVo);
+        SysRole toModel(SysRoleDto sysRoleDto);
         /**
          * 转换实体对象到VO对象。
          *

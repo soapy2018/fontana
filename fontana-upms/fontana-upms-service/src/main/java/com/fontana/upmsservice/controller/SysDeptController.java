@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/sysDept")
-public class SysDeptController extends AbstractBaseController<SysDept, SysDeptVo, Long> {
+public class SysDeptController extends AbstractBaseController<SysDeptDto, SysDept, SysDeptVo, Long> {
 
     @Autowired
     private SysDeptService sysDeptService;

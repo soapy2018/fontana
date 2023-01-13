@@ -7,6 +7,7 @@ import com.fontana.base.annotation.RelationConstDict;
 import com.fontana.base.annotation.RelationDict;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.onlineapi.dict.DictType;
+import com.fontana.onlineapi.dto.OnlineDictDto;
 import com.fontana.onlineapi.vo.OnlineDictVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -149,15 +150,15 @@ public class OnlineDict {
     private Map<String, Object> dblinkIdDictMap;
 
     @Mapper
-    public interface OnlineDictModelMapper extends BaseModelMapper<OnlineDictVo, OnlineDict> {
+    public interface OnlineDictModelMapper extends BaseModelMapper<OnlineDictDto, OnlineDict, OnlineDictVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param onlineDictVo 域对象。
+         * @param onlineDictDto 域对象。
          * @return 实体对象。
          */
         @Override
-        OnlineDict toModel(OnlineDictVo onlineDictVo);
+        OnlineDict toModel(OnlineDictDto onlineDictDto);
         /**
          * 转换实体对象到VO对象。
          *

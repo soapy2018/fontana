@@ -3,7 +3,7 @@ package com.fontana.base.annotation;
 import java.lang.annotation.*;
 
 /**
- * 将枚举类转化成字典数据
+ * 标记java类字典
  * @Author cqf
  * @Date 2022/7/8 10:34
  **/

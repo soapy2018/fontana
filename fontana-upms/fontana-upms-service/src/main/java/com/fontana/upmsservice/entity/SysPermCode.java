@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationManyToMany;
 import com.fontana.db.model.BaseModel;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.upmsapi.dto.SysPermCodeDto;
 import com.fontana.upmsapi.vo.SysPermCodeVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -77,16 +78,15 @@ public class SysPermCode extends BaseModel {
     private List<SysPermCodePerm> sysPermCodePermList;
 
     @Mapper
-    public interface SysPermCodeModelMapper extends BaseModelMapper<SysPermCodeVo, SysPermCode> {
+    public interface SysPermCodeModelMapper extends BaseModelMapper<SysPermCodeDto, SysPermCode, SysPermCodeVo> {
         /**
-         * 转换VO对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param sysPermCodeVo 域对象。
+         * @param sysPermCodeDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "sysPermCodePermList", expression = "java(mapToBean(sysPermCodeVo.getSysPermCodePermList(), com.fontana.upmsservice.entity.SysPermCodePerm.class))")
         @Override
-        SysPermCode toModel(SysPermCodeVo sysPermCodeVo);
+        SysPermCode toModel(SysPermCodeDto sysPermCodeDto);
         /**
          * 转换实体对象到VO对象。
          *

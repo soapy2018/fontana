@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.onlineapi.dto.OnlineVirtualColumnDto;
 import com.fontana.onlineapi.vo.OnlineVirtualColumnVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -92,7 +93,7 @@ public class OnlineVirtualColumn {
     private String whereClauseJson;
 
     @Mapper
-    public interface OnlineVirtualColumnModelMapper extends BaseModelMapper<OnlineVirtualColumnVo, OnlineVirtualColumn> {
+    public interface OnlineVirtualColumnModelMapper extends BaseModelMapper<OnlineVirtualColumnDto, OnlineVirtualColumn, OnlineVirtualColumnVo> {
     }
     public static final OnlineVirtualColumnModelMapper INSTANCE = Mappers.getMapper(OnlineVirtualColumnModelMapper.class);
 }

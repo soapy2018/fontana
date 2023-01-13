@@ -11,6 +11,7 @@ import com.fontana.db.model.BaseModel;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.upmsapi.dict.SysUserStatus;
 import com.fontana.upmsapi.dict.SysUserType;
+import com.fontana.upmsapi.dto.SysUserDto;
 import com.fontana.upmsapi.vo.SysUserVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -139,17 +140,15 @@ public class SysUser extends BaseModel {
     private Map<String, Object> userStatusDictMap;
 
     @Mapper
-    public interface SysUserModelMapper extends BaseModelMapper<SysUserVo, SysUser> {
+    public interface SysUserModelMapper extends BaseModelMapper<SysUserDto,SysUser,SysUserVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param sysUserVo 域对象。
+         * @param sysUserDto DTO对象。
          * @return 实体对象。
          */
-        @Mapping(target = "sysUserRoleList", expression = "java(mapToBean(sysUserVo.getSysUserRoleList(), com.fontana.upmsservice.entity.SysUserRole.class))")
-        @Mapping(target = "sysDataPermUserList", expression = "java(mapToBean(sysUserVo.getSysDataPermUserList(), com.fontana.upmsservice.entity.SysDataPermUser.class))")
         @Override
-        SysUser toModel(SysUserVo sysUserVo);
+        SysUser toModel(SysUserDto sysUserDto);
         /**
          * 转换实体对象到VO对象。
          *

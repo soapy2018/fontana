@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.flowapi.dto.FlowEntryVariableDto;
 import com.fontana.flowapi.vo.FlowEntryVariableVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -82,7 +83,7 @@ public class FlowEntryVariable {
     private Date createTime;
 
     @Mapper
-    public interface FlowEntryVariableModelMapper extends BaseModelMapper<FlowEntryVariableVo, FlowEntryVariable> {
+    public interface FlowEntryVariableModelMapper extends BaseModelMapper<FlowEntryVariableDto, FlowEntryVariable, FlowEntryVariableVo> {
     }
     public static final FlowEntryVariableModelMapper INSTANCE = Mappers.getMapper(FlowEntryVariableModelMapper.class);
 }

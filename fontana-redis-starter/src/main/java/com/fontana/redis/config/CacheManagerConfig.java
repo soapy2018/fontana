@@ -52,7 +52,7 @@ public class CacheManagerConfig {
     @Primary
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory
             , RedisSerializer<String> redisKeySerializer, RedisSerializer<Object> redisValueSerializer) {
-        RedisCacheConfiguration difConf = getDefConf(redisKeySerializer, redisValueSerializer).entryTtl(Duration.ofHours(1));
+        RedisCacheConfiguration defConf = getDefConf(redisKeySerializer, redisValueSerializer).entryTtl(Duration.ofHours(1));
 
         //自定义的缓存过期时间配置
         int configSize = cacheManagerProperties.getConfigs() == null ? 0 : cacheManagerProperties.getConfigs().size();
@@ -65,7 +65,7 @@ public class CacheManagerConfig {
         }
 
         return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheDefaults(difConf)
+                .cacheDefaults(defConf)
                 .withInitialCacheConfigurations(redisCacheConfigurationMap)
                 .build();
     }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationOneToMany;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.onlineapi.dto.OnlineTableDto;
 import com.fontana.onlineapi.vo.OnlineTableVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -87,15 +88,15 @@ public class OnlineTable {
     private OnlineColumn logicDeleteColumn;
 
     @Mapper
-    public interface OnlineTableModelMapper extends BaseModelMapper<OnlineTableVo, OnlineTable> {
+    public interface OnlineTableModelMapper extends BaseModelMapper<OnlineTableDto, OnlineTable, OnlineTableVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换Dto对象到实体对象。
          *
-         * @param onlineTableVo 域对象。
+         * @param onlineTableDto 域对象。
          * @return 实体对象。
          */
         @Override
-        OnlineTable toModel(OnlineTableVo onlineTableVo);
+        OnlineTable toModel(OnlineTableDto onlineTableDto);
         /**
          * 转换实体对象到VO对象。
          *

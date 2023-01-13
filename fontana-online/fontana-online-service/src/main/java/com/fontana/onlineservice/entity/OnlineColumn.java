@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.onlineapi.dto.OnlineColumnDto;
 import com.fontana.onlineapi.vo.OnlineColumnVo;
 import com.fontana.base.annotation.RelationConstDict;
 import com.fontana.base.annotation.RelationOneToOne;
@@ -174,16 +175,15 @@ public class OnlineColumn {
     private OnlineDict dictInfo;
 
     @Mapper
-    public interface OnlineColumnModelMapper extends BaseModelMapper<OnlineColumnVo, OnlineColumn> {
+    public interface OnlineColumnModelMapper extends BaseModelMapper<OnlineColumnDto, OnlineColumn, OnlineColumnVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param onlineColumnVo 域对象。
+         * @param onlineColumnDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "dictInfo", expression = "java(mapToBean(onlineColumnVo.getDictInfo(), com.fontana.onlineservice.entity.OnlineDict.class))")
         @Override
-        OnlineColumn toModel(OnlineColumnVo onlineColumnVo);
+        OnlineColumn toModel(OnlineColumnDto onlineColumnDto);
         /**
          * 转换实体对象到VO对象。
          *

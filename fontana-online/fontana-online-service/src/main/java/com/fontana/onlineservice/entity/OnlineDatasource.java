@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.base.annotation.RelationDict;
+import com.fontana.onlineapi.dto.OnlineDatasourceDto;
 import com.fontana.onlineapi.vo.OnlineDatasourceVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -85,16 +86,15 @@ public class OnlineDatasource {
     private OnlineTable masterTable;
 
     @Mapper
-    public interface OnlineDatasourceModelMapper extends BaseModelMapper<OnlineDatasourceVo, OnlineDatasource> {
+    public interface OnlineDatasourceModelMapper extends BaseModelMapper<OnlineDatasourceDto, OnlineDatasource, OnlineDatasourceVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param onlineDatasourceVo 域对象。
+         * @param onlineDatasourceDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "onlinePageDatasource", expression = "java(mapToBean(onlineDatasourceVo.getOnlinePageDatasource(), com.fontana.onlineservice.entity.OnlinePageDatasource.class))")
         @Override
-        OnlineDatasource toModel(OnlineDatasourceVo onlineDatasourceVo);
+        OnlineDatasource toModel(OnlineDatasourceDto onlineDatasourceDto);
         /**
          * 转换实体对象到VO对象。
          *

@@ -7,6 +7,7 @@ import com.fontana.base.annotation.RelationConstDict;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.onlineapi.dict.PageStatus;
 import com.fontana.onlineapi.dict.PageType;
+import com.fontana.onlineapi.dto.OnlinePageDto;
 import com.fontana.onlineapi.vo.OnlinePageVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -86,15 +87,15 @@ public class OnlinePage {
     private Map<String, Object> statusDictMap;
 
     @Mapper
-    public interface OnlinePageModelMapper extends BaseModelMapper<OnlinePageVo, OnlinePage> {
+    public interface OnlinePageModelMapper extends BaseModelMapper<OnlinePageDto, OnlinePage, OnlinePageVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换Dto对象到实体对象。
          *
-         * @param onlinePageVo 域对象。
+         * @param onlinePageDto 域对象。
          * @return 实体对象。
          */
         @Override
-        OnlinePage toModel(OnlinePageVo onlinePageVo);
+        OnlinePage toModel(OnlinePageDto onlinePageDto);
         /**
          * 转换实体对象到VO对象。
          *

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fontana.base.annotation.RelationOneToOne;
 import com.fontana.db.mapper.BaseModelMapper;
+import com.fontana.flowapi.dto.FlowEntryDto;
 import com.fontana.flowapi.vo.FlowEntryVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -131,17 +132,15 @@ public class FlowEntry {
     private FlowCategory flowCategory;
 
     @Mapper
-    public interface FlowEntryModelMapper extends BaseModelMapper<FlowEntryVo, FlowEntry> {
+    public interface FlowEntryModelMapper extends BaseModelMapper<FlowEntryDto, FlowEntry, FlowEntryVo> {
         /**
-         * 转换Vo对象到实体对象。
+         * 转换DTO对象到实体对象。
          *
-         * @param flowEntryVo 域对象。
+         * @param flowEntryDto 域对象。
          * @return 实体对象。
          */
-        @Mapping(target = "mainFlowEntryPublish", expression = "java(mapToBean(flowEntryVo.getMainFlowEntryPublish(), com.fontana.flowservice.entity.FlowEntryPublish.class))")
-        @Mapping(target = "flowCategory", expression = "java(mapToBean(flowEntryVo.getFlowCategory(), com.fontana.flowservice.entity.FlowCategory.class))")
         @Override
-        FlowEntry toModel(FlowEntryVo flowEntryVo);
+        FlowEntry toModel(FlowEntryDto flowEntryDto);
         /**
          * 转换实体对象到VO对象。
          *

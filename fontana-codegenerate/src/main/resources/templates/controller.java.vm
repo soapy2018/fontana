@@ -22,10 +22,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import $!{package.Entity}.$!{entity};
-#set($dtoPackage=$package.Entity.replace("service","api").replace("entity","dto"))
+`#set($dtoPackage=$package.Entity.replace("service","api").replace("model","dto"))
 import $!{dtoPackage}.$!{entity}DTO;
-#set($voPackage=$package.Entity.replace("service","api").replace("entity","vo"))
-import $!{voPackage}.$!{entity}VO;
+#set($voPackage=$package.Entity.replace("service","api").replace("model","vo"))
+import $!{voPackage}.$!{entity}VO;`
 import $!{package.Service}.$!{table.serviceName};
 import $!{superServiceClassPackage};
 #if($!{superControllerClassPackage})
@@ -47,7 +47,7 @@ import java.util.List;
 #if($!{superControllerClass})
 #foreach($field in $!{table.fields})
 #if($!{field.keyFlag})##主键
-public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity}, $!{entity}VO, $!{field.propertyType}> {
+public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity}DTO, $!{entity}, $!{entity}VO, $!{field.propertyType}> {
     @Autowired
 	private $!{table.serviceName} $!{table.entityPath}Service;
 
@@ -69,7 +69,9 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
         if (errorMessage != null) {
             return Result.failed(ResultCode.DATA_VALIDATED_FAILED, errorMessage);
         }
-        $!{entity} $!{table.entityPath} = MyModelUtil.copyTo($!{table.entityPath}DTO, $!{entity}.class);
+        //$!{entity} $!{table.entityPath} = MyModelUtil.copyTo($!{table.entityPath}DTO, $!{entity}.class);
+        $!{entity} $!{table.entityPath} = $!{entity}.INSTANCE.toModel($!{table.entityPath}DTO);
+
         $!{table.entityPath} = $!{table.entityPath}Service.saveNew($!{table.entityPath});
         return Result.succeed($!{table.entityPath}.get$!{field.capitalName}());
     }
@@ -88,7 +90,9 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
         if (errorMessage != null) {
             return Result.failed(ResultCode.DATA_VALIDATED_FAILED, errorMessage);
         }
-        $!{entity} $!{table.entityPath} = MyModelUtil.copyTo($!{table.entityPath}DTO, $!{entity}.class);
+        //$!{entity} $!{table.entityPath} = MyModelUtil.copyTo($!{table.entityPath}DTO, $!{entity}.class);
+        $!{entity} $!{table.entityPath} = $!{entity}.INSTANCE.toModel($!{table.entityPath}DTO);
+
         $!{entity} original$!{entity} = $!{table.entityPath}Service.getById($!{table.entityPath}.get$!{field.capitalName}());
         if (original$!{entity} == null) {
             // NOTE: 修改下面方括号中的话述
@@ -117,7 +121,8 @@ public class $!{table.controllerName} extends $!{superControllerClass}<$!{entity
         if (pageParam != null) {
             PageMethod.startPage(pageParam.getPageNum(), pageParam.getPageSize());
         }
-        $!{entity} $!{table.entityPath}Filter = MyModelUtil.copyTo($!{table.entityPath}DTOFilter, $!{entity}.class);
+        //$!{entity} $!{table.entityPath}Filter = MyModelUtil.copyTo($!{table.entityPath}DTOFilter, $!{entity}.class);
+        $!{entity} $!{table.entityPath}Filter = $!{entity}.INSTANCE.toModel($!{table.entityPath}DTOFilter);
         String orderBy = MyOrderParam.buildOrderBy(orderParam, $!{entity}.class);
         List<$!{entity}> $!{table.entityPath}List = $!{table.entityPath}Service.get$!{entity}List($!{table.entityPath}Filter, orderBy);
         return Result.succeed(MyPageUtil.makeResponseData($!{table.entityPath}List, $!{entity}.INSTANCE));

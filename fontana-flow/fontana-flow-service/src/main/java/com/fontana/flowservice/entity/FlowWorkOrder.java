@@ -8,6 +8,7 @@ import com.fontana.base.annotation.DeptFilterColumn;
 import com.fontana.base.annotation.RelationConstDict;
 import com.fontana.db.mapper.BaseModelMapper;
 import com.fontana.flowapi.dict.FlowTaskStatus;
+import com.fontana.flowapi.dto.FlowWorkOrderDto;
 import com.fontana.flowapi.vo.FlowWorkOrderVo;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -137,7 +138,7 @@ public class FlowWorkOrder {
     private Map<String, Object> flowStatusDictMap;
 
     @Mapper
-    public interface FlowWorkOrderModelMapper extends BaseModelMapper<FlowWorkOrderVo, FlowWorkOrder> {
+    public interface FlowWorkOrderModelMapper extends BaseModelMapper<FlowWorkOrderDto, FlowWorkOrder, FlowWorkOrderVo> {
     }
     public static final FlowWorkOrderModelMapper INSTANCE = Mappers.getMapper(FlowWorkOrderModelMapper.class);
 }

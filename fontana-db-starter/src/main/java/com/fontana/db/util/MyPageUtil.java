@@ -74,19 +74,20 @@ public class MyPageUtil {
      * 用户构建带有分页信息的数据列表。
      *
      * @param dataList    实体对象数据列表。
-     * @param modelMapper 实体对象到DomainVO对象的数据映射器。
-     * @param <D>         DomainVO对象类型。
-     * @param <T>         实体对象类型。
+     * @param modelMapper 数据映射器。
+     * @param <D>         DTO对象类型。
+     * @param <M>         实体对象类型。
+     * @param <V>         VO对象类型。
      * @return 返回分页数据对象。
      */
-    public static <D, T> Pagination<D> makeResponseData(List<T> dataList, BaseModelMapper<D, T> modelMapper) {
+    public static <D, M, V> Pagination<V> makeResponseData(List<M> dataList, BaseModelMapper<D, M, V> modelMapper) {
         long totalCount = 0L;
         if (CollectionUtils.isEmpty(dataList)) {
             // 这里需要构建分页数据对象，统一前端数据格式
             return Pagination.emptyPageData();
         }
         if (dataList instanceof Page) {
-            totalCount = ((Page<T>) dataList).getTotal();
+            totalCount = ((Page<M>) dataList).getTotal();
         }
         return MyPageUtil.makeResponseData(modelMapper.fromModelList(dataList), totalCount);
     }

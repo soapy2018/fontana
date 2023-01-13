@@ -3,7 +3,9 @@
  */
 package $!{package.Entity};
 
-#set($voPackage=$package.Entity.replace("service","api").replace("entity","vo"))
+#set($dtoPackage=$package.Entity.replace("service","api").replace("model","dto"))
+import $!{dtoPackage}.$!{entity}DTO;
+#set($voPackage=$package.Entity.replace("service","api").replace("model","vo"))
 import $!{voPackage}.$!{entity}VO;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -68,7 +70,7 @@ public class $!{entity} implements Serializable {
 ## ----------  END 字段循环遍历  ----------
 
     @Mapper
-    public interface $!{entity}ModelMapper extends BaseModelMapper<$!{entity}VO, $!{entity}> {
+    public interface $!{entity}ModelMapper extends BaseModelMapper<$!{entity}DTO, $!{entity}, $!{entity}VO> {
     }
 
     public static final $!{entity}ModelMapper INSTANCE = Mappers.getMapper($!{entity}ModelMapper.class);
