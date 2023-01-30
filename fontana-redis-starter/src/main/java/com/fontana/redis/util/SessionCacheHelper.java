@@ -54,6 +54,7 @@ public class SessionCacheHelper {
      * 缓存当前session内，上传过的文件名。
      *
      * @param filename 通常是本地存储的文件名，而不是上传时的原始文件名。
+     * @param sessionId
      */
     public void putSessionUploadFile(String filename, String sessionId) {
         if (filename != null) {
