@@ -45,7 +45,8 @@ import java.util.Calendar;
 @ConditionalOnClass(AmazonS3.class)
 @ConditionalOnProperty(prefix = CommonConstants.OSS_PREFIX, name = "type", havingValue = FileServerProperties.TYPE_S3)
 public class S3Template implements InitializingBean, IOssService {
-    private static final String DEF_CONTEXT_TYPE = "application/octet-stream";
+    private static final String DEF_CONTEXT_TYPE = "application/png";
+    private static final String DEF_CONTEXT_TYPE_DOWNLOAD = "application/octet-stream";
 
     @Autowired
     private FileServerProperties fileProperties;
