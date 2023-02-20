@@ -44,7 +44,7 @@ public class SpringConfigTest {
 
     @Test
     public void testGetMessage() {
-        //三个配置文件，最先匹配的市core
+        //三个配置文件，最先匹配的是core
         assertThat(accessor.getMessage("success", "zh_CN")).isEqualTo("成功啦");
         assertThat(accessor.getMessage("success", "en_US")).isEqualTo("success");
         assertThat(accessor.getMessage("xxxx", "en_US")).isEqualTo("");

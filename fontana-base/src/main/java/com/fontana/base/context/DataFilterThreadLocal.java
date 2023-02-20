@@ -17,7 +17,7 @@ public class DataFilterThreadLocal {
     /**
      * 设置数据过滤是否打开。如果打开，当前Servlet线程所执行的SQL操作，均会进行数据过滤。
      *
-     * @param enable 打开为true，否则false。
+     * @param enabled 打开为true，否则false。
      * @return 返回之前的状态，便于恢复。
      */
     public static boolean setDataFilter(boolean enabled) {

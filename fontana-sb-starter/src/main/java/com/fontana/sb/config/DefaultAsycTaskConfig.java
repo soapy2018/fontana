@@ -37,19 +37,25 @@ public class DefaultAsycTaskConfig {
     /**
      * 线程池前缀
      */
-    @Value("${fontana.asyc-task.threadNamePrefix:commonExecutor-}")
+    @Value("${fontana.asyc-task.threadNamePrefix:fontanaExecutor-}")
     private String threadNamePrefix;
 
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new CustomThreadPoolTaskExecutor();
+
+//        int processors = Runtime.getRuntime().availableProcessors();
+//        if (processors>1){
+//            corePoolSize = 2*processors-1;
+//            maxPoolSize = 4*processors-1;
+//        }
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(queueCapacity);
         executor.setThreadNamePrefix(threadNamePrefix);
         /*
            rejection-policy：当pool已经达到max size的时候，如何处理新任务
-           CALLER_RUNS：不在新线程中执行任务，而是有调用者所在的线程来执行
+           CALLER_RUNS：不在新线程中执行任务，而是由调用者所在的线程来执行
         */
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();

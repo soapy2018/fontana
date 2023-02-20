@@ -18,8 +18,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients(basePackages = "com.fontana.upmsapi")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @EnableFeignInterceptor
-//要将fallbackFactory实现类初始化成bean
-@ComponentScan({"com.fontana.demo.feign", "com.fontana.upmsapi"})
+//要将fallbackFactory实现类实例化成bean
+@ComponentScan({"com.fontana"})
 public class FeignApplication {
 
 	public static void main(String[] args) {

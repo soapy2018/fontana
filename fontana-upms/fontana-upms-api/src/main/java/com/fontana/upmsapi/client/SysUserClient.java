@@ -2,6 +2,7 @@ package com.fontana.upmsapi.client;
 
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
+import com.fontana.cloud.feign.FeignHttpInterceptorConfig;
 import com.fontana.cloud.feign.client.BaseFallbackFactory;
 import com.fontana.db.client.BaseClient;
 import com.fontana.upmsapi.dto.SysUserDto;
@@ -25,6 +26,7 @@ import java.util.Set;
  */
 @FeignClient(
         name = "common-upms", contextId="user",
+        configuration = FeignHttpInterceptorConfig.class,
         fallbackFactory = SysUserClient.SysUserClientFallbackFactory.class)
 public interface SysUserClient extends BaseClient<SysUserDto, SysUserVo, Long> {
 

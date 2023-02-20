@@ -2,6 +2,7 @@ package com.fontana.demo.feign.controller;
 
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
+import com.fontana.upmsapi.client.SysDeptClient;
 import com.fontana.util.updownload.*;
 import com.fontana.demo.feign.config.ApplicationConfig;
 import com.fontana.redis.util.SessionCacheHelper;
@@ -31,6 +32,9 @@ public class OpenFeignController {
     @Resource
     SysUserClient sysUserClient;
 
+    @Resource
+    SysDeptClient sysDeptClient;
+
     @Autowired
     private UpDownloaderFactory upDownloaderFactory;
 
@@ -50,6 +54,7 @@ public class OpenFeignController {
     Result<List<SysUserVo>> listByIds(
             @RequestParam("userIds") Set<Long> userIds,
             @RequestParam("withDict") Boolean withDict){
+        sysDeptClient.existId(111L);
         return sysUserClient.listByIds(userIds, withDict);
     }
 
