@@ -83,4 +83,5 @@ public interface BaseDaoMapper<M> extends BaseMapper<M> {
             + "</where>"
             + "</script>")
     int getCountByCondition(@Param("selectTable") String selectTable, @Param("whereClause") String whereClause);
+
 }
