@@ -168,7 +168,7 @@ public interface CommonConstants {
      * 密钥的生成方式，可通过执行common.core.util.RsaUtil类的main函数动态生成。
      */
     String PRIVATE_KEY =
-            "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIX3oF33NkQgSpL3bL40+O4ccrncwUVoqDJ6m7yyc7hpOD3lGMbymO3mhIY6dqKAFJj88lTy7A4Rwom9lTGA0LtdZddB0GFwBFxdt4xJOrN6NNiB5tpRy4gY59RRlEKk17lALskTMXQaUUOxrkyESZTYI6mdr2jxRA2/NrCsEJfBAgMBAAECgYA/uFyq1R8WoFVYOh+bCQ8uEpHvHbVAEluORws0YZzxJfr+Va3HUzSyU2bNgZlUCZ/CdO2+whzNRF1Hrsj71s1w31VYUUKcCDWqsFomaBBhOnjPrGM4zK5YqYPSj8G1M8gyz6oSss4iG0w146CIp/3ogXuUBpHvDEDOXQijGgrgwQJBANRXGhfnBvS0KvMghEfLE0vwQvga0k/+Y8o7ETY00KJYZiw87+/jnXSIKgKey1n0GYdeiMN9UVwhAk082nvFTqUCQQChgzpVaeruzMTt2gXJVpVZg7yvhJKigrFVX00c+vMIRHgJCACmNFbh2WJZbv9FrUkgLyfdVUtFPzVhKjk+AlXtAkEAzWtqQd9tWkQGHOjDL9Uk2N0ZXH5OIbcfgN/9uawEfln4lilpkXBovfiQc7J9VYuROuVYd45/rBn+6QvK7dwmRQJAZyyWMgP0QNHsJuj0c1ZtF36xJQoyRb/pGllDwHSKlchvSY2kJIggzCt6yRi/1znIEdgtxhT7fWPQbJ51bKg/TQJAE1+ESOg8OQGy5hwbDUKGgHcqNpp3MbavQG7YYgEoZRzdskUtiBvsPyHxD3Eng/7vJcsv+Ncyy5HINc9wXUm4nw==";
+            "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAOE73pHu91D5v5785R6vm0ks/5f10a/92TeX63e2Ds9bNcwpthR8dzMug9sHdEFRk6KbChALk1kcBwR1zI1WaXFIMf1OeE9IeqOkK6XOQwnHjN5S5gnXpnN2mpXqp9rCWSF3sn6jLmSKOEdvRgJNzMUDcFtpIPjSyHjoiI0/0MWJAgMBAAECgYEA3c6z1UtcS2Zoiw3KJXoSlvG1k9UFdyeqbtExlma4FwRf6nt5UJtyV/kK6PxiRKEtnwjH1B1SMoMjdgT8OIRMuOWWh/6mfcp7iYRV+XLELTKdDda5fmw2oGVE7tN9TkvAlqE2NNb16+pli5vy+uFckYFUs9SrYcqR8+EMA1YdPsECQQD3JaGg4kFLKlLBLzah1vVRbNfzdivpO0L65+YesxoeXF3X21rYaYizwcMnw3I0EO4evllCGE/pM/Q20z8FmZBFAkEA6U1KunWnfY3slNz/E42zTVMIX3CLa7GJkmm73oDHpjJ6OHQQRag1fviom1osIG5y7d+CAx20VAr7I4hCls7edQJAOBpNx3S097gi0wHBuBlQ1OwNVZIEw8wVF1nfDicADdZP4zlDNQ833f5lK7idSx5wv3/cSTm1oi2OCYgIrV+/tQJAFUfhmySERKWfgOyvr77rLhB24Q3JCefF3r8aTe99RqGwGFot6cywJIbWCmWtRMAOZ7hNia859biSs+kH+e2gyQJAL+2cr5HfdKlg3G+gIN2OEAbua6tnQiwHZwmRlYdZUZqoQZEwyJCnzxeBGBHLmHFALBfgKu+yHnD4hiihwvwqZw==";
 
 
     /**
@@ -243,6 +243,7 @@ public interface CommonConstants {
      * 图片文件上传的父目录。
      */
     String UPLOAD_IMAGE_PARENT_PATH = "image";
+
     /**
      * 附件文件上传的父目录。
      */
