@@ -65,8 +65,7 @@ public class MyOrderParam extends ArrayList<MyOrderParam.OrderInfo> {
         return orderBy.toString();
     }
 
-    private static void processOrderInfo(
-            OrderInfo orderInfo, OrderBaseData orderBaseData, StringBuilder orderByBuilder) {
+    private static void processOrderInfo(OrderInfo orderInfo, OrderBaseData orderBaseData, StringBuilder orderByBuilder) {
         if (StringUtils.isNotBlank(orderInfo.dateAggregateBy)) {
             orderByBuilder.append("DATE_FORMAT(")
                     .append(orderBaseData.tableName).append(".").append(orderBaseData.columnName);
@@ -119,8 +118,7 @@ public class MyOrderParam extends ArrayList<MyOrderParam.OrderInfo> {
      *                          如果该值为null或空字符串，则获取所有主表的排序字段。
      * @return 返回的是表字段，而非Java对象的属性，多个字段之间逗号分隔。
      */
-    public static String getOrderClauseByModelName(
-            MyOrderParam orderParam, Class<?> modelClazz, String relationModelName) {
+    public static String getOrderClauseByModelName(MyOrderParam orderParam, Class<?> modelClazz, String relationModelName) {
         if (orderParam == null) {
             return null;
         }
@@ -142,8 +140,7 @@ public class MyOrderParam extends ArrayList<MyOrderParam.OrderInfo> {
         return StringUtils.join(fieldNameList, ", ");
     }
 
-    private static OrderBaseData parseOrderBaseData(
-            OrderInfo orderInfo, Class<?> modelClazz, String prefix, String relationModelName) {
+    private static OrderBaseData parseOrderBaseData(OrderInfo orderInfo, Class<?> modelClazz, String prefix, String relationModelName) {
         OrderBaseData baseData = null;
         String fieldName = StringUtils.substringBefore(orderInfo.fieldName, DICT_MAP);
         if (prefix != null) {
@@ -194,8 +191,7 @@ public class MyOrderParam extends ArrayList<MyOrderParam.OrderInfo> {
      * @param relationModelName 与关联表对应的Model的名称，如my_course_paper表应对的Java对象CoursePaper。
      *                          如果该值为null或空字符串，则获取所有主表的排序字段。
      */
-    public static void removeOrderClauseByModelName(
-            MyOrderParam orderParam, Class<?> modelClazz, String relationModelName) {
+    public static void removeOrderClauseByModelName(MyOrderParam orderParam, Class<?> modelClazz, String relationModelName) {
         if (orderParam == null) {
             return;
         }
