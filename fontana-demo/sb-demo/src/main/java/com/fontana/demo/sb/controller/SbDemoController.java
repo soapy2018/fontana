@@ -15,6 +15,8 @@ import com.fontana.util.updownload.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +36,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/sb")
 @Api(tags = "sb测试接口")
+@RefreshScope
 public class SbDemoController {
 
 
@@ -108,6 +111,14 @@ public class SbDemoController {
         }
         //cacheHelper.putSessionUploadFile(responseInfo.getFilename());
         WebContextUtil.output(Result.succeed(responseInfo));
+    }
+
+    @Value("${fontana.application.name}") //引入配置
+    private String name;
+
+    @RequestMapping("/test1")
+    public String test1(){
+        return name;
     }
 
 }
