@@ -20,5 +20,5 @@ public class TraceProperties {
     /**
      * 是否开启日志链路追踪，默认开启
      */
-    private Boolean enabled = true;
+    private Boolean enabled = false;
 }

@@ -9,7 +9,7 @@ import org.springframework.core.type.AnnotationMetadata;
  * @date 2022/6/20 14:19
  */
 @Deprecated
-public class RequestLogRegistrar implements ImportSelector {
+public class RequestLogRegister implements ImportSelector {
 
     @Override
     public String[] selectImports(AnnotationMetadata annotationMetadata) {

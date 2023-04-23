@@ -1,6 +1,6 @@
 package com.fontana.log.requestlog.annotation;
 
-import com.fontana.log.requestlog.config.RequestLogRegistrar;
+import com.fontana.log.requestlog.config.RequestLogRegister;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@Import({RequestLogRegistrar.class})
+@Import({RequestLogRegister.class})
 @Deprecated
 public @interface EnableRequestLog {
 

@@ -1,0 +1,5 @@
+# 关闭solr健康检查
+management:
+  health:
+    solr:
+      enabled: false
