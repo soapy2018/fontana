@@ -1,10 +1,6 @@
-/**
- * Copyright (c) 2020-2022 宁波哥爱帮科技有限公司
- */
 package com.fontana.demo.sb.util;
 
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
-import com.fontana.base.object.DictModel;
 import com.fontana.redis.util.DictCacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +16,7 @@ import java.util.stream.Collectors;
  * @date 2022/11/16 13:45
  */
 @Component
-public class ExcelDiceHandlerImpl implements IExcelDictHandler {
+public class ExcelDictHandlerImpl implements IExcelDictHandler {
 
     @Autowired
     private DictCacheHelper dictCacheHelper;

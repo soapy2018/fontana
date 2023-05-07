@@ -1,4 +1,4 @@
-package com.fontana.datafilter.annotation;
+package com.fontana.base.annotation;
 
 import java.lang.annotation.*;
 
@@ -24,4 +24,12 @@ public @interface EnableDataPerm {
      * @return 被排序的方法名称数据。
      */
     String[] excluseMethodName() default {};
+
+    /**
+     * 必须包含能看用户自己数据的数据过滤条件，如果当前用户的数据过滤中，没有DataPermRuleType.TYPE_USER_ONLY，
+     * 在进行数据权限过滤时，会自动包含该权限。
+     *
+     * @return 是否必须包含DataPermRuleType.TYPE_USER_ONLY类型的数据权限。
+     */
+    boolean mustIncludeUserRule() default false;
 }

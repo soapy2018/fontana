@@ -24,7 +24,7 @@ public class TokenData {
     private Long userId;
 
     /**
-     * 用户名。
+     * 用户登录名。
      */
     private String userName;
     /**

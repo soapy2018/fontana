@@ -148,6 +148,11 @@ public interface DataBaseConstant {
 	 */
 	String UPDATE_USER_NAME_TABLE = "update_user_name";
 
+	/**
+	 * 更新用户显示名
+	 */
+	String STATE_TABLE = "state";
+
     /**
      * 业务流程状态
      */

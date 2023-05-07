@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020-2022 宁波哥爱帮科技有限公司
+ * Copyright (c) 2020-2030 宁波巨灵科技有限公司
  */
 package $!{package.ServiceImpl};
 
@@ -52,6 +52,8 @@ public class $!{table.serviceImplName} extends $!{superServiceImplClass}<$!{enti
     @Override
     @Transactional(rollbackFor = Exception.class)
     public $!{entity} saveNew($!{entity} $!{table.entityPath}){
+        $!{table.entityPath}.set$!{field.capitalName}(IdUtil.nextLongId());
+        $!{table.entityPath}Mapper.insert($!{table.entityPath});
         return $!{table.entityPath};
     }
 
@@ -64,7 +66,10 @@ public class $!{table.serviceImplName} extends $!{superServiceImplClass}<$!{enti
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean update($!{entity} $!{table.entityPath}){
-        return false;
+        if($!{table.entityPath}Mapper.updateById($!{table.entityPath}) == 0){
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020-2022 宁波哥爱帮科技有限公司
+ * Copyright (c) 2020-2030 宁波巨灵科技有限公司
  */
 #set($dtoPackage=$package.Entity.replace("service","api").replace("entity","dto"))
 package $!{dtoPackage};

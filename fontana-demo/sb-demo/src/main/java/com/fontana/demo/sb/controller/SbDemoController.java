@@ -4,9 +4,7 @@ import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import com.fontana.base.result.Result;
 import com.fontana.base.result.ResultCode;
 import com.fontana.demo.sb.config.ApplicationConfig;
-import com.fontana.demo.sb.model.SysUserAddress;
 import com.fontana.demo.sb.model.SysUserExcel;
-import com.fontana.demo.sb.util.ExcelDiceHandlerImpl;
 import com.fontana.redis.util.DictCacheHelper;
 import com.fontana.util.excel.ExcelUtil;
 import com.fontana.util.json.JsonUtil;
@@ -22,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @className: SbDemoController

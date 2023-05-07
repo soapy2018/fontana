@@ -12,22 +12,23 @@ import java.util.Date;
  * @date: 2022/3/16 16:24
  */
 @Data
-public abstract class BaseVO extends  BaseCreateVO{
+public abstract class BaseCreateVO {
 
     /**
-     * 更新者Id。
+     * 创建者Id。
      */
-    private Long updateUserId;
+    private Long createUserId;
 
     /**
-     * 更新者显示名称。
+     * 创建者显示名称。
      */
-    private String updateUserName;
+    private String createUserName;
 
     /**
-     * 更新时间。
+     * 创建时间。
      */
-    private Date updateTime;
+    private Date createTime;
+
 }
 
 

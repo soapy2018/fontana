@@ -21,6 +21,12 @@ public class GeneralException extends RuntimeException {
         this.resultCode = resultCode;
     }
 
+    public GeneralException(ICodeAndMessageEnum resultCode, String msg) {
+        super(msg);
+        this.resultCode = resultCode;
+        this.resultCode.setMessage(msg);
+    }
+
     public Integer getCode() {
         return resultCode.getCode();
     }
