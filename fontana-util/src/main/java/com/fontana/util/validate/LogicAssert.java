@@ -2,6 +2,7 @@ package com.fontana.util.validate;
 
 import com.fontana.base.exception.GeneralException;
 import com.fontana.base.result.ResultCode;
+import com.fontana.util.lang.ObjectUtil;
 import org.springframework.lang.Nullable;
 
 import java.util.function.Supplier;
@@ -152,6 +153,40 @@ public class LogicAssert {
   @Nullable
   private static String nullSafeGet(@Nullable Supplier<String> messageSupplier) {
     return messageSupplier != null ? (String)messageSupplier.get() : null;
+  }
+
+  /**
+   * 断言对象不为null或者blank
+   * @param object
+   * @param message
+   */
+  public static void isNotBlankOrNull(@Nullable Object object, String message) {
+    if (ObjectUtil.isNotBlankOrNull(object)) {
+      throw new GeneralException(message);
+    }
+  }
+
+  /**
+   * 断言对象不为null或者blank
+   * @param object
+   * @param resultCode
+   */
+  public static void isNotBlankOrNull(@Nullable Object object,  ResultCode resultCode) {
+    if (ObjectUtil.isNotBlankOrNull(object)) {
+      throw new GeneralException(resultCode);
+    }
+  }
+
+  /**
+   * 断言对象不为null或者blank
+   * @param object
+   * @param resultCode
+   * @param message
+   */
+  public static void isNotBlankOrNull(@Nullable Object object,  ResultCode resultCode, String message) {
+    if (ObjectUtil.isNotBlankOrNull(object)) {
+      throw new GeneralException(resultCode, message);
+    }
   }
 
 

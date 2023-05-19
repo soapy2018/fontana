@@ -1,36 +1,49 @@
 package com.fontana.db.model;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
-
 /**
- * 实体对象的公共基类，所有子类均必须包含基类定义的数据表字段和实体对象字段。
- * 用于有版本信息的实体对象，它没有更新记录，只有创建新的版本
- * @author cqf
- * @date 2020-08-08
+ * 带逻辑删除 数据表实体
+ *
+ * @author CQF
+ * @since 2021/12/2
  */
-@Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class BaseVersionedModel extends BaseCreateModel {
+@Data
+public abstract class BaseVersionedModel extends BaseLogicDelModel{
 
+
+    /**
+     * 主键。
+     */
+    @TableId(value = "id")
+    private Long id;
     /**
      * 版本。
      */
-    @TableField(value = "version", fill = FieldFill.INSERT)
+    @TableField(value = "version")
     private Integer version;
 
     /**
-     * 是否激活状态。
+     * 是否挂起状态。（0-正常 1-挂起）
      */
-    @TableField(value = "active_status", fill = FieldFill.INSERT)
-    private Boolean activeStatus;
+    @TableField(value = "pending_flag")
+    private Boolean pendingFlag;
+
+    /**
+     * 是否激活状态。（0-未激活 1-激活）
+     */
+    @TableField(value = "active_flag")
+    private Boolean activeFlag;
 
     @Override
     public String toString() {
         return super.toString();
     }
 }
+
+

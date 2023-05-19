@@ -1,5 +1,6 @@
 package com.fontana.redis.util;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.fontana.base.object.DictModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -61,11 +62,14 @@ public class DictCacheHelper {
      */
     public void putDictItem(DictModel dictModel) {
         List<DictModel> dictModelList = getDictItems(dictModel.getCode());
-        //对于已存在的字典项，先删除
-        dictModelList.removeIf(t->t.getValue().equals(dictModel.getValue()));
-        //新增字典项
-        dictModelList.add(dictModel);
-        putDict(dictModel.getCode(), dictModelList);
+        if(CollectionUtil.isNotEmpty(dictModelList)){
+            //对于已存在的字典项，先删除
+            dictModelList.removeIf(t->t.getValue().equals(dictModel.getValue()));
+            //新增字典项
+            dictModelList.add(dictModel);
+            putDict(dictModel.getCode(), dictModelList);
+        }
+
     }
 
     /**
@@ -74,8 +78,11 @@ public class DictCacheHelper {
      */
     public void removeDictItem(DictModel dictModel) {
         List<DictModel> dictModelList = getDictItems(dictModel.getCode());
-        dictModelList.removeIf(t->t.getValue().equals(dictModel.getValue()));
-        putDict(dictModel.getCode(), dictModelList);
+        if(CollectionUtil.isNotEmpty(dictModelList)){
+            dictModelList.removeIf(t->t.getValue().equals(dictModel.getValue()));
+            putDict(dictModel.getCode(), dictModelList);
+        }
+
     }
 
     /**

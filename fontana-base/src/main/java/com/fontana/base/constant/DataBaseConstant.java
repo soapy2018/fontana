@@ -147,9 +147,18 @@ public interface DataBaseConstant {
 	 * 更新用户显示名
 	 */
 	String UPDATE_USER_NAME_TABLE = "update_user_name";
+	/**
+	 * 逻辑删除
+	 */
+	String DELETED_FLAG = "deletedFlag";
+	/**
+	 * 逻辑删除
+	 */
+	String DELETED_FLAG_TABLE = "deleted_flag";
+
 
 	/**
-	 * 更新用户显示名
+	 *  状态字段
 	 */
 	String STATE_TABLE = "state";
 
