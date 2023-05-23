@@ -161,7 +161,7 @@ public class LogicAssert {
    * @param message
    */
   public static void isNotBlankOrNull(@Nullable Object object, String message) {
-    if (ObjectUtil.isNotBlankOrNull(object)) {
+    if (ObjectUtil.isBlankOrNull(object)) {
       throw new GeneralException(message);
     }
   }
@@ -172,7 +172,7 @@ public class LogicAssert {
    * @param resultCode
    */
   public static void isNotBlankOrNull(@Nullable Object object,  ResultCode resultCode) {
-    if (ObjectUtil.isNotBlankOrNull(object)) {
+    if (ObjectUtil.isBlankOrNull(object)) {
       throw new GeneralException(resultCode);
     }
   }
@@ -184,7 +184,7 @@ public class LogicAssert {
    * @param message
    */
   public static void isNotBlankOrNull(@Nullable Object object,  ResultCode resultCode, String message) {
-    if (ObjectUtil.isNotBlankOrNull(object)) {
+    if (ObjectUtil.isBlankOrNull(object)) {
       throw new GeneralException(resultCode, message);
     }
   }

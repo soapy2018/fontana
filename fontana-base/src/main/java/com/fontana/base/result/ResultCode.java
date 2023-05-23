@@ -39,7 +39,10 @@ public enum ResultCode implements ICodeAndMessageEnum {
     USER_NOT_EXIST(20004, "用户不存在"),
     USER_ALREADY_EXISTED(20005, "用户已存在"),
     USER_ACCOUNT_LOCKED(20006, "账号已被锁定"),
+    UNAUTHORIZED_LOGIN(20007,"当前用户尚未登录或登录已超时，请重新登录！"),
+    UNAUTHORIZED_USER_PERMISSION(20008,"权限验证失败，当前用户不能访问该接口，请核对！"),
     USER_FACTORY_DISCONTINUATION(20100, "工厂已停用"),
+
 
     /* 业务错误：30001-39999 */
     INVALID_UPLOAD_FILE_IOERROR(30002,"上传文件写入失败，请联系管理员！"),
