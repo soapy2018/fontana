@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.SocketTimeoutException;
 import java.sql.SQLException;
-import java.util.Optional;
 
 /**
  * 异常通用处理
