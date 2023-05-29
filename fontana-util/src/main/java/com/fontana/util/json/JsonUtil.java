@@ -1,5 +1,7 @@
 package com.fontana.util.json;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fontana.base.constant.StringPool;
 import com.fontana.base.exception.GeneralException;
 import com.fontana.util.date.DateTimeUtil;
@@ -27,6 +29,19 @@ import java.util.*;
  */
 @Slf4j
 public class JsonUtil {
+
+	/**
+	 * 将JSONObject转String，若是JSONObject是null或者{}，则返回null
+	 *
+	 * @param jsonObject json
+	 * @return jsonString json字符串
+	 */
+	public static String toString(JSONObject jsonObject) {
+		if(jsonObject==null||jsonObject.isEmpty()){
+			return null;
+		}
+		return jsonObject.toJSONString();
+	}
 
 	/**
 	 * 将对象序列化成json字符串
