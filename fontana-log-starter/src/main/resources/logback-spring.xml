@@ -189,7 +189,7 @@
     <logger name="com.fontana.log.auditlog.LoggerAuditServiceImpl" level="debug" addtivity="false">
         <appender-ref ref="audit_log_async" />
     </logger>
-    <logger name="com.fontana.log.apilog.ApiLogAspect" level="debug" addtivity="false">
+    <logger name="com.fontana.log.apilog.ApiLogAdvice" level="debug" addtivity="false">
         <appender-ref ref="api_log_async" />
     </logger>
     <!-- 判断是否启用自定义log-producer-->
