@@ -183,19 +183,20 @@
     将级别为“debug”及大于“debug”的日志信息交给此logger指定的名为“point_log_async”的appender处理，在文件中打出日志，不再向上级root传递打印信息。
     注：当然如果你把additivity="false"改成additivity="true"的话，就会打印两次，因为打印信息向上级传递，logger本身打印一次，root接到后又打印一次。
     -->
-    <logger name="com.fontana.log.monitor" level="info" additivity="false">
+    <!--    我这里希望在控制台和应用日志里也输出一下，所有将additivity设为true-->
+    <logger name="com.fontana.log.monitor" level="info" additivity="true">
         <appender-ref ref="point_log_async" />
     </logger>
-    <logger name="com.fontana.log.auditlog.LoggerAuditServiceImpl" level="info" additivity="false">
+    <logger name="com.fontana.log.auditlog.LoggerAuditServiceImpl" level="info" additivity="true">
         <appender-ref ref="audit_log_async" />
     </logger>
-    <logger name="com.fontana.log.apilog.ApiLogAdvice" level="info" additivity="false">
+    <logger name="com.fontana.log.apilog.ApiLogAdvice" level="info" additivity="true">
         <appender-ref ref="api_log_async" />
     </logger>
     <!-- 判断是否启用自定义log-producer-->
     <if condition = 'property("requestLogEnabled").contains("true")'>
         <then>
-            <logger name="requestLog" level="info" additivity="false">
+            <logger name="requestLog" level="info" additivity="true">
                 <appender-ref ref="requestLog"/>
             </logger>
         </then>
